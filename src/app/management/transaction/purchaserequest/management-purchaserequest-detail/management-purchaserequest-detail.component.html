@@ -1,0 +1,409 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-2">
+
+                    <div class="col-md-6">
+                        <a routerLink="/admin/purchaserequest" class="back-btn">
+                            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                        </a>
+                        <label for="item-searchbar" *ngIf="this.mode==='edit'" class="section-title">{{'Edit Purchase Request' | translate}} </label>
+                        <label for="item-searchbar" *ngIf="this.mode!=='edit'" class="section-title">{{'Create Purchase Request' | translate}}</label>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <!-- <dx-button class="mr-2" icon="search" type="success" routerLink="/admin/purchaserequest" text="{{'Find' | translate}}"></dx-button> -->
+                        <!-- <dx-button class="mr-2" icon="add" type="default" routerLink="/admin/purchaserequest/new" text="{{'New' | translate}}"></dx-button> -->
+
+                        <dx-button class="mr-2 " *ngIf="this.mode!=='edit'" icon="xlsxfile" type="default" text="{{'Template' | translate}}" (onClick)="downloadTemplate()"></dx-button>
+
+                        <dx-button *ngIf="this.mode!=='edit'" class="mr-2" stylingMode="outlined" type="default">
+                            <label style="margin:.1rem;">
+                                <i class="fas fa-paperclip"></i>
+                                {{'Select File' | translate}}
+                                <input #myInput hidden type="file" (change)="onFileChange($event,Template)" multiple>
+                            </label>
+                        </dx-button>
+
+                        <dx-button class="mr-2" *ngIf="this.purchase.dataSource==='POS' && (this.purchase.status!=='C'  && (this.purchase.docEntry===null || this.purchase.docEntry===undefined || this.purchase.docEntry==='') && this.canEdit && this.mode==='edit' && this.purchase.syncMWIStatus !== 'Y')"
+                            (onClick)="closePO()" icon="fas fa-check" type="danger" text="{{'Close' | translate}}"></dx-button>
+                        <dx-button class="mr-2" *ngIf="this.purchase.dataSource==='POS' && (this.canEdit && this.mode==='edit' && this.purchase.prNum === null) && this.purchase.isCanceled ==='N'" (onClick)="cancelPO()" type="danger" icon="fas fa-times-square" text="{{'Cancel' | translate}}"></dx-button>
+
+                        <dx-button type="success" *ngIf="this.purchase.dataSource==='POS' && this.mode!=='edit'&& isSave" (onClick)="saveModel()" icon="floppy" text="{{'Save' | translate}}"></dx-button>
+                        <dx-button type="success" *ngIf="this.purchase.dataSource==='POS' && this.mode!=='edit' && !isSave" icon="floppy" text="{{'Saving' | translate}}"></dx-button>
+                        <span *ngIf="this.mode==='edit'">
+                            <dx-button class="btn-print" icon="fa fa-print" text="{{'Print' | translate}}" (onClick)="PrintDetail(this.purchase)" style="color: #fff;"></dx-button>
+                        </span>
+                        <!-- <dx-button class="mr-2" (onClick)="openModal(promotemplate)" icon="copy" type="success" text="Copy promotion"></dx-button> -->
+                    </div>
+                </div>
+
+                <div class="item-search-nav">
+                    <div class="row ">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="purchaseId">{{'ID' | translate}}</label>
+                                    <dx-text-box [readOnly]="true" [(value)]="this.purchase.purchaseId"></dx-text-box>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="comment">{{'Remark' | translate}}</label>
+                                    <dx-text-box [readOnly]="this.mode === 'edit'" [(value)]="this.purchase.comment" aria-placeholder="Title"></dx-text-box>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-md-6 row">
+           
+            
+                <dx-text-box class="col-md-3" [readOnly]="true" [(value)]="this.purchase.purchaseId"></dx-text-box> 
+                <dx-text-box class="col-md-9" [(value)]="this.purchase.comment" aria-placeholder="Title"></dx-text-box> 
+               
+          </div> -->
+                        <div class="col-md-6" style="text-align: right;">
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="storeId">{{'Store' | translate}}</label>
+                                <!-- <dx-select-box #cbbStore [readOnly]="this.mode === 'edit'" id="storeId" #store [items]="this.storeList" [(value)]="this.purchase.storeId" [(ngModel)]="this.purchase.storeId" (onValueChanged)="onFromStoreChanged(cbbStore.selectedItem)" displayExpr="storeName" -->
+                                <dx-select-box #cbbStore [readOnly]="true" id="storeId" #store [items]="this.storeList" [(value)]="this.purchase.storeId" [(ngModel)]="this.purchase.storeId" (onValueChanged)="onFromStoreChanged(cbbStore.selectedItem)" displayExpr="storeName" valueExpr="storeId"
+                                    itemTemplate="item">
+
+                                    <div *dxTemplate="let data of 'item'" class="custom-item">
+                                        <div class='product-name'>{{data.storeId}} - {{data.storeName}}</div>
+                                    </div>
+                                </dx-select-box>
+                            </div>
+                            <!-- <div class="col-md-3"> -->
+                            <!-- <label for="customer">{{'Vendor' | translate}}</label> -->
+
+                            <!-- <dx-drop-down-box [readOnly]="this.purchase.dataSource!=='POS' || this.purchase.status==='C' || (this.purchase.docEntry!==null && this.purchase.docEntry!==undefined && this.purchase.docEntry!=='')" [(value)]="this.purchase.cardCode" valueExpr="customerId"
+                                    displayExpr="customerName" placeholder="Select vendor..." [showClearButton]="true" [dataSource]="this.customerList">
+                                    (onSelectionChanged)="onItemSelectionChanged($event.selectedRowKeys, e.component)" -->
+                            <!-- <div *dxTemplate="let data of 'content'">
+                                        <dx-data-grid id="gridCustomer" [dataSource]="this.customerList" [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" keyExpr="customerId" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                                            [scrolling]="{ mode: 'virtual' }" [height]="345" [(selectedRowKeys)]="this.purchase.cardCode">
+                                            <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
+                                            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                            <dxo-search-panel [visible]="true" [width]="340" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxi-column dataField="customerId" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                                            <dxi-column dataField="customerName" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+                                        </dx-data-grid>
+                                    </div>
+                                </dx-drop-down-box>  -->
+
+                            <!-- <dx-select-box [readOnly]="this.purchase.docStatus==='C'"  id="customer" #store [items]="this.customerList" [(value)]="this.purchase.cardCode"  [(ngModel)]="this.purchase.cardCode" 
+               displayExpr="customerName" valueExpr="customerId"  itemTemplate="item" [searchEnabled]="true"  searchMode="contains"
+               [searchExpr]="['customerId', 'customerName']">
+                          
+               <div *dxTemplate="let data of 'item'" class="custom-item"> 
+                   <div class='product-name'>{{data.customerId}} - {{data.customerName}}</div>
+               </div></dx-select-box> -->
+                            <!-- </div> -->
+                            <div class="col-md-3">
+                                <label for="docDate">{{'Order Date' | translate}}</label>
+                                <!-- <dx-date-box [max]="this.nowDate" [readOnly]="this.mode === 'edit'" #docDate id="docDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.purchase.docDate" [value]="this.purchase.docDate"> </dx-date-box> -->
+                                <dx-date-box [max]="this.nowDate" [readOnly]="this.mode === 'edit'" [value]="this.purchase.docDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.purchase.docDate" id="doc-date" width="100%">
+                                </dx-date-box>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="docDate">{{'Delivery Date' | translate}}</label>
+                                <dx-date-box [readOnly]="this.mode === 'edit'" #docDueDate id="docDueDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.purchase.docDueDate" [value]="this.purchase.docDueDate"> </dx-date-box>
+                            </div>
+                        </div>
+                        <div class="row mt-3" *ngIf="this.mode==='edit'">
+                            <div class="col-md-3" *ngIf="this.purchase.purchaseId!==null">
+                                <label for="storeId">{{'Doc Status' | translate}}</label>
+                                <!-- {{this.purchase.docStatus | statusFormat}} -->
+                                <dx-select-box [readOnly]="true" [style]="{'width':'100%'}" name="status" placeholder="--- Select Status ---" [dataSource]="statusOptions" displayExpr="name" valueExpr="value" [(ngModel)]="this.purchase.status" [(value)]="this.purchase.status"></dx-select-box>
+                                <!-- <div> {{this.purchase.docStatus | statusFormat}}</div> -->
+                                <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"    -->
+                            </div>
+                            <div class="col-md-3" *ngIf="this.purchase.docEntry!==null">
+                                <label for="storeId">{{'Doc Entry' | translate}}</label>
+                                <!-- {{this.purchase.docStatus | statusFormat}} -->
+                                <dx-text-box [readOnly]="true" [(value)]="this.purchase.docEntry"></dx-text-box>
+                                <!-- <div> {{this.purchase.docStatus | statusFormat}}</div> -->
+                                <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"    -->
+                            </div>
+                            <div class="col-md-3" *ngIf="this.purchase.createdBy!==null">
+                                <label for="storeId">{{'Created By' | translate}}</label>
+                                <!-- {{this.purchase.docStatus | statusFormat}} -->
+                                <dx-text-box [readOnly]="true" [(value)]="this.purchase.createdBy"></dx-text-box>
+                                <!-- <div> {{this.purchase.docStatus | statusFormat}}</div> -->
+                                <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"    -->
+                            </div>
+                            <div class="col-md-3" *ngIf="this.purchase.createdOn!==null">
+                                <label for="storeId">{{'Created On' | translate}}</label>
+                                <!-- {{this.purchase.docStatus | statusFormat}} -->
+                                <dx-date-box [readOnly]="true" #createdOn id="createdOn" [displayFormat]="this.dateFormat + ' HH:mm:ss'" [(ngModel)]="this.purchase.createdOn" [(value)]="this.purchase.createdOn"> </dx-date-box>
+                                <!-- <div> {{this.purchase.docStatus | statusFormat}}</div> -->
+                                <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"    -->
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="col-md-4">
+                        <label for="InvoiceAddress">{{'Invoice Address' | translate}}</label>
+                        <dx-text-area [readOnly]="this.purchase.dataSource!=='POS' || this.purchase.status==='C' || (this.purchase.docEntry!==null && this.purchase.docEntry!==undefined && this.purchase.docEntry!=='')" [height]="90" [(value)]="this.purchase.invoiceAddress">
+                        </dx-text-area>
+                    </div> -->
+                    <!-- <div class="col-md-12 mt-2" style="text-align: right;">
+     
+      </div> (onRowValidating)="onRowValidating($event)"-->
+                    <div class="col-md-12 ">
+                        <div class="table-wrap mt-2 mb-2">
+                            <!-- (onCellPrepared)="onCellPrepared($event)" -->
+                            <dx-data-grid #dataGrid id="goodsreceipt" (onToolbarPreparing)="onToolbarPreparing($event)" [(dataSource)]="this.lines" [allowColumnResizing]="true" [columnResizingMode]="true" (onEditingStart)="onEditingStart($event)" [disabled]="waitingData" (onRowPrepared)="onRowPrepared($event)"
+                                (onInitNewRow)="onInitNewRow($event)" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true">
+                                <!-- <dxo-column-fixing [enabled]="true"></dxo-column-fixing> -->
+
+                                <!-- <dxi-column type="buttons" [width]="110">
+                <dxi-button name="edit"></dxi-button>
+                <dxi-button name="delete"></dxi-button>
+               [readOnly]="this.purchase.status==='C'" 
+              </dxi-column> -->
+                                <dxo-editing mode="cell" [useIcons]="true" [allowUpdating]=" this.mode !=='edit' &&  this.purchase.dataSource==='POS' && this.purchase.status!=='C'  && (this.purchase.docEntry===null || this.purchase.docEntry===undefined || this.purchase.docEntry==='')"
+                                    [allowDeleting]="this.mode !=='edit' && this.purchase.dataSource==='POS' && this.purchase.status!=='C'  && (this.purchase.docEntry===null || this.purchase.docEntry===undefined || this.purchase.docEntry==='')"></dxo-editing>
+                                <!-- [allowAdding]="this.mode !=='edit' && this.purchase.dataSource==='POS' && this.purchase.status!=='C'
+                                    && (this.purchase.docEntry===null || this.purchase.docEntry===undefined || this.purchase.docEntry==='')"  -->
+                                <!-- <dxo-editing 
+                  mode="row"
+                  [allowUpdating]="true"
+                  [allowAdding]="true">
+              </dxo-editing> -->
+                                <dxi-column dataField="itemCode" [allowEditing]="this.mode !=='edit'" [fixed]="false" caption="{{'Item Code' | translate}}" editCellTemplate="itemDropDownBoxEditor">
+                                    <!-- <dxo-lookup [dataSource]="this.itemList" keyExpr="keyId" displayExpr="itemCode" valueExpr="itemCode"></dxo-lookup> -->
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <dxi-column dataField="itemCode" [visible]="false" [allowEditing]="false" caption="{{'Item Code' | translate}}"></dxi-column>
+                                <dxi-column dataField="description" [allowEditing]="false" caption="{{'Description' | translate}}" [minWidth]="250"></dxi-column>
+                                <!-- <dxi-column dataField="itemCode"  [fixed]="true" caption="Item Code" [minWidth]="250" [allowEditing]="true"   editCellTemplate="itemDropDownBoxEditor">
+                <dxo-lookup [dataSource]="this.itemList" displayExpr="itemName" valueExpr="itemCode"> </dxo-lookup>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dxi-column>   -->
+
+                                <dxi-column alignment="center" [allowEditing]="false" dataField="barCode" caption="{{'Barcode' | translate}}" [minWidth]="150"> </dxi-column>
+                                <dxi-column [allowEditing]="this.mode !=='edit'" alignment="center" dataField="slocId" caption="{{'Sloc ID' | translate}}" [minWidth]="120">
+                                    <dxo-lookup [dataSource]="this.storageList" keyExpr="keyId" displayExpr="whsCode" valueExpr="whsCode"></dxo-lookup>
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <!--  -->
+                                <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="{{'UoM' | translate}}" [minWidth]="120">
+                                    <!-- <dxo-lookup  [dataSource]="this.uomList" displayExpr="uomName" valueExpr="uomCode"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                </dxi-column>
+                                <!-- <dxi-column alignment="center" dataField="currencyCode" [allowEditing]="false" caption="Currency" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column alignment="right" dataField="price" caption="{{'Price' | translate}}" [customizeText]="customizeText" [minWidth]="120"></dxi-column> -->
+                                <!-- <dxi-column alignment="right" dataField="lastPrice" caption="{{'Last Price' | translate}}" [customizeText]="customizeText" [visible]="false" [minWidth]="120"></dxi-column> -->
+
+                                <dxi-column [allowEditing]="this.mode !=='edit'" alignment="right" dataField="quantity" caption="{{'Quantity' | translate}}" dataType="number" [minWidth]="120" [format]="this.authService.numberFormat('quantity')">
+                                    <dxi-validation-rule type="pattern" [pattern]="qtyPattern" message="Quantity format invalid"></dxi-validation-rule>
+                                    <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="Quantity format invalid !(UOM not allow Decimal)">
+                                    </dxi-validation-rule>
+                                    [validationCallback]="asyncValidation"
+                                </dxi-column>
+                                <dxi-column alignment="center" dataField="allowDecimal" [visible]="false" caption="{{'Tax Rate' | translate}}" [minWidth]="80">
+                                </dxi-column>
+                                <!-- <dxi-column alignment="center" dataField="openQty" [format]="this.authService.numberFormat('quantity')" *ngIf="this.mode!=='e'" [allowEditing]="false" caption="{{'On Hand' | translate}}" [minWidth]="120"></dxi-column> -->
+
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="openQty" [visiable]="true" [allowEditing]="false" caption="{{'OnHand' | translate}}" dataType="number" [minWidth]="170"></dxi-column>
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="fromDate" [setCellValue]="setFromDateValue" [visiable]="true" caption="{{'From Date' | translate}}" dataType="date" format="dd/MM/yyyy" [minWidth]="120"></dxi-column>
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="toDate" [setCellValue]="setToDateValue" [visiable]="true" caption="{{'To Date' | translate}}" dataType="date" format="dd/MM/yyyy" [minWidth]="120"></dxi-column>
+                                <dxi-column alignment="left" *ngIf="this.salesRotationConfig == 'true'" dataField="customField1" [visible]="true" caption="{{'Value' | translate}}" [minWidth]="320"></dxi-column>
+                                <!-- <dxi-column dataField="valueConcat" *ngIf="this.salesRotationConfig == 'true'" caption="{{'Value' | translate}}"> </dxi-column> -->
+                                <!-- <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="numOfDate" [allowEditing]="false" caption="{{'Number of days' | translate}}" dataType="number" [format]="this.authService.numberFormat('quantity')" [minWidth]="150"></dxi-column> -->
+                                <!-- <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="salesDay" [visiable]="true" [allowEditing]="false" caption="{{'Sales per day' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="150"></dxi-column>
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="salesWeek" [visiable]="true" [allowEditing]="false" caption="{{'Sales per week' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="150"></dxi-column>
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="salesMonth" [visiable]="true" [allowEditing]="false" caption="{{'Sales per month' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="150"></dxi-column> -->
+                                <!-- <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="turns" [visiable]="true" [allowEditing]="false" caption="{{'Number of turns' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="170"></dxi-column> -->
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="customField3" [visible]="false" [allowEditing]="false" caption="{{'Shelf Life' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="170"></dxi-column>
+                                <!-- <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="lastQtyOrder" [visiable]="true" [allowEditing]="false" caption="{{'Last Qty Order' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="170"></dxi-column> -->
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="customField8" [visible]="false" [allowEditing]="false" caption="{{'Min' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="170"></dxi-column>
+                                <dxi-column alignment="center" *ngIf="this.salesRotationConfig == 'true'" dataField="customField9" [visible]="false" [allowEditing]="false" caption="{{'Max' | translate}}" [format]="this.authService.numberFormat('quantity')" [minWidth]="170"></dxi-column>
+
+                                <!-- <dxi-column dataField="currencyRate" caption="Currency Rate" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column alignment="center" dataField="taxCode" caption="Tax Code" [minWidth]="120" editCellTemplate="changeTaxCodeEditor">
+                <dxo-lookup [dataSource]="this.taxList" displayExpr="taxName" valueExpr="taxCode" > </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dxi-column>
+              <dxi-column alignment="center" dataField="taxRate"  [visible]="false" caption="Tax Rate" [minWidth]="80"> </dxi-column>
+              <dxi-column alignment="right"  dataField="taxAmt" [calculateCellValue]="taxAmtCellValue" [allowEditing]="false" caption="Tax Amt" dataType="number"[minWidth]="120"> </dxi-column>
+               -->
+                                <!-- <dxi-column alignment="right" dataField="lineTotal" [customizeText]="customizeText" [calculateCellValue]="lineTotalCellValue" [allowEditing]="false" caption="{{'Line Total' | translate}}" [minWidth]="120"> </dxi-column> -->
+                                <dxi-column dataField="comment" [allowEditing]="this.mode !=='edit'" caption="{{'Remark' | translate}}" [minWidth]="220"> </dxi-column>
+                                <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                                <dxo-summary [recalculateWhileEditing]="true">
+                                    <!-- <dxi-total-item column="lineTotal" summaryType="{{'' | translate}}sum" [customizeText]="customizeText">
+
+                                    </dxi-total-item> -->
+                                    <!-- <dxi-total-item column="quantity" summaryType="sum" [customizeText]="customizeText"></dxi-total-item> -->
+                                    <dxi-total-item column="quantity" summaryType="sum" [valueFormat]="this.authService.numberFormat('quantity')"></dxi-total-item>
+                                </dxo-summary>
+                                <!--  -->
+                                <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                    <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <form [formGroup]="itemSearchForm" id="itemSearchForm">
+                                                <div class="col-md-12" style="clear: both;">
+                                                    <ng-container *ngFor="let item of this.groupControlList">
+                                                        <div class="row">
+                                                            <ng-container *ngFor="let value of item.arrayGroup">
+
+                                                                <div class="col-md-4 mb-2">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4 d-flex align-items-center">
+
+                                                                            <label *ngIf="item.controlType==='TextBox' " for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                                                            <label *ngIf="item.controlType !=='TextBox' " [ngClass]="status ? 'd-block' : 'd-none'" for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <dx-switch *ngIf="item.controlType==='CheckBox'" [ngClass]="status ? 'd-block' : 'd-none'" [(ngModel)]="searchModel[value.controlId]" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(value)]="searchModel[value.controlId]"></dx-switch>
+
+                                                                            <input *ngIf="item.controlType==='TextBox' " class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="searchModel[value.controlId]">
+
+                                                                            <dx-date-box name="{{value.controlId | translate}}" [ngClass]="status ? 'd-block' : 'd-none'" [value]="searchModel[value.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat" formControlName="{{value.controlId}}" [(ngModel)]="searchModel[value.controlId]"
+                                                                                *ngIf="item.controlType==='DateTime'" type="datetime">
+                                                                            </dx-date-box>
+
+                                                                            <dx-select-box *ngIf="item.controlType==='DropDown'" [ngClass]="status ? 'd-block' : 'd-none'" showClearButton="true" [style]="{'width':'100%'}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                                                [dataSource]="this[value.optionName]" displayExpr="{{value.optionKey}}" valueExpr="{{value.optionValue}}" [(ngModel)]="searchModel[value.controlId]" [value]="searchModel[value.controlId]"></dx-select-box>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+
+                                                    </ng-container>
+
+                                                </div>
+                                                <div class="col-md-12 mb-2 " style="float: right; text-align: right;">
+                                                    <dx-button icon="search" style="width:200px; height: 45px;" type="default" text="{{'Search' | translate}}" (onClick)="searchItem()"></dx-button>
+                                                </div>
+                                            </form>
+
+                                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" style="margin-top: 60px;" [disabled]="itemList?.length <= 0" [height]="(this.authService.getWindowHeight() <= 1024 ? this.authService.getWindowHeight() * 38 / 100 : this.authService.getWindowHeight() * 40/ 100) - 80 "
+                                                [selectedRowKeys]="[cellInfo.value]" [allowColumnResizing]="true" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Filter..." location="before"></dxo-search-panel>
+                                                <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+
+
+                                <div *dxTemplate="let cellInfo of 'changeTaxCodeEditor'">
+                                    <dx-drop-down-box #gridTaxBox [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="taxList" [(value)]="cellInfo.value" displayExpr="taxName" valueExpr="taxCode" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="taxCode" [dataSource]="taxList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() <= 1024 ? this.authService.getWindowHeight() * 30 / 100 : this.authService.getWindowHeight() * 40/ 100  " [selectedRowKeys]="[cellInfo.value]"
+                                                [focusedRowEnabled]="true" [allowColumnResizing]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Filter..." location="before"></dxo-search-panel>
+                                                <dxi-column dataField="taxCode"></dxi-column>
+                                                <dxi-column dataField="taxName"></dxi-column>
+
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                    <!-- <dx-drop-down-box #gridTaxBox [(value)]="cellInfo.value" valueExpr="taxCode" 
+                        displayExpr="taxName"
+                        placeholder="Select tax..." contentTemplate="contentTemplate" [showClearButton]="true" [dataSource]="this.taxList" >
+                   <div *dxTemplate="let e of 'contentTemplate'">
+                        <dx-data-grid   keyExpr="taxCode"  [dataSource]="this.taxList"
+                                [columns]="['taxCode', 'taxName']" [selection]="{ mode: 'single' }"
+                                [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                                [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                [height]="345" [(selectedRowKeys)]="cellInfo.value"
+                                (onSelectionChanged)= "onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event, e, e.component)"
+                                >
+                          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                          <dxo-search-panel [visible]="true"  [width]="240"  placeholder="Search..."
+                          location="before"></dxo-search-panel>
+                          <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        </dx-data-grid>
+                    </div>
+                </dx-drop-down-box> -->
+                                </div>
+                                <!-- getFilteredUom(cell) (onFocusIn)="isDropDownBoxOpened(dropDownUoM,cell.data)"-->
+                                <div *dxTemplate="let cell of 'changeUoMCodeEditor'">
+                                    <dx-drop-down-box #dropDownUoM [(value)]="cell.data.uomCode" valueExpr="uomCode" displayExpr="uomName" placeholder="{{'Select UoM' | translate}}..." [showClearButton]="true" [dataSource]="this.uomList">
+                                        <div *dxTemplate="let data of 'content'">
+                                            <dx-data-grid #gridUoMBox keyExpr="uomCode" [dataSource]="this.uomList" [columns]="['uomCode', 'uomName']" [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                                [height]="345" [(selectedRowKeys)]="cell.data.uomCode" (onSelectionChanged)="onUoMSelectionChanged($event, cell)">
+                                                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                                <dxo-search-panel [visible]="true" [width]="240" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+                                <div *dxTemplate="let line of 'detail'">
+                                    <!-- <ng-container *ngIf="line.data.lines!==null"> -->
+                                    <div class="master-detail-caption">{{'Serial' | translate}}:</div>
+                                    <dx-data-grid [dataSource]="line.data.lines" keyExpr="serialNum" [showBorders]="true" [columnAutoWidth]="true">
+                                        <dxi-column type="buttons" [width]="110">
+                                            <dxi-button name="edit"></dxi-button>
+                                            <dxi-button name="delete"></dxi-button>
+
+                                        </dxi-column>
+                                        <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                                        <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+                                        <dxi-column dataField="frSlocId" caption="{{'From Bins' | translate}}"></dxi-column>
+                                        <dxi-column dataField="toSlocId" caption="{{'To Bins' | translate}}"></dxi-column>
+                                        <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}"></dxi-column>
+                                        <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}"></dxi-column>
+                                    </dx-data-grid>
+                                    <!-- </ng-container> -->
+
+                                </div>
+
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                    <!-- (onEditorPrepared)="onEditorPrepared($event)" (onEditorPreparing)="onEditorPreparing($event)"  -->
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+    <ng-template #Template>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Error List</h4>
+            <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button> -->
+        </div>
+        <div class="modal-body">
+            <app-Import-errorlist [ErrorRepair]="ErrorRepair" [Erroreexcel]="Erroreexcel" [ListNotExitItem]="ListNotExitItem" [ListNullItem]="ListNullItem" [ListNullBarcode]="ListNullBarcode" [ListNullUom]="ListNullUom" [ListNullSlocid]="ListNullSlocid" [ListNullQuantity]="ListNullQuantity"></app-Import-errorlist>
+        </div>
+        <div class="modal-footer">
+            <dx-button class="mr-2" icon="xlsxfile" type="default" text="{{'Excel' | translate}}" (onClick)="exportExcel()"></dx-button>
+            <dx-button type="danger" text="Close" icon="close" (onClick)="modalRef.hide()"></dx-button>
+        </div>
+    </ng-template>

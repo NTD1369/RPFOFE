@@ -1,0 +1,34 @@
+<img class="wave" src="../../../../assets/images/wave.png">
+<div class="loginContainer">
+    <div class="img">
+        <img src="../../../../assets/images/erpXXX.png">
+    </div>
+    <div class="login-content">
+        <form #loginForm="ngForm" (ngSubmit)="login()">
+            <img src="../../../../assets/images/System/logo.svg">
+            <h2 class="title">{{'Welcome' | translate}} </h2>
+            <div class="input-div one" [ngClass]="isNameFocus ? 'focus' : 'blur'">
+                <div class="i">
+                    <i class="fas fa-user"></i>
+
+                </div>
+                <div class="div">
+                    <h5>{{'UserName' | translate}}</h5>
+                    <input type="text" class="input" required [(ngModel)]="model.username" name="username" id="txtName" #txtName (focus)="onFocus(txtName)" (focusout)="onFocus(txtName)">
+                </div>
+            </div>
+            <div class="input-div pass" [ngClass]="isPassFocus ? 'focus' : 'blur'">
+                <div class="i">
+                    <i class="fas fa-lock"></i>
+
+                </div>
+                <div class="div">
+                    <h5>{{'Password' | translate}}</h5>
+                    <input type="password" class="input" id="txtPassword" name="password" required [(ngModel)]="model.password" #txtPassword (focus)="onFocus(txtPassword)" (focusout)="onFocus(txtPassword)">
+                </div>
+            </div>
+            <a href="#">{{'Forgot Password' | translate}}?</a>
+            <input type="submit" class="btn" value="Login">
+        </form>
+    </div>
+</div>

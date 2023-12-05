@@ -1,0 +1,2230 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+</style>
+
+<ng-container *ngIf="this.order!==null && this.order!==undefined">
+    <div class="col-md-6 col-sm-6  offset-md-6 text-right" id="dropdownWidth">
+        <dx-toolbar>
+            <dxi-item location="before" widget="dxDropDownButton" [options]="{
+					stylingMode: 'text',
+					displayExpr: 'name',
+					keyExpr: 'value',
+					useSelectMode: true,
+					items: widths,
+					selectedItemKey: width,
+					onSelectionChanged: onWidthChanged,
+					itemTemplate: 'widthsItem'
+				}">
+            </dxi-item>
+            <!-- selectedItemKey: 11.5, Giá trị cũ -->
+
+            <div *dxTemplate="let data of 'widthsItem'">
+                {{data.name}}
+            </div>
+
+        </dx-toolbar>
+    </div>
+
+    <!-- <div #pdfContainer>
+        <p style="color: black;">tes afhwefwe adwjd </p>
+    </div> -->
+
+    <div #pdfContainer_1 *ngIf="this.PrintTemplate === 'Template1'">
+        <!-- <dx-sankey #sankey > -->
+        <div class="center-wrap print-p print-main" id="printDiv">
+
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <!-- <h2 class="maintenance-heading" >Printing</h2> -->
+                <div class="maintenance-row">
+                    <div>
+                        <!--(printClicked)="printerMarkerClicked()"  ngxPrintItemMarker -->
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <h3 class="text-center"><b #idName>
+                                    <div innerHTML="{{this.order?.storeName}}"></div>
+                                     <!-- {{this.order?.storeName}}-->
+                                    </b></h3> 
+
+                                <div class="text-center mb-2" style="font-size:15px; margin-bottom: 0 !important;">
+                                    <p *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || this.order.isCanceled !=='Y'">
+                                        <ng-container *ngIf="this.order.salesType!=='Retail'">
+                                            <b> {{ this.order?.salesType | translate}} </b> {{this.typeOrder | translate}}
+                                        </ng-container>
+                                        <ng-container *ngIf="this.order.salesType==='Retail'">
+                                            <b> {{'SALES' | translate}} </b> {{this.typeOrder | translate}}
+                                        </ng-container>
+                                    </p>
+                                </div>
+                                <!--Your html stuff that you want to print-->
+                                <!-- CODE128
+            CODE128 (automatic mode switching)
+            CODE128 A/B/C (force mode)
+            EAN / UPC
+            EAN13
+            UPC
+            EAN8
+            EAN5
+            EAN2
+            CODE39
+            ITF-14
+            MSI
+            MSI10
+            MSI11
+            MSI1010
+            MSI1110
+            Pharmacode
+            Codabar -->
+                                <ng-container>
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+                                        <!-- <div class="col-md-4">
+                        <ngx-qrcode 
+                        [elementType]="elementType" 
+                        [value]="this.order.transId"
+                        cssClass="aclass"
+                        errorCorrectionLevel="L">
+                        </ngx-qrcode>
+                    </div> -->
+                                        <div class="text-center">
+                                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-width]="barcodeWidth" [bc-height]="barcodeHeight" [bc-font-size]="13" [bc-value]="this.order.transId" [bc-display-value]="true" [bc-text-align]="center">
+                                            </ngx-barcode6>
+                                        </div>
+                                        <!-- [bc-width]="1.2"  -->
+                                        <!-- <p> <label class="textTitlePrint">{{'Bill No' | translate}}: </label> {{this.order.transId}}
+                                        <span>
+                                            - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </span>
+                                    </p> -->
+                                        <p>
+                                            <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+                                        <!-- <p *ngIf="this.order?.isCanceled!=='Y'">
+                                        <label class="textTitlePrint">{{'Created On' | translate}}: </label> 
+                                    </p> -->
+                                        <p *ngIf="this.order.refTransId !== ''">
+                                            <label class="textTitlePrint">{{'Original Trans ID' | translate}}: </label> {{this.order?.refTransId}}
+                                        </p>
+
+                                        <!-- <p> <label class="textTitlePrint">{{'Store' | translate}}: </label> {{this.order.storeName}}</p> -->
+                                        <!-- <p> <label class="textTitlePrint">{{'Address' | translate}}: </label> {{this.order.storeAddress}} </p> -->
+
+                                        <container-element [ngSwitch]="this.order?.cusGrpId">
+                                            <some-element *ngSwitchCase="'1'">
+                                                <p> <label class="textTitlePrint">{{'Member Card Number' | translate}}: </label> {{this.order?.cusId}}
+                                                </p>
+                                                <p> <label class="textTitlePrint">{{'Member Name' | translate}}: </label> {{this.order?.cusName}}
+                                                </p>
+                                                <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                    <!--  - <label class="textTitlePrint">{{'Member Expiry' | translate}}: </label> {{this.order?.expiryDate | date
+                                                        : this.authService.loadFormat().dateFormat }} -->
+                                                </p>
+                                                <!-- <p> <label class="textTitlePrint">{{'Expiry Date' | translate}}: </label> {{this.order?.expiryDate | date : this.authService.loadFormat().dateFormat }}</p> -->
+                                            </some-element>
+
+                                            <some-element *ngSwitchDefault>
+                                                <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                            </some-element>
+                                        </container-element>
+
+
+                                        <p *ngIf="this.order.isCanceled==='Y'">
+                                            <label class="textTitlePrint">{{'Sales Type' | translate}}: </label> {{'Canceled' | translate}} - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+
+                                        <!-- {{this.order.cusId}} - -->
+                                        <!-- phone: string = '';
+                        cusName: string = '';
+                        cusAddress: string = ''; -->
+                                        <!-- <p> <label class="textTitlePrint">Hạng thẻ: </label>  {{this.order.customer.customerGrpId}}</p> -->
+
+                                        <p *ngIf="this.order.salesPersonName!==null && this.order.salesPersonName!==undefined">
+                                            <label class="textTitlePrint">{{'Cashier' | translate}}: </label> {{this.order.createdBy}} - {{this.order.terminalId}}
+
+                                        </p>
+                                        <!-- <p *ngIf="this.orderType === 'Epay'">
+                                                <label class="textTitlePrint">{{'Epay Terminal' | translate}}: </label> {{ this.terminalEpay }}
+                                            
+                                            </p> -->
+
+                                        <p *ngIf="this.order?.status==='H' || this.order?.status==='Hold'"> <label class="textTitlePrint">{{'Status' | translate}}: </label> {{this.order.status}}
+                                        </p>
+                                        <!-- <p *ngIf="this.order?.remarks!=='' && this.order?.remarks!==null && this.order?.remarks!==undefined "> <label class="textTitlePrint">Notes: </label> {{this.order.remarks}}</p> -->
+                                        <!-- Người bán -->
+
+
+                                    </div>
+                                    <ng-container *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Details'))">
+
+                                        <div *ngIf="this.order.lines.length > 0">
+                                            <hr class="style5">
+                                            <div class="row table-row" style=" border-bottom: 1px solid #6c757d;">
+                                                <table style="width: 100%; border-collapse: collapse;">
+                                                    <tr>
+                                                        <th colspan="2" class="">{{'Description' | translate}}</th>
+                                                        <!-- <th colspan="1" class="text-center">{{'Price' | translate}}</th> -->
+                                                        <th colspan="1" class="text-right">{{'Total' | translate}}</th>
+                                                    </tr>
+                                                    <ng-container *ngFor="let item of this.order?.lines; let i = index">
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <p>
+                                                                    {{item.itemName}}
+
+                                                                </p>
+                                                                <!-- <p>{{item.quantity}} x {{item.price | currencyFormat}}</p> -->
+                                                                <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Class' || item.itemType === 'Card'">
+                                                                <div>
+
+                                                                    <p style="widows: 100%;" *ngIf="item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!==''">
+                                                                        {{'Date' | translate}}: {{item.appointmentDate | dateFormat }}, {{'Area' | translate}}: {{item.storeAreaId}} <br /> {{'Time' | translate}}: {{item.timeFrameId}} - {{item.remark}}</p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Member' || item.itemType === 'Class'">
+                                                                        {{'Date' | translate}}: {{item.startDate | dateFormat }} ~ {{item.endDate | dateFormat }}
+                                                                        <br> {{'Name' | translate}}: {{item.name}} - {{item.phone }}
+                                                                        <!-- , Serial: {{item.serialNum}} -->
+                                                                    </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Card'">
+                                                                        {{'Card No' | translate}}: {{item.prepaidCardNo}} </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType.toLowerCase() === 'topup' || item.itemType.toLowerCase() === 'tp' || item.itemType.toLowerCase() === 'bp' || item.itemType.toLowerCase() === 'billpayment'">
+                                                                        {{'Card No' | translate}}: {{item.custom1}}
+                                                                        <br /> {{'Ref Number' | translate}}: {{item.custom3}}
+                                                                        <br />
+                                                                        <ng-container *ngIf="this.order?.otherTerminalId?.length > 0">
+                                                                            {{'Terminal Id' | translate}}: {{ this.order?.otherTerminalId }}
+                                                                            <br />
+                                                                        </ng-container>
+
+                                                                        <span class="mt-2">
+                                                                                {{item.custom4}}
+                                                                            </span>
+
+                                                                    </p>
+                                                                    <p style="widows: 100%;" *ngIf="item?.bookletNo">
+                                                                        {{'Booklet No' | translate}}: {{item.bookletNo}}
+                                                                        <span *ngIf="item?.endDate !==null && item?.endDate!==undefined && item?.endDate !== ''">
+                                                                                {{'Exp Date' | translate}}: {{ item?.endDate | date : this.authService.loadFormat().dateFormat }}
+                                                                            </span>
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- *ngFor="let item of this.order?.lines; let i = index" -->
+                                                        <tr>
+                                                            <td colspan="1"><label>
+                                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                                        {{item.itemCode}} 
+                                                                    </span>
+                                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                                        <ng-container *ngIf="item.weightScaleBarcode?.length > 0">
+                                                                            {{item.weightScaleBarcode}}
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="item.weightScaleBarcode?.length <= 0">
+                                                                            {{item.barCode}}
+                                                                        </ng-container>
+                                                                    </span> 
+                                                                </label>
+                                                                <!-- <label style="position: absolute; left: 130px;">x</label> -->
+                                                            </td>
+                                                            <td colspan="1" class="text-center"><label> {{item.quantity}} x {{item.price | currencyFormat}} </label>
+                                                                <div *ngIf="item.discountAmt!==null && item.discountAmt!==undefined && item?.discountAmt !== 0">
+
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType === 'Bonus Amount'">
+                                                                            + {{item.discountAmt | currencyFormat}}
+                                                                        </label>
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType !== 'Bonus Amount'">
+                                                                            
+                                                                        {{ 'Disc' | translate }}: - {{ myMath.abs(item.discountAmt) | currencyFormat}}
+                                                                        </label>
+                                                                    <!-- <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType !== 'Bonus Amount' && this.order?.collectedStatus != 'Returned' ">
+                                                                            <span  *ngIf="item.quantity > 0">
+                                                                                -
+                                                                            </span> 
+                                                                            {{item.discountAmt | currencyFormat}}
+                                                                        </label> -->
+                                                                </div>
+                                                            </td>
+                                                            <td colspan="2" class="text-right"><label> {{item.lineTotal | currencyFormat}} </label>
+
+
+
+                                                            </td>
+                                                        </tr>
+                                                        <!-- || item?.itemType?.toLowerCase()==='pin' || item?.itemType?.toLowerCase()==='pn' -->
+                                                        <tr *ngIf="!item?.bookletNo && item.serialLines?.length > 0 && (item?.itemType?.toLowerCase()==='retail' )">
+                                                            <td colspan="3">
+                                                                <p>
+                                                                    {{'Serials' | translate}}:
+
+                                                                </p>
+                                                                <!-- <p>{{item.quantity}} x {{item.price | currencyFormat}}</p> -->
+                                                                <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Class' || item.itemType === 'Card'">
+
+                                                                <div class="mb-2" *ngFor="let itemSL of item.serialLines">
+                                                                    <span style="font-weight: 400; padding-left: 5px;">
+                                                                            - {{itemSL?.serialNum}}
+                                                                        </span>
+
+                                                                    <span *ngIf="itemSL?.expDate!==null && itemSL?.expDate!==undefined && itemSL?.expDate !== ''">
+                                                                            {{'Exp Date' | translate}}: {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }}</span>
+
+                                                                    <!-- <span *ngIf="itemSL?.customF3?.length > 0">
+                                                                            <br />
+                                                                            {{ itemSL?.customF3 }}
+                                                                        </span> -->
+                                                                    <!-- <li style="list-style-type: disc; font-size: 14px;">
+                                                                        
+                                                                        </li> -->
+                                                                </div>
+
+                                                            </td>
+                                                        </tr>
+
+                                                    </ng-container>
+
+
+                                                </table>
+                                            </div>
+
+                                            <div class="row table-row" style="margin: 0" *ngFor="let item of this.order?.lines; let i = index">
+                                                <!-- <div class="col-md-5 col-print-5 table-td">
+                                                <p>
+                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                        {{item.itemCode}}
+                                                    </span>
+                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                        <ng-container *ngIf="item.weightScaleBarcode?.length > 0">
+                                                            {{item.weightScaleBarcode}} 
+                                                        </ng-container> 
+                                                        <ng-container *ngIf="item.weightScaleBarcode?.length <= 0">
+                                                            {{item.barCode}} 
+                                                        </ng-container> 
+                                                    </span>
+                                                    <br> {{item.itemName}}
+                                                </p>
+                                                <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Class' || item.itemType === 'Card'">
+                                                <div>
+                                                    <p style="widows: 100%;" *ngIf="item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!==''">
+                                                        {{'Date' | translate}}: {{item.appointmentDate | dateFormat }}, {{'Area' | translate}}: {{item.storeAreaId}} <br /> {{'Time' | translate}}: {{item.timeFrameId}} - {{item.remark}}</p>
+                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Member' || item.itemType === 'Class'">
+                                                        {{'Date' | translate}}: {{item.startDate | dateFormat }} ~ {{item.endDate | dateFormat }}
+                                                        <br> {{'Name' | translate}}: {{item.name}} - {{item.phone }}
+                                                    </p>
+                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Card'">
+                                                        {{'Card No' | translate}}: {{item.prepaidCardNo}} </p>
+                                                    <p style="widows: 100%;" *ngIf="item.itemType.toLowerCase() === 'topup' || item.itemType.toLowerCase() === 'tp' || item.itemType.toLowerCase() === 'bp' || item.itemType.toLowerCase() === 'billpayment'">
+                                                        {{'Card No' | translate}}: {{item.custom1}} {{'Ref Number' | translate}}: {{item.custom3}}
+                                                    </p>
+
+                                                </div>
+                                            </div> -->
+                                                <!-- <div class="col-md-1 col-print-1 text-center table-td">
+                                                <label>{{item.quantity}}  </label>
+                                            </div>
+                                            <div class="col-md-3 col-print-3 text-right table-td"><label>
+                                                {{item.price | currencyFormat}}  
+                                                </label>
+                                            </div>
+                                            <div class="col-md-3 col-print-3 text-right table-td" style="border-right:0 ;"><label>
+                                                {{item.lineTotal | currencyFormat}}
+                                            </label>
+                                                <div *ngIf="item.discountAmt!==null && item.discountAmt!==undefined && item?.discountAmt > 0">
+                                                    <div class="col-md-1 col-print-1 table-td"> </div>
+                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType === 'Bonus Amount'">
+                                                    +{{item.discountAmt | currencyFormat}} 
+                                                </label>
+                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType !== 'Bonus Amount' ">
+                                                    -{{item.discountAmt | currencyFormat}} 
+                                                </label>
+                                                </div>
+                                            </div> -->
+                                                <!-- <div class="col-md-12 w-100 mb-2" *ngIf="!item?.bookletNo && item.serialLines.length > 0 && (item.itemType.toLowerCase()==='retail' || item.itemType.toLowerCase()==='pin' || item.itemType.toLowerCase()==='pn')">
+                                                        <div class="row">
+                                                            <div class="col-md-12 col-sm-12 col-print-12" style="font-size: 13px;">
+                                                                <b>{{'Serials' | translate}} :</b>
+                                                            </div>
+                                                            <div class="col-md-12 col-sm-12 col-print-12">
+                                                            
+                                                                <div *ngFor="let itemSL of item.serialLines">
+                                                                    <span style="font-weight: 700;">
+                                                                        {{itemSL?.serialNum}}
+                                                                    </span>
+
+                                                                    <span *ngIf="itemSL?.expDate!==null && itemSL?.expDate!==undefined && itemSL?.expDate !== ''">
+                                                                        {{'Exp Date' | translate}}: {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }}</span>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                            </div>
+                                            <!-- <table id="maintable">
+                                            <tr>
+                                                <th> {{'Description' | translate}} </th>
+                                                <th> Qty </th>
+                                                <th class="text-right"> {{'Total' | translate}} </th>
+                                            </tr>
+                                            <tr *ngFor="let item of this.order.lines">
+                                                <td>
+                                                    <label>
+                                    {{item.itemCode}} - {{item.itemName}}
+                                </label>
+                                                    <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Card'">
+                                                    <label>
+                                    
+                                    <p style="widows: 100%;" *ngIf="item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!==''"> 
+                                    {{'Date' | translate}}: {{item.appointmentDate
+                                    | dateFormat }}, {{'Area' | translate}}: {{item.storeAreaId}} <br /> {{'Time' | translate}}:
+                                    {{item.timeFrameId}} - {{item.remark}}</p>
+                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Member'"> {{'Date' | translate}}:
+                                    {{item.startDate | dateFormat }} ~ {{item.endDate | dateFormat }}</p>
+                                    <p style="widows: 100%;"  *ngIf="item.itemType === 'Card'">
+                                    {{'Card No' | translate}}: {{item.prepaidCardNo}} </p> 
+                                    
+                                </label>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <label>
+                                {{item.quantity}}  
+                                </label>
+                                                </td>
+                                                <td style="min-width: 100px;" class="justify-content-end">
+                                                    <label class="row m-0 justify-content-end">
+                                    {{item.lineTotal | number}}
+                                </label>
+                                                    <label *ngIf="item.discountAmt!==null && item.discountAmt!==undefined " class="row m-0 justify-content-end">
+                                    -{{item.discountAmt | number}} 
+                                </label>
+                                                </td>
+                                            </tr>
+        
+                                        </table> -->
+                                        </div>
+
+                                        <div>
+                                            <table id="customtable" class="mt-2">
+                                                <tr *ngIf="this.order.totalQty !==null && this.order.totalQty!==undefined && this.order.totalQty !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Quantity' | translate}}:
+                                                    </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalQty | number}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.totalAmount !==null && this.order.totalAmount!==undefined && this.order.totalAmount !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Bill Before Discount' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalAmount | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.bonusLine !==null && this.order.bonusLine!==undefined && this.order.bonusLine > 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Bonus' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.bonusLine | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                                <tr *ngIf="this.order.discountLine !==null && this.order.discountLine!==undefined && this.order.discountLine !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Discount On Items' | translate}}:
+                                                    </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.discountLine)  | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.discountAmount !==null && this.order.discountAmount!==undefined && this.order.discountAmount !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Discount On Total Bill' | translate}}:
+                                                    </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+
+                                                        <label class="row m-0 justify-content-end"> - {{myMath.abs(this.order?.discountAmount) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalDiscountAmt !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Discount' | translate}}:
+                                                    </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.totalDiscountAmt) | currencyFormat}} </label>
+
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.roundingOff !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Rounding' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{ this.order?.roundingOff | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalPayable !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Payable' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalPayable |
+                                                        currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <!--  -->
+
+                                                <ng-container *ngIf="this.order?.totalTax !== 0 &&  showTaxAmount === 'true'">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{'Total Before VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{(this.order?.totalPayable - this.order?.totalTax) | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{taxtDescrip | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalTax | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{'Total After VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalPayable | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                   
+                                                </ng-container>
+
+                                                <ng-container *ngIf="this.order?.paymentDiscount!==null && this.order?.paymentDiscount!==undefined && this.order?.paymentDiscount!==0">
+                                                    <tr  >
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{'Payment Discount' | translate}}: </label>
+                                                        </td>
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.paymentDiscount | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                              
+
+
+                                            </table>
+                                            <!-- <div class="row">
+                            <div class="col-md-6"> <label class="textTitlePrint"> Total Amount: </label></div>
+                            <div class="col-md-6" style="text-align: right;"><label > {{this.order.totalAmount  | number}} </label></div>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-6"><label class="textTitlePrint"> Total Discount: </label></div>
+                        <div class="col-md-6" style="text-align: right;"><label > {{this.order.totalDiscountAmt | number}}</label></div>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-6"><label class="textTitlePrint"> Total Payable: </label></div>
+                        <div class="col-md-6" style="text-align: right;"><label > {{this.order.totalPayable | number}}</label></div>
+                        </div> -->
+                                            <!-- <p> <label class="textTitlePrint">Total Amount: </label>  {{this.order.totalAmount | number}}</p>
+                        <p> <label class="textTitlePrint">Total Discount: </label>  {{this.order.totalDiscountAmt | number}}</p>
+                        <p> <label class="textTitlePrint">Total Payable: </label>  {{this.order.totalPayable | number}}</p>
+                        -->
+                                            <!-- <p> <label class="textTitlePrint">Tổng số tiền: </label>  {{this.order.totalAmount | number}}</p>
+                        <p> <label class="textTitlePrint">Khuyến mại: </label>  {{this.order.totalDiscountAmt | number}}</p>
+                        <p> <label class="textTitlePrint">Tiền thanh toán: </label>  {{this.order.totalPayable | number}}</p>
+                        <p> <label class="textTitlePrint">Hình thức thanh toán: </label>  </p> -->
+
+                                            <div *ngIf="this.order.payments.length > 0">
+                                                <hr class="style5">
+                                                <!--<p> <label class="textTitlePrint">{{'Payments' | translate}}: </label> </p> -->
+                                                <table id="maintable">
+                                                    <tr>
+                                                        <th> {{'PaymentMethod' | translate}} </th>
+                                                        <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                                    </tr>
+                                                    <tr *ngFor="let payment of this.order.payments">
+                                                        <td>
+                                                            <label *ngIf="payment.shortName!==null && payment.shortName!== undefined && payment.shortName!==''">
+                                                            {{payment.shortName}}
+                                                            <span *ngIf="payment?.customF2 === 'E' && payment?.customF4?.length > 0">
+                                                                - {{ payment?.customF4 }}
+                                                            </span>
+                                                            <!-- <span class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined 
+                                                        || this.authService.getStoreCurrency().length > 1">
+                                                        {{payment.currency}}
+                                                        </span> -->
+                                                            <!-- payment.customF2?.toLowerCase()==='b' &&  payment.customF2?.toLowerCase()==='b' && -->
+                                                        
+                                                            <p
+                                                                *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                                {{'Ref' | translate}} 1:
+                                                                <container-element [ngSwitch]="true">
+                                                                    <!-- {{payment.refNumber?.length - 4}}
+                                                                {{ payment.refNumber.substring( 9,12) }} -->
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                        ***{{ payment.refNumber.substring(
+                                                                        payment.refNumber?.length - 1,
+                                                                        payment.refNumber?.length) }}
+                                                                    </some-element>
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+
+                                                                        ***{{ payment.refNumber.substring(
+                                                                        payment.refNumber?.length - 4,
+                                                                        payment.refNumber?.length) }}
+                                                                    </some-element>
+                                                                    <some-element *ngSwitchDefault>
+                                                                        {{ payment.refNumber}}
+                                                                        
+                                                                    </some-element>
+                                                                </container-element>
+
+                                                            </p>
+                                                        
+                                                            <!-- payment.customF2?.toLowerCase()==='b' && -->
+                                                            <p
+                                                                *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                                {{'Ref' | translate}} 2:
+                                                                <container-element [ngSwitch]="true">
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                        ***{{
+                                                                        payment.customF1.substring(payment.customF1?.length
+                                                                        - 1, payment.customF1?.length) }}
+                                                                    </some-element>
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                        ***{{
+                                                                        payment.customF1.substring(payment.customF1?.length
+                                                                        - 4, payment.customF1?.length) }}
+                                                                    </some-element>
+                                                                    <some-element *ngSwitchDefault>
+                                                                        {{ payment.customF1}}
+                                                                    </some-element>
+                                                                </container-element>
+                                                                <!-- {{payment.customF1}}  -->
+                                                            </p>
+                                                            <p  class="mt-1"  *ngIf="payment?.cardNo !== null && payment?.cardNo !== undefined && payment?.cardNo?.length > 0">
+                                                                {{'Card No' | translate}}:    {{ payment?.cardNo}} 
+                                                            </p>
+                                                        </label>
+
+                                                            <label *ngIf="payment.shortName===null || payment.shortName=== undefined || payment.shortName===''">
+                                                            {{payment.paymentCode}}
+                                                            <span class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined 
+                                                            || this.authService.getStoreCurrency().length > 0">
+                                                                {{payment.currency}}
+                                                            </span>
+                                                            <!-- payment.customF2?.toLowerCase()==='b' &&  -->
+                                                            <p
+                                                                *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                                {{'Ref' | translate}} 1:
+                                                                <container-element [ngSwitch]="true">
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                        ***{{
+                                                                        payment.refNumber.substring(payment.refNumber?.length
+                                                                        - 1, payment.refNumber?.length) }}
+                                                                    </some-element>
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+                                                                        ***{{
+                                                                        payment.refNumber.substring(payment.refNumber?.length
+                                                                        - 4, payment.refNumber?.length) }}
+                                                                    </some-element>
+                                                                    <some-element *ngSwitchDefault>
+                                                                        {{ payment.refNumber }}
+                                                                    </some-element>
+                                                                </container-element>
+
+                                                            </p>
+                                                            <!-- payment.customF2?.toLowerCase()==='b' && -->
+                                                            <p
+                                                                *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                                {{'Ref' | translate}} 2:
+                                                                <container-element [ngSwitch]="true">
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                        ***{{ payment.customF1.substring(
+                                                                        payment.customF1?.length - 1,
+                                                                        payment.customF1?.length) }}
+                                                                    </some-element>
+                                                                    <some-element
+                                                                        *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                        ***{{ payment.customF1.substring(
+                                                                        payment.customF1?.length - 4,
+                                                                        payment.customF1?.length) }}
+                                                                    </some-element>
+                                                                    <some-element *ngSwitchDefault>
+                                                                        {{ payment.customF1 }}
+                                                                    </some-element>
+                                                                </container-element>
+                                                                <!-- {{payment.customF1}}  -->
+                                                            </p>
+                                                        </label>
+
+                                                            <label class="ml-2" *ngIf="payment?.fcAmount!==0">
+                                                            {{payment.fcAmount}}
+                                                        </label>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <label>{{payment.collectedAmount | currencyFormat}}
+                                                            </label>
+                                                            <!-- <ng-container *ngIf="payment.paymentDiscount!==null && payment.paymentDiscount!==undefined && payment.paymentDiscount!==0" >
+                                                                <label >{{-payment.paymentDiscount | currencyFormat}}
+                                                                </label>
+                                                            </ng-container> -->
+                                                            
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+
+                                            <hr class="style5">
+                                            <table id="customtable">
+
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Receipt' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.totalReceipt | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="this.order.paymentDiscount!==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount!==0">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint" > {{'Actual Amount' | translate}}: </label>
+                                                        </td>
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{(this.order.totalPayable - this.order.paymentDiscount) | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Change' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.amountChange | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+
+                                        </div>
+
+                                        <div>
+                                            <p class="mt-2" *ngIf="this.order?.luckyNo">{{'LUCKY DRAW CODE' | translate}}: {{this.order?.luckyNo}}
+                                            </p>
+                                            <ng-container *ngIf="this.order?.dataSource==='POS' && this.order.refTransId !== ''">
+                                                <p class="">
+                                                    <container-element [ngSwitch]="this.order.salesMode?.toLowerCase()">
+                                                        <some-element *ngSwitchCase="'ex' || 'exchange'">
+                                                            {{'Exchanged' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchCase="'return'">
+                                                            {{'Returned' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchDefault>
+                                                            {{'Voided' | translate}}:
+                                                        </some-element>
+                                                    </container-element>
+                                                    Rcpt# {{this.order?.refTransId}}
+                                                </p>
+                                                <!-- <p  class="">
+                                                <span>{{'VOIDED' | translate}}</span>
+                                            
+                                                : Rcpt# {{this.order.refTransId}}</p> -->
+                                                <!-- {{'Changes Mind' | translate}} -->
+                                                <p>{{'Reason' | translate}}: {{this.order?.reason}} </p>
+                                            </ng-container>
+
+
+                                            <p class="mt-2" *ngIf="this.order?.approvalId">{{'Approved by' | translate}}: {{this.order?.approvalId}}
+                                            </p>
+                                        </div>
+                                        <!-- <hr class="style5"> -->
+
+                                        <div style="font-size: 13px;" *ngIf="this.order?.storeAddress"> {{'Contact' | translate}}: ({{this.order?.companyPhone}}) - {{this.order?.email}} <br>
+                                            <label style="font-size: 12px;"> - {{this.order?.storeAddress}}</label>
+                                        </div>
+
+                                        <!--  -->
+                                        <div class="mt-1 pt-2" style="border-top: 1px solid black;" *ngIf="this.order?.printRemarks?.length > 0">
+                                            <!-- {{this.order?.printRemarks}} -->
+                                            <div innerHTML="{{this.order.printRemarks}}"></div>
+                                            <!-- <p>- Để phản hồi về chất lượng dịch vụ. Vui lòng liên hệ: 1800 69 30 - 0917 85 32 32</p>
+                                                <p>- Quý khách cần hóa đơn tài chính, vui lòng cung cấp thông tin trong ngày</p>
+                                                <p>- Giữ phiếu tính tiền để đổi sản phẩm trong vòng 24h trong trường hợp sản phẩm có lỗi do nhà sản xuất</p>
+                                                <p class="text-center">Xin cảm ơn Quý khách - Hẹn gặp lại</p> -->
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <button ngxPrintItemButton printItemId="print-section">Print first item directly</button> -->
+                    <!-- <div ngxPrintItemMarker directPrint="true" divID="print-section"></div> -->
+                    <!-- <button class="submit-btn" style="min-width:150px; width: 100%;"  printSectionId="print-section" directPrint="true" ngxPrint  >Print</button>  -->
+
+                    <!-- <div class="mt-4" *ngIf="this.order?.luckyNo?.length > 0 && this.printByPDF !=='PDF'">
+                       
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <h3 class="text-center"><b #idName>
+                                    <div innerHTML="{{this.order?.storeName}}"></div>
+                                   
+                                </b></h3>
+
+                                <div class="text-center mb-3" style="font-size:15px; margin-bottom: 0 !important;">
+                                    <h4> {{'LUCKY DRAW ENTRY FORM' | translate }}</h4>
+                                    
+                                </div>
+
+                                <div class="mt-2">
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+
+                                        <container-element [ngSwitch]="this.order?.cusGrpId">
+                                            <some-element *ngSwitchCase="'1'">
+                                                <p> <label class="textTitlePrint">{{'Name' | translate}}: </label> <label class="under-line-solid">{{this.order?.cusName}}</label> </p>
+                                                <p> <label class="textTitlePrint">{{'IC/PASSPORT' | translate}}: </label><label class="under-line-solid">{{this.order?.cusId}}</label> </p>
+                                                <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                </p>
+                                            </some-element>
+                                            <some-element *ngSwitchCase="'2'">
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'Name' | translate}}: </label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px;">{{'IC/PASSPORT' | translate}}: </label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px;">{{'TEL NO' | translate}}: </label> </p>
+                                            </some-element>
+                                            <some-element *ngSwitchDefault>
+                                                <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                            </some-element>
+                                        </container-element>
+
+                                        <hr class="style5">
+                                        <p>
+                                            <label class="textTitlePrint">{{'RECEIPT NO' | translate}}: </label> {{this.order?.transId}}
+                                        </p>
+                                        <p>
+                                            <label class="textTitlePrint">{{'RECEIPT DATE' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+                                        <p>
+                                            <label class="textTitlePrint">{{'TOTAL AMT PURCHASE' | translate}}: </label> {{this.order?.totalAmount | currencyFormat}}
+                                        </p>
+                                        <p>
+                                            <label class="textTitlePrint">{{'Lucky Draw Code' | translate}}: </label> {{this.order?.luckyNo }}
+                                        </p>
+
+                                      
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div> -->
+
+
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="this.orderType === 'Epay'">
+            <ng-container *ngFor="let order of this.orderList">
+                <div class="center-wrap print-p print-main mb-3" id="printDiv">
+
+                    <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+
+                        <div class="maintenance-row">
+                            <div>
+                                <div class="print-main-cl">
+                                    <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+
+                                        <ng-container>
+
+                                            <ng-container *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Details'))">
+
+                                                <div *ngIf="this.order.lines.length > 0">
+                                                    <hr class="style5">
+                                                    <div class="row table-row" style=" border-bottom: 1px solid #6c757d;">
+                                                        <!-- <table style="width: 100%; border-collapse: collapse;"> -->
+
+                                                        <ng-container *ngFor="let item of this.order?.lines; let i = index">
+                                                            <ng-container *ngFor="let itemSL of item?.serialLines">
+                                                                <h3 style="width: 100%;text-align: center; font-weight: 600;">
+                                                                    {{ item.itemName }}
+                                                                    <!-- <span  *ngIf="itemSL?.expDate?.length > 0" >
+                                                                                - {{'Exp Date' | translate}}: {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }}
+                                                                            </span> -->
+                                                                </h3>
+                                                                <br />
+                                                                <h3 style="width: 100%; text-align: center; font-weight: 600;">
+                                                                    <!-- {{ this.terminalEpay }} -->
+                                                                    {{ itemSL.baseTransId }}
+                                                                </h3>
+                                                                <!-- <br /> -->
+                                                                <!-- <h3  style="width: 100%;text-align: center; font-weight: 600;">
+                                                                            {{ item.price }} 
+                                                                        </h3> -->
+                                                                <table id="customtable" class="mt-2">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <label class="textTitlePrint">  {{'Terminal Id' | translate}}:  </label>
+                                                                        </td>
+                                                                        <td style="min-width: 100px;">
+                                                                            <label class="row m-0 justify-content-end">
+                                                                                    <!-- {{ itemSL?.custom1 }}  -->
+                                                                                    {{this.terminalEpay}} 
+                                                                                </label>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <label class="textTitlePrint">  {{'Serial Number' | translate}}:  </label>
+                                                                        </td>
+                                                                        <td style="min-width: 100px;">
+                                                                            <label class="row m-0 justify-content-end">  {{itemSL?.serialNum}} </label>
+                                                                        </td>
+                                                                        
+                                                                    </tr>
+                                                                    <tr *ngIf="itemSL?.expDate?.length > 0">
+                                                                        <td>
+                                                                            <label class="textTitlePrint">  {{'Exp Date' | translate}}:  </label>
+                                                                        </td>
+                                                                        <td style="min-width: 100px;">
+                                                                            <label class="row m-0 justify-content-end">  {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }} </label>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <label class="textTitlePrint"> {{'Transaction Id' | translate}}: </label>
+                                                                        </td>
+                                                                        <td style="min-width: 100px;">
+                                                                            <label class="row m-0 justify-content-end"> {{this.order.transId}}</label>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            <label class="textTitlePrint"> {{'Cashier' | translate}}: </label>
+                                                                        </td>
+                                                                        <td style="min-width: 100px;">
+                                                                            <label class="row m-0 justify-content-end"> {{this.order.createdBy}}</label>
+                                                                        </td>
+                                                                    </tr>
+
+
+
+
+
+                                                                </table>
+
+                                                            </ng-container>
+
+
+
+
+                                                        </ng-container>
+
+
+                                                        <!-- </table> -->
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="mt-1 pt-2" style="border-top: 1px solid black;" *ngIf="this.order?.remarkCustom1?.length > 0">
+
+                                                    <div innerHTML="{{this.order.remarkCustom1}}"></div>
+
+                                                </div>
+                                                <h3 class="mt-3" style="width: 100%;text-align: center; font-weight: 600;">
+                                                    {{'Do not share PIN' | translate}}
+                                                </h3>
+                                            </ng-container>
+                                        </ng-container>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="mt-4" *ngIf="this.order?.luckyNo?.length > 0">
+                                    
+                                    <div class="print-main-cl">
+                                        <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                            <h3 class="text-center"><b #idName>{{this.order?.storeName}}</b></h3>
+            
+                                            <div class="text-center mb-3" style="font-size:15px; margin-bottom: 0 !important;">
+                                                <h4> LUCKY DRAW ENTRY FORM </h4>
+                                            </div>
+            
+                                            <div class="mt-2">
+                                                <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+            
+                                                    <container-element [ngSwitch]="this.order?.cusGrpId">
+                                                        <some-element *ngSwitchCase="'1'">
+                                                            <p> <label class="textTitlePrint">{{'Name' | translate}}: </label> <label class="under-line-solid">{{this.order?.cusName}}</label> </p>
+                                                            <p> <label class="textTitlePrint">{{'NPIC/PASSWORD' | translate}}: </label><label class="under-line-solid">{{this.order?.cusId}}</label> </p>
+                                                            <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                            </p>
+                                                        </some-element>
+            
+                                                        <some-element *ngSwitchDefault>
+                                                            <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                                        </some-element>
+                                                    </container-element>
+            
+                                                    <hr class="style5">
+                                                    <p>
+                                                        <label class="textTitlePrint">{{'RECEIPT NO' | translate}}: </label> {{this.order?.transId}}
+                                                    </p>
+                                                    <p>
+                                                        <label class="textTitlePrint">{{'RECEIPT DATE' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                                    </p>
+                                                    <p>
+                                                        <label class="textTitlePrint">{{'TOTAL AMT PURCHASE' | translate}}: </label> {{this.order?.totalAmount | currencyFormat}}
+                                                    </p>
+                                                    <p>
+                                                        <label class="textTitlePrint">{{'Lucky Draw Code' | translate}}: </label> {{this.order?.luckyNo }}
+                                                    </p>
+            
+                                                    <div style="font-size: 13px;" *ngIf="this.order?.storeAddress"> {{'Contact' | translate}}: ({{this.order?.companyPhone}}) - {{this.order?.email}} <br>
+                                                        <label style="font-size: 12px;"> - {{this.order?.storeAddress}}</label>
+                                                    </div>
+                                                </div>
+            
+                                            </div>
+            
+                                        </div>
+                                    </div>
+                                </div>
+            
+            -->
+                        </div>
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </ng-container>
+
+        <!-- </dx-sankey> -->
+
+
+
+    </div>
+    <div #pdfVoucherHeader *ngIf="this.voucherHeaderPrintRequest=== true">
+        <div class="center-wrap print-p print-main" id="printDiv">
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <div class="maintenance-row">
+                    <div class="mt-4" >
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <h3 class="text-center"><b #idName>
+                                    <div innerHTML="{{this.order?.storeName}}"></div>
+                                     <!-- {{this.order?.storeName}}-->
+                                    </b></h3> 
+
+                                <div class="text-center mb-2" style="font-size:15px; margin-bottom: 0 !important;">
+                                    <p *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || this.order.isCanceled !=='Y'">
+                                        <ng-container *ngIf="this.order.salesType!=='Retail'">
+                                            <b> {{ this.order?.salesType | translate}} </b> {{this.typeOrder | translate}}
+                                        </ng-container>
+                                        <ng-container *ngIf="this.order.salesType==='Retail'">
+                                            <b> {{'SALES' | translate}} </b> {{this.typeOrder | translate}}
+                                        </ng-container>
+                                    </p>
+                                </div>
+                             
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+                                       
+                                        <div class="text-center">
+                                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-width]="1.2" [bc-height]="50" [bc-font-size]="13" [bc-value]="this.order.transId" [bc-display-value]="true" [bc-text-align]="center">
+                                            </ngx-barcode6>
+                                        </div>
+                                        <!-- [bc-width]="1.2"  -->
+                                        <!-- <p> <label class="textTitlePrint">{{'Bill No' | translate}}: </label> {{this.order.transId}}
+                                        <span>
+                                            - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </span>
+                                    </p> -->
+                                        <p>
+                                            <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+                                        <!-- <p *ngIf="this.order?.isCanceled!=='Y'">
+                                        <label class="textTitlePrint">{{'Created On' | translate}}: </label> 
+                                    </p> -->
+                                        <p *ngIf="this.order.refTransId !== ''">
+                                            <label class="textTitlePrint">{{'Original Trans ID' | translate}}: </label> {{this.order?.refTransId}}
+                                        </p>
+
+                                        <!-- <p> <label class="textTitlePrint">{{'Store' | translate}}: </label> {{this.order.storeName}}</p> -->
+                                        <!-- <p> <label class="textTitlePrint">{{'Address' | translate}}: </label> {{this.order.storeAddress}} </p> -->
+
+                                        <container-element [ngSwitch]="this.order?.cusGrpId">
+                                            <some-element *ngSwitchCase="'1'">
+                                                <p> <label class="textTitlePrint">{{'Member Card Number' | translate}}: </label> {{this.order?.cusId}}
+                                                </p>
+                                                <p> <label class="textTitlePrint">{{'Member Name' | translate}}: </label> {{this.order?.cusName}}
+                                                </p>
+                                                <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                    <!--  - <label class="textTitlePrint">{{'Member Expiry' | translate}}: </label> {{this.order?.expiryDate | date
+                                                        : this.authService.loadFormat().dateFormat }} -->
+                                                </p>
+                                                <!-- <p> <label class="textTitlePrint">{{'Expiry Date' | translate}}: </label> {{this.order?.expiryDate | date : this.authService.loadFormat().dateFormat }}</p> -->
+                                            </some-element>
+
+                                            <some-element *ngSwitchDefault>
+                                                <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                            </some-element>
+                                        </container-element>
+
+
+                                        <p *ngIf="this.order.isCanceled==='Y'">
+                                            <label class="textTitlePrint">{{'Sales Type' | translate}}: </label> {{'Canceled' | translate}} - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+
+                                        <!-- {{this.order.cusId}} - -->
+                                        <!-- phone: string = '';
+                        cusName: string = '';
+                        cusAddress: string = ''; -->
+                                        <!-- <p> <label class="textTitlePrint">Hạng thẻ: </label>  {{this.order.customer.customerGrpId}}</p> -->
+
+                                        <p *ngIf="this.order.salesPersonName!==null && this.order.salesPersonName!==undefined">
+                                            <label class="textTitlePrint">{{'Cashier' | translate}}: </label> {{this.order.createdBy}} - {{this.order.terminalId}}
+
+                                        </p>
+                                        <!-- <p *ngIf="this.orderType === 'Epay'">
+                                                <label class="textTitlePrint">{{'Epay Terminal' | translate}}: </label> {{ this.terminalEpay }}
+                                            
+                                            </p> -->
+
+                                        <p *ngIf="this.order?.status==='H' || this.order?.status==='Hold'"> <label class="textTitlePrint">{{'Status' | translate}}: </label> {{this.order.status}}
+                                        </p>
+                                    
+
+                                    </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div #pdfLuckyContainer *ngIf="this.order?.luckyNo?.length > 0 && (this.printByPDF ==='PDF' || this.luckyPrintRequest=== true)">
+        <div class="center-wrap print-p print-main" id="printDiv">
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <div class="maintenance-row">
+                    <div class="mt-4" >
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <h3 class="text-center"><b #idName>
+                                    <div innerHTML="{{this.order?.storeName}}"></div>
+                                    <!-- {{this.order?.storeName}} -->
+                                </b></h3>
+
+                                <div class="text-center mb-3" style="font-size:15px; margin-bottom: 0 !important;">
+                                    <h4> {{'LUCKY DRAW ENTRY FORM' | translate }}</h4>
+                                    <h4 *ngIf="this.order?.loyaltyName?.length > 0"> {{this.order?.loyaltyName}}</h4>
+                                    <h4 *ngIf="this.typeOrder !== 'Receipt'"> ({{this.typeOrder | translate}})</h4> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+
+                                        <container-element [ngSwitch]="this.order?.cusGrpId">
+                                            <some-element *ngSwitchCase="'1'">
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'NAME' | translate}}: <span style="font-weight:400">{{this.order?.cusName}}</span></label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'NRIC/PASSPORT' | translate}}: <span style="font-weight:400" >{{this.order?.cusId}}</span> </label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'TEL. NO' | translate}}: <span style="font-weight:400" >{{this.order?.phone}}</span> </label> </p>
+ 
+                                                <p *ngIf="this.order?.rewardPoints > 0"> 
+                                                    <label class="textTitlePrint" >{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                </p>
+                                                <!-- <p> <span class="textTitlePrint">{{'NAME' | translate}}: </span> <span class="under-line-solid" >{{this.order?.cusName}}</span> </p>
+                                                <p> <span class="textTitlePrint under-line-solid">{{'NRIC/PASSPORT' | translate}}: </span><span >{{this.order?.cusId}}</span> </p>
+                                                <p> <span class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px;">{{'TEL. NO' | translate}}: </span> </p>
+                                                <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                </p> -->
+                                            </some-element>
+                                            <some-element *ngSwitchCase="'2'">
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'Name' | translate}}: </label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'NRIC/PASSPORT' | translate}}: </label> </p>
+                                                <p> <label class="textTitlePrint" style="border-bottom: solid 1px; width: 100%; padding-bottom: 2px; margin-bottom: 15px;">{{'TEL. NO' | translate}}: </label> </p>
+                                            </some-element>
+                                            <some-element *ngSwitchDefault>
+                                                <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                            </some-element>
+                                        </container-element>
+
+                                        <hr class="style5">
+                                        <p style="font-size: 15px ;">
+                                            <label class="textTitlePrint">{{'RECEIPT NO' | translate}}: </label> {{this.order?.transId}}
+                                        </p>
+                                        <p style="font-size: 15px ;">
+                                            <label class="textTitlePrint">{{'RECEIPT DATE TIME' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+                                        <p style="font-size: 15px ;">
+                                            <label class="textTitlePrint">{{'TOTAL AMT PURCHASE' | translate}}: </label> {{this.currency}} {{this.order?.totalAmount | currencyFormat}}
+                                        </p>
+                                        <p style="font-size: 15px ;">
+                                            <label class="textTitlePrint">{{'LUCKY DRAW CODE' | translate}}: </label> {{this.order?.luckyNo }}
+                                        </p>
+
+                                        <!-- <div style="font-size: 13px;" *ngIf="this.order?.storeAddress"> {{'Contact' | translate}}: ({{this.order?.companyPhone}}) - {{this.order?.email}} <br>
+                                            <label style="font-size: 12px;"> - {{this.order?.storeAddress}}</label>
+                                        </div> -->
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 printPageShopCheck" *ngIf="this.PrintTemplate === 'Template1'">
+        <div class="col-md-12 w-100" *ngIf="this.luckyPrintRequest=== true && this.offPrint === true">
+            <button class="btn-search w-100" (click)="LuckyPrint()" style="padding: 10px 30px"><i
+                            class="fa fa-print" aria-hidden="true"></i> {{'Lucky Print' | translate}}</button>
+        </div>
+        <div class="col-md-12 w-100">
+            <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                            class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+        </div>
+    </div>
+
+    <!-- <div #pdfContainer_2 *ngIf="this.PrintTemplate === 'Template2'">
+        <div class="center-wrap print-p print-main" id="printDiv">
+
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <div class="maintenance-row">
+                    <div>
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="cl-company" style="font-size: 26px; line-height: 1;"><b>{{this.authService.getCompanyInfor().shortName}}</b></div>
+                                    <div class="cl-info" style="font-weight: 500">
+                                        <p class="text-center">{{this.order?.storeAddress}}</p>
+                                        <p>Hotline: {{this.order?.storePhone}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mb-2" style="font-size:27px; margin-bottom: 0 !important;">
+                                    <p>
+                                        <ng-container *ngIf="this.order.salesType!=='Retail'">
+                                            <b> {{ this.order?.salesType | translate}} </b> ({{this.typeOrder | translate}})
+                                        </ng-container>
+                                        <ng-container *ngIf="this.order.salesType ==='Retail'">
+                                            <b *ngIf="this.order.status!=='Hold'"> {{'SALES' | translate}} </b> <span *ngIf="this.typeOrder !== 'Receipt'">({{this.typeOrder | translate}})</span>
+                                            <b *ngIf="this.order.status==='Hold'"> Phiếu giữ đơn </b>
+                                        </ng-container>
+                                    </p>
+                                </div>
+                                
+                                <ng-container>
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+                                        <div class="text-center">
+                                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-width]="1.2" [bc-height]="50" [bc-font-size]="13" [bc-value]="this.order.transId" [bc-display-value]="true" [bc-text-align]="center">
+                                            </ngx-barcode6>
+                                        </div>
+                                        <p class="d-flex justify-content-between">
+                                            <span><label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</span>
+                                            <span><label class="textTitlePrint">Giờ in: </label> {{this.cusDate | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</span>
+                                        </p>
+                                       
+                                        <p *ngIf="this.order.refTransId !== ''">
+                                            <label class="textTitlePrint">{{'Original Trans ID' | translate}}: </label> {{this.order?.refTransId}}
+                                        </p>
+                                        <container-element [ngSwitch]="this.order?.cusGrpId">
+                                            <some-element *ngSwitchCase="'1'">
+                                                <p> <label class="textTitlePrint">{{'Member Card Number' | translate}}: </label> {{this.order?.cusId}}
+                                                </p>
+                                                <p> <label class="textTitlePrint">{{'Member Name' | translate}}: </label> {{this.order?.cusName}}
+                                                </p>
+                                                <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints | number}}
+                                                </p>
+                                            </some-element>
+
+                                            <some-element *ngSwitchDefault>
+                                                <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                            </some-element>
+                                        </container-element>
+
+
+                                        <p *ngIf="this.order.isCanceled==='Y'">
+                                            <label class="textTitlePrint">{{'Sales Type' | translate}}: </label> {{'Canceled' | translate}} - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+
+                                        <p *ngIf="this.order.salesPersonName!==null && this.order.salesPersonName!==undefined">
+                                            <label class="textTitlePrint">{{'Cashier' | translate}}: </label> {{this.order.salesPersonName}} - {{this.order.terminalId}}
+                                        </p>
+
+                                    </div>
+                                    <ng-container *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Details'))">
+
+                                        <div *ngIf="this.order.lines.length > 0">
+                                            <hr class="style5">
+                                            <div class="row table-row" style=" border-bottom: 1px solid #6c757d;">
+                                                <table style="width: 100%; border-collapse: collapse;">
+                                                    <tr>
+                                                        <th colspan="1" class="">{{'Description' | translate}}</th>
+                                                        <th colspan="1" class="text-center">{{'SL' | translate}}</th>
+                                                        <th colspan="1" class="text-right">{{'Đơn Giá' | translate}}</th>
+                                                        <th colspan="1" class="text-right">{{'Total' | translate}}</th>
+                                                    </tr>
+                                                    <ng-container *ngFor="let item of this.order?.lines; let i = index">
+                                                        <tr>
+                                                            <td colspan="5">
+                                                                <p>
+                                                                    {{item.itemName}}
+
+                                                                </p>
+                                                                <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Class' || item.itemType === 'Card'">
+                                                                <div>
+
+                                                                    <p style="widows: 100%;" *ngIf="item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!==''">
+                                                                        {{'Date' | translate}}: {{item.appointmentDate | dateFormat }}, {{'Area' | translate}}: {{item.storeAreaId}} <br /> {{'Time' | translate}}: {{item.timeFrameId}} - {{item.remark}}</p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Member' || item.itemType === 'Class'">
+                                                                        {{'Date' | translate}}: {{item.startDate | dateFormat }} ~ {{item.endDate | dateFormat }}
+                                                                        <br> {{'Name' | translate}}: {{item.name}} - {{item.phone }}
+                                                                    </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Card'">
+                                                                        {{'Card No' | translate}}: {{item.prepaidCardNo}} </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType.toLowerCase() === 'topup' || item.itemType.toLowerCase() === 'tp' || item.itemType.toLowerCase() === 'bp' || item.itemType.toLowerCase() === 'billpayment'">
+                                                                        {{'Card No' | translate}}: {{item.custom1}}
+                                                                        <br /> {{'Ref Number' | translate}}: {{item.custom3}}
+                                                                    </p>
+
+                                                                </div>
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="1"><label>
+                                                                <span *ngIf="this.printShow==='ItemCode'">
+                                                                    {{item.itemCode}} 
+                                                                </span>
+                                                                <span *ngIf="this.printShow!=='ItemCode'">
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length > 0">
+                                                                        {{item.weightScaleBarcode}}
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length <= 0">
+                                                                        {{item.barCode}}
+                                                                    </ng-container>
+                                                                </span> 
+                                                            </label>
+                                                            </td>
+                                                            <td colspan="1" class="text-center"><label>{{item.quantity}}</label></td>
+
+                                                            <td colspan="1" class="text-right"><label>{{item.price | currencyFormat}}</label>
+                                                            </td>
+                                                            <td colspan="1" class="text-right"><label> {{item.lineTotal | currencyFormat}} </label>
+                                                                <div *ngIf="item.discountAmt!==null && item.discountAmt!==undefined && item?.discountAmt > 0">
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType === 'Bonus Amount'">
+                                                                +{{item.discountAmt | currencyFormat}}
+                                                            </label>
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType !== 'Bonus Amount' && this.order?.collectedStatus != 'Returned'">
+                                                                -{{item.discountAmt | currencyFormat}}
+                                                            </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </table>
+                                            </div>
+
+                                            <div class="row table-row" style="margin: 0" *ngFor="let item of this.order?.lines; let i = index">
+                                                <div class="col-md-12 w-100 mb-2" *ngIf="item.serialLines.length > 0 && (item.itemType.toLowerCase()==='retail' || item.itemType.toLowerCase()==='pin' || item.itemType.toLowerCase()==='pn')">
+                                                    <div class="row">
+                                                        <div class="col-md-3 col-sm-3 col-print-3" style="font-size: 13px;">
+                                                            <b>{{'Serials' | translate}} :</b>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-9 col-print-9">
+                                                            <ul style="column-count: 2;" *ngFor="let itemSL of item.serialLines">
+                                                                <li style="list-style-type: disc; font-size: 14px;">
+                                                                    {{itemSL?.serialNum}}
+                                                                    <span *ngIf="itemSL?.expDate!==null && itemSL?.expDate!==undefined && itemSL?.expDate !== ''">
+                                                                        {{'Exp Date' | translate}}: {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <table id="customtable" class="mt-2">
+                                                <tr *ngIf="this.order.totalQty !==null && this.order.totalQty!==undefined && this.order.totalQty !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Quantity' | translate}}:
+                                                </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalQty | number}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.totalAmount !==null && this.order.totalAmount!==undefined && this.order.totalAmount !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Bill Before Discount' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalAmount | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.bonusLine !==null && this.order.bonusLine!==undefined && this.order.bonusLine > 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Bonus' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.bonusLine |
+                                                    currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                                <tr *ngIf="this.order.discountLine !==null && this.order.discountLine!==undefined && this.order.discountLine !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Discount On Items' | translate}}:
+                                                </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.discountLine) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.discountAmount !==null && this.order.discountAmount!==undefined && this.order.discountAmount !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Discount On Total Bill' | translate}}:
+                                                </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.discountAmount) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalDiscountAmt !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Discount' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.totalDiscountAmt) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.roundingOff !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Rounding' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{ this.order?.roundingOff |
+                                                    currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalPayable !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Payable' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalPayable |
+                                                    currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="this.order?.totalTax !== 0 &&  showTaxAmount === 'true'">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{'Total Before VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{(this.order?.totalPayable - this.order?.totalTax) | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{taxtDescrip | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalTax | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint"> {{'Total After VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalPayable | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </table>
+                                            <div *ngIf="this.order.payments.length > 0">
+                                                <hr class="style5">
+                                                <table id="maintable">
+                                                    <tr>
+                                                        <th> {{'PaymentMethod' | translate}} </th>
+                                                        <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                                    </tr>
+                                                    <tr *ngFor="let payment of this.order.payments">
+                                                        <td>
+                                                            <label *ngIf="payment.shortName!==null && payment.shortName!== undefined && payment.shortName!==''">
+                                                        {{payment.shortName}}
+                                                        <p
+                                                            *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                            {{'Ref' | translate}} 1:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                    {{ payment.refNumber.substring(
+                                                                    payment.refNumber?.length - 1,
+                                                                    payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+
+                                                                    {{ payment.refNumber.substring(
+                                                                    payment.refNumber?.length - 4,
+                                                                    payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.refNumber}}
+                                                                </some-element>
+                                                            </container-element>
+
+                                                        </p>
+                                                        <p
+                                                            *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                            {{'Ref' | translate}} 2:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                    ***{{
+                                                                    payment.customF1.substring(payment.customF1?.length
+                                                                    - 1, payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                    ***{{
+                                                                    payment.customF1.substring(payment.customF1?.length
+                                                                    - 4, payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.customF1}}
+                                                                </some-element>
+                                                            </container-element>
+                                                        </p>
+
+                                                        <p class="mt-1" *ngIf="payment?.cardNo !== null && payment?.cardNo !== undefined && payment?.cardNo?.length > 0">
+                                                            {{'Card No' | translate}}:    {{ payment?.cardNo}} 
+                                                        </p>
+                                                    </label>
+
+                                                            <label *ngIf="payment.shortName===null || payment.shortName=== undefined || payment.shortName===''">
+                                                        {{payment.paymentCode}}
+                                                        <span class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined 
+                                                        || this.authService.getStoreCurrency().length > 0">
+                                                            {{payment.currency}}
+                                                        </span>
+                                                        <p
+                                                            *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                            {{'Ref' | translate}} 1:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                    ***{{
+                                                                    payment.refNumber.substring(payment.refNumber?.length
+                                                                    - 1, payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+                                                                    ***{{
+                                                                    payment.refNumber.substring(payment.refNumber?.length
+                                                                    - 4, payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.refNumber }}
+                                                                </some-element>
+                                                            </container-element>
+
+                                                        </p>
+                                                        <p
+                                                            *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                            {{'Ref' | translate}} 2:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                    ***{{ payment.customF1.substring(
+                                                                    payment.customF1?.length - 1,
+                                                                    payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                    ***{{ payment.customF1.substring(
+                                                                    payment.customF1?.length - 4,
+                                                                    payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.customF1 }}
+                                                                </some-element>
+                                                            </container-element>
+                                                        </p>
+                                                    </label>
+
+                                                            <label class="ml-2" *ngIf="payment?.fcAmount!==0">
+                                                        {{payment.fcAmount}}
+                                                    </label>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <label>{{payment.collectedAmount | currencyFormat}}
+                                                    </label>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+
+                                            <hr class="style5">
+                                            <table id="customtable">
+
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Receipt' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.totalReceipt | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Change' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.amountChange | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+
+                                        <div>
+                                            <p class="mt-2 textTitlePrint" *ngIf="this.order?.luckyNo">{{'Lucky Draw Code' | translate}}: {{this.order?.luckyNo}}
+                                            </p>
+                                            <ng-container *ngIf="this.order?.dataSource==='POS' && this.order.refTransId !== ''">
+                                                <p class="">
+                                                    <container-element [ngSwitch]="this.order.salesMode?.toLowerCase()">
+                                                        <some-element *ngSwitchCase="'ex' || 'exchange'">
+                                                            {{'Exchanged' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchCase="'return'">
+                                                            {{'Returned' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchDefault>
+                                                            {{'Voided' | translate}}:
+                                                        </some-element>
+                                                    </container-element>
+                                                    Rcpt# {{this.order?.refTransId}}
+                                                </p>
+
+                                                <p>{{'Reason' | translate}}: {{this.order?.reason}} </p>
+                                            </ng-container>
+
+
+                                            <p class="mt-2" *ngIf="this.order?.approvalId">{{'Approved by' | translate}}: {{this.order?.approvalId}}
+                                            </p>
+                                        </div>
+
+                                    </ng-container>
+                                    <hr class="style5">
+                                    <div class="font-weight-bold mt-2">
+                                        <p>- Để phản hồi về chất lượng dịch vụ. Vui lòng liên hệ: 1800 69 30 - 0917 85 32 32</p>
+                                        <p>- Quý khách cần hóa đơn tài chính, vui lòng cung cấp thông tin trong ngày</p>
+                                        <p>- Giữ phiếu tính tiền để đổi sản phẩm trong vòng 24h trong trường hợp sản phẩm có lỗi do nhà sản xuất</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="footer-bill">
+                                            <p class="header-invoice">ĐỀ XUẤT HÓA ĐƠN VAT, VUI LÒNG QUÉT QR CODE ĐỂ ĐIỀN THÔNG TIN TRONG NGÀY MUA HÀNG (TRƯỚC 22H30)</p>
+                                        </div>
+                                        <div class="footer-img">
+                                            <img width="100%" src="../../../../../assets/images/System/thumbnail_barcode phieutinhtien.png" alt="qrcode" class="img-fluid">
+                                        </div>
+                                        <div style="line-height: 1.3; clear: both;"><b>- Để đổi trả sản phẩm có lỗi do nhà sản xuất trong vòng 24h, vui lòng giữ lại phiếu tính tiền này.</b></div>
+                                        <div style="line-height: 1.3"><b>- Để phản hồi về chất lượng dịch vụ. Vui lòng liên hệ: 1800 69 30 - 0917 85 32 32</b></div>
+                                    </div> 
+                                   <div [innerHTML]="this.authService.storeSelected().printRemarks"></div> 
+                                    <div style="clear: both;">
+                                        <p class="text-center"><b>Xin cảm ơn Quý khách - Hẹn gặp lại</b></p>
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div #pdfContainer_2 *ngIf="this.PrintTemplate === 'Template2'">
+        <div class="center-wrap print-p print-main" id="printDiv">
+
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <div class="maintenance-row">
+                    <div>
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="cl-company" style="font-size: 26px; line-height: 1;"><b>{{this.authService.getCompanyInfor().shortName}}</b></div>
+                                    <div class="cl-info" style="font-weight: 500">
+                                        <p class="text-center">{{this.order?.storeAddress}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mb-2" style="font-size:27px; margin-bottom: 0 !important;">
+                                    <p>
+                                        <ng-container *ngIf="this.order.salesType!=='Retail'">
+                                            <b style="font-size: 31px"> {{ this.order?.salesType | translate}} </b><br> <span style="font-size: 18px"><b>({{this.typeOrder | translate}})</b></span>
+                                        </ng-container>
+                                        <ng-container *ngIf="this.order.salesType ==='Retail'">
+                                            <b style="font-size: 31px" *ngIf="this.order.status!=='Hold'"> {{'SALES' | translate}} </b><br> <span style="font-size: 18px" *ngIf="this.typeOrder !== 'Receipt'"><b>({{this.typeOrder | translate}})</b></span>
+                                            <b *ngIf="this.order.status==='Hold'"> Phiếu giữ đơn </b>
+                                        </ng-container>
+                                    </p>
+                                </div>
+
+                                <ng-container>
+                                    <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+                                        <div class="text-center">
+                                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-width]="1.2" [bc-height]="50" [bc-font-size]="13" [bc-value]="this.order.transId" [bc-display-value]="true" [bc-text-align]="center">
+                                            </ngx-barcode6>
+                                        </div>
+                                        <p class="d-flex justify-content-between">
+                                            <span><label class="textTitlePrint">Ngày bán: </label> {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</span>
+                                            <span><label class="textTitlePrint">Ngày in: </label> {{this.cusDate | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</span>
+                                        </p>
+
+                                        <p *ngIf="this.order.refTransId !== ''">
+                                            <label class="textTitlePrint">{{'Original Trans ID' | translate}}: </label> {{this.order?.refTransId}}
+                                        </p>
+                                        <container-element>
+                                            <p> <label class="textTitlePrint">{{'Member Name' | translate}}: </label> {{this.order?.cusName}}</p>
+                                            <p> <label class="textTitlePrint">{{'Phone' | translate}}: </label> {{this.order?.phone}}</p>
+                                            <p> <label class="textTitlePrint">{{'Member Card Number' | translate}}: </label> {{this.order?.cusId}}</p>
+                                            <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> {{this.order?.rewardPoints}}</p>
+                                        </container-element>
+
+
+                                        <p *ngIf="this.order.isCanceled==='Y'">
+                                            <label class="textTitlePrint">{{'Sales Type' | translate}}: </label> {{'Canceled' | translate}} - {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                        </p>
+
+                                        <p *ngIf="this.order.salesPersonName!==null && this.order.salesPersonName!==undefined">
+                                            <label class="textTitlePrint">{{'Cashier' | translate}}: </label> {{this.order.salesPersonName}}
+                                        </p>
+
+                                    </div>
+                                    <ng-container *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Details'))">
+
+                                        <div *ngIf="this.order.lines.length > 0">
+
+                                            <div class="border-0">
+                                                <table class="print-header-bill">
+                                                    <tr class="border-0 print-header-bill-tr">
+                                                        <!-- <th colspan="1" class="">{{'Description' | translate}}</th> -->
+                                                        <th colspan="2" class="text-right border-0">{{'Đơn Giá' | translate}}</th>
+                                                        <th colspan="1" class="text-right border-0">{{'Số lượng' | translate}}</th>
+                                                        <th colspan="1" class="text-right border-0">{{'Thành tiền' | translate}}</th>
+                                                    </tr>
+
+                                                    <ng-container *ngFor="let item of this.order?.lines; let i = index">
+                                                        <!-- <tr>
+                                                            <td colspan="5">
+                                                                <p>
+                                                                    {{item.itemName}}
+
+                                                                </p>
+                                                                <br *ngIf="(item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!=='') || item.itemType === 'Member' || item.itemType === 'Class' || item.itemType === 'Card'">
+                                                                <div>
+
+                                                                    <p style="widows: 100%;" *ngIf="item.timeFrameId!==null && item.timeFrameId!==undefined  && item.timeFrameId!==''">
+                                                                        {{'Date' | translate}}: {{item.appointmentDate | dateFormat }}, {{'Area' | translate}}: {{item.storeAreaId}} <br /> {{'Time' | translate}}: {{item.timeFrameId}} - {{item.remark}}</p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Member' || item.itemType === 'Class'">
+                                                                        {{'Date' | translate}}: {{item.startDate | dateFormat }} ~ {{item.endDate | dateFormat }}
+                                                                        <br> {{'Name' | translate}}: {{item.name}} - {{item.phone }}
+                                                                    </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType === 'Card'">
+                                                                        {{'Card No' | translate}}: {{item.prepaidCardNo}} </p>
+                                                                    <p style="widows: 100%;" *ngIf="item.itemType.toLowerCase() === 'topup' || item.itemType.toLowerCase() === 'tp' || item.itemType.toLowerCase() === 'bp' || item.itemType.toLowerCase() === 'billpayment'">
+                                                                        {{'Card No' | translate}}: {{item.custom1}}
+                                                                        <br /> {{'Ref Number' | translate}}: {{item.custom3}}
+                                                                    </p>
+
+                                                                </div>
+                                                            </td>
+
+                                                        </tr> -->
+                                                        <tr style="border: none;">
+                                                            <td colspan="4" style="font-size: 13px;">{{item.itemName}}
+                                                                <span *ngIf="this.printShow==='ItemCode'">{{item.itemCode}}</span>
+                                                                <span *ngIf="this.printShow!=='ItemCode'">
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length > 0">
+                                                                        ({{item.weightScaleBarcode}})
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length <= 0">
+                                                                        ({{item.barCode}})
+                                                                    </ng-container>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <!-- <td colspan="1"><label>
+                                                                <span *ngIf="this.printShow==='ItemCode'">
+                                                                    {{item.itemCode}} 
+                                                                </span>
+                                                                <span *ngIf="this.printShow!=='ItemCode'">
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length > 0">
+                                                                        {{item.weightScaleBarcode}}
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="item.weightScaleBarcode?.length <= 0">
+                                                                        {{item.barCode}}
+                                                                    </ng-container>
+                                                                </span> 
+                                                            </label>
+                                                            </td> -->
+
+                                                            <td colspan="2" class="text-right"><label>{{item.price | currencyFormat}}</label></td>
+                                                            <td colspan="1" class="text-right"><label>{{item.quantity}}</label></td>
+                                                            <td colspan="1" class="text-right"><label> {{item.lineTotalBefDis | currencyFormat}} </label></td>
+
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="text-right">
+                                                                <div *ngIf="item.discountAmt!==null && item.discountAmt!==undefined && item?.discountAmt > 0">
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType === 'Bonus Amount'">
+                                                                        + {{item.discountAmt | currencyFormat}}
+                                                                    </label>
+                                                                    <label class="row m-0 justify-content-end text-right" *ngIf="item.discountType !== 'Bonus Amount' && this.order?.collectedStatus != 'Returned'">
+                                                                        - {{item.discountAmt | currencyFormat}}
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </table>
+                                            </div>
+
+                                            <div class="row" style="margin: 0" *ngFor="let item of this.order?.lines; let i = index">
+                                                <div class="col-md-12 w-100 mb-2" *ngIf="item.serialLines.length > 0 && (item.itemType.toLowerCase()==='retail' || item.itemType.toLowerCase()==='pin' || item.itemType.toLowerCase()==='pn')">
+                                                    <div class="row">
+                                                        <div class="col-md-3 col-sm-3 col-print-3" style="font-size: 13px;">
+                                                            <b>{{'Serials' | translate}} :</b>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-9 col-print-9">
+                                                            <ul style="column-count: 2;" *ngFor="let itemSL of item.serialLines">
+                                                                <li style="list-style-type: disc; font-size: 14px;">
+                                                                    {{itemSL?.serialNum}}
+                                                                    <span *ngIf="itemSL?.expDate!==null && itemSL?.expDate!==undefined && itemSL?.expDate !== ''">
+                                                                        {{'Exp Date' | translate}}: {{ itemSL?.expDate | date : this.authService.loadFormat().dateFormat }}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <hr class="style1">
+                                            <table id="customtable" class="mt-2">
+                                                <!-- <tr *ngIf="this.order.totalQty !==null && this.order.totalQty!==undefined && this.order.totalQty !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Total Quantity' | translate}}:
+                                                </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalQty | number}} </label>
+                                                    </td>
+                                                </tr> -->
+                                                <tr *ngIf="this.order.totalAmount !==null && this.order.totalAmount!==undefined && this.order.totalAmount !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total Bill Before Discount' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalAmount | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.bonusLine !==null && this.order.bonusLine!==undefined && this.order.bonusLine > 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Bonus' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.bonusLine | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                                <tr *ngIf="this.order.discountLine !==null && this.order.discountLine!==undefined && this.order.discountLine !== 0 ">
+                                                    <td>
+                                                        <label class="textTitlePrint"> {{'Discount On Items' | translate}}:
+                                                </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.discountLine) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order.discountAmount !==null && this.order.discountAmount!==undefined && this.order.discountAmount !== 0 ">
+                                                    <td>
+                                                        <!-- <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Discount On Total Bill' | translate}}:</label> -->
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Other Discount' | translate}}:</label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.discountAmount) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalDiscountAmt !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total Discount' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> - {{ myMath.abs(this.order?.totalDiscountAmt) | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.roundingOff !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Rounding' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{ this.order?.roundingOff |
+                                                    currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="this.order?.totalPayable !== 0">
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total Payable' | translate}}: </label>
+                                                    </td>
+
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order?.totalPayable | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="this.order?.totalTax !== 0 &&  showTaxAmount === 'true'">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total Before VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{(this.order?.totalPayable - this.order?.totalTax) | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{taxtDescrip | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalTax | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total After VAT Tax' | translate}}: </label>
+                                                        </td>
+
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.totalPayable | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                    
+                                                 
+                                                </ng-container>
+                                                <ng-container *ngIf="this.order?.paymentDiscount!==null && this.order?.paymentDiscount!==undefined && this.order?.paymentDiscount!==0">
+                                                    <tr  >
+                                                        <td>
+                                                            <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Payment Discount' | translate}}: </label>
+                                                        </td>
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{this.order?.paymentDiscount | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </table>
+                                          
+                                            <div *ngIf="this.order.payments.length > 0">
+                                                <hr class="style1">
+                                                <table style="width: 100%">
+                                                    <tr>
+                                                        <th style="border: none;"> {{'PaymentMethod' | translate}} </th>
+                                                        <th style="border: none"> </th>
+                                                    </tr>
+                                                    <tr *ngFor="let payment of this.order.payments">
+                                                        <td>
+                                                            <label *ngIf="payment.shortName!==null && payment.shortName!== undefined && payment.shortName!==''">
+                                                       <b>{{payment.shortName}}</b> 
+                                                        <p style="font-size: 13px;"
+                                                            *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                            {{'Ref' | translate}} 1:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                    {{ payment.refNumber.substring(
+                                                                    payment.refNumber?.length - 1,
+                                                                    payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+
+                                                                    {{ payment.refNumber.substring(
+                                                                    payment.refNumber?.length - 4,
+                                                                    payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.refNumber}}
+                                                                </some-element>
+                                                            </container-element>
+
+                                                        </p>
+                                                        <p style="font-size: 13px;"
+                                                            *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                            {{'Ref' | translate}} 2:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                    ***{{
+                                                                    payment.customF1.substring(payment.customF1?.length
+                                                                    - 1, payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                    ***{{
+                                                                    payment.customF1.substring(payment.customF1?.length
+                                                                    - 4, payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.customF1}}
+                                                                </some-element>
+                                                            </container-element>
+                                                        </p>
+
+                                                        <p class="mt-1" *ngIf="payment?.cardNo !== null && payment?.cardNo !== undefined && payment?.cardNo?.length > 0">
+                                                            {{'Card No' | translate}}:    {{ payment?.cardNo}} 
+                                                        </p>
+                                                    </label>
+
+                                                            <label *ngIf="payment.shortName===null || payment.shortName=== undefined || payment.shortName===''">
+                                                        {{payment.paymentCode}}
+                                                        <span class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined 
+                                                        || this.authService.getStoreCurrency().length > 0">
+                                                            {{payment.currency}}
+                                                        </span>
+                                                        <p
+                                                            *ngIf="payment?.refNumber !== null && payment?.refNumber !== undefined && payment?.refNumber !== ''">
+                                                            {{'Ref' | translate}} 1:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length <= 4">
+                                                                    ***{{
+                                                                    payment.refNumber.substring(payment.refNumber?.length
+                                                                    - 1, payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.refNumber?.length > 4">
+                                                                    ***{{
+                                                                    payment.refNumber.substring(payment.refNumber?.length
+                                                                    - 4, payment.refNumber?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.refNumber }}
+                                                                </some-element>
+                                                            </container-element>
+
+                                                        </p>
+                                                        <p
+                                                            *ngIf=" payment?.customF1 !== null && payment?.customF1 !== undefined && payment?.customF1 !== ''">
+                                                            {{'Ref' | translate}} 2:
+                                                            <container-element [ngSwitch]="true">
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length <= 4">
+                                                                    ***{{ payment.customF1.substring(
+                                                                    payment.customF1?.length - 1,
+                                                                    payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element
+                                                                    *ngSwitchCase="payment.customF2?.toString() === 'B' && payment.customF1?.length > 4">
+                                                                    ***{{ payment.customF1.substring(
+                                                                    payment.customF1?.length - 4,
+                                                                    payment.customF1?.length) }}
+                                                                </some-element>
+                                                                <some-element *ngSwitchDefault>
+                                                                    {{ payment.customF1 }}
+                                                                </some-element>
+                                                            </container-element>
+                                                        </p>
+                                                    </label>
+
+                                                            <label class="ml-2" *ngIf="payment?.fcAmount!==0">
+                                                        {{payment.fcAmount}}
+                                                    </label>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <label>{{payment.collectedAmount | currencyFormat}} </label>
+                                                            <ng-container *ngIf="payment.paymentDiscount!==null && payment.paymentDiscount!==undefined && payment.paymentDiscount!==0">
+                                                                <br />
+                                                                <label  >{{-payment.paymentDiscount | currencyFormat}}
+                                                                </label>
+                                                            </ng-container>
+                                                          
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+
+                                            <hr class="style1">
+                                            <table id="customtable">
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Total Receipt' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.totalReceipt | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="this.order.paymentDiscount!==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount!==0">
+                                                    <tr>
+                                                        <td>
+                                                            <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Actual Amount' | translate}}: </label>
+                                                        </td>
+                                                        <td style="min-width: 100px;">
+                                                            <label class="row m-0 justify-content-end"> {{(this.order.totalPayable - this.order.paymentDiscount) | currencyFormat}} </label>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                <tr>
+                                                    <td>
+                                                        <label class="textTitlePrint font-size-14" style="font-weight: 800"> {{'Change' | translate}}: </label>
+                                                    </td>
+                                                    <td style="min-width: 100px;">
+                                                        <label class="row m-0 justify-content-end"> {{this.order.amountChange | currencyFormat}} </label>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+
+                                        <div>
+                                            <p class="mt-2 textTitlePrint" *ngIf="this.order?.luckyNo">{{'LUCKY DRAW CODE' | translate}}: {{this.order?.luckyNo}}
+                                            </p>
+                                            <ng-container *ngIf="this.order?.dataSource==='POS' && this.order.refTransId !== ''">
+                                                <p class="">
+                                                    <container-element [ngSwitch]="this.order.salesMode?.toLowerCase()">
+                                                        <some-element *ngSwitchCase="'ex' || 'exchange'">
+                                                            {{'Exchanged' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchCase="'return'">
+                                                            {{'Returned' | translate}}:
+                                                        </some-element>
+                                                        <some-element *ngSwitchDefault>
+                                                            {{'Voided' | translate}}:
+                                                        </some-element>
+                                                    </container-element>
+                                                    Rcpt# {{this.order?.refTransId}}
+                                                </p>
+
+                                                <p>{{'Reason' | translate}}: {{this.order?.reason}} </p>
+                                            </ng-container>
+
+
+                                            <p class="mt-2" *ngIf="this.order?.approvalId">{{'Approved by' | translate}}: {{this.order?.approvalId}}
+                                            </p>
+                                        </div>
+
+                                    </ng-container>
+                                    <hr class="style1">
+                                    <div class="mt-2 d-flex align-items-center">
+                                        <div class="footer-bill ">
+                                            <p class="header-invoice">ĐỀ XUẤT HÓA ĐƠN VAT(GTGT), VUI LÒNG QUÉT QR CODE/ TRUY CẬP <span style="font-weight: 800">http://einvoice.farmersmarket.vn</span> ĐỂ ĐIỀN THÔNG TIN TRONG NGÀY MUA HÀNG (TRƯỚC 22H30)</p>
+                                        </div>
+                                        <div class="footer-img">
+                                            <img width="100%" src="../../../../../assets/images/System/thumbnail_QR-FM-Einvoice.png" alt="qrcode" class="img-fluid">
+                                        </div>
+                                    </div>
+                                    <hr class="style1">
+                                    <p class="font-weight-bold">Tổng đài góp ý/ khiếu nại: <span style="font-weight: 800;">1800 6930</span> </p>
+                                    <p class="font-weight-bold">Tổng đài tư vấn/ mua hàng: <span style="font-weight: 800;">1900 6369 50</span></p>
+                                    <hr class="style1">
+                                    <div style="clear: both; font-weight: 700;">
+                                        <p style="font-weight: 800;">Chính sách bảo hành/ đổi trả sản phẩm:</p>
+                                        <p>- Hàng hóa bị rách bao bì/ hư hỏng trong quá trình giao.</p>
+                                        <p>- Hàng hóa bị hư hỏng do vi khuẩn/ côn trùng xâm nhập.</p>
+                                        <p>- Hàng hóa hết hạn sử dụng/ lỗi do nhà sản xuất.</p>
+                                        <br>
+                                        <p style="font-weight: 800;">Vui lòng giữ phiếu tính tiền để đổi trả sản phẩm trong:</p>
+                                        <p>- 24H*: hàng đông lạnh, hải sản, thịt cá, trái cây, rau củ tươi.</p>
+                                        <p>- 72H*: trái cây chờ chín, mặt hàng còn lại.</p>
+                                        <p>* Kể từ khi xuất bill mua hàng này.</p>
+                                        <br>
+                                        <p class="text-center"><b>Xin cảm ơn đã lựa chọn mua sắm tại <br> Farmers Market!</b></p>
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 printPageShopCheck" *ngIf="this.PrintTemplate === 'Template2'">
+        <div class="col-md-12 w-100">
+            <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                            class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+        </div>
+    </div>
+
+
+
+</ng-container>
+<!-- <ng-container *ngIf="this.order===null || this.order===undefined">
+  X
+</ng-container> -->

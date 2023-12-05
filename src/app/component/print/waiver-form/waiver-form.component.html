@@ -1,0 +1,551 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;     height: 100%;">
+        <div class="search-wrap" style="width: 100%!important; max-width: unset!important;">
+            <div class="row" style="padding-bottom: 50px;">
+                <div class="col-md-6">
+                    <label for="item-searchbar" class="section-title">{{'Waiver Form' | translate}}</label>
+                </div>
+
+                <div class="col-md-6" style="text-align: right;">
+                    <ng-container *ngIf="this.UserWaiverList?.length > 1">
+
+                        <!-- printSectionId="print-section" directPrint="true" ngxPrint [useExistingCss]="true"  -->
+                        <!-- <button class="submit-btn "     (click)="printPage()"  >Print</button>  -->
+                        <dx-button (click)="printPage()" class="mr-4" stylingMode="outlined" text="Print" type="default"> </dx-button>
+
+                    </ng-container>
+                    <dx-button *ngIf="this.version==='en'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-gb" type="default"> </dx-button>
+                    <dx-button *ngIf="this.version==='vi'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-vn" type="default"> </dx-button>
+
+                    <dx-button (onClick)="addNewWaiver()" stylingMode="outlined" icon="add" type="default"> </dx-button>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="table-wrap">
+
+            <div class="row">
+
+                <div class="col-md-3" *ngFor="let waiver of this.UserWaiverList">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <input #txtPhone type="text" class="form-control mt-2" placeholder="Phone" [value]="waiver.phone" [(ngModel)]="waiver.phone" (change)="somethingChanged()" />
+                        </div>
+                        <div class="col-md-2">
+                            <!-- -->
+                            <dx-button style="width:100%" (onClick)="findCustomer(txtPhone.value)" class=" mt-2" stylingMode="outlined" icon="search" type="default">
+                            </dx-button>
+                        </div>
+                    </div>
+
+                    <input type="text" class="form-control mt-2" placeholder="Full name" [(value)]="waiver.name" [(ngModel)]="waiver.name" (change)="somethingChanged()" />
+
+                    <dx-date-box name="Birthdate" class=" mt-2" [placeholder]="'Birthdate'" id="Birthdate" [value]="waiver.dob" [displayFormat]="this.dateFormat" [(ngModel)]="waiver.dob" width="100%" (onValueChanged)="somethingChanged()"></dx-date-box>
+                    <dx-select-box #ddlGender class=" mt-2" [value]="waiver.gender" [(ngModel)]="waiver.gender" [placeholder]="'Gender'" [dataSource]="version==='vi' ? this.genderVNOptions : this.genderENOptions " displayExpr="name" valueExpr="id">
+                    </dx-select-box>
+                    <!-- {{waiver.gender}} -->
+                    <input type="text" class="form-control mt-2" placeholder="Address" [value]="waiver.address" [(ngModel)]="waiver.address" (change)="somethingChanged()" />
+                    <input type="text" class="form-control mt-2" placeholder="Email" [value]="waiver.email" [(ngModel)]="waiver.email" (change)="somethingChanged()" />
+                    <dx-date-box name="From" class=" mt-2" [placeholder]="'From'" id="From" [value]="waiver.from" [displayFormat]="this.dateFormat" [(ngModel)]="waiver.from" width="100%" (onValueChanged)="somethingChanged()"></dx-date-box>
+                    <dx-date-box name="To" class=" mt-2" [placeholder]="'To'" id="To" [value]="waiver.to" [displayFormat]="this.dateFormat" [(ngModel)]="waiver.to" width="100%" (onValueChanged)="somethingChanged()"></dx-date-box>
+
+                    <hr class="style1">
+
+                    <dx-button style="width:100%" (onClick)="addNewRow(waiver)" class=" mt-2" stylingMode="outlined" icon="add" type="default"> </dx-button>
+
+                    <div *ngFor="let item of waiver.itemList">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control mt-2" disabled placeholder="Id" [value]="item.id" [(ngModel)]="item.id" (change)="somethingChanged()" />
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control mt-2" placeholder="Name" [value]="item.name" [(ngModel)]="item.name" (change)="somethingChanged()" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <dx-select-box #ddlGender class=" mt-2" [value]="item.gender" [(ngModel)]="item.gender" [placeholder]="'Gender'" [dataSource]="version==='vi' ? this.genderVNOptions : this.genderENOptions " displayExpr="name" valueExpr="id">
+                                </dx-select-box>
+                            </div>
+                            <div class="col-md-7">
+                                <dx-date-box name="Birthdate" class=" mt-2" [placeholder]="'Birthdate'" id="Birthdate" [value]="item.dob" [displayFormat]="this.dateFormat" [(ngModel)]="item.dob" width="100%" (onValueChanged)="somethingChanged()"></dx-date-box>
+                            </div>
+                            <div class="col-md-2">
+                                <dx-button style="width:100%" (onClick)="removeRow(waiver, item)" class=" mt-2" stylingMode="outlined" icon="fas fa-user-times" type="danger"> </dx-button>
+                            </div>
+                        </div>
+                        <hr class="style4">
+
+                    </div>
+                    <!-- [useExistingCss]="true" printSectionId="print-section" directPrint="true" ngxPrint   (click)="printTemplate()"-->
+                    <ng-container *ngIf="this.UserWaiverList?.length === 1">
+                        <button class="submit-btn mt-3" style="min-width:150px; width: 100%;" (click)="printPage()">{{'Print' | translate}}</button>
+                        <!-- <button class="submit-btn mt-3" style="min-width:150px; width: 100%;" 
+                  printSectionId="print-section" directPrint="true" ngxPrint [useExistingCss]="true" 
+                   >Print</button>  -->
+                    </ng-container>
+                    <ng-container *ngIf="this.UserWaiverList?.length > 1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- printSectionId="print-section" directPrint="true" ngxPrint [useExistingCss]="true"  -->
+                                <!-- <button class="submit-btn mt-3"   style="width:100%"  (click)="printTemplate()"  >Print</button>  -->
+                            </div>
+                            <div class="col-md-6">
+                                <dx-button class="submit-btn mt-3" style="width:100%" (onClick)="removeWaiver(waiver)" stylingMode="outlined" icon="fas fa-user-times" type="danger"> </dx-button>
+                            </div>
+                        </div>
+
+
+
+                    </ng-container>
+
+                    <!-- <div id="print-section"  ngxPrintItemMarker  printWindow="false" directPrint="true" divID="print-section">  -->
+
+                </div>
+                <ng-template #PrintTemplate>
+                    <app-waiver-form-template [(version)]="this.version" [(UserWaiverList)]="this.UserWaiverList"></app-waiver-form-template>
+                </ng-template>
+                <div class="col-md-9" *ngIf="this.UserWaiverList?.length === 1">
+                    <div class="col-md-12" divID="print-section" id="print-section" ngxPrintItemMarker printWindow="false" directPrint="true">
+                        <img src="../../../../assets/images/jump.png" style=" float:right; max-height: 80px; margin-top: -40px;">
+                        <ng-container *ngIf="version==='vi'">
+
+                            <h2 class="mt-3">
+                                GIẤY CAM KẾT (Dành cho Khách hàng Cá nhân)
+                            </h2>
+                            <hr class="style1">
+                            <div class="row mt-2" style="width: 100%;">
+                                <div class="col-md-1">
+                                    <h4 class="textWaiver mt-1">Họ Tên: </h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].name}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;"> Ngày sinh: </h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].dob | dateFormat}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;"> Nam / Nữ: </h4>
+                                </div>
+                                <div class="col-md-1" style="border-bottom: 1px solid black;" [innerHtml]="this.UserWaiverList[0].gender | genderFormat:this.version">
+                                    <!-- <span ></span> -->
+                                    <!-- {{this.UserWaiverList[0].gender | genderFormat: this.UserWaiverList[0].gender:this.version}} -->
+                                </div>
+
+                            </div>
+                            <div class="row  mt-2">
+
+                                <div class="row col-md-12">
+                                    <div class="col-md-1">
+                                        <h4 class="textWaiver mt-1">Địa chỉ: </h4>
+                                    </div>
+                                    <div class="col-md-11" style="border-bottom: 1px solid black;">
+                                        {{this.UserWaiverList[0].address}}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row  mt-2">
+                                <div class="col-md-1">
+                                    <h4 class="textWaiver mt-1">Email:</h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].email}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;">Số điện thoại:</h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].phone}}
+                                </div>
+                                <div class="row  mt-2">
+                                    <div class="col-md-1 w-p-3">
+                                        <h4 class="textWaiver mt-1">Từ:</h4>
+                                    </div>
+                                    <div class="col-md-3 w-p-6" style="border-bottom: 1px solid black;">
+                                        {{this.UserWaiverList[0].from | dateFormat}}
+                                    </div>
+                                    <div class="col-md-2 w-p-3">
+                                        <h4 class="textWaiver mt-1" style="text-align: right;">Đến:</h4>
+                                    </div>
+                                    <div class="col-md-3 w-p-6" style="border-bottom: 1px solid black;">
+                                        {{this.UserWaiverList[0].to | dateFormat}}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <h4 class="textWaiver  mt-2">
+                                Để sử dụng dịch vụ/tham gia hoạt động thể thao, vui chơi giải trí tại trung tâm Jump Arena của Công ty Cổ phần Jump Arena (sau đây gọi là “<span style="font-weight: bolder;">Jump Arena</span>”), tôi theo đây cam kết rằng:
+
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                1. Tôi có đầy đủ năng lực hành vi dân sự, nhận thức, tỉnh táo, sức khỏe và tự nguyện tham gia các hoạt động/trò chơi tại trung tâm và ký Giấy Cam Kết này.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                2. Tôi chấp nhận và cam kết tuân thủ “Quy định tham gia nhảy bạt nhún” được niêm yết công khai tại trung tâm và đã đọc, hiểu các nội dung, quy định được nêu trong Giấy Cam Kết này.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                3. Tôi cam kết chấp thuận và tuân thủ nội quy chơi như sau:
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                a. Không tham gia chơi bất kỳ hoạt động, trò chơi nào hoặc bạt nhún khi chịu tác động của thuốc, chất kích thích hoặc đồ uống có cồn.
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                b. Sử dụng đúng quy cách đã được hướng dẫn đối với tất cả các tấm bạt lò xo, thiết bị an toàn leo núi và những trang thiết bị khác được cung cấp.
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                c. Không tham gia chơi bất kỳ hoạt động hoặc bạt nhún khi có tiền sử bệnh lý, hoặc có vấn đề về hệ tuần hoàn, tim, phổi, lưng, cổ, vừa mới phẩu thuật, huyết áp cao, đã từng bị chấn thương cột sống, cơ xương hoặc đầu, hoặc nếu / có thể đang mang thai.
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+
+                                d. Tránh va chạm với những người chơi khác trong lúc tham gia trò chơi.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                e. Tuân thủ các quy định về độ tuổi, chiều cao hay cân nặng khi chơi theo quy định của nhà sản xuất hoặc Jump Arena để sử dụng hoặc tham gia vào sân chơi bạt nhún và các hoạt động khác.
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                f. Tổng trọng lượng không quá 150kg.
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                g. Không sử dụng bạt nhún khi có quá nhiều người và tránh nhảy cùng một tấm bạt với một người chơi khác.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                h. Không thực hiện các động tác nhào lộn nguy hiểm khi chưa được nhân viên hướng dẫn kỹ thuật nhào lộn.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                i. Không trèo lên hoặc treo mình lên các tấm đệm dựng nghiêng.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                j. Để bảo đảm an toàn, không tiếp đất trên sàn và đệm viền bạt.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                k. Không ném banh hoặc các vật dụng vào người khác.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                l. Không ngồi hoặc nằm trên khu vực bạt nhún.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                4. Trong trường hợp dẫn theo trẻ em/người chưa thành niên:
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                a. Trẻ em tham gia phải ít nhất từ đủ 2 tuổi trở lên.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                b. Trong trường hợp dẫn theo trẻ em chưa đủ 6 tuổi, tôi cam kết tôi là cha mẹ/người giám hộ hợp pháp của trẻ theo quy định pháp luật.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                c. Trong trường hợp dẫn theo trẻ em/người chưa thành niên từ đủ 6 tuổi trở lên, tôi cam kết tôi là cha mẹ/người giám hộ hợp pháp, hoặc tôi đã nhận được sự xác nhận đồng ý của cha mẹ/người giám hộ hợp pháp của trẻ/người chưa thành niên.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                d. Người dẫn theo trẻ em/người chưa thành niên có trách nhiệm đưa đón và chăm sóc cho trẻ em/người chưa thành niên sau khi kết thúc thời gian chơi tại trung tâm. Trong mọi trường hợp, Jump Arena không chịu trách nhiệm quản lý trẻ em/người chưa thành niên
+                                sau khi kết thúc thời gian chơi tại trung tâm.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                5. Tôi cam kết tất cả thông tin, nội dung mà tôi xác nhận trong Giấy Cam Kết này đều là sự thật và sẽ chịu toàn bộ trách nhiệm phát sinh (nếu có) nếu như cam kết không đúng sự thật.
+                            </h4>
+
+                            <h4 class="textWaiver mt-1">
+                                6. Trong mọi trường hợp, Jump Arena hiểu rằng cam kết của người ký tên vào Giấy Cam Kết này là đúng sự thật và Jump Arena không có nghĩa vụ phải xác minh nội dung cam kết.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                7. Jump Arena có quyền mời người chơi ra khỏi khu vui chơi nếu không tuân thủ quy định của Jump Arena hoặc gây phiền toái hoặc nguy hiểm cho người chơi khác, nhân viên và khách viếng thăm tại đây.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                8. Tôi nhận thức được các rủi ro và tai nạn có thể xảy ra khi tham gia các hoạt động, bao gồm nhưng không giới hạn những chấn thương vật lý và tâm lý, thương tích cá nhân, mất mát hoặc hư hỏng về tài sản. Trong trường hợp có rủi ro hoặc tai nạn xảy ra
+                                mà không phải do lỗi của Jump Arena, tôi cam kết miễn trừ mọi trách nhiệm liên quan cho Jump Arena và từ bỏ mọi quyền khiếu nại, khởi kiện, tố cáo, mọi hành vi gây bất lợi đến Jump Arena liên quan hoặc phát sinh từ việc
+                                tôi sử dụng dịch vụ/tham gia hoạt động, vui chơi giải trí tại Jump Arena.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                9. Giấy Cam Kết này cũng có hiệu lực áp dụng đối với trẻ em/người chưa thành niên do tôi dẫn theo cùng (nếu có).
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                10. Nhằm thích ứng an toàn, linh hoạt, kiểm soát hiệu quả Covid -19, quý khách vui lòng tuân thủ 5k trong suốt quá trình sử dụng dịch vụ/ tham gia chơi tại trung tâm.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                11. Giấy Cam kết này có hiệu lực kể từ ngày ký cho đến hết ngày 31 tháng 12 năm {{this.currentYear}}.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                Bằng việc ký vào Giấy Cam Kết này, tôi chấp nhận với tất cả nội dung nêu trong Giấy Cam Kết này và các quy định, điều kiện và điều khoản liên quan đến các hoạt động, dịch vụ và chính sách của Jump Arena và bất cứ điều chỉnh nào trong từng thời kỳ, bao
+                                gồm cả việc cho phép Jump Arena sử dụng hoặc chuyển giao cho các bên thứ ba khác các thông tin cá nhân kê khai tại Giấy Cam Kết, và các hình ảnh, ghi âm, ghi hình của tôi nhằm mục đích giới thiệu, quảng cáo, hoặc thực hiện
+                                các chương trình khuyến mại, tích điểm hoặc các chương trình khách hàng khác theo quyết định của Jump Arena.
+                            </h4>
+                            <div class="row col-md-12 mt-2">
+                                <div class="col-md-6">
+                                    <dx-check-box class="row mt-2" [value]="false" text="Người tham gia (người chơi tự ký)"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Cha mẹ"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Người giám hộ hợp pháp"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Người được sự đồng ý của cha mẹ/người giám hộ hợp pháp"></dx-check-box>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="textWaiver mt-1"> Ngày: _____________________________</h4>
+                                    <h4 class="textWaiver mt-1"> Ký và ghi rõ họ tên:</h4>
+
+                                </div>
+                            </div>
+                            <div class="row col-md-12 mt-2">
+                                <h4 class="textWaiver mt-1">Danh sách trẻ em/người chưa thành niên được dẫn theo cùng (nếu có):</h4>
+                                <div class="col-md-12">
+                                    <!--  this.waiver?.itemList -->
+                                    <div *ngFor="let item of this.UserWaiverList[0].itemList">
+                                        <div class="row mt-1">
+                                            <div class="col-md-1">
+                                                {{item.id}}./
+                                            </div>
+                                            <div class="col-md-4" style="border-bottom: 1px solid black;">
+                                                {{item.name}}
+                                            </div>
+                                            <div class="col-md-1">
+                                                Ngày sinh
+                                            </div>
+                                            <div class="col-md-5" style="border-bottom: 1px solid black;">
+                                                {{item.dob | dateFormat}}
+                                            </div>
+                                            <div class="col-md-1" [innerHtml]="item.gender | genderFormat:this.version">
+                                                <!-- {{item.gender }} -->
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="version==='en'">
+
+                            <h2 class="mt-3">
+                                COMMITMENT (For Individual Customer)
+                            </h2>
+                            <hr class="style1">
+
+                            <div class="row mt-2" style="width: 100%;">
+                                <div class="col-md-1">
+                                    <h4 class="textWaiver mt-1">Full name:</h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].name}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;">Date of birth: </h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].dob | dateFormat}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;"> Male/Female: </h4>
+                                </div>
+                                <div class="col-md-1" style="border-bottom: 1px solid black;" [innerHtml]="this.UserWaiverList[0].gender | genderFormat:this.version">
+                                    <!-- {{this.UserWaiverList[0].gender | genderFormat: item.gender:this.version}} -->
+                                </div>
+
+                            </div>
+                            <div class="row  mt-2">
+
+                                <div class="row col-md-12">
+                                    <div class="col-md-1">
+                                        <h4 class="textWaiver mt-1">Address: </h4>
+                                    </div>
+                                    <div class="col-md-11" style="border-bottom: 1px solid black;">
+                                        {{this.UserWaiverList[0].address}}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row  mt-2">
+                                <div class="col-md-1">
+                                    <h4 class="textWaiver mt-1">Email:</h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].email}}
+                                </div>
+                                <div class="col-md-2">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;">Phone number:</h4>
+                                </div>
+                                <div class="col-md-3" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].phone}}
+                                </div>
+
+                            </div>
+
+                            <div class="row  mt-2">
+                                <div class="col-md-1 w-p-3">
+                                    <h4 class="textWaiver mt-1">From:</h4>
+                                </div>
+                                <div class="col-md-3 w-p-8" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].from | dateFormat}}
+                                </div>
+                                <div class="col-md-2 w-p-6">
+                                    <h4 class="textWaiver mt-1" style="text-align: right;">To:</h4>
+                                </div>
+                                <div class="col-md-3 w-p-8" style="border-bottom: 1px solid black;">
+                                    {{this.UserWaiverList[0].to | dateFormat}}
+                                </div>
+
+                            </div>
+                            <h4 class="textWaiver  mt-2">
+                                In order to use the service/participate in sports and entertainment activities at Jump Arena center of Jump Arena Joint Stock Company (hereinafter referred to as “Jump Arena”), I hereby commit that:
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                1. I have full capacity for civil acts, awareness, alertness, health, and volunteer to participate in activities/games at the center and sign this Waiver Form.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                2. I accept and commit to comply with the "Trampoline Court Rules", which publicly posted at the center and have read and understood the contents and provisions stated in this Commitment.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                3. I commit to accept and comply with the rules as follows:
+
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                a. Do not participate in any activities, games, or trampoline games when being affected by drugs, stimulants, or alcoholic beverages.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                b. Properly use all trampolines, climbing safety equipment, and other provided equipment as instructed.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                c. Do not participatie in any activities or trampoline games when having any pre-existing medical conditions; or having problems with the circulatory system, heart, lung, back, neck; just had surgery; high blood pressure; have had a spinal injury, skeletal
+                                muscle injury or head injury; or if being or may be pregnant.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                d. Avoid colliding with other players while participating in the games.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                e. Comply with the rules about age, height, or weight when playing according to instructions of the manufacturer or Jump Arena to use trampolines or participate in the trampoline games and other activities.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                f. The total weight must not exceeding 150kg.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                g. Do not use trampolines when there are too many people and avoid jumping on the same trampoline with another player.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                h. Do not perform any dangerous acrobatic movements without prior guidance on acrobatic techniques from Jump Arena’s staff.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                i. Do not climb or hang yourself on the inclined mattress.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                j. For your own safety, do not land on the floor or the edge of the trampoline.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                k. Do not throw balls or objects at other people.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                l. Do not sit or lie on the trampolines.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                4. In case of taking children/minors along:
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                a. To participate in the games, children must be at least 02 years of age.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                b. In case of taking children under 6 years of age along, I undertake that I am the parent/legal guardian of the children in accordance with the law.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                c. In case of taking children/minors aged 06 or older along, I undertake that I am the parent/legal guardian, or I have received approvals from the parent/legal guardian of the children/minors.
+                            </h4>
+                            <h4 class="ml-4 textWaiver mt-1">
+                                d. The person who take children/minors along is responsible to pick up and take care of the children/minors after finish playing time at the center. In any cases, Jump Arena is not responsible for taking care of the children/minor after finish playing
+                                time at the center.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                5. I commit that all information and content that I confirmed in this Commitment is true and will undertake all arising responsibilities (if any) of any untrue commitments.
+                            </h4>
+
+                            <h4 class="textWaiver mt-1">
+                                6. In any cases, Jump Arena understands that the commitment of the person, who signed this Commitment is true and Jump Arena has no obligation to verify the content of the commitment.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                7. Jump Arena has the right to ask players to go out of the playing area if they do not comply with the rules of Jump Arena, or causing nuisance or danger to other players, staffs, and visitors.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                8. I am fully aware of all the risks and accidents that may occur when participating in the activities, including but not limited to physical and psychological injuries, personal injuries, loss or damage to property. In the event of any risks or accidents
+                                occurring through no fault of Jump Arena, I undertake to waive all relevant responsibilities for Jump Arena and waive all right to complain, sue, denounce, all harmful acts to Jump Arena in relation to or arising from my
+                                use of services/participation in the activities and entertainment at Jump Arena.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                9. This Commitment is also applicable for children/minors who is taken along with me (if any).
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                10. In order to adapt safely, flexibly, and effectively control Covid-19, please adhere to 5k during the process of using the service / participate in the game at the center.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                11. This Commitment shall take effect from the signing date until the end of December 31, {{this.currentYear}}.
+                            </h4>
+                            <h4 class="textWaiver mt-1">
+                                By signing this Waiver, I agree to all of the content of this Commitment and provisions, terms and conditions in relation to Jump Arena's activities, services and policies and any adjustments from time to time, including allowing Jump Arena to use or
+                                transfer personal information declared in the Commitment, and my photos, audio, video recording to other third parties to introduce, advertise, or execute promotions, getting points or other customer programs as determined
+                                by Jump Arena.
+                            </h4>
+                            <div class="row col-md-12 mt-2">
+                                <div class="col-md-6">
+                                    <dx-check-box class="row mt-2" [value]="false" text="Participant (signed by player)"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Parent"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Legal guardian"></dx-check-box>
+                                    <dx-check-box class="row mt-2" [value]="false" text="Person with parental/legal guardian’s consent"></dx-check-box>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 class="textWaiver mt-1"> Date: _____________________________</h4>
+                                    <h4 class="textWaiver mt-1"> Sign and write full name:</h4>
+
+                                </div>
+                            </div>
+                            <div class="row col-md-12 mt-2">
+                                <h4 class="textWaiver mt-1">List of children/minors who is taken along (if any):</h4>
+                                <div class="col-md-12">
+                                    <div *ngFor="let item of this.UserWaiverList[0].itemList">
+                                        <div class="row mt-1">
+                                            <div class="col-md-1">
+                                                {{item.id}}./
+                                            </div>
+                                            <div class="col-md-4" style="border-bottom: 1px solid black;">
+                                                {{item.name}}
+                                            </div>
+                                            <div class="col-md-1">
+                                                Date of birth
+                                            </div>
+                                            <div class="col-md-5" style="border-bottom: 1px solid black;">
+                                                {{item.dob | dateFormat}}
+                                            </div>
+                                            <div class="col-md-1" [innerHtml]="item.gender | genderFormat:this.version">
+                                                <!-- {{item.gender  }} -->
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </ng-container>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

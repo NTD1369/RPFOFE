@@ -1,0 +1,44 @@
+<!-- <div class="content-end">
+    <button style="width: 200px;height: 50px;position: absolute;top: -65px;right: 220px;" (click)="clickEvent()" class="btn-add"> <i
+      style="font-size: 16px;" class="dx-icon dx-icon-add mr-2"></i> {{'More option' | translate}}</button>
+</div> -->
+<form [formGroup]="editForm" id="editForm">
+    <div class="content-end mb-2">
+        <button (click)="ApplyToCart()" style="width: 400px; height: 50px;" class="btn-agree"><i
+          style="font-size: 16px;" class="dx-icon dx-icon-floppy"></i> {{'Apply' | translate}}</button>
+    </div>
+
+    <dx-data-grid *ngIf="this.items?.length > 0"  #dataGrid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" 
+        class='gridContainerX'
+        id="gridContainer" [dataSource]="this.items" [(selectedRowKeys)]="this.selectedKey" [showBorders]="true">
+        <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+        </dxo-selection>
+
+        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+        <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+        <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+        <dxi-column dataField="itemCode" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+        <dxi-column dataField="itemName" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+        <dxi-column dataField="uomName" caption="{{'UoM' | translate}}" dataType="string"> </dxi-column>
+        <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}" dataType="string"> </dxi-column>
+        <dxi-column dataField="priceAfterTax" caption="{{'Price' | translate}}" [customizeText]="customizeText"> </dxi-column>
+        <!-- <dxi-column dataField="foreignName" caption="{{'Foreign Name' | translate}}" dataType="string"> </dxi-column> -->
+        <!-- <dxi-column dataField="imageUrl" caption="Image Url" dataType="string"> </dxi-column>  -->
+        <!-- <dxi-column dataField="isBom" caption="is BOM"> </dxi-column>  -->
+        <!-- <dxi-column dataField="isSerial" caption="{{'Is Serial' | translate}}"> </dxi-column>
+        <dxi-column dataField="isVoucher" caption="{{'Is Voucher' | translate}}"> </dxi-column> -->
+        <!-- <dxi-column alignment="center" dataField="status"   cellTemplate="statusTemplate" caption="Status" ></dxi-column> -->
+
+        <!-- <dxi-column  cellTemplate="cellTemplate"></dxi-column>
+<div *dxTemplate="let cell of 'cellTemplate'">
+  <dx-button icon="fas fa-eye" text="View" (onClick)="getItem( cell.data)"></dx-button>
+</div> -->
+        <!-- <div *dxTemplate="let cell of 'statusTemplate'">
+<div  [innerHtml]="cell.data.status | statusFormat"></div>
+</div> -->
+
+    </dx-data-grid>
+
+</form>

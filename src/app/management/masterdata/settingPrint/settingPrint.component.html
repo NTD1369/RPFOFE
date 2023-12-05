@@ -1,0 +1,220 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+    <div class="search-wrap">
+      <label for="item-searchbar" class="section-title">
+        {{'Information about setting print' | translate}}
+      </label>
+    </div>
+    <div class="table-wrap">
+      <dx-data-grid id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="sourceData"
+        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true" [showBorders]="true"
+        [showRowLines]="true" class="mt-1 p-3">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+        <dxi-column [groupIndex]="0" caption="{{'Print Name' | translate}}" dataField="printName"
+          dataType="string"></dxi-column>
+        <dxi-column caption="{{'Group Item' | translate}}" dataField="igName" dataType="string"></dxi-column>
+        <dxi-column caption="{{'Status' | translate}}" dataField="status" cellTemplate="statusTemplate"
+          dataType="string" [width]="150">
+        </dxi-column>
+        <div *dxTemplate="let cell of 'statusTemplate'">
+          <div [innerHtml]="cell.data.status | statusFormat"></div>
+        </div>
+        <dxi-column [width]="400" cellTemplate="cellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'cellTemplate'">
+          <div>
+            <div class="row">
+              <div class="col-4" style="margin-top:5px ;">
+                <dx-button icon="fas fa-edit" style="width:100%" text="{{'Edit' | translate}}"
+                  (onClick)="btnCreateModal(template,cell.data)"></dx-button>
+              </div>
+              <div class="col-4" style="margin-top:5px ;">
+                <dx-button icon="fas fa-view" style="width:100%" text="{{'View' | translate}}"
+                  (onClick)="btnViewModal(templateViewItemGroup,cell.data)"></dx-button>
+              </div>
+              <div class="col-4" style="margin-top:5px ;">
+                <dx-button type="danger" style="width:100%" icon="trash" text="{{'Delete' | translate}}"
+                  (onClick)="btnDelele(cell.data,cell.data.printName)"></dx-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #template>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">
+              <label for="item-searchbar" class="section-title">
+                {{'Information item code in group' | translate}}
+              </label>
+            </h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <img src="../../../assets/images/System/times.svg">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'CompanyCode ' | translate}}</div>
+                <div class="col-md-8">
+                  <dx-text-box #txtCompanyCode [(ngModel)]="this.place.companyCode" [value]="this.place?.companyCode"
+                    [disabled]="true" placeholder="{{'' | translate}}">
+                  </dx-text-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Store Id ' | translate}} </div>
+                <div class="col-md-8">
+                  <dx-select-box [disabled]="true" #txtstoreId [(ngModel)]="this.place.storeId" displayExpr="storeName"
+                    valueExpr="storeId" [items]="storeList" [value]="this.place?.storeId"
+                    placeholder="{{'' | translate}}">
+                  </dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Status ' | translate}} </div>
+                <div class="col-md-8">
+                  <dx-select-box #cbbStatus [items]="listStatus" [(ngModel)]="this.placePrint.status" displayExpr="name"
+                    [value]="this.placePrint?.status" valueExpr="value" placeholder="Active"></dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Item Group ' | translate}} <span class="text-red">(*)</span></div>
+                <div class="col-md-8">
+                  <dx-select-box #cbbItemGroup [items]="itemGourpList" [(ngModel)]="this.placePrint.groupItem"
+                    valueExpr="igId" [value]="this.placePrint?.groupItem" displayExpr="igName"></dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Print Name ' | translate}} <span class="text-red">(*)</span></div>
+                <div class="col-md-5">
+                  <dx-text-box #txtTableName [(ngModel)]="this.placePrint.PrintName"
+                    [value]="this.placePrint?.PrintName" placeholder="{{'' | translate}}">
+                  </dx-text-box>
+                </div>
+                <div class="col-md-3">
+                  <dx-button icon="fas fa-sync" style="width:100%" text="{{'Show print name' | translate}}"
+                    (onClick)="btnSyncSytemPrintName()">
+                  </dx-button>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                  <div class="dx-field-value">
+                    <dx-radio-group [items]="syncPrintNameViewModel" displayExpr="printName" valueExpr="printName"
+                      layout="horizontal" (onValueChanged)="onValueChanged($event)">
+                    </dx-radio-group>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;margin-top: 15px;">
+              <button (click)="saveInfo()" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+            </div>
+          </div>
+        </ng-template>
+
+
+        <!-- view itemGroup -->
+        <ng-template #templateViewItemGroup>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">
+              <label for="item-searchbar" class="section-title">
+                {{'List items have the same ItemGroup ' | translate}}
+              </label>
+            </h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <img src="../../../assets/images/System/times.svg">
+            </button>
+          </div>
+          <div class="modal-body">
+            <dx-data-grid id="gridContainer" [dataSource]="itemByItemGroup" [showBorders]="true">
+              <dxo-paging [pageSize]="15"> </dxo-paging>
+              <dxi-column caption="{{'Item Code' | translate}}" dataField="igId" dataType="string"></dxi-column>
+              <dxi-column caption="{{'Item Name' | translate}}" dataField="itemName" dataType="string"></dxi-column>
+
+            </dx-data-grid>
+          </div>
+        </ng-template>
+
+
+
+
+        <ng-template #templatePrintName>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">
+              <label for="item-searchbar" class="section-title">
+                {{'Information about setting print' | translate}}
+              </label>
+            </h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <img src="../../../assets/images/System/times.svg">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'CompanyCode ' | translate}}</div>
+                <div class="col-md-8">
+                  <dx-text-box #txtCompanyCode [(ngModel)]="this.place.companyCode" [value]="this.place?.companyCode"
+                    [disabled]="true" placeholder="{{'' | translate}}">
+                  </dx-text-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Store Id ' | translate}} </div>
+                <div class="col-md-8">
+                  <dx-select-box [disabled]="true" #txtstoreId [(ngModel)]="this.place.storeId" displayExpr="storeName"
+                    valueExpr="storeId" [items]="storeList" [value]="this.place?.storeId"
+                    placeholder="{{'' | translate}}">
+                  </dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Status ' | translate}} </div>
+                <div class="col-md-8">
+                  <dx-select-box #cbbStatus [items]="listStatus" [(ngModel)]="this.placePrint.status" displayExpr="name"
+                    [value]="this.placePrint?.status" valueExpr="value" placeholder="Active"></dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Item Group ' | translate}} <span class="text-red">(*)</span></div>
+                <div class="col-md-8">
+                  <dx-select-box #cbbItemGroup [items]="itemGourpList" [(ngModel)]="this.placePrint.groupItem"
+                    valueExpr="igId" [value]="this.placePrint?.groupItem" displayExpr="igName"></dx-select-box>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-4">{{'Print Name ' | translate}} <span class="text-red">(*)</span></div>
+                <div class="col-md-5">
+                  <dx-text-box #txtTableName [(ngModel)]="this.placePrint.PrintName"
+                    [value]="this.placePrint?.PrintName" placeholder="{{'' | translate}}">
+                  </dx-text-box>
+                </div>
+                <div class="col-md-3">
+                  <dx-button icon="fas fa-sync" style="width:100%" text="{{'Show print name' | translate}}"
+                    (onClick)="btnSyncSytemPrintName()">
+                  </dx-button>
+                </div>
+              </div>
+              <div class="col-md-6 row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                  <div class="dx-field-value">
+                    <dx-radio-group [items]="syncPrintNameViewModel" displayExpr="printName" valueExpr="printName"
+                      layout="horizontal" (onValueChanged)="onValueChanged($event)">
+                    </dx-radio-group>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;margin-top: 15px;">
+              <button (click)="saveInfo()" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+            </div>
+          </div>
+        </ng-template>
+
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

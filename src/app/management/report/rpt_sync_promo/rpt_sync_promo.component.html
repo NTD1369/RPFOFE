@@ -1,0 +1,84 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6"><label for="item-searchbar" class="section-title">{{'Sync Promotion' | translate}}</label></div>
+          <div class="col-md-6 text-right">
+              <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/report" text="{{'Report List' | translate}}">
+              </dx-button>
+          </div>
+      </div>
+      <div class="row justify-content-center flex-row mb-3 mt-2">
+        <div class="col-md-2 mb-1">
+          {{'From Date' | translate}}
+            <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-2 mb-1">
+          {{'To Date' | translate}}
+            <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-2 mb-1">
+          {{'From Id' | translate}}
+           <dx-text-box #txtFromItem></dx-text-box>
+        </div>
+        <div class="col-md-2 mb-1">
+          {{'To Id' | translate}}
+           <dx-text-box #txtToItem></dx-text-box>
+        </div>
+          <!-- <div class="col-md-2 mb-1">
+            {{'Store' | translate}}
+            <dx-select-box #cbbStore [searchEnabled]="true" [value]="storeOptions[0].value" [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+        </div> -->
+          <div class="col-md-3 mt-3">
+            <ng-container *ngIf="this.isLoadingData===false">  
+              <dx-button class="mr-2 pt-1" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value, txtFromItem.value, txtToItem.value)" text="{{'Search' | translate}}"></dx-button>
+              <!-- <dx-button class="mr-2 pt-1" icon="xlsxfile" type="default" text="{{'Excel' | translate}}" (onClick)="downloadExcel(fromCalendar.value, toCalendar.value,cbbStore.selectedItem)"></dx-button> -->
+            </ng-container>
+            <ng-container *ngIf="this.isLoadingData===true">
+                <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+            </ng-container> 
+             
+          </div>
+      </div>
+    
+      <dx-data-grid class="mt-2" [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" (onExporting)="onExporting($event)" [dataSource]="this.list"
+          [showBorders]="true">
+
+          <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before">
+          </dxo-search-panel>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+          <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>
+
+          <ng-container *ngFor="let col of this.controlList; let i = index">
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+              </dxi-column>
+             
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+              </dxi-column>
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+              </dxi-column>
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                  [format]='this.authService.numberFormat(col.custom2)'>
+              </dxi-column>
+          </ng-container>
+          <dxo-summary [recalculateWhileEditing]="true" >
+           
+            <ng-container *ngFor="let col of this.controlList; let i = index">
+                <dxi-total-item [column]="col.controlId" summaryType="sum" *ngIf="(col.controlId!=='price' ) && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number"
+                [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+
+                <dxi-group-item [valueFormat]="this.authService.numberFormat('amount')" [alignByColumn]="true" [column]="col?.controlId" *ngIf="col?.groupItem?.length > 0 && col?.groupItem.includes('sum')" summaryType="sum">
+                </dxi-group-item>
+        </ng-container>
+
+ 
+        </dxo-summary>
+         
+          <div *dxTemplate="let cell of 'statusTemplate'">
+              <div [innerHtml]="cell.data.status | statusFormat"></div>
+          </div>
+
+      </dx-data-grid>

@@ -1,0 +1,486 @@
+<div *ngIf="this.isLoading === true">
+  <div class="lds-facebook">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+<div class="center-wrap" id="endOdDay" *ngIf="this.isLoading === false">
+  <div class="maintenance-card">
+    <div class="row">
+      <div class="col-md-12">
+        <div style="display: flex;" (click)="backtoList()">
+          <div><i class="col-md-3" class="fas fa-arrow-left fa-2x mr-3" style="cursor: pointer;"></i></div>
+          <div for="item-searchbar" class="section-title">{{'Table View' | translate}} -
+            <strong *ngIf="placeInfor !== undefined && placeInfor != null"> {{placeInfor.placeName}}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row table__pd">
+      <div class="col-md-12 table__view">
+        <div class="table__pd">
+          <div class="row">
+            <div class="col-md-8" style="display: flex;">
+
+              <div *ngIf="this.buttonAvalable">
+                <dx-button icon="variable" class="table__button_all" type="default"
+                  text="{{'Available Table' | translate}}" (click)="filterAvailable()"> </dx-button>
+              </div>
+
+              <div *ngIf="this.buttonMore">
+                <dx-button icon="more" class="table__button_all" type="danger" text="{{'Place' | translate}}"
+                  (click)="fucntionMore()"> </dx-button>
+              </div>
+
+              <div *ngIf="this.inputSlot">
+                <dx-text-box style="width: 170px; height:70px;" valueChangeEvent="keyup" #txtinput
+                  placeholder="{{'Slot' | translate}}" (onValueChanged)="funcSlot(txtinput.value)">
+                </dx-text-box>
+              </div>
+
+              <div *ngIf="this.buttonReload">
+                <dx-button type="danger" class="table__button_all" icon="refresh" text="{{'Reload' | translate}}"
+                  (click)="reloadModel()"></dx-button>
+              </div>
+
+              <ng-container>
+                <div *ngIf="itemselected?.length>=2">
+                  <dx-button type="danger" icon="mergecells" class="table__button_all" text="{{'Merge' | translate}}"
+                    (click)="mergeBan(this.itemselected)"> </dx-button>
+                </div>
+
+                <div *ngIf="itemselected?.length>=1 ">
+                  <!-- <div *ngIf="isSplitTable && itemselected?.length ===1"></div> -->
+                  <dx-button *ngIf="selectTableSplit && this.buttonChonThemBan" type="danger" icon="splitcells"
+                    class="table__button_all" text="{{'Split table' | translate}}" (click)="btnSplitTable()">
+                  </dx-button>
+
+                  <dx-button *ngIf="this.buttonChonThemBan" type="danger" icon="checklist" class="table__button_all"
+                    text="{{'Choose more tables' | translate}}" (click)="chonThemBan(this.itemselected)">
+                  </dx-button>
+                </div>
+              </ng-container>
+
+              <div>
+                <dx-button *ngIf="this.showMove" icon="movetofolder" type="danger" class="table__button_all"
+                  text="{{'Move table' | translate}}" (click)="fucnMoveTable()"> </dx-button>
+              </div>
+              <div *ngIf="this.buttonApllyMove">
+                <dx-button type="danger" icon="check" class="table__button_all" text="{{'Apply' | translate}}"
+                  (click)="chuyenBan(this.itemselected)"> </dx-button>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div *ngIf="this.showAll===true" class="table__view_container">
+                <div style="text-align:center ;">
+                  <dx-button *ngIf="this.buttonThemMon" icon="add" class="table__button_all" type="default"
+                    text="{{'Add order' | translate}}" (click)="createNewOrder()"> </dx-button>
+                </div>
+                <div *ngIf="this.buttonSpit">
+                  <dx-button type="danger" icon="splitcells" class="table__button_all"
+                    text="{{'Split-merge order' | translate}}" (click)="fucncPopupVisiblesplt()">
+                  </dx-button>
+                </div>
+                <div class="table__all">
+
+                  <ng-container *ngIf="itemselected?.length>=0 && itemselected?.length<=1">
+
+                    <div *ngIf="this.buttonDetail">
+                      <dx-button type="danger" icon="overflow" class="table__button_all" text="{{'Detail' | translate}}"
+                        (click)="detailSelected()"> </dx-button>
+                    </div>
+
+
+                    <div>
+                      <dx-button *ngIf="this.showViewDetail" type="danger" class="table__button_all"
+                        text="{{'View Detail' | translate}}" (click)="viewdetail()"> </dx-button>
+                    </div>
+
+                    <div *ngIf="this.buttonTinhTien">
+                      <dx-button type="success" icon="money" class="table__button_all" text="{{'Payment' | translate}}"
+                        (click)="orderBill()">
+                      </dx-button>
+                    </div>
+                  </ng-container>
+
+                  <div style="text-align:center ;">
+                    <dx-button type="default" icon="arrowleft" *ngIf="this.troVe" class="table__button_all"
+                      text="{{'Back' | translate}}" (click)="funcTroVE()"> </dx-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- split -->
+          <div *ngIf="this.showSplit === true">
+            <div class="">
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="row ">
+                    <div class="col-md-8">
+                      <dx-text-box #txtSoluong class="table__button" placeholder="{{'Quantity' | translate}}"
+                        (blur)="splitOrder(txtSoluong.value)" (onEnterKey)="splitOrder(txtSoluong.value)"
+                        valueChangeEvent="keyup">
+                      </dx-text-box>
+                    </div>
+                    <div class="col-md-3">
+                      <dx-button type="default" class="table__button " icon="plus"
+                        (click)="splitOrder(txtSoluong.value)" text="{{'Apply' | translate}}"> </dx-button>
+                    </div>
+                    <div class="col-md-1">
+                      <dx-button type="default" class="table__button" icon="plus" (click)="splitOrderTab()">
+                      </dx-button>
+                    </div>
+                  </div>
+                  <div *ngIf="this.showOrder ===true">
+                    <div class="row ">
+                      <div class="col-md-12" style="margin-top:10px ;">
+                        <ng-container *ngIf="tabs?.length > 0">
+                          <dx-tab-panel #tabPanel [height]="500" [(dataSource)]="tabs" [(selectedIndex)]="selectedIndex"
+                            [loop]="false" [animationEnabled]="true" [swipeEnabled]="true">
+                            <div *dxTemplate="let tab of 'title'">
+                              <span>{{ tab.text }} <button style="margin-left: 35%;" icon="clearsquare"
+                                  (click)="delectTab(tab)"><i class="fas fa-times"></i></button> </span>
+                            </div>
+                            <div *dxTemplate="let tab of 'item'">
+                              <div class="tabpanel-item">
+                                <div class="row" style="width: 100%;">
+                                  <div class="col-md-4 "
+                                    *ngFor="let item of orderSplit[selectedIndex].lines;  let i = index">
+                                    <div class="cards ">
+                                      <div class="card card-1">
+                                        <p class="card__exit"
+                                          (click)="deleteItemTab(item.lineNum, orderSplit[selectedIndex])"><i
+                                            class="fas fa-times"></i></p>
+                                        <div style="font-size:17px ;"> {{ 'Code' | translate}}: <span
+                                            class="table__detail_item"> {{item.itemName}}</span></div>
+                                        <!-- <div> line: <span class="table__detail_item"> {{item.lineNum}}</span></div> -->
+                                        <div style="font-size:17px ;"> {{ 'Name' | translate}}: <span
+                                            class="table__detail_item">{{item.itemCode}}</span></div>
+                                        <div style="font-size:17px ;"> {{ 'Quantity' | translate}}: <span
+                                            class="table__detail_item"> {{item.quantity}}</span></div>
+                                        <div style="font-size:17px ;"> {{ 'Price' | translate}}: <span
+                                            class="table__detail_item"> {{item.price | currencyFormat}}</span></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </dx-tab-panel>
+                        </ng-container>
+                      </div>
+                      <div class="footer__split">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <dx-button type="default" icon="todo" class="table__button" (click)="addSplitOrder()"
+                              text="{{'Ok' | translate}}"> </dx-button>
+                          </div>
+                          <div class="col-md-6">
+                            <dx-button type="danger" icon="clear" class="table__button" (click)="backSplit()"
+                              text="{{'Cancel' | translate}}"> </dx-button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div>
+                    <div class="" *ngIf="this.showOrder">
+                      <div class="table__split">
+                        <div *ngFor="let item of splitLineItem" id="container"
+                          (click)="addItemToOrder(item, orderSplit[selectedIndex])">
+                          <div class="product-details">
+                            <h1>{{item.itemName}}</h1>
+                            <div style="font-size:17px ;"> {{ 'Code' | translate}}: <span style="font-size:17px ;">
+                                {{item.itemCode}}</span></div>
+                            <!-- <div> Name: <span class="">{{item.itemName}}</span></div> -->
+                            <div style="font-size:17px ;"> {{ 'Quantity' | translate}}: <span style="font-size:17px ;">
+                                {{item.quantity}}</span></div>
+                            <div style="font-size:17px ;"> {{ 'Price' | translate}}: <span
+                                style="font-size:17px ;">{{item.price | currencyFormat}}</span></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- *ngIf="tableInforList!==null && tableInforList!==undefined && tableInforList?.length > 0"  -->
+
+          <div class="row" style="margin-top:10px">
+            <div class="col-md-6" *ngIf="this.showTable">
+              <!-- [ngStyle]="{'display': this.showTable===false ? 'none' : '' }"   -->
+              <div class="table-wrap ">
+
+                <dx-diagram id="diagram" #diagram [showGrid]="false" [simpleView]="true" [readOnly]="true"
+                  customShapeTemplate="customShapeTemplate" customShapeToolboxTemplate="customShapeToolboxTemplate"
+                  (onContentReady)="contentReadyHandler($event)" (onSelectionChanged)="selectionChangedHandler($event)"
+                  (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)">
+
+                  <ng-container *ngFor="let table of tableInforList">
+                    <ng-container *ngIf="table?.isOrdered ">
+                      <dxi-custom-shape category="tables" [defaultText]="table.tableId + '-'+ table.tableName"
+                        [type]="table.tableName" [allowEditText]="false"
+                        backgroundImageUrl="../../../../assets/images/System/table-iconss.png"
+                        [backgroundImageLeft]="-0.5" [backgroundImageTop]="-0.5" [backgroundImageWidth]="2"
+                        [backgroundImageHeight]="2" [textLeft]="0">
+                        <dxi-connection-point [x]="1" [y]="0"></dxi-connection-point>
+                        <dxi-connection-point [x]="1" [y]="0.5"></dxi-connection-point>
+                        <dxi-connection-point [x]="1" [y]="1"></dxi-connection-point>
+                        <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+                      </dxi-custom-shape>
+                    </ng-container>
+                    <ng-container *ngIf="table?.isOrdered !== true ">
+                      <dxi-custom-shape category="tables" [type]="table.tableName"
+                        [defaultText]="table.tableId + '-'+ table.tableName" [allowEditText]="false"
+                        backgroundImageUrl="../../../../assets/images/System/table-iconss.png"
+                        [backgroundImageLeft]="-0.5" [backgroundImageTop]="-0.5" [backgroundImageWidth]="2"
+                        [backgroundImageHeight]="2" [textLeft]="0">
+                        <dxi-connection-point [x]="0.5" [y]="0"></dxi-connection-point>
+                        <dxi-connection-point [x]="0.9" [y]="0.5"></dxi-connection-point>
+                        <dxi-connection-point [x]="0.5" [y]="1"></dxi-connection-point>
+                        <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+                      </dxi-custom-shape>
+
+                    </ng-container>
+                  </ng-container>
+
+                  <dxi-custom-shape category="place" type="place" title="Place" [backgroundImageUrl]="this.urlImage"
+                    [allowEditText]="false" [defaultWidth]="0.75">
+                    <dxi-connection-point [x]="0.5" [y]="0"></dxi-connection-point>
+                    <dxi-connection-point [x]="0.9" [y]="0.5"></dxi-connection-point>
+                    <dxi-connection-point [x]="0.5" [y]="1"></dxi-connection-point>
+                    <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+                  </dxi-custom-shape>
+
+                  <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
+                    <foreignObject x="1" y="12" width="100%" height="73%"
+                      *ngIf="item.dataItem?.text?.length > 0  && !item?.dataItem.dataItem.isOrdered">
+                      <div class="geeks" id="table_{{item?.dataItem?.dataItem.tableId}}"
+                        [ngStyle]="{'background-color': item?.dataItem?.dataItem.orderCustomF3.length > 0 ?  item?.dataItem?.dataItem.orderCustomF3 :  '#46B076' }">
+                        <div class="table__NoOrder"
+                          [ngStyle]="{'color': item?.dataItem?.dataItem?.transId?.length>0?'#4FADAF':'white'}">
+                          <div style="font-size:small">
+                            <span
+                              *ngIf="item?.dataItem?.dataItem.orderCustomF2?.length > 0">({{item?.dataItem?.dataItem.orderCustomF2}})</span>
+                            {{item?.dataItem?.dataItem.tableName }}-{{item?.dataItem?.dataItem.slot }}
+                          </div>
+                        </div>
+                      </div>
+                    </foreignObject>
+                    <foreignObject x="1" y="12" width="100%" height="73%"
+                      *ngIf="item.dataItem?.text?.length > 0 && item?.dataItem.dataItem.isOrdered">
+                      <div class="geeks" id="table_{{item?.dataItem?.dataItem.tableId}}"
+                        [ngStyle]="{'background-color': item?.dataItem?.dataItem.orderCustomF3?.length > 0  ? item?.dataItem?.dataItem.orderCustomF3 : 'rgb(217 83 79)' }">
+                        <div class="table__Order"
+                          [ngStyle]="{'color': item?.dataItem?.dataItem?.transId?.length>0?'#4FADAF':'white'}">
+                          <div style="font-size:small">
+                            <span
+                              *ngIf="item?.dataItem?.dataItem.orderCustomF2?.length > 0">({{item?.dataItem?.dataItem.orderCustomF2}})</span>
+                            {{item?.dataItem?.dataItem.tableName }}-{{item?.dataItem?.dataItem.slot }}
+                          </div>
+                        </div>
+                      </div>
+                    </foreignObject>
+                    <!-- <foreignObject  x="1" y="12" width="100%" height="73%"*ngIf="item.dataItem?.text?.length > 0 && item?.dataItem?.dataItem?.transId?.length > 0">
+                      <div class="geeks" [ngStyle]="{'background-color':'#4FADAF'}">
+                         <div class="table__Order" >{{ item?.dataItem?.dataItem.tableName }}</div> 
+                      </div>
+                    </foreignObject> -->
+                  </svg>
+
+                  <svg *dxTemplate="let item of 'customShapeToolboxTemplate'" class="template">
+                    <text x="50%" y="70%"> {{ 'Place' | translate}}</text>
+                  </svg>
+
+                  <dxo-nodes [dataSource]="dataSource" keyExpr="tableId" [typeExpr]="itemTypeExpr"
+                    [(styleExpr)]="itemStyleExpr" imageUrlExpr="urlImage" [customDataExpr]="itemCustomDataExpr">
+                  </dxo-nodes>
+
+                  <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="1">
+                  </dxo-context-toolbox>
+
+                  <dxo-toolbox [showSearch]="false" [shapeIconsPerRow]="1">
+                    <dxi-group category="tables" title="Tables" displayMode="texts"></dxi-group>
+                    <dxi-group category="place" title="Place" [expanded]="true"></dxi-group>
+
+                  </dxo-toolbox>
+                </dx-diagram>
+              </div>
+            </div>
+
+            <div class="col-md-6" style="border: 1px solid #f0f0f0;" *ngIf="this.showPlace">
+              <dx-data-grid id="gridContainer" [dataSource]="sourceData" [remoteOperations]="false"
+                [allowColumnReordering]="true" [rowAlternationEnabled]="true" [showBorders]="true" class="mt-1 p-3">
+
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+                <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+                <!-- <dxi-column caption="storeId" dataField="storeId" dataType="string"></dxi-column>
+              
+                <dxi-column caption="PlaceId" dataField="placeId" dataType="string"></dxi-column> -->
+                <dxi-column caption="Place name" dataField="placeName" dataType="string"></dxi-column>
+                <dxi-column caption="Description" dataField="description" dataType="string"></dxi-column>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                  <div class="">
+                    <dx-button style="width:100%" icon="fas fa-eye" text="{{'View' | translate}}"
+                      (onClick)="moveTableCashier(cell.data)"></dx-button>
+                  </div>
+                </div>
+              </dx-data-grid>
+              <div *ngFor="let group of listTableMore" style="padding: 15px;">
+                <div style="border:1px solid #f0f0f0;padding: 15px;margin-top: 10px;">
+                  <div>
+                    <h3> {{ 'Group' | translate}} </h3>
+                    <div class="hr__group"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4" style="border: 1px solid #f0f0f0;margin: 10px;padding:10px 0 10px 10px">
+                      {{ 'Group Name' | translate}}: <span style="font-size:17px"> {{group.name}} </span>
+
+                      <div *ngFor="let table of group.lines">
+                        <span> {{ 'Tables' | translate}}:</span>
+                        <span style="font-size:17px" [ngStyle]="{'color': group.color  }">
+                          {{table.tableName}}+{{table.placeId}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6" *ngIf="this.viewShowDetail">
+              <div class="list-container"
+                style="border: 1px solid #f0f0f0; border-radius: 10px;height: 570px;padding: 15px;">
+                <div *ngIf="this.showSelected">
+                  <span class="caption" *ngIf="this.itemselected.length>0">
+                    <span style="font-size: 18px;">{{ 'Selected' | translate }}: </span>
+                  </span>
+                  <span *ngFor="let item of itemselected ;let i = index" class="table__select">
+                    {{item?.text }} {{i == itemselected.length-1? '' : ',' }}
+                  </span>
+                </div>
+                <div class="row" style="overflow: scroll;height:525px">
+                  <div class="col-md-7">
+                    <dx-list [dataSource]="transLst" #list [selectAllMode]="selectAllModeVlaue"
+                      [selectionMode]="selectionModeValue" [showSelectionControls]="true" keyExpr="transId"
+                      displayExpr="transId" (onContentReady)="onEmployeeListReady($event)"
+                      [(selectedItemKeys)]="selectedItemKeys" (onSelectionChanged)="listSelectionChanged($event)">
+                      <div>
+                        <div *dxTemplate="let item of 'item'">
+                          <div class="row left">
+                            <div>{{ 'Bill No' | translate}}: {{item.transId}}</div>
+                            <div class=""> {{ 'Date' | translate}}: {{ item.createdOn }}</div>
+                            <div class="">{{ 'Total Amount' | translate}}: {{ item.totalAmount | currencyFormat }}</div>
+                            <div *ngIf="this.itemselected[0].dataItem?.dataItem?.transId?.length <= 0"><dx-button
+                                class="" icon="trash" type="danger" text="{{'' | translate}}"
+                                (click)="cancelOrderBill(item)"></dx-button></div>
+                          </div>
+                        </div>
+                      </div>
+                    </dx-list>
+                  </div>
+                  <div class="col-md-5">
+                    <ng-container *ngIf="this.showCurrenOrder">
+                      <div class="table__detail">{{ 'Detail' | translate}}: <span
+                          class="table__detail_font">{{selectedItemKeys.join()}}</span> </div>
+                      <!-- <span style="font-size:17px ;">Thông tin đơn: <span style="font-size: 20px;color:chocolate;font-weight: 650;">{{this.currentOrder.transId}}</span> </span> -->
+                      <div class="hr"></div>
+                      <div *ngFor="let item of currentOrder">
+                        <div class="cards__detail"
+                          *ngIf="item?.lines!==null && item?.lines!==undefined && item?.lines.length > 0">
+                          <div class="card__detail card-1__detail" *ngFor="let item1 of item.lines">
+                            <br />
+                            <div class=""> {{ 'Code' | translate}}: <span class="table__detail_item">
+                                {{item1.itemCode}}</span></div>
+                            <div class=""> {{ 'Name' | translate}}: <span
+                                class="table__detail_item">{{item1.itemName}}</span></div>
+                            <div class=""> {{ 'Quantity' | translate}}: <span class="table__detail_item">
+                                {{item1.quantity}}</span></div>
+                            <div class=""> {{ 'Price' | translate}}: <span class="table__detail_item"> {{item1.price |
+                                currencyFormat}}</span></div>
+                            <div class=""> {{ 'Line total' | translate}}: <span class="table__detail_item">
+                                {{item1.lineTotal | currencyFormat}}</span></div>
+                            <div>
+                              <dx-button style="width:97%" type="default" class="" text="{{'Move' | translate}}"
+                                (click)="clickItemMove(item1,item)"> </dx-button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <!-- Tổng bill : {{this.totalamount}} -->
+                  </div>
+                </div>
+              </div>
+              <div class="" *ngIf="this.viewUserManual">
+                <div class="row" style="border: 1px solid #f0f0f0; padding:4px;">
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-1" style="width: 20px;height: 20px;background: rgb(217 83 79);"></div>
+                      <div class="col-md-9">In use</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-1" style="width: 20px;height: 20px;background: #fa3142;"></div>
+                      <div class="col-md-9">Group in use</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-1" style="width: 20px;height: 20px;background: #46B076;"></div>
+                      <div class="col-md-9">Free</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-1" style="width: 20px;height: 20px;background: #ee9a3a;"></div>
+                      <div class="col-md-9">Text(Hold)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div [ngStyle]="{'display': this.showMerge===false ? 'none' : '' }">
+            <div class="">
+              <dx-select-box #cbbtablelist [items]="tableInforList" displayExpr="tableName" valueExpr="tableId"
+                placeholder="Table list"></dx-select-box>
+              <div class="dx-field">
+                <div class="dx-field-label"> {{ 'Checked' | translate}}</div>
+                <div class="dx-field-value">
+                  <dx-check-box [value]="true" #clearTable></dx-check-box>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-md-6">
+                <dx-button type="default"  class="table_button_popup" 
+                (click)="mergeBan(this.itemselected,cbbtablelist.value,clearTable.value)"> Ok</dx-button>
+                </div>
+                <div class="col-md-6">
+                <dx-button type="danger" class="table_button_popup" (click)="funcTrove()" > Cancel</dx-button>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

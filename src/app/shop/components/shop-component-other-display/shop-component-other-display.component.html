@@ -1,0 +1,482 @@
+
+
+<main class="grocery-cashier-page"  id="divShow"   >
+
+  <div class="main-section">
+
+       <!-- <div class="keyboard">
+          <numeric-keyboard layout="tel"  ></numeric-keyboard>
+        </div>
+      
+        <div className="input">
+          <label>Amount: </label>
+          <numeric-input type="number" placeholder="touch to input" [(ngModel)]="amount"></numeric-input>
+        </div>
+
+        <app-shop-tool-virtual-keyboard ></app-shop-tool-virtual-keyboard> -->
+      
+      <div class="center-wrap p-0">
+         
+        <div class="col-md-12"  >
+            <div class="row">
+                <ng-container *ngIf="basket$ | async as basket" class="mb-1">
+                    <ng-container *ngIf="basket?.items?.length <=0 || basket?.lastedItem === null || basket?.lastedItem ===undefined  || basket?.lastedItem?.id?.length <= 0">
+                        <div class=" col-md-12">
+                            <div   class="cardModify" >
+                                <h1 style="font-weight: 500;">{{this.message}}</h1>
+                               
+                            </div> 
+                        </div>
+                            
+                    </ng-container>
+                    
+                </ng-container>
+                <ng-container *ngIf="basket$ | async as basket" class="mb-1">
+                   
+                    <ng-container *ngIf="basket?.items?.length > 0 && basket?.lastedItem !== null && basket?.lastedItem !==undefined  && basket?.lastedItem?.id?.length > 0">
+                        <div class=" col-md-12">
+                            <div   class="cardModify" >
+                            <div class="row">
+                                <div class="col-xl-9 col-md-8 col-lg-8">
+                                    <ng-container *ngIf="basket?.lastedItem?.type==='Add'">
+                                        <span style="color: green ;">
+                                            <i class="fas fa-plus"></i> 
+                                        </span> 
+                                    </ng-container>
+                                    <ng-container *ngIf="basket?.lastedItem?.type==='Edit'">
+                                        <span style="color: dodgerblue ;"> 
+                                            <i class="fas fa-edit"></i>
+                                        </span> 
+                                    </ng-container>
+                                    <ng-container *ngIf="basket?.lastedItem?.type==='Remove'">
+                                        <span style="color: red ;"> 
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span> 
+                                    </ng-container>
+                                    
+                                    {{ basket?.lastedItem?.productName}}
+                                </div>
+                                <div class="col-xl-3 col-md-4 col-lg-4" style="text-align:right ;">
+                                    
+                                   
+                                    <span style="color: cadetblue ;">
+                                        <i class="fas fa-tags"></i> {{basket?.lastedItem?.price}} 
+                                    </span> 
+                                </div>
+                            </div>
+                               
+                                
+                            </div> 
+                        </div>
+                           
+                            
+                        
+                    </ng-container>
+                </ng-container>
+            </div>
+            <!-- <img src="http://192.168.8.230:8778/display/images/1.jpg" style="    width: 15%;">  -->
+          <div class="row">
+              <div class="col-xl-9 col-md-8 col-lg-8  left-grid-grocery">
+                  <!-- LEFT SECTION -->
+                  <div class="left-grid mt-1"> 
+                    <!-- SEARCH BAR -->
+                    <div class="main-content" style="text-align: center ;">
+                    <ng-container *ngIf="(imageList?.length <= 0 || imageList===null || imageList===undefined) && (videoSource===null || videoSource===undefined) "> 
+                        <div  style="padding: 23%; text-align: center;">
+                        
+                            <img src="../../../../assets/images/System/loading2.gif" style="    width: 15%;"> 
+                        
+                        
+                        </div>
+                    </ng-container>
+                    <div style="margin: auto 0px;" *ngIf="initCompleted" >
+                       
+                        <ng-container *ngIf="imageList?.length > 0"> 
+                            <!-- [showNavButtons]="true"
+                            [showIndicator]="true" -->
+                            <dx-gallery
+                                #gallery
+                                id="gallery"  width="100%"
+                                [dataSource]="imageList"
+                                [height]="this.heightScreen"
+                                [slideshowDelay]="this.slideshowDelay"
+                                [showIndicator]="false"
+                                [loop]="true"
+                        
+                            ></dx-gallery>
+                          </ng-container>
+                          <ng-container *ngIf="videoSource!==null && videoSource!==undefined && videoSource?.length > 0"> 
+                            <div class="video">
+                                <video width="100%" loop controls (click)="toggleVideo()" [height]="this.heightScreen" #videoPlayer  autoplay muted>
+                                    <source [(src)]="videoSource" type="video/mp4" />
+                                    Browser not supported
+                                </video>
+                            </div>
+                          </ng-container>
+                    </div>
+                    
+                    </div>
+                  </div>
+                  <!-- LEFT SECTION END -->
+              </div>
+
+              <div class="col-xl-3 col-md-4 col-lg-4  right-grid-grocery">
+                  <div class="right-grid p-0 shop-order-grocery-grid pt-1 " style="height: calc(92vh)">
+                      <div #divRight class="right-section shop-order-grocery-section " id="rigthCustom"   >
+                        <!-- <ng-container *ngIf="basket$ | async as basket" class="mt-3">
+                            <ng-container *ngIf="basket?.lastedItem !== null && basket?.lastedItem !==undefined  && basket?.lastedItem?.id?.length > 0">
+                                <div class="bill-details mb-3">
+                                   
+                                    <div   style="padding-top: 8px; padding-bottom: 8px; border-bottom: 3px solid #1a1616; font-size: 25px ; font-weight: 700;    width: 100%;" >
+                                        {{basket?.lastedItem?.productName}}
+                                        <br>
+                                        <span style="color: cadetblue ;">
+                                            <i class="fas fa-tags"></i> {{basket?.lastedItem?.price}} 
+                                        </span>
+                                        
+                                    </div> 
+                                    
+                                </div>
+                            </ng-container>
+                        </ng-container> -->
+                        
+                              <ng-container  *ngIf="(this.basket?.salesPerson!==null && this.basket?.salesPerson!==undefined && this.basket?.salesPerson!=='')">
+                                <div class="row"  >
+                                  <dx-text-box name="txtSalesPerson" class="txtSalesPerson"  [readOnly]="true" [(value)]="this.basket.salesPerson"   placeholder="{{'Sales Person' | translate}}" 
+                                    #txtSalesPerson style="height: 50px; padding: 2px;"></dx-text-box>
+                                </div>
+                              </ng-container>
+                        
+
+
+
+                          <ng-container *ngIf="basket$ | async as basket" class="mt-3">
+
+                              <ng-container *ngIf="basket?.customer=== null || baskket?.customer===undefined">
+                                  <div style="padding-bottom: 8px; border-bottom: 3px solid #1a1616;">
+                                      <div class="row">
+                                          <div class="col-md-9">
+                                          </div>
+                                          <div class="col-md-3 pl-0">
+                                              <!-- <button class="submit-btn p-1" [disabled]="!(this.isResponseBasket$ | async)" style="width:100%; height: 65px;" (click)="createNewOrder()">{{'Clear Bill' | translate}}</button> -->
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                      </div>
+                                  </div>
+                              </ng-container>
+                              <ng-container *ngIf="basket.customer !== null">
+                                  <div style="padding-bottom: 10px; border-bottom: 3px solid #1a1616;">
+
+                                      <!-- <div class="row mb-1 mt-1 align-items-center" *ngIf="this.authService.getCRMSource()?.toString()==='Input'">
+                                          <ng-container *ngIf="basket?.items?.length <= 0">
+                                              <ng-container *ngIf="this.omsInputDefault?.settingValue!=='N/A'">
+                                                  <ng-container *ngIf="basket?.customer?.cusType === 'M'">
+                                                      <div class="col-md-3 col-xl-3 col-sm-3 col-lg-3 pl-3" *ngIf="basket?.customer?.cusType === 'M'" style=" text-align: end;">
+                                                          <dx-button text='Walkin' class="submit-btn" style="height: 50px;   " (onClick)="changeToWalkin()"></dx-button>
+                                                      </div>
+                                                      <div [ngClass]=" basket?.customer?.cusType === 'M' ? ' col-md-9 p-1  pl-3 pr-3  ':'col-md-12 p-1  pl-3 pr-3'">
+                                                          <dx-text-box name="txtCustomer" class="txtCustomer" id="txtCustomer" valueChangeEvent="keyup" (blur)="inputCustomer(txtCustomer.value)" (onEnterKey)="inputCustomer(txtCustomer.value)" placeholder="{{'Customer' | translate}} / {{'Member ID' | translate}}"
+                                                              #txtCustomer style="height: 50px; padding: 2px;"></dx-text-box>
+                                                          <dx-button *ngIf="txtCustomer.value!=='' && basket.customer.phone !== txtCustomer.value" icon="check" class="submit-btn mr-2" style="height: 40px; top: 5px; width: 50px; position: absolute; right: 10px;" (onClick)="inputCustomer(txtCustomer.value)"></dx-button>
+                                                      </div>
+
+                                                  </ng-container>
+                                                  <ng-container *ngIf="basket?.customer?.cusType !== 'M'">
+                                                      <div class="col-md-9 col-xl-10 col-sm-9 col-lg-9">
+                                                          <ng-container *ngIf="inputOMSMode===false">
+
+                                                              <dx-text-box name="txtCustomer" id="txtCustomer" class="txtCustomer" valueChangeEvent="keyup" (onFocusOut)="inputCustomerFocusOut(txtCustomer.value)" (onEnterKey)="inputCustomer(txtCustomer.value)" placeholder="{{'Customer' | translate}} / {{'Member ID' | translate}}"
+                                                                  #txtCustomer style="height: 50px; padding: 2px;"></dx-text-box>
+                                                              <dx-button *ngIf="txtCustomer.value!=='' && basket.customer.customerId !== txtCustomer.value" icon="check" class="submit-btn mr-2" style="height: 40px; top: 5px; width: 50px; position: absolute; right: 10px;" (onClick)="inputCustomer(txtCustomer.value)"></dx-button>
+                                                          </ng-container>
+                                                          <ng-container *ngIf="inputOMSMode===true">
+
+                                                              <dx-text-box name="txtOMSId" class="txtOMSId" valueChangeEvent="keyup" (onFocusOut)="inputOMSIdFocusOut(txtOMSId.value)" [(value)]="basket.omsId" (onEnterKey)="inputOMSId(txtOMSId.value)" placeholder="{{'Reference ID' | translate}}" #txtOMSId style="height: 50px; padding: 2px;"></dx-text-box>
+                                                              <dx-button *ngIf="txtOMSId.value!=='' && basket.omsId !== txtOMSId.value" icon="check" class="submit-btn mr-2" style="height: 40px; top: 5px; width: 50px; position: absolute; right: 10px;" (onClick)="inputOMSId(txtOMSId.value)"></dx-button>
+                                                          </ng-container>
+                                                      </div>
+
+                                                      <div class="col-md-3 col-xl-2 col-sm-3 col-lg-3 pl-0" style=" text-align: end;">
+
+                                                          <span style="cursor: pointer;" (click)="switchShopMode()">
+                                                              <i class="fas fa-sync fa-2x" *ngIf="this.omsInputDefault?.customField2===''"></i> 
+                                                              <img *ngIf="this.omsInputDefault?.customField2!==''" height="45px" style="border-radius: 10px;"
+                                                              src="../../../../assets/images/{{this.omsInputDefault?.customField2}}" alt="{{this.omsInputDefault?.settingValue}}" /> 
+                                                          </span>
+                                                      </div>
+                                                  </ng-container>
+
+
+
+                                              </ng-container>
+                                              <ng-container *ngIf="this.omsInputDefault?.settingValue ==='N/A'">
+                                                  <div class="col-md-12 p-1  pl-3 pr-2">
+
+                                                      <dx-text-box name="txtCustomer" id="txtCustomer" class="txtCustomer" valueChangeEvent="keyup" (blur)="inputCustomer(txtCustomer.value)" (onEnterKey)="inputCustomer(txtCustomer.value)" placeholder="{{'Customer' | translate}} / {{'Member ID' | translate}}"
+                                                          #txtCustomer style="height: 50px; padding: 2px;"></dx-text-box>
+                                                      <dx-button *ngIf="txtCustomer.value!=='' && basket.customer.phone !== txtCustomer.value" icon="check" class="submit-btn mr-2" style="height: 40px; top: 5px; width: 50px; position: absolute; right: 10px;" (onClick)="inputCustomer(txtCustomer.value)"></dx-button>
+                                                  </div>
+                                              </ng-container>
+                                          </ng-container>
+
+                                          <ng-container *ngIf="basket?.items?.length > 0">
+                                              
+                                              <ng-container *ngIf="inputOMSMode===false">
+                                                  <div class="col-md-3 col-xl-3 col-sm-3 col-lg-3 pl-3" *ngIf="basket?.customer?.cusType === 'M'" style=" text-align: end;">
+                                                      <dx-button text='Walkin' class="submit-btn" style="height: 50px;   " (onClick)="changeToWalkin()"></dx-button>
+
+                                                  </div>
+
+                                                  <div [ngClass]=" basket?.customer?.cusType === 'M' ? ' col-md-9 p-1  pl-3 pr-3  ':'col-md-12 p-1  pl-3 pr-3'">
+                                                      <dx-text-box name="txtCustomer" class="txtCustomer" id="txtCustomer" valueChangeEvent="keyup" (blur)="inputCustomer(txtCustomer.value)" (onEnterKey)="inputCustomer(txtCustomer.value)" placeholder="{{'Customer' | translate}} / {{'Member ID' | translate}}"
+                                                          #txtCustomer style="height: 50px; padding: 2px;"></dx-text-box>
+                                                      <dx-button *ngIf="txtCustomer.value!=='' && basket.customer.phone !== txtCustomer.value" icon="check" class="submit-btn mr-2" style="height: 40px; top: 5px; width: 50px; position: absolute; right: 10px;" (onClick)="inputCustomer(txtCustomer.value)"></dx-button>
+                                                  </div>
+
+
+                                              </ng-container>
+
+                                              <ng-container *ngIf="inputOMSMode===true">
+                                                  <div class="col-md-12 p-1  pl-3 pr-3">
+                                                      <dx-text-box name="txtOMSId" class="txtOMSId" valueChangeEvent="keyup" [readOnly]="basket?.items?.length > 0" [(value)]="basket.omsId" (onEnterKey)="inputOMSId(txtOMSId.value)" placeholder="{{'Reference ID' | translate}}" (blur)="inputOMSId(txtOMSId.value)"
+                                                          #txtOMSId style="height: 50px; padding: 2px;"></dx-text-box>
+                                                  </div>
+ 
+                                              </ng-container>
+                                          </ng-container>
+
+                                      </div>
+ -->
+
+                                      <div class="row mt-2 align-items-center">
+                                          <div class="col-md-9">
+
+                                              <div class="row">
+
+                                                  
+                                                  <ng-container *ngIf="this.authService.getCRMSource()!==null && this.authService.getCRMSource()!==undefined ">
+                                                      <div class="col-md-12 ellipsis-cus">
+                                                          <ng-container *ngIf="this.authService.getCRMSource()?.toString()==='Input'">
+                                                              <span class="username name-cus"> <i
+                                                                  class="fas fa-user-tie"></i> {{basket.customer?.customerName}}</span>
+                                                          </ng-container>
+                                                          <ng-container *ngIf="this.authService.getCRMSource()?.toString()!=='Input'">
+                                                              <span class="username name-cus" (click)="viewCustomer(popupIemplate, basket.customer)"> <i
+                                                                  class="fas fa-user-tie"></i> {{basket.customer?.customerName}}</span>
+                                                          </ng-container>
+
+                                                      </div>
+                                                      <!-- <div class="col-md-12 mt-2 ellipsis-cus">
+
+                                                          <ng-container *ngIf="basket.customer?.phone!=='' && basket.customer?.phone!== null && basket.customer?.phone!== undefined">
+                                                              <a href="tel:{{basket.customer?.phone}}" style="    font-size: 18px;">
+                                                                  <img width="20px" src="../../../../assets/images/System/phone.svg" alt="phone"> {{basket.customer?.phone}}
+                                                              </a>
+                                                          </ng-container>
+                                                          <ng-container *ngIf="basket.customer?.phone==='' || basket.customer?.phone=== null || basket.customer?.phone=== undefined">
+                                                              <a style="    font-size: 18px;">
+                                                                  <i class="fas fa-id-card"></i> {{basket.customer?.customerId}}
+                                                              </a>
+
+                                                          </ng-container>
+
+                                                      </div>
+                                                      <div class="col-md-12 mt-2" *ngIf="basket.customer?.rewardPoints!==null && basket.customer?.rewardPoints!==undefined">
+                                                          <span class="nav-mail greeting ml-1" style="    font-size: 18px;">
+                                                              <img src="../../../../assets/images/System/top-rated.svg" style="height: 25px;" alt="mail">{{basket.customer?.rewardPoints | number}}
+                                                              <span *ngIf="basket.customer?.customerRankName">
+                                                                  ({{basket.customer?.customerRankName}})
+                                                              </span>
+                                                          <span *ngIf="basket.customer?.expiryDate">
+                                                                  - Ex Date: {{basket.customer?.expiryDate}}
+                                                              </span>
+
+                                                          </span>
+                                                        
+                                                      </div> -->
+                                                  </ng-container>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-3 pl-0">
+                                           
+                                              <!-- <button class="btn-new p-1" [disabled]="!(this.isResponseBasket$ | async)" style="width:100%; height: 65px;" (click)="createNewOrder()">{{'Clear Bill' | translate}}</button> -->
+                                              <!-- <span class="username" style="cursor: pointer;"  [routerLink]="['/shop/order/customer']"> <i class="fas fa-user-tie"></i> {{basket.customer.customerName}}</span> -->
+                                          </div>
+                                      </div>
+                                    
+                                    
+
+                                  </div>
+
+                                
+                              </ng-container>
+
+                            
+                              <!-- <div class="row mt-2">
+                                  <div class="col-md-6 col-sm-12">
+                                      <p class="billType">
+                                          <ng-container *ngIf="basket?.salesType!=='Retail'">
+                                              {{ basket?.salesType }}
+                                              <a (click)="openOrder()" style="cursor: pointer;">{{ this.orderId}}</a>
+                                          </ng-container>
+                                          <ng-container *ngIf="basket?.salesType==='Retail'">
+                                              {{'SALES' | translate}}
+                                          </ng-container>
+                                      </p>
+
+                                  </div>
+                                  <div class="col-md-6 col-sm-12">
+                                      <p class="billType" style="text-align: end;">
+                                        
+
+                                      </p>
+                                  </div>
+                              </div> -->
+
+                          </ng-container>
+
+
+                          <!-- <div class="bill-info-wrap" style="padding-top: 10px; ">
+
+
+                              <div class="bill-info">
+                                  <p id="txtBillNo" class="bill-number">{{'BillNo' | translate}}: {{this.orderNo}}</p>
+
+                              </div>
+                             
+
+
+                          </div> -->
+
+                        
+
+                          <div class="bill-info-wrap" style="padding-top: 10px; margin-bottom: 10px;">
+ 
+                            <p class="bill-date">{{'Date' | translate}}: {{myDate | date : this.authService.loadFormat().dateFormat}}</p>
+                            <p class="bill-time">{{'Time' | translate}}: {{myDate | date:'HH:mm:ss'}}</p>
+
+
+
+
+                        </div>
+                     
+                          <div class="bill-details">
+                               
+                              <!-- <div class="detail d-flex align-items-center justify-content-between mb-2">
+                                  <div>
+                                      <label class="detail-title">{{'Total Quantity' | translate}}</label>
+                                  </div>
+                                  <div>
+                                      <p class="detail-value text-right mr-2">{{(basketTotal$ | async)?.totalQty | currencyFormat}}</p>
+                                  </div>
+                              </div>
+                              <div class="detail d-flex align-items-center justify-content-between mb-2">
+                                  <div>
+                                      <label class="detail-title">{{'Total Amount' | translate}}</label>
+                                  </div>
+                                  <div>
+                                      <p class="detail-value text-right mr-2"> <span *ngIf="(basket$ | async)?.negativeOrder || ((basket$ | async)?.salesType?.toLowerCase() === 'return' &&  (basketTotal$ | async)?.billTotal !== 0)">-</span> {{(basketTotal$ | async)?.billTotal | currencyFormat}}</p>
+                                  </div>
+                              </div>
+                              <div class="detail d-flex align-items-center justify-content-between mb-2">
+                                <div  >
+                                  <label class="detail-title">  {{'Discount Amount' | translate}} </label> 
+                              </div>
+                                  <div>
+                                      <p class="detail-value text-right mr-2"> <span *ngIf="(basketTotal$ | async)?.discountBillValue > 0">-</span> {{(basketTotal$ | async)?.discountBillValue | currencyFormat}}</p>
+                                  </div>
+                              </div>
+                               
+                              <div class="detail d-flex align-items-center justify-content-between mb-2" *ngIf=" (basketTotal$ | async)?.billRoundingOff !==0 ">
+                                  <div>
+                                      <label class="detail-title ">{{'Rounding' | translate}}</label>
+                                  </div>
+                                  <div>
+                                    
+                                      <p class="detail-value text-right mr-2 ">{{ (basketTotal$ | async)?.billTotal
+                                          < 0 ? (basketTotal$ | async)?.billRoundingOff : -(basketTotal$ | async)?.billRoundingOff | currencyFormat}}</p>
+                                  </div>
+                              </div> -->
+                              <div class="detail d-flex align-items-center justify-content-between mb-2" style="border-bottom: unset" >
+                                <div>
+                                    <label class="detail-title " >{{'Total Payable' | translate}}</label>
+                                </div>
+                                
+   
+                              </div>
+                              <div class="detail d-flex align-items-center justify-content-between mb-2 ">
+                                  <p class="text-right mr-2 txtTotalPayable" style="width: 100%;   color: darkorange!important;">
+                                      <span *ngIf="  (basket$ | async)?.negativeOrder || ((basket$ | async)?.salesType?.toLowerCase() === 'return' &&  (basketTotal$ | async)?.total !== 0)">-</span>
+                                       {{(basketTotal$ | async)?.total | currencyFormat}}
+                                  </p>
+ 
+                              </div>
+                              <!-- <div class="detail d-flex align-items-center justify-content-between mb-2" style="color: darkorange">
+                                <div>
+                                    <label class="detail-title ">{{'Collected' | translate}}</label>
+                                </div>
+                                <div>
+                                  
+                                    <p class="detail-value text-right mr-2 ">  {{((basketTotal$ | async)?.totalAmount) | currencyFormat}}</p>
+                                </div>
+                            </div> -->
+                          
+                            <div class="detail d-flex align-items-center justify-content-between mb-2" style="border-bottom: unset" >
+                              <div>
+                                  <label class="detail-title " >{{'Change Amount' | translate}}</label>
+                              </div>
+                              <!-- <div>
+                                
+                                  <p class="detail-value text-right mr-2 ">  {{((basketTotal$ | async)?.changeAmount) | currencyFormat}}</p>
+                              </div>
+  -->
+                            </div>
+                            <div class="detail d-flex align-items-center justify-content-between mb-2 ">
+                                <!-- <p class="text-right mr-2 txtTotalPayable" style="width: 100%;">
+                                    <span *ngIf="  (basket$ | async)?.negativeOrder || ((basket$ | async)?.salesType?.toLowerCase() === 'return' &&  (basketTotal$ | async)?.total !== 0)">-</span>
+                                     {{(basketTotal$ | async)?.total | currencyFormat}}
+                                </p> -->
+                                <p class="detail-value text-right mr-2  txtTotalPayable" style="width: 100%; color: darkred!important;">  {{((basketTotal$ | async)?.changeAmount) | currencyFormat}}</p>
+                            </div>
+                          </div>
+                         
+                          <div class="row">
+                            <div class="col-md-3">
+                                
+                            </div>
+                        
+                            <div class="col-md-3">
+                                
+                            </div>
+                            <div class="col-md-3">
+                                
+                            </div>
+                            <div class="col-md-3">
+                                 
+                                    <button class="btn button-filter w-100" style="height: 50px;" (click)=" this.toggleScreen()">
+                                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                                        <!-- {{'Toggle Screen' | translate}}  -->
+                                      </button>
+                               
+                               
+                            </div> 
+                        </div>
+                      </div>
+                      
+                  </div>
+                  <!-- RIGHT SECTION END -->
+                  
+              </div>
+          </div>
+
+         </div>
+
+
+
+      </div>
+  </div>
+</main>
+
+<ng-keyboard-shortcuts  [shortcuts]="[]"></ng-keyboard-shortcuts>
+<ng-keyboard-shortcuts-help [key]="'`'"  [closeKey]="'escape'" ></ng-keyboard-shortcuts-help>   

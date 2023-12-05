@@ -1,0 +1,87 @@
+<div class="center-wrap" *ngIf="this.storeList !==null &&  this.storeList !==undefined && this.storeList?.length >0">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6">
+              <label for="item-searchbar" class="section-title">{{'Dashboard Sales Transaction Detail' | translate}}</label>
+          </div>
+          <div class="col-md-6 text-right">
+              <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/report" text="{{'Report List' | translate}}">
+              </dx-button>
+          </div>
+
+      </div>
+      <!-- (onValueChanged)="customerValueChange(cbbCustomer.value, false)" -->
+      
+      <div>
+        <div class="row justify-content-center flex-row mb-3 mt-2 mt-5">
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+            
+            <dx-select-box #cbbStoreList [items]="storeList" displayExpr="storeName" valueExpr="storeId" 
+            placeholder="Store list"></dx-select-box>
+            
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+            <dx-select-box #cbbViewType [items]="viewType" displayExpr="name" valueExpr="value" 
+            placeholder="View type"></dx-select-box>
+            
+          </div>
+  
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+           
+            <dx-select-box #cbbtopType [items]="topType" displayExpr="name" valueExpr="value" 
+            placeholder="Top"></dx-select-box>
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard">
+            {{'From Date' | translate}}
+            <dx-date-box #fromdate  [value]='this.fromDate' [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard">
+            <dx-date-box #todate [value]='this.toDate'  [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <!-- mo -->
+            <!-- <div class="col-md-2 mb-1">
+                {{'From Date' | translate}}
+                  
+              </div>
+              <div class="col-md-2 mb-1">
+                {{'To Date' | translate}}
+                  <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+              </div> -->
+              <!-- <div class="col-md-2 mb-1">
+                {{'Store' | translate}}
+                <dx-select-box #cbbStore  [searchEnabled]="true" [value]="storeOptions[0].value" [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+            </div> -->
+           
+              <div class="col-md-2"  >
+                <ng-container *ngIf="this.isLoadingData===false">  
+                  <dx-button  class="mr-2 pt-1 search-dashboard" icon="search" type="success" 
+                  (onClick)="this.loadData(cbbStoreList.value,fromdate.value,todate.value, cbbViewType.value ,cbbtopType.value)" 
+                  text="{{'Search' | translate}}"></dx-button>
+
+                </ng-container>
+                <ng-container *ngIf="this.isLoadingData===true" >
+                    <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}">
+                   </dx-button>
+                </ng-container> 
+                 
+              </div>
+        </div>
+      
+        <dx-chart id="chart" [dataSource]="dataSource">
+          <dxi-series
+            argumentField="Description"
+            valueField="Value"
+            [name]="this.nameType"
+            type="bar"
+            color="#ffaa66"
+          >
+          </dxi-series>
+        </dx-chart>
+        
+      </div>
+     
+     
+  </div>
+
+</div>
+ 

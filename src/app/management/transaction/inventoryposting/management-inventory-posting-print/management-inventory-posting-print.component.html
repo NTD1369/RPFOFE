@@ -1,0 +1,168 @@
+<div class="center-wrap main-container">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;     height: 100%;">
+        <div class="container cl-fs" *ngIf="this.arrDataPrintList != null">
+            <div class="row text-right">
+                <div class="col-md-6 offset-md-6 text-right bt-info">
+                    <dx-button *ngIf="this.version==='en'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-gb" type="default"> </dx-button>
+                    <dx-button *ngIf="this.version==='vi'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-vn" type="default"> </dx-button>
+                    <dx-button class="btn-print" icon="fa fa-print" text="Print" (onClick)="PrintPage()" style="color: #fff;"></dx-button>
+                </div>
+            </div>
+
+            <ng-container *ngIf="this.version === 'vi'">
+                <h3>{{this.companyName}}</h3>
+                <h2 class="text-center mb-4"><b>PHIẾU KHO HÀNG</b></h2>
+                <div class="row">
+                    <span class="col-md-1 col-print-1 p-0"><b>Mã phiếu:</b></span>
+                    <span class="col-md-10 col-print-10">{{this.arrDataPrintList.ipid}}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-1 col-print-1 p-0"><b>Cửa hàng:</b></span>
+                    <span class="col-md-10 col-print-10">{{this.arrDataPrintList.storeId}} -
+            {{this.arrDataPrintList.storeName}}</span>
+                </div>
+                <div class="row">
+                    <span class="col-md-1 col-print-1 p-0"><b>Ghi chú:</b></span>
+                    <span class="col-md-10 col-print-10">{{this.arrDataPrintList.comment }}</span>
+                </div>
+                <div class="row mt-4" *ngIf="this.arrDataPrintList.lines.length > 0">
+                    <table class="w-100 table-template">
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th>Mã hàng</th>
+                            <th>Tên hàng</th>
+                            <th style="width: 10%">Mã vạch</th>
+                            <th class="text-center">Đơn vị</th>
+                            <th class="text-right">Đơn giá</th>
+                            <th class="text-right">Số lượng</th>
+                            <th class="text-right">Tổng giá trị</th>
+                        </tr>
+                        <tr *ngFor="let item of this.arrDataPrintList.lines; let i = index">
+                            <td class="text-center">{{i + 1}}</td>
+                            <td>{{item.itemCode}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.barCode}}</td>
+                            <td class="text-center">{{item.uomCode}}</td>
+                            <td class="text-right">{{item.price | number}}</td>
+                            <td class="text-right">{{item.quantity | number}}</td>
+                            <td class="text-right">{{item.lineTotal | number}}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right" colspan="7"><b>Tổng số lượng:</b> {{this.arrDataPrintList.sumQuality | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="row mt-4" >
+                    <div class="col-md-9">
+                        </div>
+                    <div class="col-md-3 ">
+                        <span class="col-md-1 col-print-1 p-0"><b>Ngày in phiếu:</b></span>
+                        <span class="col-md-10 col-print-10">{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+                    </div>
+                </div>
+                <div class="row mt-5 mb-4">
+                    <div class="col-md-11 col-print-11 text-right">.............., Ngày........ Tháng........ Năm........</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-print-3 text-center" style="height: 100px;"><b>Người nhận</b></div>
+                    <div class="col-md-3 col-print-3 text-center" style="height: 100px;"><b>Người giao</b></div>
+                    <div class="col-md-3 col-print-3 text-center" style="height: 100px;"><b>Cửa hàng Trưởng</b></div>
+                    <div class="col-md-3 col-print-3 text-center" style="height: 100px;"><b>Người lập phiếu</b></div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="this.version === 'en'">
+                <h3>{{this.companyName}}</h3>
+                <h2 class="text-center mb-4"><b>INVENTORY POSTING</b></h2>
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Inventory Posting No:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.ipid}}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Store:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.storeId}} -
+            {{this.arrDataPrintList.storeName}}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Name:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.name }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Created By:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.createdBy }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Created On:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.createdOn | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Document Date:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.docDate | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Document Due Date:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.docDueDate | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Status:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.status }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="col-md-2 w-p-5 p-0"><b>Remark:</b></span>
+                    <span class="col-md-10 w-p-10">{{this.arrDataPrintList.comment }}</span>
+                </div>
+
+                <div class="row mt-4" *ngIf="this.arrDataPrintList.lines.length > 0">
+                    <table class="w-100 table-template">
+                        <tr>
+                            <th class="text-center">No.</th>
+                            <th>Item code</th>
+                            <th>Description</th>
+                            <th style="width: 10%">Barcode</th>
+                            <th class="text-center">Uom</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Line Total</th>
+                        </tr>
+                        <tr *ngFor="let item of this.arrDataPrintList.lines; let i = index">
+                            <td class="text-center">{{i + 1}}</td>
+                            <td>{{item.itemCode}}</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.barCode}}</td>
+                            <td class="text-center">{{item.uomCode}}</td>
+                            <td class="text-right">{{item.price | number}}</td>
+                            <td class="text-right">{{item.quantity | number}}</td>
+                            <td class="text-right">{{item.lineTotal}}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right" colspan="7">Sum: {{this.arrDataPrintList.sumQuality | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="row mt-4" >
+                    <div class="col-md-9">
+                        </div>
+                    <div class="col-md-3 ">
+                        <span class="col-md-1 col-print-1 p-0"><b>Print date:</b></span>
+                        <span class="col-md-10 col-print-10">{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+                    </div>
+                </div>
+                <div class="row mt-5 mb-4">
+                    <div class="col-md-10 col-print-10 text-right">Date:.....................................................</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-print-6 text-center" style="height: 100px;"><b>Store Manager</b></div>
+                    <div class="col-md-6 col-print-6 text-center" style="height: 100px;"><b>Transfer By</b></div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="cus-maintenance-card">
+    <!-- <h2 class="maintenance-heading">Choose Sales Type</h2> -->
+    <div class="row" style="width:100%">
+        <div class="col-md-6 maintenance-access-wrapper" (click)="chooseType('Retail')">
+            <div class="maintenance-service-box">
+                <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Retail">
+        </span>
+                <label>{{'Retail' | translate}}</label>
+            </div>
+        </div>
+
+        <div class="col-md-6 maintenance-access-wrapper" (click)="chooseType('Card')">
+            <div class="maintenance-service-box">
+                <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+        </span>
+                <label>{{'Card' | translate}}</label>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- <div class="maintenance-card" >
+  
+    <div class="maintenance-row" style="display: flex;">
+      <div class="maintenance-access-wrapper" (click)="chooseType('Retail')">
+        <div class="maintenance-service-box">
+          <span class="service-icon contain-image">
+            <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+          </span>
+          <label>Retail</label>
+        </div>
+      </div>
+
+      <div class="maintenance-access-wrapper" (click)="chooseType('Member')">
+        <div class="maintenance-service-box">
+            <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales-tranction.svg" alt="Sales Tranction Report">
+            </span>
+          
+          <label>Member</label>
+        </div>
+      </div>
+      <div class="maintenance-access-wrapper" (click)="chooseType('Member')">
+        <div class="maintenance-service-box">
+            <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales-tranction.svg" alt="Sales Tranction Report">
+            </span>
+          
+          <label>Class</label>
+        </div>
+      </div>
+      <div class="maintenance-access-wrapper" (click)="chooseType('Card')">
+        <div class="maintenance-service-box">
+          <span class="service-icon contain-image">
+            <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Inventory Tranction Report">
+          </span>
+          <label>Card</label>
+        </div>
+      </div>
+
+      <div class="maintenance-access-wrapper" (click)="chooseType('Event')">
+        <div class="maintenance-service-box">
+          <span class="service-icon contain-image">
+            <img src="../../../../assets/images/System/EOD.svg" alt="EOD">
+          </span>
+          <label>Event</label>
+        </div>
+      </div>
+ 
+    </div>
+  </div> -->

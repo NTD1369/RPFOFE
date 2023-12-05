@@ -1,0 +1,261 @@
+<div id='invoice-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Delivery Information' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12" *ngIf="this.showGrid">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" (onToolbarPreparing)="onToolbarPreparing($event)" id="gridContainer" [allowColumnResizing]="true" [columnAutoWidth]="true" [dataSource]="this.deliveryList" [showBorders]="true">
+                    <!-- rowTemplate="rowTemplateName" -->
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                    <dxi-column dataField="name" caption="Name" dataType="string"> </dxi-column>
+                    <dxi-column dataField="phone" caption="Phone" dataType="string"> </dxi-column>
+                    <dxi-column dataField="deliveryId" caption="Delivery Id"></dxi-column>
+                    <dxi-column dataField="email" caption="Email" dataType="string"></dxi-column>
+
+                    <dxi-column cellTemplate="cellTemplate" [minWidth]="180"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button icon="check" class="mr-2" text="Select" (onClick)="SelectInfor(cell.data)"></dx-button>
+                        <dx-button icon="edit" class="mr-2" text="Edit" (onClick)="EditInfor(cell.data)"></dx-button>
+                    </div>
+                    <!-- <tbody class="employee dx-row" [ngClass]="{'dx-row-alt': invoce.rowIndex % 2}" *dxTemplate="let invoce of 'rowTemplateName'" >
+                <tr class="main-row">
+                   
+                    <td rowspan="2">{{invoce.data.name}}</td>
+                    <td rowspan="2">{{invoce.data.phone}}</td>
+                    
+                </tr>
+                <tr class="notes-row">
+                    <td colspan="4">
+                    <div>
+                      <td>{{invoce.data.phone}}</td>
+                      <td>{{invoce.data.taxCode}}</td>
+                      <td>{{invoce.data.email}}</td>
+                      <td>{{invoce.data.remarks}}</td>
+                      <td>{{invoce.data.address}}</td>
+
+                    </div>
+                  </td>
+                </tr>
+            </tbody> -->
+                    <!-- <div *dxTemplate="let cell of 'statusTemplate'">
+                <div  [innerHtml]="cell.data.status | statusFormat"></div>
+              </div>
+           -->
+                </dx-data-grid>
+            </div>
+            <div class="col-md-12" *ngIf="this.showEdit">
+
+                <div class="row mt-1">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Name' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.name" [(ngModel)]="this.deliveryInfor.name" placeholder="Customer Name" aria-label="Customer Name">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Delivery Partner' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.deliveryPartner" [(ngModel)]="this.deliveryInfor.deliveryPartner" placeholder="Delivery Partner" aria-label="Tax Code">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Delivery ID' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.deliveryId" [(ngModel)]="this.deliveryInfor.deliveryId" placeholder="Delivery Id" aria-label="Tax Code">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Email' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.email" [(ngModel)]="this.deliveryInfor.email" placeholder="Email" aria-label="Email">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Address' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.address" [(ngModel)]="this.deliveryInfor.address" placeholder="Address" aria-label="Address">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Phone' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.phone" [(ngModel)]="this.deliveryInfor.phone" placeholder="Phone" aria-label="Phone">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Fax' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.fax" [(ngModel)]="this.deliveryInfor.fax" placeholder="Fax" aria-label="Fax">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-2" style="padding-top: 15px;">
+                        {{'Remark' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-text-wrap">
+                            <!-- <i class="fas fa-list-ol"></i> -->
+                            <input class="form-control" type="text" [value]="this.deliveryInfor?.remarks" [(ngModel)]="this.deliveryInfor.remarks" placeholder="Remark" aria-label="Remark">
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <!-- <div class="col-md-12">
+          <div id="grid">
+            <div class="row mt-2 mb-2">
+              <div class="col-md-2" >
+                <dx-button style="width: 100%;" icon="sortdown" type="warning" text="Top" (onClick)="selectFromTop()"> </dx-button>
+              </div> 
+              <div class="col-md-2" >  
+                <dx-button style="width: 100%;" icon="indent" type="warning" text="Random" (onClick)="selectRandom()"> </dx-button>
+              </div> 
+              <div class="col-md-8" >
+                <label *ngIf="this.selectedKey.length > 0">Serial Selected: </label> {{this.selectedKey}} </div>
+             </div>
+            <dx-data-grid
+                id="grid-container"
+                [dataSource]="this.itemSerials"
+                keyExpr="serialNum"
+                [(selectedRowKeys)]="this.selectedKey"
+                [showBorders]="true">
+                <dxo-selection 
+                    [selectAllMode]="allMode"
+                    [showCheckBoxesMode]="checkBoxesMode"
+                    mode="multiple"
+                    
+                ></dxo-selection>
+                <dxo-paging
+                    [pageSize]="10"
+                ></dxo-paging>
+               
+                <dxi-column
+                    dataField="serialNum"
+                    caption="Serial Num"
+                  
+                ></dxi-column>
+                
+                <dxi-column
+                    dataField="expDate"
+                    dataType="Exp Date"
+                    alignment="right" 
+                    dataType="datetime"
+                    format="d/M/yyyy"
+                ></dxi-column>
+                
+            </dx-data-grid>
+            
+        </div>
+      
+        </div>
+        -->
+
+        </div>
+    </div>
+    <div class="modal-footer" *ngIf="!this.showGrid">
+        <div class="row " style="width: 100%;">
+            <div class="col-md-6">
+                <dx-button class="button-height btn-back" icon="fas fa-undo-alt" stylingMode="outlined" text="Back to list" (onClick)="this.toggleDislay()">
+                </dx-button>
+            </div>
+            <div class="col-md-6 text-right">
+                <div class="row">
+                    <ng-container *ngIf="!this.isNew">
+                        <div class="col-md-3 text-center">
+                            <dx-button class="button-height" style="width: 100%;" icon="add" stylingMode="outlined" type="default" text="Add new" (onClick)="reset(true)">
+                            </dx-button>
+
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!this.isView">
+                        <div class="col-md-3 text-center">
+                            <dx-button class="button-height btn-agree" style="width: 100%;" icon="save" stylingMode="outlined" text="Save" (onClick)="save()">
+                            </dx-button>
+
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!this.isView && !this.isNew">
+                        <div class="col-md-3 text-center">
+                            <dx-button class="button-height" style="width: 100%;" icon="check" stylingMode="outlined" type="success" text="Select" (onClick)="SelectInvoice()">
+                            </dx-button>
+
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!this.isNew && this.isView">
+                        <div class="col-md-3 text-center">
+                            <dx-button class="button-height" style="width: 100%;" icon="remove" stylingMode="outlined" type="danger" text="Remove" (onClick)="removeInvoice()">
+                            </dx-button>
+
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>

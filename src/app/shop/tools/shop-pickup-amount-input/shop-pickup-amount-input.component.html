@@ -1,0 +1,85 @@
+<div id='discount-modal'>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Pickup' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+  <div class="modal-body">
+      
+      <!-- <div class="row mt-2" >
+        <div class="col-md-12">
+          <h4>
+            Pickup By : {{pickupBy}}
+          </h4> 
+        </div>
+      
+      </div> -->
+      <div class="row mt-2">
+        <div class="col-md-4">{{'Pickup By ' | translate}}  </div>
+        <div class="col-md-8">
+          <dx-text-box [disabled]="true" #txtPickupBy   [(ngModel)]="this.model.pickupBy" placeholder="{{'Pickup By' | translate}}"
+           [(value)]="this.model.pickupBy">
+          </dx-text-box>
+  
+        </div>
+      
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-4">{{'Counter Id' | translate}}  </div>
+      <div class="col-md-8">
+        <dx-text-box  [disabled]="true" #txtCounterId [(ngModel)]="this.model.counterId" placeholder="{{'Counter Id' | translate}}" [(value)]="this.model.counterId">
+        </dx-text-box> 
+      </div> 
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-4">{{'Shift Id' | translate}}  </div>
+      <div class="col-md-8">
+        <dx-text-box  [disabled]="true" #txtShiftId   [(ngModel)]="this.model.shiftId" placeholder="{{'Shift Id' | translate}}" [(value)]="this.model.shiftId">
+        </dx-text-box>
+
+      </div>
+    
+    </div>
+    <div class="row mt-2" *ngIf="isView && this.model.createdOn!==null && this.model.createdOn!==undefined">
+      <div class="col-md-4">{{'Pick Time' | translate}}  </div>
+      <div class="col-md-8">
+        <!-- <dx-text-box  [disabled]="true" #txtPickTime   [(ngModel)]="this.model.createdOn" placeholder="{{'Pick Time' | translate}}" 
+          [(value)]="this.model.createdOn">
+        </dx-text-box> -->
+        <dx-date-box [disabled]="true"  #txtPickTime [(value)]="this.model.createdOn" placeholder="{{'Pick Time' | translate}}"   [(ngModel)]="this.model.createdOn"
+          [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"> </dx-date-box>
+      </div>
+    
+    </div>
+      <div class="row  mt-2">
+        <div class="col-md-4">{{'Amount' | translate}} <span class="requid-default" style="color: red;">*</span></div>
+        <div class="col-md-8">
+          <!-- <dx-text-box #txtAmount [(ngModel)]="this.model.amount" [(value)]="this.model.amount" placeholder="{{'Amount' | translate}}">
+          </dx-text-box> -->
+          <dx-number-box [disabled]="isView" [(value)]="this.model.amount" [format]="this.formatStr" #txtAmount [(ngModel)]="this.model.amount"  placeholder="{{'Amount' | translate}}"></dx-number-box>
+        </div>
+       
+     </div>
+     <div class="row mt-2">
+          <div class="col-md-4">{{'Remarks' | translate}}  </div>
+          <div class="col-md-8">
+            <dx-text-area [disabled]="isView" #txtRemarks [height]="90"  [(ngModel)]="this.model.remarks" placeholder="{{'Remarks' | translate}}" [(value)]="this.model.remarks">
+            </dx-text-area>
+    
+          </div>
+        
+      </div>
+      <div *ngIf="!isView" class="row  mt-2" style="width: 100%;">
+          <div class="col-md-6">
+              <dx-button icon="close" type="warning" text="{{'Cancel' | translate}}" (onClick)="cancel()">
+              </dx-button>
+          </div>
+          <div class="col-md-6" style="text-align: right;">
+              <dx-button icon="add" type="success" text="{{'Submit' | translate}}" (onClick)="applyReason()">
+              </dx-button>
+          </div>
+      </div>
+
+  </div>
+</div>

@@ -1,0 +1,233 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Item Serial' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="col-md-12" *ngIf="showPopupCreate" >
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                    {{'Serial Num' | translate}}:
+                </div>
+                <div class="col-md-10">
+                    <!-- <i class="fas fa-list-ol"></i> -->
+                    <input  style="font-size: 25px;"  class="form-control" #txtSerialNum type="text"  placeholder="{{'Serial Num' | translate}}" aria-label="Serial Num">
+                </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                    {{'EXP Date' | translate}}:
+                </div>
+                <div class="col-md-10">
+                    <!-- <i class="fas fa-list-ol"></i> -->
+                    <dx-date-box style="font-size: 25px;"  #txtExpDate [value]="this.expDate1Year" type="date" placeholder="{{'EXP Date' | translate}}"> </dx-date-box>
+                    <!-- <input #txtExpDate type="text" [(ngModel)]="this.selectedKey.length" placeholder="{{'Quantity' | translate}}" aria-label="Quantity"> -->
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="row mt-3">
+            <div class="col-md-6">
+              <dx-button  style="height: 50px;" type="warning" text="{{'Back' | translate}}" (onClick)="this.backToList()">
+              </dx-button>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              
+                <dx-button style="height: 50px;"  type="success" text="{{'Save Changes' | translate}}" (onClick)="createSerial(txtSerialNum.value, txtExpDate.value)">
+                </dx-button>
+            </div>
+           </div>
+            
+        
+        </div>
+        <div class="row"  *ngIf="!showPopupCreate" >
+        
+            <div class="col-md-5">
+                <div class="col-icon-search"  >
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <!-- (change)="filterBy(filter)" (keyup)="filterBy(filter)" -->
+                    <input class="form-control" name="txtSerialNumber"  type="search" #filter (keyup.enter)="filterBy(filter)"  placeholder="{{'Search Serial' | translate}}" aria-label="Search">
+                </div>
+              
+            </div>
+            <div class="col-md-2">
+                <dx-button *ngIf="!this.isCreateSerial"  type="success" text="Search Serial" (onClick)="filterBy(filter)">
+                </dx-button>
+                <dx-button *ngIf="this.isCreateSerial" style="width: 100%; " icon="add" type="success"  (onClick)="showNewSerial(filter.value)">
+                </dx-button>
+            </div>
+            <div class="col-md-5">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        {{'Quantity' | translate}}:
+                    </div>
+                    <div class="col-md-10">
+                        <!-- <i class="fas fa-list-ol"></i> -->
+                        <ng-container *ngIf="this.item?.promotionIsPromo?.toString() === '1'">
+                          <input class="form-control" disabled #txtQuantity type="text" [(ngModel)]="this.item.quantity" placeholder="{{'Quantity' | translate}}" aria-label="Quantity">
+                        </ng-container>
+                         <ng-container *ngIf="this.item?.promotionIsPromo?.toString() !== '1'">
+                          <input class="form-control" #txtQuantity type="text" [(ngModel)]="this.selectedKey.length" placeholder="{{'Quantity' | translate}}" aria-label="Quantity">
+                        </ng-container>
+                      
+                       
+                    </div>
+                </div>
+            </div>
+<!-- 
+            <div class="col-md-2 text-center">
+               
+            </div> -->
+          <div class="col-md-12 mt-2" *ngIf="this.salesBooklet==='true'">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="col-icon-search"  >
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                
+                    <input class="form-control" name="txtBookletNumber" type="search" #txtBookletId (keyup.enter)="searchBooklet(txtBookletId.value)"   placeholder="{{'Search Booklet No' | translate}}" aria-label="Search">
+                </div>
+                
+              </div>
+              <div class="col-md-7">
+              
+                <dx-button    type="success" text="Search Booklet" (onClick)="searchBooklet(txtBookletId.value)">
+                </dx-button>
+              </div>
+               
+            </div>
+          
+           
+          </div>
+            <div class="col-md-12">
+                <div id="grid">
+                    <div class="row mt-2 mb-2">
+                        <div class="col-md-2">
+                            <dx-button style="width: 100%;" icon="sortdown" type="warning" text="{{'Top' | translate}}" (onClick)="selectFromTop()"> </dx-button>
+                        </div>
+                        <div class="col-md-2">
+                            <dx-button style="width: 100%;" icon="indent" type="warning" text="{{'Random' | translate}}" (onClick)="selectRandom()"> </dx-button>
+                        </div>
+                        <div class="col-md-8">
+                            <label *ngIf="this.selectedKey.length > 0">{{'Serial Selected' | translate}}: </label> {{this.selectedKey}} </div>
+                    </div>
+                    <dx-data-grid id="grid-container" [dataSource]="this.itemSerials" keyExpr="serialNum" [(selectedRowKeys)]="this.selectedKey" [showBorders]="true">
+                        <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <!-- <dxo-filter-row
+                    [visible]="true"
+                ></dxo-filter-row> -->
+                        <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+                        <dxi-column dataField="expDate" dataType="Exp Date" caption="{{'EXP Date' | translate}}" alignment="right" dataType="datetime" [format]="this.authService.loadFormat().dateFormat"></dxi-column>
+                        
+                        <dxi-column *ngIf="this.salesBooklet==='true'" dataField="bookletNo" caption="{{'Booklet No' | translate}}"></dxi-column>
+
+                    </dx-data-grid>
+
+                    <!-- <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <span>Select All Mode</span>
+                    <dx-select-box
+                        id="select-all-mode"
+                        [dataSource]="['allPages', 'page']"
+                        [(value)]="allMode"
+                        [disabled]="checkBoxesMode === 'none'"
+                    ></dx-select-box>
+                </div>
+                <div class="option checkboxes-mode">
+                    <span>Show Checkboxes Mode</span>
+                    <dx-select-box
+                        id="show-checkboxes-mode"
+                        [dataSource]="['none', 'onClick', 'onLongTap', 'always']"
+                        [(value)]="checkBoxesMode"
+                    ></dx-select-box>
+                </div>
+            </div> -->
+                </div>
+
+            </div>
+            <div class="col-md-12 mt-2" style="text-align: right;">
+               
+              <dx-button  icon="check" type="success" text="{{'Select' | translate}}" (onClick)="saveSelection()">
+              </dx-button>
+
+            </div>
+            <!-- <div class="col-md-12">
+          <div class="row">
+            <div class="left-grid"> 
+              <div class="col-md-12"  > 
+                <div class="search-wrap main-search">
+                  <img src="../../../../../assets/images/System/search.svg" alt="search" class="img-fluid">
+                  
+                    <input class="form-control" type="search" #filter   (change)="filterBy(filter.value)" (keyup)="filterBy(filter.value)" placeholder="Search" aria-label="Search">
+                  
+                </div>
+                
+              </div>
+            </div>
+          
+          </div>
+          <div class="main-content " >
+            
+            <div class="row">
+              <div class="col-md-12"  > 
+                <div class="table-wrap">
+                  <div class="item-search-table custom-table">
+                    <div class="t-head">
+                      <div class="t-row">
+                        <div class="t-cell cell-item">
+                          <p>Serial Num</p>
+                        </div>
+                        <div class="t-cell cell-name">
+                          <p>Expire Date</p>
+                        </div>
+                        
+                        <div class="t-cell cell-action">
+                          <p></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="t-body vertical-scroll"  style="width: 100%; display: inline-block;">
+                      <div class="t-row" *ngFor="let item of this.itemSerials" >
+                        <div class="t-cell cell-item">
+                          <p>{{item.serialNum}}</p>
+                        </div>
+                        <div class="t-cell cell-name">
+                          <p>{{item.expDate | dateFormat}}</p>
+                        </div>
+                        
+                        <div class="t-cell cell-action">
+                        
+                          <a class="secondary-btn" (click)="SelectSerial(item)">Select</a>
+                        </div>
+                      </div>
+                  
+                    </div>
+                  </div>
+                </div>
+      
+              </div>
+            </div>
+          
+            <div class="row">
+              <div class="col-md-12">
+                <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+                [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" 
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+          
+                  </pagination>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        </div>
+    </div>
+</div>

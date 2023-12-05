@@ -1,0 +1,98 @@
+ 
+<!-- <ng-container *ngIf="(basket$ |async)?.items===null">
+    Basket null
+</ng-container> -->
+<ng-container *ngIf="(basket$ |async)?.items!==null">
+  <div class="wrapper">
+    <div class="item-card-slick " [ngClass]="{'item-selected' : (basket$ |async).items!==null ? filter(item.itemCode, item.uomCode, (basket$ |async)?.items) : null}">
+      <div class="item-properties">
+        <i class="fas fa-archive" *ngIf="item.isBom"></i>
+        <i class="fas fa-info" *ngIf="item.isSerial"></i>
+        <i class="fas fa-ticket-alt" *ngIf="item.capacityValue > 0" aria-hidden="true"></i>
+      </div>
+      <div  class="item-card-slick__image item-card-slick__image text-center" >
+        <img  src="{{item.imageUrl || '../../../assets/images/System/LOGO-ABEO.png'}}" class="img-fluid" alt="{{item.itemName}}" />
+      </div>
+      <div class="item-card-slick__level item-card-slick__level">
+      
+        <p class="item-price"> {{item.defaultPrice | currencyFormat }} / {{item.uomCode }}</p>
+      </div>
+      <div (click)="showDialog()" class="item-card-slick__unit-name"  >
+         {{item.itemName}} 
+      </div>
+    
+      <div class="item-card-slick__unit-stats item-card-slick__unit-stats clearfix" 
+      *ngIf="(basket$ |async).items!==null ? !filter(item.itemCode, item.uomCode , (basket$ |async)?.items) : null" >
+        
+          <div class="one"  (click)="addToBag()">
+            <i class="fas fa-cart-plus"></i>
+          </div>
+      </div> 
+     
+      <ng-container  *ngIf="basket$ | async as basket ">
+        <ng-container *ngIf="basket.items !== null && basket.items.length > 0">
+          
+            <ng-container  *ngFor="let itemCa of basket.items"  >
+              <div class="item-card-slick__unit-stats item-card-slick__unit-stats clearfix" *ngIf="itemCa.id === item.itemCode  && itemCa.uom === item.uomCode && itemCa.promotionIsPromo!=='1'"> 
+                <div class="one-third" *ngIf="item.isSerial!==true && (item.capacityValue === 0 || item.capacityValue === null || item.capacityValue===undefined  ) && item.customField1!=='Member' && item.customField1!=='Card'" (click)="increment(itemCa)">
+                  <div class="stat">+</div> 
+                </div>
+                <div class="one-third" *ngIf="item.isSerial===true">
+                  <div class="stat"></div> 
+                </div>
+                <div class="one-third"  (click)="addToBag()" *ngIf="item.capacityValue > 0 || item.customField1==='Member'  || item.customField1==='Card'">
+                  <i class="fas fa-cart-plus" style="font-size: 24px;"></i>
+                </div>
+                
+                <div class="one-third"> 
+                  <div class="stat"  >{{itemCa.quantity}}</div> 
+                </div>
+                  
+                <div  class="one-third no-border" *ngIf="item.isSerial!==true  && (item.capacityValue === 0 || item.capacityValue === null || item.capacityValue===undefined ) && item.customField1!=='Member' && item.customField1!=='Card'"  (click)="decrement(itemCa)" >
+                  <div class="stat">-</div> 
+                </div> 
+                <div  class="one-third no-border" *ngIf="item.isSerial===true"  (click)="removeItem(itemCa)" >
+                  <div class="stat">  <i class="fas fa-trash-alt"></i></div> 
+                </div> 
+                <div  class="one-third no-border" *ngIf="item.capacityValue > 0 || item.customField1==='Member' || item.customField1==='Card'"  (click)="removeItem(itemCa)" >
+                  <div class="stat">  <i class="fas fa-trash-alt"></i></div> 
+                </div> 
+              </div> 
+            </ng-container>
+        
+      
+        </ng-container>
+        
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+  
+   <!-- end wrapper -->
+   
+<!--    
+<div class="item-card" >
+
+  
+  <div class="img-wrap" (click)="showDialog()">
+    <img src="../../../../assets/images/items/chicken.png" alt="sandwich" class="img-fluid">
+  </div>
+  <h5 class="item-name"> {{item.itemName}}</h5>
+  <p class="item-price"> {{item.defaultPrice | currencyFormat }}</p>
+  
+   <button  type="button" *ngIf="!filter(item.itemCode, (basket$ |async).items)" (click)="addToBag()" class="btn btn-secondary default mb-1"><i class="fas fa-cart-plus"></i></button>
+ 
+  <div  *ngIf="basket$ | async as basket"> 
+    <div *ngIf="basket.items.length > 0" class="col-md-12" >
+        
+      <div *ngFor="let itemCa of basket.items"  >
+        <button  style="    width: 38px;" *ngIf="itemCa.id === item.itemCode" (click)="increment(itemCa)" class="btn btn-primary   mr-2">+</button>
+        <span  *ngIf="itemCa.id === item.itemCode" class="badge badge-pill badge-primary">{{itemCa.quantity}}</span>
+        <button style="    width: 38px;" *ngIf="itemCa.id === item.itemCode" (click)="decrement(itemCa)" class="btn btn-primary ml-2">-</button>
+      </div>
+
+  </div>
+  </div>
+</div> -->
+

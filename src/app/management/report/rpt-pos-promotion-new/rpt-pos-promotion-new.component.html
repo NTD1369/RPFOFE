@@ -1,0 +1,127 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="row">
+            <div class="col-md-6"><label for="item-searchbar" class="section-title">{{'POS Promotion' | translate}}</label></div>
+            <div class="col-md-6 text-right">
+                <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/report" text="{{'Report List' | translate}}">
+                </dx-button>
+            </div>
+        </div>
+
+        <div class="row justify-content-center flex-row mb-3 mt-2">
+            <div class="col-md-2 mb-1">
+                <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2 mb-1">
+                <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"></dx-date-box>
+            </div>
+            <div class="col-md-2 mb-1">
+                <ng-container *ngIf="this.isLoadingData===false">  
+                    <dx-button class="mr-2" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button>
+                  </ng-container>
+                  <ng-container *ngIf="this.isLoadingData===true">
+                      <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+                  </ng-container> 
+                <!-- <dx-button class="mr-2" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button> -->
+            </div>
+        </div>
+
+        <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onExporting)="onExporting($event)" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.list"
+            [showBorders]="true">
+            <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before">
+            </dxo-search-panel>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+            <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>
+
+            <ng-container *ngFor="let col of this.controlList; let i = index">
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+                </dxi-column>
+
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+                </dxi-column>
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+                </dxi-column>
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                    [format]='this.authService.numberFormat(col.custom2)'>
+                </dxi-column>
+            </ng-container>
+
+            <div *dxTemplate="let cell of 'statusTemplate'">
+                <div [innerHtml]="cell.data.status | statusFormat"></div>
+            </div>
+            <div *dxTemplate="let line of 'detail'">
+
+                <ng-container *ngIf="line.data?.promoBuys!==null && line.data?.promoBuys!==undefined && line.data?.promoBuys.length > 0">
+                    {{'Buy' | translate}}
+                    <dx-data-grid [dataSource]="line.data.promoBuys" keyExpr="lineNum" (onRowPrepared)="onRowPrepared($event)" [showBorders]="true" [columnAutoWidth]="true">
+                        <dxo-master-detail [enabled]="true" template="OTdetail"></dxo-master-detail>
+                        <dxi-column dataField="lineNum" caption="{{'No.' | translate}}" [width]="70"></dxi-column>
+                        <dxi-column dataField="lineType" caption="{{'Line Type' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineCode" caption="{{'Line Code' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineName" caption="{{'Line Name' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineUom" caption="{{'Line UoM' | translate}}"></dxi-column>
+                        <dxi-column dataField="valueType" caption="{{'Value Type' | translate}}"></dxi-column>
+                        <dxi-column dataField="condition1" caption="{{'Condition' | translate}} 1"></dxi-column>
+                        <dxi-column dataField="value1" caption="{{'Value' | translate}} 1"></dxi-column>
+                        <dxi-column dataField="condition2" caption="{{'Condition' | translate}} 2"></dxi-column>
+                        <dxi-column dataField="value2" caption="{{'Value' | translate}} 2"></dxi-column>
+                        <dxi-column dataField="additionValue" caption="{{'Addition Value' | translate}}"></dxi-column>
+                        <div *dxTemplate="let line of 'OTdetail'">
+
+                            <ng-container *ngIf="line.data?.lines!==null && line.data?.lines!==undefined && line.data?.lines.length > 0">
+                                <dx-data-grid [dataSource]="line.data.lines" keyExpr="lineNum" [showBorders]="true" [columnAutoWidth]="true">
+
+                                    <dxi-column dataField="lineNum" caption="{{'No.' | translate}}" [width]="70"></dxi-column>
+                                    <dxi-column dataField="lineType" caption="{{'Line Type' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineCode" caption="{{'Line Code' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineName" caption="{{'Line Name' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineUom" caption="{{'Line UoM' | translate}}"></dxi-column>
+                                    <dxi-column dataField="additionValue" caption="{{'Addition Value' | translate}}"></dxi-column>
+                                </dx-data-grid>
+                            </ng-container>
+                        </div>
+                    </dx-data-grid>
+                </ng-container>
+                <ng-container *ngIf="line.data?.promoGets!==null && line.data?.promoGets!==undefined && line.data?.promoGets.length > 0">
+                    {{'Get' | translate}}
+                    <dx-data-grid [dataSource]="line.data.promoGets" keyExpr="lineNum" (onRowPrepared)="onRowPrepared($event)" [showBorders]="true" [columnAutoWidth]="true">
+                        <dxo-master-detail [enabled]="true" template="OTdetail"></dxo-master-detail>
+                        <dxi-column dataField="lineNum" caption="{{'No.' | translate}}" [width]="70"></dxi-column>
+                        <dxi-column dataField="lineType" caption="{{'Line Type' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineCode" caption="{{'Line Code' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineName" caption="{{'Line Name' | translate}}"></dxi-column>
+                        <dxi-column dataField="lineUom" caption="{{'Line UoM' | translate}}"></dxi-column>
+                        <dxi-column dataField="conditionType" caption="{{'Condition Type' | translate}}"></dxi-column>
+                        <dxi-column dataField="condition1" caption="{{'Condition' | translate}} 1"></dxi-column>
+                        <dxi-column dataField="value1" caption="{{'Value' | translate}} 1"></dxi-column>
+                        <dxi-column dataField="condition2" caption="{{'Condition' | translate}} 2"></dxi-column>
+                        <dxi-column dataField="value2" caption="{{'Value' | translate}} 2"></dxi-column>
+                        <dxi-column dataField="valueType" caption="{{'Value Type' | translate}}"></dxi-column>
+                        <dxi-column dataField="getValue" caption="{{'Get Value' | translate}}"></dxi-column>
+                        <dxi-column dataField="maxAmtDis" caption="{{'Max Amt Dis' | translate}}"></dxi-column>
+                        <dxi-column dataField="maxQtyDis" caption="{{'Max Qty Dis' | translate}}"></dxi-column>
+                        <dxi-column dataField="additionValue" caption="{{'Addition Value' | translate}}"></dxi-column>
+                        <div *dxTemplate="let line of 'OTdetail'">
+
+                            <ng-container *ngIf="line.data?.lines!==null && line.data?.lines!==undefined && line.data?.lines.length > 0">
+                                <dx-data-grid [dataSource]="line.data.lines" keyExpr="lineNum" [showBorders]="true" [columnAutoWidth]="true">
+
+                                    <dxi-column dataField="lineNum" caption="{{'No.' | translate}}" [width]="70"></dxi-column>
+                                    <dxi-column dataField="lineType" caption="{{'Line Type' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineCode" caption="{{'Line Code' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineName" caption="{{'Line Name' | translate}}"></dxi-column>
+                                    <dxi-column dataField="lineUom" caption="{{'Line UoM' | translate}}"></dxi-column>
+                                    <dxi-column dataField="additionValue" caption="{{'Addition Value' | translate}}"></dxi-column>
+                                </dx-data-grid>
+                            </ng-container>
+                        </div>
+                    </dx-data-grid>
+                </ng-container>
+            </div>
+        </dx-data-grid>
+    </div>
+</div>

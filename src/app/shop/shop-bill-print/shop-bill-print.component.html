@@ -1,0 +1,119 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+</style>
+<div class="center-wrap content-center">
+
+    <div class="maintenance-card print-p">
+        <!-- <h2 class="maintenance-heading" >Printing</h2> -->
+
+        <div class="maintenance-row print-p">
+            <div class="col-md-12 print-p">
+                <!-- <ng-template #PrintTemplate> -->
+                <!-- {{this.typeOrder}} -->
+                <app-shop-component-order-print [(order)]="this.order" [(typeOrder)]="this.typeOrder" [poleValue]="this.poleValue"></app-shop-component-order-print>
+
+                <!-- <app-shop-component-lucky-draw-print [(order)]="this.order"></app-shop-component-lucky-draw-print> -->
+                <!-- </ng-template> -->
+                <ng-template #PrintTemplate>
+                    <app-shop-component-order-print [(order)]="this.order" [poleValue]="this.poleValue"></app-shop-component-order-print>
+                </ng-template>
+                <!-- <div id="print-section" (printClicked)="printerMarkerClicked()" ngxPrintItemMarker  printWindow="false" directPrint="true" divID="print-section"> 
+         
+             <ng-container>
+               <div>
+                 
+                 <ngx-barcode6
+                 [bc-format]="'CODE128'"
+                 [bc-value]="this.order.transId"
+                 [bc-display-value]="false"
+               >
+               </ngx-barcode6>
+                 
+                 <p> <label class="textTitlePrint" >Bill No: </label>  {{this.order.transId}}</p>
+                 <p> <label class="textTitlePrint" >Sales Type: </label>  {{this.order.salesType}}</p>
+                 <p> <label class="textTitlePrint">Date: </label> {{this.order.createdOn | date : "yyyy-MM-dd HH:mm:ss"}}</p>
+                 <p> <label class="textTitlePrint">Customer: </label> {{this.order.cusId}} - {{this.order.customer.customerName}}</p>
+                
+                 <p> <label class="textTitlePrint">Phone: </label>  {{this.order.customer.phone}}</p>
+                 <p *ngIf="this.order.salesPersonName!==null && this.order.salesPersonName!==undefined"> <label class="textTitlePrint" >Sales Man: </label>  {{this.order.salesPersonName}}</p> 
+                 
+                 <p> <label class="textTitlePrint">Create: </label>  {{this.order.createdBy}}</p> 
+                
+               </div>
+               <hr class="style5">
+               <table>
+                <tr>
+                  <th>  {{'Description' | translate}} </th>
+                  <th> Qty </th>
+                  <th>  {{'Total' | translate}} </th>
+                </tr>
+                <tr *ngFor="let item of this.order.lines">
+                  <td>   
+                    <label>
+                      {{item.itemCode}} - {{item.itemName}}
+                    </label>
+                  </td>
+                  <td style="text-align: center;"> 
+                    <label>
+                    {{item.quantity}}  
+                    </label>
+                  </td>
+                  <td style="text-align: center;"> 
+                    <label>
+                      {{item.lineTotal | number}}
+                    </label>
+                  </td>  
+                </tr>
+                
+              </table>
+              <hr class="style5">
+             
+               <div>
+                <p> <label class="textTitlePrint">Total Amount: </label>  {{this.order.totalAmount | number}}</p>
+                <p> <label class="textTitlePrint">Total Discount: </label>  {{this.order.totalDiscountAmt | number}}</p>
+                <p> <label class="textTitlePrint">Total Payable: </label>  {{this.order.totalPayable | number}}</p>
+               
+                 <hr class="style5">
+                 <p> <label class="textTitlePrint">Payments: </label>  </p>
+                 <table>
+                  <tr>
+                    <th>  {{'Description' | translate}} </th> 
+                    <th>  {{'Total' | translate}} </th>
+                  </tr>
+                  <tr *ngFor="let payment of this.order.payments">
+                    <td>   
+                      <label>
+                        {{payment.paymentCode}}
+                      </label>
+                    </td>
+                   
+                    <td style="text-align: center;"> 
+                      <label>{{payment.chargableAmount | number}}
+                      
+                      </label>
+                    </td>  
+                  </tr>
+                  
+                </table>
+                
+                 <hr class="style5">
+                
+                 <p> <label class="textTitlePrint"> Total recept: </label> <label style="text-align: right;"> {{this.order.totalReceipt  | number}} </label></p> 
+                 <br />
+                 <p> <label class="textTitlePrint"> Amount Change: </label> {{this.order.amountChange | number}} </p> 
+                  
+               </div>
+             
+             </ng-container>
+             
+       </div> -->
+                <!-- <button ngxPrintItemButton printItemId="print-section">Print first item directly</button> -->
+                <!-- <div ngxPrintItemMarker directPrint="true" divID="print-section"></div> -->
+                <!-- <button class="submit-btn" style="min-width:150px; width: 100%;" (click)="PrintPage()">Print</button> -->
+            </div>
+
+        </div>
+    </div>
+</div>

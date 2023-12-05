@@ -1,0 +1,593 @@
+<div class="center-wrap">
+
+    <div class="row" style="width: 100%;">
+        <div class="col-md-12">
+            <div class="right-section">
+                <div class="bill-info-wrap">
+
+                    <div class="bill-info">
+                        <p class="bill-number"> {{'Bill No' | translate}}: {{this.order.transId}}</p>
+                        <p class="bill-date">{{'Date' | translate}}: {{this.order.createdOn | date:'yyyy-MM-dd'}}</p>
+                        <p class="bill-time">{{'Time' | translate}}: {{this.order.createdOn | date:'HH:mm:ss'}}</p>
+                    </div>
+                    <div class="bill-info">
+                        <p class="bill-number"> {{'Customer' | translate}}: {{this.order.customer.customerName}}</p>
+                        <p class="bill-date"> {{'Class' | translate}}: {{this.order.customer.customerGrpId}}</p>
+                        <p></p>
+                        <!-- <p class="bill-time">Time: {{this.order.createdOn | date:'HH:mm:ss'}}</p> -->
+                    </div>
+                    <!-- <a class="primary-btn "  (click)="createBasket()" style="margin-left: -10%;" >
+            <i class="fas fa-cart-arrow-down mr-2"></i>   Basket
+          </a> -->
+                    <!--  -->
+                    <a class="primary-btn" (click)="openPromotionModal(ManualPromotion)" style="margin-left: -10%;">
+            {{'Discount' | translate}}
+          </a>
+                    <a *ngIf="this.order.status==='H'" class="primary-btn" (click)="confirmOrder()" style="margin-left: -10%;">
+            {{'Confirm' | translate}}
+          </a>
+                    <a class="primary-btn" (click)="openModal(template)" style="margin-left: -10%;">{{'Payment' | translate}}</a>
+                </div>
+                <div class="col-md-12">
+                    <dx-drawer [openedStateMode]="selectedOpenMode" [position]="selectedPosition" [revealMode]="selectedRevealMode" template="template" [(opened)]="isDrawerOpen" [closeOnOutsideClick]="true">
+                        <div *dxTemplate="let data of 'template'" style="width: 200px">
+                            ABC
+                            <!-- [(value)]="cellInfo.value" -->
+
+                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [allowColumnResizing]="true" [height]="250" [selectedRowKeys]="[]" [focusedRowEnabled]="true" [hoverStateEnabled]="true">
+
+                                <dxo-search-panel [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+
+                                <dxi-column dataField="itemCode"></dxi-column>
+                                <dxi-column dataField="barCode"></dxi-column>
+                                <dxi-column dataField="itemName"></dxi-column>
+                                <dxi-column dataField="uomName"></dxi-column>
+                                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                                <div *dxTemplate="let cell of 'cellTemplate'">
+                                    <dx-button icon="fas fa-exchange-alt" text="Exchange" (onClick)="selectItem(cell.data)"></dx-button>
+                                </div>
+                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                <dxo-selection mode="single"></dxo-selection>
+                            </dx-data-grid>
+
+
+                        </div>
+                        <div id="content" class="dx-theme-background-color">
+                            <dx-data-grid #dataGrid id="dataGrid" class="mt-2" [(dataSource)]="this.order.lines" [allowColumnResizing]="true" [columnResizingMode]="true" (onRowPrepared)="onRowPrepared($event)" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true">
+                                <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                                <dxo-editing mode="cell" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                                <!-- <dxi-column dataField="keyId"  [minWidth]="250"    caption="Item Code" editCellTemplate="itemDropDownBoxEditor">
+                  <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>  -->
+                                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                                <div *dxTemplate="let cell of 'cellTemplate'">
+                                    <dx-button icon="fas fa-exchange-alt" text="Exchange" (onClick)="exchangeItem(cell.data)"></dx-button>
+                                </div>
+                                <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                <dxi-column dataField="itemName" [allowEditing]="false" caption="Name" [minWidth]="180"> </dxi-column>
+                                <dxi-column dataField="isExchange" caption="isExchange"> </dxi-column>
+                                <dxi-column alignment="center" dataField="barCode" [allowEditing]="false" caption="Barcode" [minWidth]="150"> </dxi-column>
+                                <!-- <dxi-column alignment="center" dataField="slocId" caption="SLoc"  [allowEditing]="this.mode!=='e'"  [minWidth]="120"> 
+                  <dxo-lookup [dataSource]="this.storageList" displayExpr="slocId" valueExpr="slocId"> </dxo-lookup>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column> -->
+                                <!--  -->
+                                <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="UoM" [minWidth]="120">
+
+                                    <!-- <dxo-lookup  [dataSource]="this.uomList" displayExpr="uomName" valueExpr="uomCode"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                </dxi-column>
+                                <dxi-column alignment="right" dataField="price" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                <!-- <dxi-column alignment="center" dataField="currencyCode" [allowEditing]="false" caption="Currency" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column dataField="currencyRate" caption="Currency Rate" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column alignment="center" dataField="taxCode"  [allowEditing]="this.mode!=='e'"  caption="Tax Code" [minWidth]="120" editCellTemplate="changeTaxCodeEditor">
+                    <dxo-lookup [dataSource]="this.taxList" displayExpr="taxName" valueExpr="taxCode" > </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column> -->
+                                <!-- <dxi-column alignment="center" dataField="taxRate"  [visible]="false" caption="Tax Rate" [minWidth]="80"> </dxi-column>
+                  <dxi-column alignment="right"  dataField="taxAmt"  [customizeText]="customizeText"   [calculateCellValue]="taxAmtCellValue" [allowEditing]="false" caption="Tax Amt" dataType="number"[minWidth]="120"> </dxi-column> -->
+                                <dxi-column alignment="right" dataField="quantity" caption="Quantity" dataType="number" [minWidth]="120"> </dxi-column>
+                                <dxi-column alignment="right" dataField="lineTotal" [customizeText]="customizeText" [allowEditing]="false" caption="Line Total" [minWidth]="120"> </dxi-column>
+                                <dxi-column dataField="remark" caption="Remark" [minWidth]="220"> </dxi-column>
+
+                                <dxo-summary [recalculateWhileEditing]="true">
+                                    <dxi-total-item column="lineTotal" [customizeText]="customizeText" summaryType="sum">
+
+                                    </dxi-total-item>
+                                    <dxi-total-item column="quantity" summaryType="sum"></dxi-total-item>
+                                </dxo-summary>
+                                <!--  -->
+                                <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                    <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value"
+                                                [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+
+                                                <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                                <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                                <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+                                                <dxi-column dataField="barCode" caption="Barcode"></dxi-column>
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+
+                                <div *dxTemplate="let cellInfo of 'changeTaxCodeEditor'">
+                                    <dx-drop-down-box #gridTaxBox [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="taxList" [(value)]="cellInfo.value" displayExpr="taxName" valueExpr="taxCode" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="taxCode" [dataSource]="taxList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " [allowColumnResizing]="true" [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value"
+                                                [hoverStateEnabled]="true" (onSelectionChanged)="onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+
+                                                <dxi-column dataField="taxCode"></dxi-column>
+                                                <dxi-column dataField="taxName"></dxi-column>
+
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                    <!-- <dx-drop-down-box #gridTaxBox [(value)]="cellInfo.value" valueExpr="taxCode" 
+                          displayExpr="taxName"
+                          placeholder="Select tax..." contentTemplate="contentTemplate" [showClearButton]="true" [dataSource]="this.taxList" >
+                     <div *dxTemplate="let e of 'contentTemplate'">
+                          <dx-data-grid   keyExpr="taxCode"  [dataSource]="this.taxList"
+                                  [columns]="['taxCode', 'taxName']" [selection]="{ mode: 'single' }"
+                                  [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                                  [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                  [height]="345" [(selectedRowKeys)]="cellInfo.value"
+                                  (onSelectionChanged)= "onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event, e, e.component)"
+                                  >
+                            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                            <dxo-search-panel [visible]="true"  [width]="240"  placeholder="Search..."
+                            location="before"></dxo-search-panel>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                          </dx-data-grid>
+                      </div>
+                  </dx-drop-down-box> -->
+                                </div>
+                                <!-- getFilteredUom(cell) (onFocusIn)="isDropDownBoxOpened(dropDownUoM,cell.data)"-->
+                                <div *dxTemplate="let cell of 'changeUoMCodeEditor'">
+                                    <dx-drop-down-box #dropDownUoM [(value)]="cell.data.uomCode" valueExpr="uomCode" displayExpr="uomName" placeholder="Select UoM..." [showClearButton]="true" [dataSource]="this.uomList">
+                                        <div *dxTemplate="let data of 'content'">
+                                            <dx-data-grid #gridUoMBox keyExpr="uomCode" [dataSource]="this.uomList" [columns]="['uomCode', 'uomName']" [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                                [height]="345" [(selectedRowKeys)]="cell.data.uomCode" (onSelectionChanged)="onUoMSelectionChanged($event, cell)">
+                                                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..." location="before"></dxo-search-panel>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+                                <div *dxTemplate="let line of 'detail'">
+                                    <!-- <ng-container *ngIf="line.data.lines!==null"> -->
+                                    <div class="master-detail-caption">{{'Serial' | translate}}:</div>
+                                    <dx-data-grid [dataSource]="line.data.serialLines" keyExpr="lineId" [showBorders]="true" [columnAutoWidth]="true">
+                                        <!-- <dxi-column type="buttons" [width]="110"> <dxi-button name="edit"></dxi-button> <dxi-button name="delete"></dxi-button> 
+                        </dxi-column> -->
+
+                                        <dxo-editing mode="cell" *ngIf="this.order.status==='H'" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                                        <dxi-column dataField="serialNum" caption="Serial Num"></dxi-column>
+                                        <!-- <dxi-column dataField="frSlocId"  caption="From"></dxi-column>
+                            <dxi-column dataField="toSlocId"  caption="To"></dxi-column>
+                            <dxi-column dataField="quantity"  caption="Quantity"></dxi-column>
+                            <dxi-column dataField="uomCode" caption="UoM"></dxi-column>  -->
+                                    </dx-data-grid>
+                                    <!-- </ng-container> -->
+
+                                </div>
+
+                            </dx-data-grid>
+                        </div>
+                    </dx-drawer>
+                </div>
+
+                <div class="total-bill">
+                    <div class="discount-div">
+                        <p>{{'Bill Total' | translate}}</p>
+                        <p>{{ this.order.totalAmount | number}}</p>
+                    </div>
+
+                    <div class="discount-div">
+                        <p>{{'Total Discount' | translate}}</p>
+                        <p>{{this.order.totalDiscountAmt | number}}</p>
+                    </div>
+
+                    <div class="payable-div">
+                        <p>{{'Total Payable' | translate}}</p>
+                        <p>{{this.order.totalReceipt| number}}</p>
+                    </div>
+
+                </div>
+                <div class="bill-wrapper">
+
+                    <!-- <div class="table-wrap">
+            <div class="bill-table custom-table">
+              <div class="t-head">
+                <div class="t-row">
+                  <div class="t-cell cell-action" style="max-width: 60px!important;">
+                    <p>Remark</p>
+                  </div>
+                  <div class="t-cell cell-desc">
+                    <p>Description</p>
+                  </div>
+                  <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                    <p>UoM</p>
+                  </div>
+                  <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                    <p>Quantity</p>
+                  </div>
+                  <div class="t-cell cell-quantity" style="max-width: 60px!important;">
+                    <p>Price</p>
+                  </div>
+                  <div class="t-cell cell-total" style="max-width: 60px!important;">
+                    <p>Total</p>
+                  </div>
+                  <div class="mr-2" style="min-width: 40px!important;">
+                  
+                 
+                  </div>
+                </div>
+              </div>
+            
+              <div class="t-body" >
+                <ng-container *ngFor="let item of filterNotBOM(this.order.lines)">
+                  <div class="t-row" >
+                    <div class="t-cell cell-action" style="max-width: 60px!important;">
+                      <p>
+                        <a href="javascript:void">
+                          <img src="../../../../assets/images/System/file.svg">
+                        
+                        </a>
+                      </p>
+                    </div>
+                    <div class="t-cell cell-desc">
+                      <p> {{item.itemName}}</p>
+                      <a (click)="ele.class = ele.class == 'showChildren' ? 'hideChildren' :  'showChildren'">
+                        
+                        <i class="fas fa-angle-down fa-2x" *ngIf="filterSerial(order.serialLines, item.itemCode, item.uomCode).length > 0" ></i>
+                        <i class="fas fa-angle-down fa-2x" *ngIf="filterBOM(order.lines, item.itemCode, '').length > 0" ></i>
+                        
+                     </a>
+                    
+                    </div>
+                    <div class="t-cell cell-total" style="max-width: 60px!important;">
+                      <p>{{item.uomCode}}</p>
+                    </div>
+                    <div class="t-cell cell-quantity" style="max-width: 70px!important;" >
+                      <p>{{item.quantity | number}}</p>  
+                      
+                    </div>
+                   
+                    <div class="t-cell cell-total" style="max-width: 60px!important;">
+                     
+                      <ng-container  *ngIf="item?.promoPrice!==null && item?.promoPrice!==item.price">
+                        <p class="mr-2 textOrigionalX"> {{item.price | number}}</p> 
+                        <p class="mr-2 textPromotion"> {{item?.promoPrice | number}}</p>
+                       
+                      </ng-container>
+                      <ng-container  *ngIf="item?.promoPrice===null || item?.promoPrice===item.price">
+                        <p  class="mr-2 textPromotion">  {{item.price | number}}</p>
+                      </ng-container>
+                    </div>
+                    <div class="t-cell cell-total" style="max-width: 60px!important;">
+                      <ng-container  *ngIf="item?.promoLineTotal!==null && item?.promoLineTotal!==item.lineTotal">
+                        <p class="mr-2 textOrigionalX"> {{item.lineTotal | number}}</p> 
+                        <p class="mr-2 textPromotion"> {{item?.promoLineTotal | number}}</p>
+                       
+                      </ng-container>
+                      <ng-container  *ngIf="item?.promoLineTotal===null || item?.promoLineTotal===item.lineTotal">
+                        <p  class="mr-2 textPromotion">  {{item.lineTotal | number}}</p>
+                      </ng-container>
+   
+                    </div>
+                    <div class="mr-2" style="min-width: 40px!important;">
+                     
+                    </div>
+                  </div>
+                  <div [ngClass]="{ hideChildren : ele.class !== 'showChildren' }" #ele>
+                    <div class="t-row" *ngFor="let itemBOM of filterBOM(order.lines, item.itemCode, '')"   >
+                      <div class="t-cell cell-action" style="max-width: 60px!important;">
+                       
+                      </div>
+                   
+                      <div class="t-cell cell-desc"> 
+                        <p style="widows: 100%;"> {{itemBOM.itemCode}} - {{itemBOM.itemName}}</p>
+                      </div>
+                      <div class="t-cell cell-total" style="max-width: 60px!important; cursor: pointer;"   >
+                        <p>{{itemBOM.uomCode}} </p>
+                      </div>
+                      <div class="t-cell cell-quantity" style="max-width: 70px!important;" >
+                        <p>{{itemBOM.quantity | number}} </p>
+                      </div> 
+                      <div class="t-cell cell-total" style="max-width: 60px!important;">
+                        <p>{{itemBOM.price | number}} </p>
+                        
+                      </div>
+                      <div class="t-cell cell-total" style="max-width: 60px!important;">
+                        <p>{{itemBOM.price * itemBOM.quantity | number}} </p>
+                      </div>
+                      <div class="mr-2" style="min-width: 40px!important;">
+                         
+                     
+                      </div>
+                       
+                    </div>
+                  </div>
+                  <div [ngClass]="{ hideChildren : ele.class !== 'showChildren' }" #ele>
+                   
+                    <div class="t-row" *ngFor="let itemSerial of item.serialLines"   >
+                      <div class="t-cell cell-action" style="max-width: 60px!important;">
+                       
+                      </div>
+                   
+                      <div class="t-cell cell-desc"> 
+                        <p style="widows: 100%;"> {{itemSerial.serialNum}} </p>
+                      </div>
+                      <div class="" style="max-width: 40px!important; cursor: pointer;"   >
+                        
+                      </div>
+                      <div class="t-cell cell-quantity" style="max-width: 70px!important;" >
+                      
+                      </div> 
+                      <div class="t-cell cell-total" style="max-width: 60px!important;">
+                        
+                      </div>
+                      <div class="t-cell cell-total" style="max-width: 60px!important;">
+                        <p>{{itemSerial.lineTotal | number}} </p>
+                      </div>
+                      <div class="mr-2" style="min-width: 40px!important;">
+                         
+                     
+                      </div>
+                       
+                    </div>
+                  </div>
+                </ng-container>
+               
+                
+              </div>
+            </div>
+          </div> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Payment' | translate}}</h4>
+        <!-- (click)="()" -->
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <!-- <span aria-hidden="true">
+        
+        &times;
+       
+      
+      </span> -->
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body" *ngIf="showModal">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-action"></div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{'Payment Discount' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll">
+
+                                <div class="t-row" *ngFor="let payment of order.payments">
+                                    <div class="t-cell cell-action">
+                                        <!-- <a href="javascript:void" class="delete-btn"  >
+                      <img src="../../../../assets/images/System/close.svg" alt="close">
+                    </a> -->
+                                        <!-- <button (click)="enableEditMethod($event, i)">Set Focus</button> -->
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{payment.paymentDiscount | number}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <!-- <div class="search-wrap typing-section-input-wrap " >
+                      <input type="text"  #focus  type="text"  (change)="changeValuePayment(focus.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)"
+                       value="{{payment.paymentCharged | number}}" (focus)="setClickedRow(i, payment)" (focusout)="removeselect(i, payment)"
+                        placeholder="Amount"   class="typing-section-input txtAmount">
+                    </div>  -->
+                                        <p>{{payment.chargableAmount | number}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{payment.collectedAmount | number}}</p>
+
+                                    </div>
+                                    <!-- (change)="changeValuePayment(focus{{i}}.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)" -->
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-payment-info">
+                        <div>
+                            <label>{{'Bill Amount' | translate}}</label>
+                            <p>{{this.order.totalAmount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Discount' | translate}}</label>
+                            <p>{{this.order.paymentDiscount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Chargable' | translate}}</label>
+                            <p> {{this.order.totalPayable - this.order.paymentDiscount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Collected' | translate}}</label>
+                            <p>{{this.order.totalReceipt | number}}</p>
+                        </div>
+
+                        <div>
+                            <label>{{'Amount Left' | translate}}</label>
+                            <p>0</p>
+                        </div>
+                        <div>
+                            <label>{{'Amount Change' | translate}}</label>
+                            <p>{{this.order.amountChange | number}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #ManualPromotion>
+    <div id='discount-modal'>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion' | translate}} / {{'Discount' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="grey-wrapper left-modal-section">
+                        <div class="table-wrap horizontal-scrol">
+                            <div class="discount-modal-table custom-table l">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-item">
+                                            <p>{{'Item Code' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>{{'Description' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p>{{'UoM' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{'Price' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{'Quantity' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-discount">
+                      <p>Discount Type</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{'Discount' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{'Subtotal' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="t-body vertical-scroll">
+
+                                    <div class="t-row" *ngFor="let item of this.order.lines; let i = index">
+                                        <div class="t-cell cell-item">
+                                            <p>{{item?.itemCode}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>
+                                                {{item?.itemName}}
+                                            </p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p> {{item?.uomCode }}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{item?.price | number}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{item?.quantity | number}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-quantity">
+                      <p>{{item.discountType}}</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{item?.discountAmt | number}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{item?.quantity * item?.price - item?.discountAmt | number}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-payment-info">
+                            <div>
+                                <label>{{'Bill Discount' | translate}}</label>
+
+                            </div>
+
+                            <p>{{this.order.discountRate == null ? 0 : this.order.discountRate | number}}</p>
+                            <div>
+                                <label>{{'Bill Amount' | translate}}</label>
+                                <p>{{this.order?.totalAmount | number}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Discount' | translate}}</label>
+                                <p>{{this.order.totalDiscountAmt == null ? 0 : this.order.totalDiscountAmt | number}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Amount' | translate}}</label>
+                                <p>{{ this.order?.totalReceipt | number}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</ng-template>

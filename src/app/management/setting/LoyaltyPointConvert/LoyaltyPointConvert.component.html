@@ -1,0 +1,101 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Loyalty Point Convert' | translate}}</label>
+
+      </div>
+      <div class="row">
+          <div class="col-md-3 left">
+              <dx-list class="list" [dataSource]="dataSource" [grouped]="false" [searchEnabled]="true"[searchExpr]="['storeId', 'storeName']" selectionMode="single" [selectedItemKeys]="[currentStore?.storeId]" (onSelectionChanged)="listSelectionChanged($event)">
+                  <div *dxTemplate="let item of 'item'">
+                      <div>
+                          <div class="hotel">
+                              <div class="name">{{item?.storeId}}</div>
+                              <div class="name">{{item?.storeName}}</div>
+                              <div class="address">{{item?.address}}</div>
+                              <!-- <div class="type" [ngClass]="item.Hotel_Class.toLowerCase()"></div> -->
+                          </div>
+                          <!-- <div class="price-container">
+                      <div class="price">{{item.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+                      <div class="caption">per<br>night</div>
+                  </div> -->
+                      </div>
+                  </div>
+                  <!-- <div *dxTemplate="let item of 'group'">
+              <div class="city">{{item.key}}</div>
+          </div> -->
+              </dx-list>
+          </div>
+          <div class="col-md-9 right">
+              <div class="header">
+                  <div class="row">
+                      <div class="col-md-10">
+                          <div class="name-container">
+                              <div class="name">{{currentStore?.storeName}}</div>
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <ng-container *ngIf="this.currentStore !==null && this.currentStore !==undefined">
+                <form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <ng-container *ngFor="let value of this.groupControlList">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <ng-container *ngFor="let item of value.arrayGroup">
+                                            <!-- <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')"> -->
+                                                <div class="col-md-6 form-group" *ngIf="item.isView">
+                                                <div class="row">
+                                                    <div class="col-md-4"><label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span></label></div>
+                                                    <div class="col-md-8"></div>
+                                                </div>
+                
+                                                <input [type]="item.type" *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [required]="item.require" 
+                                                             [attr.disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                                    formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+                                                    <!-- [attr.disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId,'E')?'disabled':null" -->
+                
+                                                <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='DateTime' && item.isView"
+                                                    type="datetime" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"></dx-date-box>
+                                                <!-- <dx-switch *ngIf="value.controlType==='CheckBox' && checkPermission(item.controlId,'V')" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+                                                </dx-switch> -->
+                                                <!-- <ng-container *ngIf="item.controlType==='CheckBox' && checkPermission(item.controlId,'V')"> -->
+                                                       <ng-container *ngIf="item.controlType==='CheckBox'&& item.isView">
+                                                    <br>
+                                                    <dx-switch [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" 
+                                                    [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                                   ></dx-switch>
+                                                </ng-container>
+                                                <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" -->
+                                                <dx-select-box *ngIf="value.controlType==='DropDown' && item.isView" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                                    [dataSource]="this[item.optionName]" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}"
+                                                    [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                                    [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]"></dx-select-box>
+                                                    <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" -->
+                                                <label *ngIf="item.require && editForm.get(item.controlId).invalid" [ngClass]="'error-text'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                                                <!-- (onValueChanged)=" item.controlId ==='countryCode' ? countryChange($event) : 
+                                item.controlId ==='regionCode' ? regionChange($event) :
+                                item.controlId ==='areaCode' ? areaChange($event) :
+                                item.controlId ==='provinceId' ? provinceChange($event) : 
+                                item.controlId ==='districtId' ? districtChange($event) : ''" -->
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-12 text-right">
+                        <button [disabled]="!editForm.valid || !editForm.dirty" *ngIf="checkPermission('btnSave' ,'V')" form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+                    </div>
+                </form>
+              </ng-container>
+          </div>
+      </div>
+
+  </div>
+</div>

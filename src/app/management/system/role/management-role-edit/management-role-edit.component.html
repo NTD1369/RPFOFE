@@ -1,0 +1,21 @@
+<!-- #editForm="ngForm" -->
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="updateRole()">
+    <div class="form-group">
+        <label for="roleName">{{'Name' | translate}} </label>
+        <input class="form-control" id="roleName" formControlName="roleName" name="roleName" rows="6" [(ngModel)]="role.roleName">
+    </div>
+    <div class="form-group">
+        <label for="description">{{'Description' | translate}}</label>
+        <input class="form-control" name="description" formControlName="description" rows="6" [(ngModel)]="role.description">
+    </div>
+
+    <div class="form-group">
+        <label for="status">{{'Status' | translate}}</label>
+        <dx-select-box [style]="{'width':'100%'}" formControlName="status" name="status" placeholder="--- {{'Select Status' | translate}} ---" [dataSource]="this.statusOptions" displayExpr="name" valueExpr="value" [(ngModel)]="role.status"></dx-select-box>
+        <!-- <ngx-select-dropdown  tabindex="0" id="status"  formControlName="status"  [(ngModel)]="this.statusSelect"
+    name="status" [multiple]="false" [config]="config"  [options]="statusOptions"></ngx-select-dropdown> -->
+    </div>
+    <div class="col-md-12 text-right">
+        <button [disabled]="!editForm.dirty" form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+    </div>
+</form>

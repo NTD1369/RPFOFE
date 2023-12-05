@@ -1,0 +1,72 @@
+<div class="main-content ">
+    <div class="center-wrap">
+        <div class="maintenance-card" style="margin: auto;    width: 100%;">
+            <div class="maintenance-row">
+                <div class="col-md-12">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="item-searchbar" class="section-title">{{'Scan Barcode' | translate}} {{ qrResultString }}</label>
+                        </div>
+
+                        <div class="col-md-6 text-right respon" *ngIf="this.scannerEnabled === false">
+                            <button (click)="showCamera()" class="btn button-one"><i class="fa fa-camera" aria-hidden="true"></i> {{'Scan Barcode' | translate}}</button>
+                        </div>
+
+                        <div class="col-md-6 text-right respon" *ngIf="this.scannerEnabled === true">
+                            <button (click)="hideCamera()" class="btn button-one"><i class="fa fa-camera" aria-hidden="true"></i> {{'Scan Barcode' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <barcode-scanner-livestream class="scan-zxing" [codes]="['code_128', 'ean', 'upc', 'upc_e', 'ean_13']" (valueChanges)="onValueChanges($event)" (started)="(onStarted)"></barcode-scanner-livestream> -->
+            <zxing-scanner class="scan-zxing" [enable]="scannerEnabled" (scanSuccess)="onScanSuccess($event)"></zxing-scanner>
+            <div class="row mb-5">
+                <div class="col-md-5 offset-md-3">
+                    <div class="search-wrap mar-ser">
+                        <img src="../../../assets/images/System/barcode.svg" alt="barcode" class="img-fluid" />
+                        <input #txtSearch (keyup.enter)="onSubmit(txtSearch.value, false)" class="form-control" maxlength="50" type="string" placeholder="{{'Keyword' | translate}}" style="height: 50px;" />
+                    </div>
+                </div>
+                <div class="col-md-1 respon-mar">
+                    <button type="submit" (click)="onSubmit(txtSearch.value, false)" class="btn-add height-50 pr-2 pl-2"><i class="dx-icon dx-icon-search"></i> {{'Search' | translate}}</button>
+                </div>
+            </div>
+
+
+            <div class="table-wrap">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12" *ngFor="let item of this.itemsBybarcode; let i = index">
+                                <b>{{(i+1)}}.</b>
+                                <p class="ml-15"><b>{{'SlocId' | translate}}:</b> {{item.slocId}}</p>
+                                <p class="ml-15"><b>{{'Item Code' | translate}}:</b> {{item.itemCode}}</p>
+                                <p class="ml-15"><b>{{'Description' | translate}}:</b> {{item.itemName}}</p>
+                                <p class="ml-15"><b>{{'Bar Code' | translate}}:</b> {{item.barCode}}</p>
+                                <p class="ml-15"><b>{{'Price' | translate}}:</b> {{item.defaultPrice | number}}</p>
+                                <p class="ml-15"><b>{{'UoM Name' | translate}}:</b> {{item.uomName}}</p>
+                                <!-- <p class="ml-15"><b>{{'Price List ID' | translate}}:</b> {{item.priceListId}}</p> -->
+                                <p class="ml-15"><b>{{'Stock Quantity' | translate}}:</b> {{item.stockQty | number}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.itemsBybarcode" [showBorders]="true">
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column dataField="slocId" caption="{{'SlocId' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemName" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="barCode" caption="{{'Bar Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="defaultPrice" caption="{{'Price' | translate}}" dataType="number" [format]="this.authService.numberFormat('amount')"> </dxi-column>
+                    <dxi-column dataField="uomName" caption="{{'UoM Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="priceListId" caption="{{'Price List ID' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="stockQty" caption="{{'Stock Quantity' | translate}}" dataType="number"> </dxi-column>
+                </dx-data-grid> -->
+            </div>
+        </div>
+
+    </div>

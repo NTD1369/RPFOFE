@@ -1,0 +1,124 @@
+
+.timeline{
+    position: relative;
+    margin: 50px auto;
+    padding: 40px 0;
+    width: 1000px;
+    box-sizing: border-box;
+}
+
+
+
+.timeline ul {
+    margin: 0;
+    padding: 0;
+}
+
+.timeline ul li{
+    line-height: normal;
+    position: relative;
+    // width: 50%;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    list-style: none;
+}
+.timeline:before{
+    content: '';
+    position: absolute;
+    // left: 50%;
+    width: 2px;
+    height: 100%;
+    background: #c5c5c5;
+}
+
+
+.timeline ul li:nth-child(odd){
+    float: left;
+    text-align: right;
+    clear: both;
+}
+
+// .timeline ul li:nth-child(even){
+//     float: right;
+//     text-align: left;
+//     clear: both;
+// }
+.timeline ul li{
+    float: left;
+    text-align: right;
+    clear: both;
+}
+.noi_dung{
+    padding-bottom: 20px;
+}
+
+
+
+// .timeline ul li:nth-child(odd):before{
+//     content: '';
+//     position: absolute;
+//     top: 24px;
+//     right: -6px;
+//     width: 10px;
+//     height: 10px;
+//     background: rgba(97, 123, 227, 1);
+//     border-radius: 50%;
+//     box-shadow: 0 0 0 3px rgba(97, 123, 227, 0.2);
+// }
+
+.timeline ul li:before{
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: -4px;
+    width: 10px;
+    height: 10px;
+    background: rgba(97, 123, 227, 1);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(97, 123, 227, 0.2);
+}
+
+.timeline ul li h3{
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+    color: rgba(97, 123, 227, 1);
+}
+
+.timeline ul li p{
+    margin: 10px 0 0;
+    padding: 0;
+    text-align: left;
+}
+.timeline ul li .thoi_gian h4{
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+.badge {
+    padding: 0.2em 1em!important;
+    color: white!important;
+}
+.timeline ul li .thoi_gian{
+    position: absolute;
+    top: 12px;
+    // right: -165px;
+    margin: 0;
+    padding: 8px 16px;
+    background: rgba(97, 123, 227, 1);
+    color: #fff;
+    border-radius: 18px;
+    box-shadow: 0 0 0 3px rgba(97, 123, 227, 0.4);
+}
+
+// .timeline ul li:nth-child(even) .thoi_gian{
+//     position: absolute;
+//     top: 12px;
+//     left: -165px;
+//     margin: 0;
+//     padding: 8px 16px;
+//     background: rgba(97, 123, 227, 1);
+//     color: #fff;
+//     border-radius: 18px;
+//     box-shadow: 0 0 0 3px rgba(97, 123, 227, 0.4);
+// }

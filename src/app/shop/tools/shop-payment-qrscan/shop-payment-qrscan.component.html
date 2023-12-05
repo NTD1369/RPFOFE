@@ -1,0 +1,45 @@
+<!-- 
+<div class="number-pad" > 
+  <div class="row mb-3 p3">
+ 
+    
+  
+  </div>
+ 
+</div> -->
+
+<div id='invoice-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'QR Scan' | translate}}</h4>
+
+
+        <button type="reset" class="reset-btn mr-1 closeCustom" (click)="closeModal()" style="width: 13%;">
+        <i class="fas fa-window-close"></i>
+
+      </button>
+
+    </div>
+    <div class="modal-body">
+        <div class="row p-5" style="margin: 0 auto; text-align: center;">
+            <!-- QR Code -->
+
+            <img src="../../../../assets/images/System/qr-code-scan.svg" style="max-height: 100px; margin: 0px auto; position: absolute;  top: 10%; left: 42%;">
+            <zxing-scanner *ngIf="this.showCamera" class="small-video" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+        </div>
+
+
+        <div class="row align-items-center mt-2 p-2">
+
+            <div class="col-md-9 p-0">
+                <dx-text-box #txtQrCode name="txtQrCode" class="txtQrCode" id="txtQrCode" style="height: 50px; padding: 10px;" [value]="this.qrResultString"></dx-text-box>
+            </div>
+            <div class="col-md-3">
+                <dx-button class="submit-btn mr-2" style="height: 50px; width: 100%;" (onClick)="applyValue(txtQrCode.value)" text="{{'Apply' | translate}}"></dx-button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+ 

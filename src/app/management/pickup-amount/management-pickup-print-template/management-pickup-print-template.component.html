@@ -1,0 +1,55 @@
+<div #pdfContainer_1 >
+  <div class="maintenance-card print-main cl-print-cm" style="overflow: hidden" [style.width]="width + 'cm'">
+    <div class="maintenance-row">
+        <div class="col-md-12">
+          
+
+          <div class="text-center mb-2" style="font-size:15px">{{'Pickup Amount' | translate}}</div>
+              
+          <div>
+              <p> <label class="textTitlePrint">{{'Created By' | translate}}: </label> {{this.pickAmount?.createdBy}} </p>
+              <p> <label class="textTitlePrint">{{'Created On' | translate}}: </label> {{this.pickAmount?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}} </p> 
+              <p> <label class="textTitlePrint">{{'Counter' | translate}}: </label> {{this.pickAmount?.counterId}} </p>
+              <p> <label class="textTitlePrint">{{'Shift' | translate}}: </label> {{this.pickAmount?.shiftId}} </p>
+              <p> <label class="textTitlePrint">{{'Amount' | translate}}: </label> {{this.pickAmount.amount | currencyFormat}} </p>
+              <p> <label class="textTitlePrint">{{'Remark' | translate}}: </label> {{this.pickAmount.remarks}} </p>
+          </div>
+            <!-- <div *ngIf="this.pickupAmtList?.length > 0"> 
+             
+                <div class="row table-row">
+                    <table style="width: 100%; border-collapse: collapse;" class="shift-cls" >
+                        <tr>
+                            <th width="15%"> {{'#' | translate}} </th> 
+                            <th width="35%" style="padding-right: 3px;"> {{'Amount' | translate}} </th>
+                            <th width="50%" style="min-width: 80px;"> {{'Remark' | translate}} </th>
+                        </tr>
+                        <tr *ngFor="let item of this.pickupAmtList">
+                            <td>
+                                <label style="margin-bottom: 0px;">
+                                    {{item.collection}} 
+                                </label>
+                            </td> 
+                            <td class="text-right" style="padding-right: 3px;">
+                                <label style="margin-bottom: 0px;">
+                                    {{item.amount | currencyFormat}}
+                                </label>
+                            </td>
+                            <td>
+                              <label style="margin-bottom: 0px;">
+                                  {{item.remarks}}
+                              </label>
+                          </td>
+                        </tr>
+                        <tr style="border-top: 1px solid;">
+                            <td><b>{{'Total' | translate}}</b></td> 
+                            <td class="text-right"><b>{{this.pickTotal | currencyFormat}}</b></td>
+                            <td class="text-right"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+           -->
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="center-wrap">
+
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6"> <label for="item-searchbar" class="section-title">{{'Merchandise Setting' | translate}}</label></div>
+                <div class="col-md-6" style="text-align: right;">
+                    <dx-button icon="floppy" type="success" text="{{'Save' | translate}}" (onClick)="saveModel()"></dx-button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <dx-list [selectionMode]="selectionModeValue" [selectAllMode]="selectAllModeVlaue" [showSelectionControls]="true" [selectedItemKeys]="this.selectedKey" (onSelectionChanged)="onSelectionChanged($event)" [searchEnabled]="true" searchExpr="Name" searchMode="contains"
+                        [items]="plannedTasks" [repaintChangesOnly]="true" keyExpr="mcid">
+                        <div *dxTemplate="let item of 'item'">
+                            <div class="product">
+                                <div>{{item.mcid}}</div>
+                                <div class="price">{{item.mcname}}</div>
+                            </div>
+                        </div>
+                        <!-- <dxo-item-dragging
+                    group="tasks"
+                    [data]="plannedTasks"
+                    [allowReordering]="true"
+                    [onDragStart]="onDragStart"
+                    [onAdd]="onAdd"
+                    [onRemove]="onRemove">
+                </dxo-item-dragging> -->
+                    </dx-list>
+                </div>
+                <div class="col-md-6">
+                    <dx-list [searchEnabled]="true" searchExpr="Name" searchMode="contains" [items]="doingTasks" [repaintChangesOnly]="true" keyExpr="mcid">
+                        <div *dxTemplate="let item of 'item'">
+                            <div class="product">
+                                <div>{{item.mcid}}</div>
+                                <div class="price">{{item.mcname}}</div>
+                            </div>
+                        </div>
+                        <dxo-item-dragging group="tasks" [data]="doingTasks" [allowReordering]="true" [onDragStart]="onDragStart" [onAdd]="onAdd" [onRemove]="onRemove">
+                        </dxo-item-dragging>
+                    </dx-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<style>
+  .textTitlePrint {
+    font-weight: 600;
+  }
+/* 
+  .textRightPrint {} */
+</style>
+<div class="center-wrap content-center">
+  <div class="maintenance-card print-p">
+    <div class="maintenance-row print-p">
+      <div class="col-md-12 print-p">
+        <app-shop-component-management-print-shift></app-shop-component-management-print-shift>
+
+        <!-- <div #funnel id="print-section">
+
+          <ng-container>
+            <div>
+              <ngx-barcode6 [bc-format]="'CODE128'" [bc-value]="this.header?.shiftId" [bc-display-value]="false">
+              </ngx-barcode6>
+
+              <p> <label class="textTitlePrint">ID: </label> {{this.header?.shiftId}}</p>
+              <p> <label class="textTitlePrint">Date: </label> {{this.header?.createdOn | date : "yyyy-MM-dd HH:mm:ss"}}
+              </p>
+              <p> <label class="textTitlePrint">Store: </label> {{this.header?.storeId}} </p>
+              <p> <label class="textTitlePrint">Create By: </label> {{this.header?.createdBy }}</p>
+              <p> <label class="textTitlePrint">Open Amount: </label> {{this.header?.openAmt | number}}</p>
+              <p> <label class="textTitlePrint">End Amount: </label> {{this.header?.endAmt | number}}</p>
+
+            </div>
+            <hr class="style5">
+            <h3>Sales Summary</h3>
+            <hr class="style5">
+            <table class="tblLine">
+
+              <tr *ngFor="let item of this.header?.payments">
+                <td>
+                  <label>
+                    {{item.paymentCode}}
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <label>
+                    {{ item.totalAmt | number}}
+                  </label>
+                </td>
+              </tr>
+
+            </table>
+            <hr class="style5">
+            <h3>Category Sales</h3>
+            <hr class="style5">
+            <table class="tblLine">
+              <tr>
+                <th> {{'Description' | translate}} </th>
+                <th> {{'Quantity' | translate}} </th>
+                <th> {{'LineTotal' | translate}} </th>
+              </tr>
+              <tr *ngFor="let item of this.header?.itemSumary">
+                <td>
+                  <label>
+                    {{item.itemCode}} - {{item.description}}
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <label>
+                    {{item.totalQty| number}}
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <label>
+                    {{item.lineTotal | number}}
+                  </label>
+                </td>
+              </tr>
+
+            </table>
+
+            <hr class="style5">
+          </ng-container>
+
+        </div> -->
+        <!-- </dx-funnel> -->
+        <!-- <button class="submit-btn" style="min-width:150px; width: 100%;"   >Print</button>  -->
+        <!-- <button class="submit-btn" style="min-width:150px; width: 100%;"  printSectionId="print-section" ngxPrint  >Print</button>  -->
+        <!-- <button class="btn-search" (click)="PrintPage()" id="printPageShopCheck" style="padding: 10px 30px"><i
+            class="fa fa-print" aria-hidden="true"></i> Print</button> -->
+      </div>
+
+    </div>
+  </div>
+</div>

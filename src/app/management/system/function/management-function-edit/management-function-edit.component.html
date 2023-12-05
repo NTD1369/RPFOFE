@@ -1,0 +1,64 @@
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="updateRole()">
+    <!-- <div class="row">
+    <div class="form-group col-md-6"  *ngIf="checkPermission('functionId' ,'V')">
+      <label for="functionId" >Id </label>
+      <input  class="form-control" id="functionId" [attr.disabled]="!checkPermission('functionId' ,'E')?'disabled':null"    formControlName="functionId"  name="functionId" rows="6" 
+      [(ngModel)]="function.functionId">
+    </div>
+    <div class="form-group col-md-6" *ngIf="checkPermission('functionName' ,'V')">
+      <label for="functionName" >Name </label>
+      <input  class="form-control" id="functionName"  [attr.disabled]="!checkPermission('functionName' ,'E') ?'disabled':null" formControlName="functionName"  name="functionName" rows="6" 
+      [(ngModel)]="function.name">
+    </div>
+    <div class="form-group col-md-6" *ngIf="checkPermission('functionUrl' ,'V')">
+      <label for="functionUrl">Url</label>
+      <input class="form-control" name="functionUrl"  formControlName="functionUrl" rows="6"   [(ngModel)]="function.url">
+    </div>
+    <div class="form-group col-md-6" >
+      <label for="parentId">Parent Id</label>
+      <input class="form-control" name=" "  formControlName="parentId" rows="6"   [(ngModel)]="function.parentId">
+    </div>
+    
+    <div class="form-group col-md-6">
+      <label for="icon">Icon</label>
+      <input class="form-control" name="icon"  formControlName="icon" rows="6"   [(ngModel)]="function.icon">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="orderNo">OrderNo</label>
+      <input class="form-control" name="orderNo"  formControlName="orderNo" rows="6"   [(ngModel)]="function.orderNo">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="licenseType">LicenseType</label>
+      <input class="form-control" name="licenseType"  formControlName="licenseType" rows="6"   [(ngModel)]="function.licenseType">
+    </div>
+    
+    <div class="form-group col-md-6">
+      <label for="status" class="mr-2">Status</label> 
+      <p-dropdown [options]="statusOptions"  formControlName="status"  name="status" [(ngModel)]="function.status" optionLabel="name" optionValue="value"></p-dropdown>
+    </div>
+  </div> -->
+    <div class="col-md-12">
+        <div class="row">
+            <ng-container *ngFor="let item of this.controlList">
+                <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')">
+                    <label for="{{item.controlId}}"> {{item.controlName | translate}}</label>
+                    <input *ngIf="item.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [attr.disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId,'E')?'disabled':null" formControlName="{{item.controlId}}"
+                        name="{{item.controlId}}" [(ngModel)]="model[item.controlId]">
+
+                    <dx-date-box name="{{item.controlId}}" [value]="model[item.controlId]" displayFormat="dd/MM/yyyy HH:mm:ss" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="item.controlType==='DateTime' && checkPermission(item.controlId,'V')"
+                        type="datetime" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+
+                    </dx-date-box>
+                    <dx-switch *ngIf="item.controlType==='CheckBox' && checkPermission(item.controlId,'V')" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"></dx-switch>
+
+                    <dx-select-box *ngIf="item.controlType==='DropDown' && checkPermission(item.controlId,'V')" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId}}" placeholder="--- Select {{item.controlName}} ---" [dataSource]="this[item.optionName]"
+                        displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" [(ngModel)]="model[item.controlId]"
+                        [value]="model[item.controlId]"></dx-select-box>
+
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">{{'Save Changes' | translate}}</button>
+</form>

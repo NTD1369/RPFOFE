@@ -1,0 +1,144 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+    
+    .textRightPrint {}
+</style>
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto; width: 100%;">
+        <!-- <h2 class="maintenance-heading" >Printing</h2> -->
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent" [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode" [bounceEnabled]="pullDown" reachBottomText="Updating...">
+                    <!-- <dx-funnel #funnel> -->
+                    <div #funnel id="print-section">
+
+                        <ng-container>
+                            <div>
+
+                                <!-- <ngx-barcode6
+                [bc-format]="'CODE128'"
+                [bc-value]="this.inventory.invtid"
+                [bc-display-value]="false"
+              >
+              </ngx-barcode6> -->
+
+                                <p> <label class="textTitlePrint">{{'ID' | translate}}: </label> {{this.inventory.invtid}}</p>
+                                <p> <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.inventory.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</p>
+                                <p> <label class="textTitlePrint">{{'From' | translate}}: </label> {{this.inventory.fromStore}} - {{this.inventory.fromStoreName}}</p>
+                                <p> <label class="textTitlePrint">{{'To' | translate}}: </label> {{this.inventory.toStore}} - {{this.inventory.toStoreName}}</p>
+
+
+                            </div>
+                            <hr class="style5">
+                            <table class="tblLine">
+                                <tr>
+                                    <th> {{'Item Code' | translate}}</th>
+                                    <th> {{'Barcode' | translate}} </th>
+                                    <th> {{'Description' | translate}} </th>
+                                    <th> {{'Price' | translate}} </th>
+                                    <th> {{'Quantity' | translate}} </th>
+                                </tr>
+                                <tr *ngFor="let item of this.inventory.lines">
+                                    <td>
+                                        <label>
+                     {{item.itemCode}}  
+                   </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                   {{item.barCode}}  
+                   </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                  {{item.description}} 
+                  </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                  {{item.price | number}}  
+                  </label>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <label>
+                     {{item.quantity | number}}
+                   </label>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <hr class="style5">
+                            <table class="tbl">
+
+                                <tr>
+                                    <td>
+                                        <label>
+                    {{'Total quantity' | translate}}: 
+                  </label>
+                                    </td>
+
+                                    <td style="text-align: right;">
+                                        <label class="mr-2" style="font-weight: 700;">
+                    {{this.total  | number}}
+                  </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>
+                    {{'Remark' | translate}}: 
+                  </label>
+                                    </td>
+
+                                    <td style="text-align: left;">
+                                        <label>
+                    {{this.inventory.remark }}
+                  </label>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <hr class="style5">
+                            <table class="tbl">
+                                <tr>
+                                    <th style="text-align: center;"> {{'Người gửi' | translate}} </th>
+                                    <th style="text-align: center;"> {{'Vận chuyển' | translate}} </th>
+                                    <th style="text-align: center;"> {{'Người Nhận' | translate}} </th>
+                                </tr>
+                                <tr *ngFor="let item of this.inventory.lines" style="background-color: white;">
+                                    <td>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <hr class="style5">
+                        </ng-container>
+
+                    </div>
+                </dx-scroll-view>
+                <!-- </dx-funnel> -->
+                <!-- <button class="submit-btn" style="min-width:150px; width: 100%;" (click)="printFunnel()"  >Print</button>  -->
+                <button class="submit-btn" style="min-width:150px; width: 100%;" printSectionId="print-section" ngxPrint>{{'Print' | translate}}</button>
+            </div>
+
+        </div>
+    </div>
+</div>

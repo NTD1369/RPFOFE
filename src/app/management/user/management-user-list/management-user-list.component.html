@@ -1,0 +1,290 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'User List' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridContainer" (onExporting)="onExporting($event)"
+            (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.items" [allowColumnResizing]="true" 
+            [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+                [showBorders]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-export *ngIf="this.items!==null && this.items!==undefined && this.items.length>0" [enabled]="true"></dxo-export>
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="username" caption="{{'User Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="firstName" caption="{{'First Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="lastName" caption="{{'Last Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="position" caption="{{'Position' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="roleName" caption="{{'Role' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="createdBy" caption="{{'Created By' | translate}}" dataType="string"> </dxi-column>
+                <!-- <dxi-column dataField="license"  dataType="string"> </dxi-column> -->
+                <dxi-column width="250" caption="{{'License' | translate}}" cellTemplate="cellLicenseTemplate"></dxi-column>
+                <dxi-column alignment="center" dataField="createdOn" caption="{{'Created On' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'">
+                </dxi-column>
+                <dxi-column alignment="center" dataField="statusMask" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                <dxi-column width="250" cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <!-- <i class="fab fa-accusoft"></i> -->
+                    <dx-button icon="fas fa-eye" class="mr-2" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button icon="fab fa-accusoft" text="{{'Store' | translate}}" (onClick)="openStoreModal(cell.data, storetemplate)"></dx-button>
+                </div>
+              
+                <div *dxTemplate="let cell of 'cellLicenseTemplate'">
+                    <!-- <i class="fab fa-accusoft"></i> -->
+                    <ng-container *ngIf="cell.data?.setLicense !== undefined && cell.data?.setLicense !== null && cell.data.setLicense" >
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a (click)="getLicense(cell.data)">
+                                    <dx-text-box [readOnly]="true" [(value)]="cell.data.license" placeholder="password" stylingMode="filled" mode="text" ></dx-text-box>
+                                </a>
+                              
+                            </div>
+                            <div class="col-md-4"> 
+                                <dx-button icon="fas fa-times" (onClick)="removeLicense(cell.data)"></dx-button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf=" cell.data?.setLicense === undefined || cell.data?.setLicense === null" >
+                        <div class="row">
+                            <div class="col-md-8">
+                                <dx-text-box  [(value)]="cell.data.license" placeholder="License" stylingMode="filled" mode="text" ></dx-text-box>
+                            </div>
+                            <div class="col-md-4"> 
+                                <dx-button icon="fas fa-check" (onClick)="saveLicense(cell.data)"></dx-button>
+                            </div>
+                        </div>
+                        <!-- <div class="dx-field-value">
+                            <dx-text-box value="password" placeholder="password" stylingMode="filled" mode="text" >
+                              <dxi-button name="today" location="after"
+                                [options]="passwordButton"
+                              ></dxi-button>
+                            </dx-text-box>
+                          </div> -->
+                    </ng-container>
+                    <!-- <dx-button icon="fas fa-eye" class="mr-2" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button icon="fab fa-accusoft" text="{{'Store' | translate}}" (onClick)="openStoreModal(cell.data, storetemplate)"></dx-button> -->
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.statusMask | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'User' | translate}} || {{ this.user?.username }}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-user-edit [model]="this.user" [isNew]="this.isNew" style="width: 100%" (outModel)="updateModel($event)"></app-management-user-edit>
+
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #storetemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Store' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-user-store [model]="this.user" style="width: 100%"></app-management-user-store>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<!-- companyCode: string;
+    companyName: string;
+    contractNo: string;
+    licenseType: string;
+    licenseNo: string;
+
+    description: string;
+    numOfDevice: number;
+
+    validFrom: Date | string | null;
+    validTo: Date | string | null;
+    createdBy: string;
+    createdOn: Date | string | null;
+    modifiedBy: string;
+    modifiedOn: Date | string | null;
+    customF1: string;
+    customF2: string;
+    customF3: string;
+    customF4: string;
+    customF5: string; -->
+<dx-popup
+    [width]="600" [height]="700"
+    [showTitle]="true" [resizeEnabled]="true"
+    title="{{'License Information' | translate}}"
+    [dragEnabled]="false"
+    [hideOnOutsideClick]="true"
+    [showCloseButton]="true"
+    container=".dx-viewport"
+    [(visible)]="popupVisible"
+>
+    
+    <div *dxTemplate="let data of 'content'">
+        <div class="row">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;" [readOnly]="true" value="{{'Id' | translate}}" placeholder="{{'Id' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.licenseNo}}" placeholder="{{'Id' | translate}}"  mode="text" ></dx-text-box>
+               
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'Description' | translate}}" placeholder="{{'Description' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <!-- <dx-text-box [readOnly]="true" value="{{licenseInfor.description}}" placeholder="{{'Description' | translate}}"  mode="text" ></dx-text-box> -->
+                <dx-text-area style="font-size: 20px; font-weight: 500;"  [readOnly]="true"
+                [height]="90"
+                value="{{licenseInfor.description}}" 
+                placeholder="{{'Description' | translate}}"
+              >
+              </dx-text-area>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'Type' | translate}}" placeholder="{{'Type' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.licenseType}}" placeholder="{{'Type' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box  style="font-size: 20px; font-weight: 500;" [readOnly]="true" value="{{'Num Of Device' | translate}}" placeholder="{{'Num Of Device' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.numOfDevice}}" placeholder="{{'Num Of Device' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'Contract No' | translate}}" placeholder="{{'Contract No' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.contractNo}}" placeholder="{{'Contract No' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'Valid Date' | translate}}" placeholder="{{'Valid Date' | translate}}"  mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-4"> 
+                <dx-date-box style="font-size: 20px; font-weight: 500;"   [readOnly]="true" [value]='licenseInfor.validFrom'  [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-1"> 
+                <h3 style="    text-align: center;">~</h3>
+            </div>
+            <div class="col-md-4">
+                <!-- <dx-text-box [readOnly]="true" value="{{licenseInfor.licenseType}}" placeholder="password" stylingMode="filled" mode="text" ></dx-text-box> -->
+                <dx-date-box style="font-size: 20px; font-weight: 500;"   [readOnly]="true" [value]='licenseInfor.validTo'  [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'CustomF1' | translate}}" placeholder="{{'CustomF1' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.customF1}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'CustomF2' | translate}}" placeholder="{{'CustomF2' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box  style="font-size: 20px; font-weight: 500;" [readOnly]="true" value="{{licenseInfor.customF2}}" mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'CustomF3' | translate}}" placeholder="{{'CustomF3' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.customF3}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'CustomF4' | translate}}" placeholder="{{'CustomF4' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.customF4}}" mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{'CustomF5' | translate}}" placeholder="{{'CustomF5' | translate}}" mode="text" ></dx-text-box>
+                
+            </div>
+            <div class="col-md-9">
+                <dx-text-box style="font-size: 20px; font-weight: 500;"  [readOnly]="true" value="{{licenseInfor.customF5}}"  mode="text" ></dx-text-box>
+                
+            </div>
+        </div>
+       
+    <!-- <p>
+       
+    </p> -->
+    <!-- <h3>
+        {{'License Description' | translate}} :
+        <span>{{ licenseInfor.licenseDesc }}</span>
+    </h3>
+    <h3>
+        {{'License Type' | translate}} :
+        <span>{{ licenseInfor.licenseType }}</span>
+    </h3>
+    <h3> 
+        {{'Valid Date' | translate}} :
+        <span> {{ licenseInfor.validFrom  | date : this.authService.loadFormat().dateFormat }} ~ {{ licenseInfor.validTo  | date : this.authService.loadFormat().dateFormat }}</span>
+    </h3> -->
+    <!-- <p>
+        Position:
+        <span>{{ currentEmployee.Position }}</span>
+    </p> -->
+    </div>
+</dx-popup>

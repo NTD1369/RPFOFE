@@ -1,0 +1,155 @@
+<!-- {{this.groupControlList | json}} -->
+
+
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Release Note' | translate}}</h4>'
+     
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+<ng-container  *ngIf="this.groupControlList?.length > 0"> 
+    <form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+    <div class="modal-body"  [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" > 
+            <div class="col-md-12">
+                <div class="row">
+                    <ng-container *ngFor="let value of this.groupControlList">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <ng-container *ngFor="let item of value.arrayGroup">
+                                    <!-- <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')"> -->
+                                        <div class="col-md-6 form-group" *ngIf="item.isView">
+                                        <div class="row">
+                                            <div class="col-md-4"><label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span></label></div>
+                                            <div class="col-md-8"></div>
+                                        </div>
+    
+                                        <input *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [required]="item.require" 
+                                                    [attr.disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                            formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+                                            <!-- [attr.disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId,'E')?'disabled':null" -->
+    
+                                        <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='DateTime' && item.isView"
+                                            type="datetime" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"></dx-date-box>
+    
+                                            <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='Date' && item.isView"
+                                            type="date" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"></dx-date-box>
+                                        <!-- <dx-switch *ngIf="value.controlType==='CheckBox' && checkPermission(item.controlId,'V')" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+                                        </dx-switch> -->
+                                        <!-- <ng-container *ngIf="item.controlType==='CheckBox' && checkPermission(item.controlId,'V')"> -->
+                                            <ng-container *ngIf="item.controlType==='CheckBox'&& item.isView">
+                                            <br>
+                                            <dx-switch [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" 
+                                            [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                        ></dx-switch>
+                                        </ng-container>
+                                        
+                                        <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" -->
+                                        <dx-select-box *ngIf="value.controlType==='DropDown' && item.isView" [style]="{'width':'100%'}"
+                                            formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" 
+                                            placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                            [dataSource]="this[item.optionName]" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}"
+                                            [searchEnabled]="true" searchMode="contains" [searchExpr]="['{{item.optionKey}}', '{{item.optionValue}}']"
+                                            [disabled]="isNew ? (!item.isInsert?'disabled':null ): (!item.isEdit?'disabled':null)"
+                                            [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]">
+                                        </dx-select-box>
+                                            <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" -->
+                                        <label *ngIf="(item.require && editForm.get(item.controlId).invalid) || (item.require && editForm.get(item.controlId).value ==='') " 
+                                        [ngClass]="'error-text'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                                        <!-- (onValueChanged)=" item.controlId ==='countryCode' ? countryChange($event) : 
+                        item.controlId ==='regionCode' ? regionChange($event) :
+                        item.controlId ==='areaCode' ? areaChange($event) :
+                        item.controlId ==='provinceId' ? provinceChange($event) : 
+                        item.controlId ==='districtId' ? districtChange($event) : ''" -->
+    
+                                            <dx-html-editor height="725px" *ngIf="value.controlType==='Editor' && item.isView" [style]="{'width':'100%'}"
+                                            formControlName="{{item.controlId}}" name="{{item.controlId | translate}}"   
+                                            [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null" 
+                                            [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]">
+                                                <dxo-toolbar [multiline]="true">
+                                                <dxi-item name="undo"></dxi-item>
+                                                <dxi-item name="redo"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item
+                                                    name="size"
+                                                    [acceptedValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"
+                                                ></dxi-item>
+                                                <dxi-item
+                                                    name="font"
+                                                    [acceptedValues]="[
+                                                    'Arial',
+                                                    'Courier New',
+                                                    'Georgia',
+                                                    'Impact',
+                                                    'Lucida Console',
+                                                    'Tahoma',
+                                                    'Times New Roman',
+                                                    'Verdana'
+                                                    ]"
+                                                ></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="bold"></dxi-item>
+                                                <dxi-item name="italic"></dxi-item>
+                                                <dxi-item name="strike"></dxi-item>
+                                                <dxi-item name="underline"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="alignLeft"></dxi-item>
+                                                <dxi-item name="alignCenter"></dxi-item>
+                                                <dxi-item name="alignRight"></dxi-item>
+                                                <dxi-item name="alignJustify"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="orderedList"></dxi-item>
+                                                <dxi-item name="bulletList"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item
+                                                    name="header"
+                                                    [acceptedValues]="[false, 1, 2, 3, 4, 5]"
+                                                ></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="color"></dxi-item>
+                                                <dxi-item name="background"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="link"></dxi-item>
+                                                <dxi-item name="image"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="clear"></dxi-item>
+                                                <dxi-item name="codeBlock"></dxi-item>
+                                                <dxi-item name="blockquote"></dxi-item>
+                                                <dxi-item name="separator"></dxi-item>
+                                                <dxi-item name="insertTable"></dxi-item>
+                                                <dxi-item name="deleteTable"></dxi-item>
+                                                <dxi-item name="insertRowAbove"></dxi-item>
+                                                <dxi-item name="insertRowBelow"></dxi-item>
+                                                <dxi-item name="deleteRow"></dxi-item>
+                                                <dxi-item name="insertColumnLeft"></dxi-item>
+                                                <dxi-item name="insertColumnRight"></dxi-item>
+                                                <dxi-item name="deleteColumn"></dxi-item>
+                                                </dxo-toolbar>
+                                                <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+                                            </dx-html-editor>
+                        
+                        
+                        
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+    
+          
+        
+     
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-12 text-right">
+            <button *ngIf="checkPermission('btnSave' ,'V')" form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+        </div>
+     </div>
+    </form>
+</ng-container>
+
+
+
+<!-- [disabled]="!editForm.valid || !editForm.dirty" -->

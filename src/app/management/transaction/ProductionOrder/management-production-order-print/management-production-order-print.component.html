@@ -1,0 +1,246 @@
+<div class="proOrderPrint_background">
+  <div>
+  <div class="row text-right">
+    <div class="col-md-6 offset-md-6 text-right bt-info">
+        <dx-button *ngIf="this.version==='en'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-gb" type="default"> </dx-button>
+        <dx-button *ngIf="this.version==='vi'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-vn" type="default"> </dx-button>
+        <dx-button class="btn-print proOrder__print" icon="fa fa-print" text="Print" (onClick)="PrintPage()"></dx-button>
+    </div>
+</div>
+  
+<ng-container *ngIf="this.version === 'vi'">
+  <div class="row" style="margin-top:15px ;">
+    <div class="col-md-1"></div>
+    <div class="col-md-4 proOrderPrint_fsw-1">{{this.companyName}}</div>
+    <div class="col-md-6"></div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="proOrderPrint_fsw-2">Lệnh sản xuất</div>
+<div class="row" style="margin-top:10px ;">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Lệnh vận chuyển:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.purchaseId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Cửa hàng:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.storeId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw"  >Sản phẩm:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.productNo}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Được tạo bởi:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.createdBy}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Ngày tạo:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.createdOn | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Ngày bắt đầu:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.docDate | date: 'dd/MM/yyyy HH:mm:ss' }}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Ngày hết hạn:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.docDueDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Trạng thái:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.sapStatus}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Ghi chú:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.comment}}</div>
+  <div class="col-md-1"></div>
+</div> -->
+<div class="row mt-4" *ngIf="this.dataProductPrint.lines.length > 0" style="margin:30px">
+  <table class="w-100 table-template">
+
+      <tr>
+        <th class="proOrder__align">STT</th>
+        <th class="proOrder__align">Mã sản phẩm</th>
+        <th class="proOrder__align">Tên sản phẩm</th>
+        <th class="proOrder__align" >Đơn vị</th>
+        <th class="delivery__align">BaseQty</th>
+        <th class="delivery__align">Planned Qty</th>
+        <th class="delivery__align">Issue Id</th>
+        <th class="proOrder__align">SlocId</th>
+      
+        
+    </tr>
+    <tr *ngFor="let item of this.dataProductPrint.lines; let i = index">
+        <td class="proOrder__align">{{i + 1}}</td>
+        <td  class="proOrder__align">{{item.itemCode}}</td>
+        <td  class="proOrder__align">{{item.description}}</td>
+        <td  class="proOrder__align">{{item.uomCode}}</td>
+        <td  class="delivery__align">{{item.baseQty}}</td>
+        <td  class="delivery__align">{{item.plannedQty}}</td>
+        <td  class="delivery__align">{{item.issueId}}</td>
+        <td  class="proOrder__align">{{item.slocId}}</td>
+      
+     
+       
+    </tr>
+      <!-- <tr>
+          <td class="proOrderPrint__sum"  colspan="7">Tổng: {{this.dataProductPrint.sumQuality | number}}</td>
+          <td class="proOrder__align"  colspan="8">Tổng: {{this.dataProductPrint.sumLineTotal | number}}</td>
+      </tr> -->
+  </table>
+</div>
+<div class="row mt-4" >
+  <div class="col-md-9">
+      </div>
+  <div class="col-md-3 ">
+      <span class="col-md-1 col-print-1 p-0"><b class="proOrder__fonts">Ngày in phiếu:</b></span>
+      <span class="col-md-10 col-print-10 proOrder__fonts">{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+  </div>
+</div>
+<div class="row mt-5 mb-4">
+  <div class="col-md-10 col-print-10 text-right proOrder__fonts" >..........,Ngày.........Tháng..........Năm..............</div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-print-6 text-center proOrderPrint__footer"><b>Quản lý cửa hàng</b></div>
+  <div class="col-md-6 col-print-6 text-center proOrderPrint__footer"><b>Người vận chuyển</b></div>
+</div>
+
+  </ng-container>
+  <ng-container *ngIf="this.version === 'en'">
+    <div class="row" style="margin-top:10px ;">
+      <div class="col-md-1"></div>
+      <div class="col-md-4 proOrderPrint_fsw-1">{{this.companyName}}</div>
+      <div class="col-md-6"></div>
+      <div class="col-md-1"></div>
+    </div>
+  
+    <div class="proOrderPrint_fsw-2">Production order</div>
+<div class="row" style="margin-top:15px ;">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Production order:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.purchaseId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Store:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.storeId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Product no:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.productNo}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Created by:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.createdBy}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Created on:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.createdOn | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Document date:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.docDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Document Due Date:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.docDueDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Status:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.sapStatus}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 proOrder__font_sw">Remark:</div>
+  <div class="col-md-8 proOrder__fonts">{{this.dataProductPrint.comment}}</div>
+  <div class="col-md-1"></div>
+</div> -->
+<div class="row mt-4" *ngIf="this.dataProductPrint.lines.length > 0" style="margin:30px">
+  <table class="w-100 table-template">
+      <tr>
+          <th class="proOrder__align">STT</th>
+          <th class="proOrder__align">Item code</th>
+          <th class="proOrder__align">Description</th>
+          <th class="proOrder__align" >Uom</th>
+          <th class="delivery__align">BaseQty</th>
+          <th class="delivery__align">Planned Qty</th>
+          <th class="delivery__align">Issue Id</th>
+          <th class="proOrder__align">SlocId</th>
+         
+          
+      </tr>
+      <tr *ngFor="let item of this.dataProductPrint.lines; let i = index">
+          <td class="proOrder__align">{{i + 1}}</td>
+          <td  class="proOrder__align">{{item.itemCode}}</td>
+          <td  class="proOrder__align">{{item.description}}</td>
+          <td  class="proOrder__align">{{item.uomCode}}</td>
+          <td  class="delivery__align">{{item.baseQty}}</td>
+          <td  class="delivery__align">{{item.plannedQty}}</td>
+          <td  class="delivery__align">{{item.issueId}}</td>
+          <td  class="proOrder__align">{{item.slocId}}</td>
+        
+       
+         
+      </tr>
+      <!-- <tr>
+          <td class="proOrderPrint__sum" colspan="7">Sum: {{this.dataProductPrint.sumQuality | number}}</td>
+          <td class="proOrder__align" colspan="8">Sum: {{this.dataProductPrint.sumLineTotal | number}}</td>
+      </tr> -->
+  </table>
+</div>
+<div class="row mt-4" >
+  <div class="col-md-9">
+      </div>
+  <div class="col-md-3 ">
+      <span class="col-md-1 col-print-1 p-0"><b class="proOrder__fonts">Print date:</b></span>
+      <span class="col-md-10 col-print-10 proOrder__fonts" >{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+  </div>
+</div>
+<div class="row mt-5 mb-4">
+  <div class="col-md-10 col-print-10 text-right proOrder__fonts">Date:.....................................................</div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-print-6 text-center proOrderPrint__footer"><b>Store Manager</b></div>
+  <div class="col-md-6 col-print-6 text-center proOrderPrint__footer"><b>Transfer By</b></div>
+</div>
+
+  </ng-container>
+
+</div>
+</div>

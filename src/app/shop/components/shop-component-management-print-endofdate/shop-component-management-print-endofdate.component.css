@@ -1,0 +1,75 @@
+#customtable {
+    font-family: arial, sans-serif;
+    border: unset;
+    width: 100%;
+}
+
+#customtable>td,
+th {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+}
+
+#customtable>tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+#maintable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#maintable td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.table-main tr td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+#maintable tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+hr.style5 {
+    background-color: #fff;
+    border-top: 2px dashed #8c8b8b;
+}
+
+
+/* .page[size="A4"] {
+    width: 13cm;
+    height: 100%;
+} */
+
+#print-section {
+    width: 13cm;
+    height: 100%;
+}
+
+@media print {
+    #printPageShopCheck,
+    #txtTitlePayment {
+        display: none !important;
+    }
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    html,
+    body {
+        width: 210mm;
+        height: 297mm;
+    }
+    /* ... the rest of the rules ... */
+}

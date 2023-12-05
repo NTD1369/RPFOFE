@@ -1,0 +1,124 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class='row'>
+            <div class='col-md-4'>
+                <div class="search-wrap">
+                    <label for="item-searchbar" class="section-title">{{'Counter Client' | translate}}</label>
+
+                </div>
+            </div>
+            <div class='col-md-5'>
+
+            </div>
+            <div class='col-md-3'>
+
+            </div>
+        </div>
+
+        <div class="table-wrap mt-2 ">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 23vh)','overflow':'auto'}" id="gridContainer"  #dataGrid 
+            (onToolbarPreparing)="onToolbarPreparing($event)" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'"
+            (onSaved)="save($event)" (onRowRemoved)="remove($event)"
+            [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.list"
+            [showBorders]="true">
+            <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+            </dxo-editing>
+            <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before"></dxo-search-panel>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <!-- <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export> -->
+           
+
+            <ng-container *ngFor="let col of this.controlList; let i = index">
+                
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+                </dxi-column> 
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='date' " dataType="date" [format]="this.authService.loadFormat().dateFormat">
+                </dxi-column>
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'">
+                </dxi-column>
+                <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                    [format]='this.authService.numberFormat(col.custom2)'>
+                </dxi-column>
+            </ng-container>
+          
+            <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <!-- <dxi-column dataField="storeId" caption="{{'Store' | translate}}">
+                <dxo-lookup [dataSource]="this.storelist" displayExpr="storeName" valueExpr="storeId"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column> -->
+            <div *dxTemplate="let cell of 'statusTemplate'">
+                <div [innerHtml]="cell.data.status | statusFormat"></div>
+            </div>
+            <div *dxTemplate="let data of 'totalGroupCount'">
+                <dx-select-box style="min-width: 300px;" [searchEnabled]="true"
+                 [items]="this.storelist" placeholder="{{'Store' | translate}}" 
+                 displayExpr="storeName" valueExpr="storeId" 
+                 (onValueChanged)="selectStore($event)"></dx-select-box>
+            </div>
+        </dx-data-grid>
+
+
+<!-- 
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 23vh)','overflow':'auto'}" id="dataGrid" #dataGrid 
+            (onToolbarPreparing)="onToolbarPreparing($event)" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'"
+             (onSaved)="save($event)" (onRowRemoved)="remove($event)"
+                [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+                </dxo-editing>
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}" location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+ 
+                <dxi-column dataField="storeId" caption="{{'Store' | translate}}">
+                    <dxo-lookup [dataSource]="this.storelist" displayExpr="storeName" valueExpr="storeId"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="name" caption="{{'Name' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                <dxi-column dataField="localIP" caption="{{'Finger ID Browser' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                <dxi-column dataField="publicIP" caption="{{'Counter' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="fromDate" caption="{{'From Date' | translate}}" dataType="date"> </dxi-column>
+                <dxi-column dataField="toDate" caption="{{'To Date' | translate}}" dataType="date"> </dxi-column>
+                <dxi-column dataField="custom1" caption="{{'Custom F1' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom2" caption="{{'Custom F2' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom3" caption="{{'Custom F3' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom4" caption="{{'Custom F4' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom5" caption="{{'Custom F5' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                    <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+               
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let data of 'totalGroupCount'">
+                    <dx-select-box style="min-width: 300px;" [searchEnabled]="true"
+                     [items]="this.storelist" placeholder="{{'Store' | translate}}" 
+                     displayExpr="storeName" valueExpr="storeId" 
+                     (onValueChanged)="selectStore($event)"></dx-select-box>
+                </div>
+            </dx-data-grid> -->
+        </div>
+    </div>
+</div>
+
+<!-- <ng-template #template >
+<div class="modal-header">
+<h4 class="modal-title pull-left" id="my-modal-title">Currency</h4> 
+<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+<img src="../../../assets/images/System/times.svg">
+</button>
+</div>
+
+<div class="modal-body">
+<div class="row">
+ 
+<app-management-currency-edit [model]="this.model"  style="width: 100%" (outModel)="updateModel($event)"></app-management-currency-edit> 
+</div>
+</div>
+</ng-template>  -->

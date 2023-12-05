@@ -1,0 +1,58 @@
+
+
+.table-inventory-template td, .table-inventory-template th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table-inventory-template tr:nth-child(even){background-color: #f2f2f2;}
+
+.table-inventory-template tr:hover {background-color: #ddd;}
+
+.table-inventory-template th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+   
+.tbl > tr >td, .tbl > th {
+  border: 1px solid #fff;
+  text-align: left;
+  padding: 0px;
+}
+.tbl > tr:nth-child(even) {
+  background-color: #fff;
+}
+
+
+ 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tblLine > tr > td, .tblLine > th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.tblLine > tr:nth-child(even) {
+  background-color: #dddddd;
+}
+ 
+hr.style5 {
+    background-color: #fff;
+    border-top: 2px dashed #8c8b8b;
+}
+
+#inventoryPrint{
+  display: none;
+}
+
+@media print{
+  #inventoryPrint{
+    display: none;
+  }
+}

@@ -1,0 +1,94 @@
+
+<div *ngIf="!this.authService.loggedIn()">
+  <container *ngIf="!this.setupMode">
+    <app-login></app-login> 
+  </container> 
+  <container *ngIf="this.setupMode">
+      <app-setup-new-store></app-setup-new-store>
+  </container>
+</div>
+
+<h5 *ngIf="this.currentApplicationVersion?.length > 0" class="txtVersion" style="cursor: pointer;" id="txtVersionX" (click)="showChangelog()">
+  <ng-container >
+    V {{this.currentApplicationVersion}}
+  </ng-container>
+  <ng-container *ngIf="this.buidTime?.length > 0">
+    {{ buidTime}} 
+  </ng-container>
+  <ng-container *ngIf="this.dbAPIName?.length > 0">
+    {{ this.dbAPIName }} 
+  </ng-container>
+   
+  <ng-container *ngIf="this.pingResponseTime!== null && this.pingResponseTime!== undefined">
+    <span class="dot" [ngClass]="this.pingResponseTime < 500 ? 'success' : this.pingResponseTime < 1200 ? 'warning' : 'red'"></span> {{this.pingResponseTime}} ms
+  </ng-container>
+  
+</h5>
+<ng-container *ngIf="this.offLine!== true"> 
+  <ng-container *ngIf="(this.SystemCheck$ | async)">
+    <div  style="margin-top: 10%; text-align: center;">
+      <h2 style="color:red; font-weight: 600;">
+        <!-- System Checking... -->
+      </h2>
+    
+      <img src="../../../../assets/images/System/loading2.gif" style="    width: 15%;"> 
+      <h2>{{'Please wait a minute.' | translate}}.</h2>
+      <h2>{{'Thank you' | translate}}!!.</h2>
+      <h2 style="text-align: center; margin-top: 30px; color: red;">{{ timerDisplay }}</h2>
+      <!-- {{this.SystemCheck$ | async}} -->
+        
+       <!-- {{this.time}} -->
+   
+       
+   
+    </div>
+  
+  </ng-container>
+  <ng-container *ngIf="(this.SystemCheck$ | async) !== true">
+    <router-outlet *ngIf="this.authService.loggedIn()">
+   
+    </router-outlet>
+    <!-- color = "rgba(0,0,0,0)"-->
+    <ngx-spinner  size = "medium"  color = "#d91a1a" type = "line-scale-party" [fullScreen] = "true" bdColor = "rgba(0, 0, 0, 0.8)">
+          <!-- <app-shop-tool-loading2 ></app-shop-tool-loading2> -->
+    </ngx-spinner>
+    
+    <div class="systemNotify" *ngIf="this.showMessage">
+      <p id="pot">
+        <marquee>{{this.NotifyMessage}}</marquee>
+      </p>
+    </div>
+     
+    
+     <ng-container *ngIf="(shortcuts$ | async)?.length > 0 && enableShorcut==='true'" >
+    
+        <ng-keyboard-shortcuts  [shortcuts]="shortcuts$ | async"></ng-keyboard-shortcuts>
+        <ng-keyboard-shortcuts-help [key]="'`'"  [closeKey]="'escape'" [title]="'Help ' + (shortcuts$ | async)?.length "></ng-keyboard-shortcuts-help>   
+        
+     </ng-container>
+     
+  
+  </ng-container> 
+
+  
+</ng-container>
+<ng-container *ngIf="this.offLine"> 
+
+  <div class="panelLoadingVisible" >
+    <div  style="margin-top: 10%; text-align: center;"> 
+    
+      <img src="../../../../assets/images/System/Offline_logo.svg" > 
+      <br />
+      <h1 style="color: red;" class="mt-2">{{'Your are offline' | translate}}!!.</h1> 
+      <h2 style="margin-top: 10px;">{{ 'Please check your connection' | translate}}.</h2>
+      <!-- <h2 style="text-align: center; margin-top: 30px; color: red;">{{ timerDisplay }}</h2>
+    
+        -->
+   
+    </div>
+  </div>
+   
+</ng-container>
+
+
+ 

@@ -1,0 +1,15 @@
+<div class="cl-contain">
+    <div class="item-info" *ngFor="let item of this.model; let i = index">
+        <p class="title">{{item.itemName}}</p>
+        <div class="d-flex justify-content-center align-items-center">
+            <p class="price">{{item.priceAfterTax}} <span class="unit">VND/{{item.uomName}}</span></p>
+        </div>
+        <div class="">
+            <!-- <div class="cl-img"> <img width="100%" src="https://theme.hstatic.net/1000141988/1000751919/14/logo.png?v=114"></div> -->
+            <div class="cl-itemcode">{{item.itemCode}}</div>
+            <div class="cl-bc" id="cusBarcode">
+                <ngx-barcode6 [bc-format]="'CODE128'" [bc-font-size]="13" [bc-height]="45" [bc-background]="transparent" [bc-value]="item.barCode" [bc-display-value]="true"></ngx-barcode6>
+            </div>
+        </div>
+    </div>
+</div>

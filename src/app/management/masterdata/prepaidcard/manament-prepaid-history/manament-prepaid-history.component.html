@@ -1,0 +1,18 @@
+<dx-data-grid *ngIf="this.history!==null && this.history!==undefined && this.history.length > 0" 
+    [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.history"   [showRowLines]="true" [showBorders]="true">
+
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <!-- <dxi-column dataField="prepaidCardNo" caption="Card No" dataType="string">  </dxi-column> -->
+    <dxi-column dataField="mainBalance" caption="{{'Main Balance' | translate}}" [customizeText]="customizeText"> </dxi-column>
+    <dxi-column dataField="subBalance" caption="{{'Sub Balance' | translate}}" [customizeText]="customizeText"> </dxi-column>
+    <dxi-column dataField="transId" caption="{{'Trans ID' | translate}}"> </dxi-column>
+    <dxi-column dataField="createdOn" caption="{{'Date' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"> </dxi-column>
+    <dxo-summary [recalculateWhileEditing]="true">
+        <dxi-total-item column="mainBalance" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+
+        </dxi-total-item>
+        <dxi-total-item column="subBalance" summaryType="{{'sum' | translate}}" [customizeText]="customizeText"></dxi-total-item>
+    </dxo-summary>
+</dx-data-grid>

@@ -1,0 +1,216 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'General Setting' | translate}}</label>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3 left">
+                <dx-list class="list"  [style]="{'max-height':'calc(100vh - 28vh)','overflow':'auto'}" [dataSource]="dataSource" [grouped]="false" [searchEnabled]="true"[searchExpr]="['storeId', 'storeName']" selectionMode="single" [selectedItemKeys]="[currentStore?.storeId]" (onSelectionChanged)="listSelectionChanged($event)">
+                    <div *dxTemplate="let item of 'item'">
+                        <div>
+                            <div class="hotel">
+                                <div class="name">{{item?.storeId}}</div>
+                                <div class="name">{{item?.storeName}}</div>
+                                <div class="address">{{item?.address}}</div>
+                                <!-- <div class="type" [ngClass]="item.Hotel_Class.toLowerCase()"></div> -->
+                            </div>
+                            <!-- <div class="price-container">
+                        <div class="price">{{item.Price | currency:'USD':'symbol':'1.0-0'}}</div>
+                        <div class="caption">per<br>night</div>
+                    </div> -->
+                        </div>
+                    </div>
+                    <!-- <div *dxTemplate="let item of 'group'">
+                <div class="city">{{item.key}}</div>
+            </div> -->
+                </dx-list>
+            </div>
+            <div class="col-md-9 right">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="name-container">
+                                <div class="name">{{currentStore?.storeName}}</div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="price-container pt-0" *ngIf="currentStore!==null && currentStore!==undefined">
+
+                                <button class="primary-btn mr-2 " *ngIf="this.displayMode==='list'" style="height: 50px; width: 100%;" (click)="this.changeDisplayMode()">
+                    <i class="fas fa-list"></i>
+          
+                  </button>
+                                <button class="primary-btn mr-2 " *ngIf="this.displayMode!=='list'" style="height: 50px; width: 100%;" (click)="this.changeDisplayMode()">
+                      <i class="fas fa-th-large"></i>
+          
+                  </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- (onToolbarPreparing)="onToolbarPreparing($event)" -->
+                <dx-data-grid *ngIf="currentStore!==null && currentStore!==undefined && this.displayMode==='list'" [style]="{'max-height':'calc(100vh - 28vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.items" [showBorders]="true">
+
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column dataField="settingName" caption="{{'Setting Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="settingDescription" caption="{{'Setting Description' | translate}}" dataType="string"> </dxi-column>
+
+                    <dxi-column dataField="settingValue" caption="{{'Value' | translate}}" dataType="string"> </dxi-column>
+
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    </div>
+
+
+                </dx-data-grid>
+                <!--  -->
+                <ng-container *ngIf="this.updateSettingModel!==null && this.updateSettingModel!==undefined && this.displayMode!=='list'">
+                    <form [formGroup]="editForm" id="editForm" (ngSubmit)="update()" [style]="{'max-height':'calc(100vh - 28vh)','overflow':'auto'}">
+                        <div style="padding-bottom: 70px;" class="col-md-12">
+                            <div class="row">
+                                <ng-container *ngFor="let value of this.groupControlList">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <ng-container *ngFor="let item of value.arrayGroup">
+                                                <!-- *ngIf="checkPermission(item.settingId,'V')" -->
+                                                <!-- [attr.disabled]="isNew ? !checkPermission(item.settingId ,'I')?'disabled':null : !checkPermission(item.settingId,'E')?'disabled':null" -->
+                                                <div class="col-md-6 form-group">
+                                                   
+                                                    <label for="{{item.settingId}}">  {{item.settingDescription | translate}}</label>
+                                                    <input *ngIf="value.valueType==='TextBox'" class="form-control" id="{{item.settingId}}" 
+                                                    formControlName="{{item.settingId}}" name="{{item.settingId}}" 
+                                                    [(ngModel)]="this.updateSettingModel[item.settingId]">
+                                                    <dx-date-box name="{{item.settingId}}" [value]="this.updateSettingModel[item.settingId]" 
+                                                    [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"
+                                                     formControlName="{{item.settingId}}"
+                                                     [(ngModel)]="this.updateSettingModel[item.settingId]" *ngIf="value.valueType==='DateTime'"
+                                                        type="datetime">
+
+                                                    </dx-date-box>
+                                                  
+                                                    <!-- [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"> -->
+                                                    <dx-number-box name="{{item.settingId | translate}}" [value]="this.updateSettingModel[item.settingId]" 
+                                                        [format]="this.authService.formatNumberByPattern()" 
+                                                        formControlName="{{item.settingId}}" [(ngModel)]="this.updateSettingModel[item.settingId]" 
+                                                        *ngIf="value.valueType==='NumberBox'">
+                                                        
+                                                    </dx-number-box>
+                                                    <dx-date-box name="{{item.settingId}}" [value]="this.updateSettingModel[item.settingId]" 
+                                                    displayFormat="HH:mm:ss" formControlName="{{item.settingId}}"
+                                                     [(ngModel)]="this.updateSettingModel[item.settingId]" *ngIf="value.valueType==='Time'"
+                                                        type="time">
+
+                                                    </dx-date-box>
+                                                    <!-- && checkPermission(item.settingId,'V') -->
+                                                    <!-- [disabled]="isNew ? !checkPermission(item.settingId ,'I')?'disabled':null : !checkPermission(item.settingId ,'E')?'disabled':null" -->
+                                                    <ng-container *ngIf="value.valueType.toLowerCase() ==='checkbox'">
+                                                        <br />
+                                                        <dx-switch [(ngModel)]="this.updateSettingModel[item.settingId]"
+                                                         formControlName="{{item.settingId}}" name="{{item.settingId}}" [(value)]="this.updateSettingModel[item.settingId]">
+                                                        </dx-switch>
+                                                    </ng-container>
+                                                    <!-- *ngIf="  checkPermission(item.settingId,'V')"   [disabled]="isNew ? !checkPermission(item.settingId ,'I')?'disabled':null : !checkPermission(item.settingId ,'E')?'disabled':null"-->
+                                                    <dx-select-box *ngIf="value.valueType==='DropDown' " 
+                                                    [style]="{'width':'100%'}" formControlName="{{item.settingId}}"
+                                                     name="{{item.settingId}}" placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                                      [dataSource]="item.options"
+                                                        displayExpr="Name" valueExpr="Code" [(ngModel)]="this.updateSettingModel[item.settingId]" 
+                                                        [value]="this.updateSettingModel[item.settingId]"></dx-select-box>
+                                                    <!-- && checkPermission(item.settingId,'V')  [disabled]="isNew ? !checkPermission(item.settingId ,'I')?'disabled':null : !checkPermission(item.settingId ,'E')?'disabled':null"-->
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div style="position: absolute; bottom: 0px;right: 30px;" class="col-md-12 text-right">
+                            <!-- [disabled]="!editForm.dirty" *ngIf="checkPermission('btnSave' ,'V')" -->
+
+                            <button [disabled]="!editForm.valid || !editForm.dirty" form="editForm" class="btn-agree width-200 height-60" [ngClass]="(!editForm.valid || !editForm.dirty) ? 'disableCustom': ''">{{'Save Changes' | translate}}</button>
+                        </div>
+
+                    </form>
+                    <!-- <form [formGroup]="editForm" id="editForm"  (ngSubmit)="update()">
+              <div class="col-md-12">
+                  <div class="row">
+                      <ng-container *ngFor="let item of this.controlList">
+                       
+                          <div class="col-md-6 form-group">
+                           
+                              <label for="{{item.settingId}}"> {{item.settingDescription}}</label>
+                              <input *ngIf="item.valueType==='TextBox'" class="form-control" id="{{item.settingId}}"  
+                              formGroupName="{{item.settingId}}"
+                                formControlName="{{item.settingId}}" name="{{item.settingId}}" [(ngModel)]="this.updateSettingModel[item.settingId]">
+                                 
+                              <dx-date-box name="{{item.settingId}}"  [(value)]="this.updateSettingModel[item.settingId]"  displayFormat="dd/MM/yyyy HH:mm:ss" 
+                              formGroupName="{{item.settingId}}" formControlName="{{item.settingId}}" formsettingId="{{item.settingId}}"  [(ngModel)]="this.updateSettingModel[item.settingId]" *ngIf="item.valueType==='DateTime'"
+                                  type="datetime" >
+          
+                              </dx-date-box>
+                             <ng-container *ngIf="item.valueType==='CheckBox'" >
+                               <br>
+                                <dx-switch formGroupName="{{item.settingId}}" formControlName="{{item.settingId}}"  formsettingId="{{item.settingId}}"
+                                name="{{item.settingId}}" 
+                              [(value)]="this.updateSettingModel[item.settingId]"  [(ngModel)]="this.updateSettingModel[item.settingId]"
+                              ></dx-switch>
+                             </ng-container>
+                             
+                              
+                              <dx-select-box *ngIf="item.valueType==='DropDown' " [style]="{'width':'100%'}" 
+                              formGroupName="{{item.settingId}}" formControlName="{{item.settingId}}"  formsettingId="{{item.settingId}}"  name="{{item.settingId}}" 
+                                  placeholder="--- Select {{item.settingId}} ---" [dataSource]="item.options"
+                                  displayExpr="Name" valueExpr="Code"   [(value)]="this.updateSettingModel[item.settingId]" >
+                              </dx-select-box>
+                               
+          
+                          </div>
+                      </ng-container>
+                  </div>
+              </div>
+          
+              <div class="col-md-12 text-right">
+ 
+                  <button form="editForm" class="btn-agree width-200 height-60">Save Changes</button>
+              </div>
+            </form>
+           -->
+                </ng-container>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'General Setting' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-general-setting-edit [model]="this.model" style="width: 100%" (outModel)="updateModel($event)"></app-management-general-setting-edit>
+            <!-- <app-management-masterdata-uom-edit [model]="this.uom" style="width: 100%" (outModel)="updateModel($event)"></app-management-masterdata-uom-edit> -->
+
+        </div>
+    </div>
+</ng-template>

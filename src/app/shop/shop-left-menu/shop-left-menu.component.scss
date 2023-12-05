@@ -1,0 +1,60 @@
+#testPop {
+    left: 0% !important;
+}
+
+.voucherDisplay {
+    padding: 15px 10px;
+    border: 1px solid #c6c5cb;
+    height: 60px;
+    width: 100% !important;
+    border-radius: 10px;
+    display: grid;
+}
+
+.modal .modal-body .grey-wrapper {}
+
+.dx-overlay-content .dx-popup-content>.dx-template-wrapper {
+    height: 100%!important;
+    position: absolute!important;
+    width: 98%!important;
+}
+
+.dx-overlay-content .dx-popup-content {
+    position: absolute!important;
+}
+
+.dx-popup-content {
+    position: absolute!important;
+}
+
+.dx-button-mode-contained .dx-icon {
+    color: white !important;
+}
+
+.dx-button-has-text .dx-icon {
+    color: white !important;
+}
+
+.dx-icon {
+    color: white!important;
+}
+
+.submit-btn:hover {
+    background-color: white!important;
+    border: 2px solid #01a572!important;
+    color: #01a572!important;
+}
+
+#discount-modal .modal-body .left-modal-section .discount-modal-table .t-cell.cell-desc {
+    max-width: none;
+    min-width: 40%;
+}
+
+@media print {
+    #billPrint {
+        display: none;
+    }
+    #orderPrint {
+        display: block;
+    }
+}

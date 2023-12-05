@@ -1,0 +1,52 @@
+<div id='invoice-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{this.title | translate}} <span class="red mt-2" style="font-size: 12px;"> (*) {{'The system only allows return and exchange of retail items' | translate}}</span></h4>
+        <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button> -->
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 35vh)','overflow':'auto'}" 
+                id="gridContainer" [focusedRowEnabled]="true" keyExpr="baseLine" #dataGrid
+                 [allowColumnResizing]="true" [columnAutoWidth]="true" [dataSource]="this.items" [showBorders]="true">
+                    <!-- rowTemplate="rowTemplateName" -->
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before"></dxo-search-panel>
+                    <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                    <dxi-column dataField="baseLine"   sortOrder="asc" caption="Base Line" dataType="number"> </dxi-column>
+                    <dxi-column dataField="id" caption="Item Code" dataType="string"> </dxi-column>
+                    <dxi-column dataField="productName" caption="Name" dataType="string"> </dxi-column>
+                    <dxi-column dataField="barcode" caption="Barcode" dataType="string"> </dxi-column>
+                    <dxi-column dataField="uom" caption="UoM" dataType="string"></dxi-column>
+                    <dxi-column dataField="price" caption="Price" dataType="number" [format]="this.authService.numberFormat('amount')"> </dxi-column>
+                    <dxi-column dataField="quantity" caption="Quantity"  dataType="number"  [format]="this.authService.numberFormat('quantity')"></dxi-column>
+                    <dxi-column dataField="openQty" caption="Open Quantity"  dataType="number"  [format]="this.authService.numberFormat('quantity')"></dxi-column>
+                </dx-data-grid>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row " style="width: 100%;">
+            <div class="col-md-6">
+                <dx-button class="button-height" icon="add" (onClick)="commitEvent(false)" stylingMode="outlined" type="warning" text="New Order">
+                </dx-button>
+                <!-- <dx-button class="button-height ml-2" icon="add" (onClick)="commitEvent(false)" stylingMode="outlined" type="warning" text="All item">
+                </dx-button> -->
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <dx-button class="button-height" icon="check" (onClick)="commitEvent(true)" type="success" text="Ok">
+                </dx-button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

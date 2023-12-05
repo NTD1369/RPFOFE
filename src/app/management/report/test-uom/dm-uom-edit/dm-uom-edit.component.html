@@ -1,0 +1,74 @@
+
+
+
+<button  class="btn-agree width-200 height-50 mt-4 ml-3" (click)="taoMoiModal(template,null)" >Tạo mới</button>
+<dx-data-grid
+  id="gridContainer"
+  style="padding:20px"
+
+  [dataSource]="listData"
+  [remoteOperations]="false"
+  [allowColumnReordering]="true"
+  [rowAlternationEnabled]="true"
+  [showBorders]="true"
+>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[10, 25, 50, 100]"
+  ></dxo-pager>
+  <dxo-search-panel
+    [visible]="true"
+    [highlightCaseSensitive]="true"
+  ></dxo-search-panel>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+  <dxi-column
+    dataField="uomCode"
+    caption="Uom Code"
+  ></dxi-column>
+  <dxi-column
+    caption="Company Code"
+    dataField="companyCode"
+    [allowGrouping]="false"
+    cssClass="bullet"
+  ></dxi-column>
+  <dxi-column dataField="uomName" dataType="string"></dxi-column>
+  <dxi-column dataField="createdOn" dataType="date"></dxi-column>
+  <dxi-column dataField="createdBy" dataType="string"></dxi-column>
+  <dxi-column cellTemplate="cellTemplate"></dxi-column>
+  <div *dxTemplate="let cell of 'cellTemplate'">
+    <!-- cell.data lấy dữ liệu ở hàng "view" đúng khi show model -->
+    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="taoMoiModal(template,cell.data)"></dx-button>
+    <dx-button icon="fas fa-eye" text="{{'Delete' | translate}}" (onClick)="this.delele(cell.data)"></dx-button>
+</div>
+  <ng-template #template >
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'UoM' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+  <!-- nếu muốn thị code, name, status ở view thì dùng [value]="this.uom.uomCode,name,status" -->
+    <div class="modal-body">
+        <div class="row">
+          <div class="col-4 mt-2">
+           <h4> Uom code</h4>
+            <input style="width: 100%;height: 61%;" #txtUomCode [value]="this.uom?.uomCode">
+          </div>
+          <div class="col-4  mt-2">
+            <h4> Uom name</h4>
+            <input style="width: 100%;height: 61%" #txtUomName [value]="this.uom?.uomName">
+          </div>
+          <div class="col-4  mt-2">
+            <h4>Status</h4>
+            <dx-select-box #cbbstatus [value]="this.uom?.status"  [items]="listStatus" displayExpr="name" valueExpr="value" 
+            placeholder="Active"></dx-select-box>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top: 15px;">
+          <button  (click)="saveModal(txtUomCode.value,txtUomName.value,cbbstatus.value)" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+        </div>
+    </div>
+</ng-template>
+</dx-data-grid>

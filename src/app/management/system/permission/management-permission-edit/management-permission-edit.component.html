@@ -1,0 +1,23 @@
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="functionId">{{'Function' | translate}} </label>
+            <input class="form-control" id="functionId" disabled="disabled" formControlName="functionId" name="functionId" [(ngModel)]="model.functionId">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="controlId">{{'Control' | translate}} </label>
+            <input class="form-control" id="controlId" formControlName="controlId" name="controlId" [(ngModel)]="model.controlId">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="permissions">{{'Permission' | translate}}</label>
+            <input class="form-control" name="permissions" id="permissions" formControlName="permissions" [(ngModel)]="model.permissions">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="status" class="mr-2">{{'Status' | translate}}</label>
+            <p-dropdown [options]="statusOptions" formControlName="status" name="status" [(ngModel)]="model.status" optionLabel="name" optionValue="value"></p-dropdown>
+        </div>
+    </div>
+
+    <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">{{'Save Changes' | translate}}</button>
+</form>

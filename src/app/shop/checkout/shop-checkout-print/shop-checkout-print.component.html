@@ -1,0 +1,176 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+    /* .textRightPrint {} */
+</style>
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto; width:100%">
+        <!-- <dx-button
+   class="send"
+   icon="print"
+   text="Send"
+   (onClick)="sendClick()">
+</dx-button> -->
+        <div class="row">
+            <!-- <div class="col-md-12 text-right"><button class="btn button-filter mb-2" printSectionId="print-section" ngxPrint
+          [useExistingCss]="true">Print</button> </div> -->
+            <div class="col-md-12 text-right">
+                <!-- <dx-button class="btn-search" icon="fa fa-print" text="Print" id="printPageShopCheck" (onClick)="PrintPage()"></dx-button> -->
+                <button class="btn-search" (click)="PrintPage()" id="printPageShopCheck" style="padding: 10px 30px"><i
+            class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+            </div>
+        </div>
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div #funnel id="print-section">
+                    <ng-container>
+                        <div>
+                            <!-- <ngx-barcode6
+                [bc-format]="'CODE128'"
+                [bc-value]="this.invoice?.transId"
+                [bc-display-value]="false"
+              >
+              </ngx-barcode6> -->
+                            <h2 style="text-align: center; font-weight: 500;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h2>
+                            <H3 style="text-align: center; font-weight: 500;">Độc lập - Tự do - Hạnh phúc</H3>
+                            <br>
+                            <h3 style="text-align: center; font-weight: 500;">BIÊN BẢN XÁC NHẬN SỐ LƯỢNG</h3>
+                            <!-- 
+                <p> <label class="textTitlePrint" >Mã đơn hàng: </label>  {{this.invoice?.transId}}</p>
+                <p> <label class="textTitlePrint">Ngày: </label> {{this.invoice?.createdOn | date : "yyyy-MM-dd HH:mm:ss"}}</p>
+                <p> <label class="textTitlePrint">Cửa hàng: </label> {{this.invoice?.storeId}} </p> -->
+                            <!-- <p> <label class="textTitlePrint">Create By: </label> {{this.invoice?.createdBy}}</p> -->
+                            <!-- <p> <label class="textTitlePrint">Open Amount: </label> {{this.invoice?.openAmt}}</p>
+                <p> <label class="textTitlePrint">End Amount: </label> {{this.invoice?.endAmt}}</p> -->
+                            <br>
+                        </div>
+                        <!-- <hr class="style5"> -->
+                        <p style="font-size: 25px;">Hôm nay ngày: {{this.invoice?.createdOn | date : "dd-MM-yyyy"}}. Chúng tôi gồm:
+                        </p>
+                        <p style="font-size: 25px;">Đại diện Jump Arena: ............................................ Chức vụ:........... </p>
+                        <p style="font-size: 25px;">Đại diện {{this.invoice?.cusName }} ................................ Chức vụ:...........</p>
+
+                        <p style="font-size: 25px;">Nội dung: {{this.invoice?.storeName}} có bàn giao cho {{this.invoice?.cusName }} tổng cộng là: {{ this.totalQty | number }} </p>
+
+                        <br>
+                        <!-- <hr class="style5"> -->
+                        <table class="tblLine">
+                            <tr>
+                                <th>
+                                    <p style="font-size: 25px; text-align: center"> STT </p>
+                                </th>
+                                <th>
+                                    <p style="font-size: 25px;"> {{'Mô tả' | translate}} </p>
+                                </th>
+                                <th>
+                                    <p style="font-size: 25px; text-align: center"> {{'Số lượng' | translate}} </p>
+                                </th>
+                                <th>
+                                    <p style="font-size: 25px; text-align: right"> {{'Số tiền' | translate}} </p>
+                                </th>
+                            </tr>
+                            <tr *ngFor="let item of this.invoice?.lines; let i = index">
+                                <td style="text-align: center;">
+                                    <label>
+                    <p style="font-size: 25px;"> {{(i + 1)}} </p>
+                  </label>
+                                </td>
+                                <td>
+                                    <label>
+                    <p style="font-size: 25px;"> {{item.itemName}} </p>
+                  </label>
+                                </td>
+                                <td style="text-align: center;">
+                                    <label>
+                    <p style="font-size: 25px;"> {{item.checkedQty | number}} </p>
+
+                  </label>
+                                </td>
+                                <td style="text-align: right;">
+                                    <label>
+                    <p style="font-size: 25px;"> {{item.lineTotal | number}} </p>
+
+                  </label>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <hr>
+                        <p style="font-size: 25px;"> Biên bản được lập thành 2 bản. Mỗi bên giữ một bản và có giá trị như nhau.</p>
+
+                        <br>
+                        <br>
+                        <table class="tbl">
+                            <tr>
+                                <th style="text-align: center;">
+                                    <p style="font-size: 25px;">{{' Đại diện trung tâm ' | translate}}</p>
+                                </th>
+
+                                <th style="text-align: center;">
+                                    <p style="font-size: 25px;"> {{'Đại diện khách hàng' | translate}}</p>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+
+                                <td>
+                                    <label>
+
+                  </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </ng-container>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

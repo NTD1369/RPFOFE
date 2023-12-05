@@ -1,0 +1,15 @@
+<span class="grey" (click)="themeService.selectTheme('light')">
+  <i  [ngClass]="{'far fa-check-circle': themeService.getCurrentTheme()==='light', 'fas fa-ban': themeService.getCurrentTheme()!=='light' }"></i>
+</span> 
+
+<span class="red" (click)="themeService.selectTheme('dark')" >
+  <i  [ngClass]="{'far fa-check-circle': themeService.getCurrentTheme()==='dark', 'fas fa-ban': themeService.getCurrentTheme()!=='dark' }"></i>
+</span> 
+<!-- <i class="far fa-check-circle"></i> -->
+<!-- *ngIf="themeService.getCurrentTheme()==='dark'" -->
+
+<!-- <span class="blue"> - </span> 
+
+<span class="green">-</span> 
+
+<span class="pink">-</span>  -->

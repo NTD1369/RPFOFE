@@ -1,0 +1,238 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-1">
+                        <a routerLink="/admin/goodissue" class="back-btn">
+                            <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
+
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                        <label for="item-searchbar" class="section-title">{{'Detail Promotion' | translate}}</label>
+                        <!-- <label for="item-searchbar" *ngIf="this.mode!=='e'" class="section-title">Create Goods Issue</label>  -->
+                    </div>
+                    <!-- a.back-btn svg -->
+
+
+                </div>
+                <div class="item-search-nav">
+                    <div class="row col-md-12">
+                        <div class="col-md-6 row">
+
+
+                            <dx-text-box class="col-md-3" [readOnly]="true" [(value)]="this.promotion.promoId"></dx-text-box>
+                            <dx-text-box class="col-md-9" [(value)]="this.promotion.promoName"></dx-text-box>
+
+                        </div>
+                        <div class="col-md-6" style="text-align: right;">
+                            <!-- <dx-button class="mr-2" icon="search" type="success" text="Find"></dx-button> -->
+                            <dx-button class="mr-2" (onClick)="addNewPromotion()" icon="add" type="success" text="New"></dx-button>
+                            <dx-button class="mr-2" (onClick)="savePromotion()" icon="floppy" type="success" text="Save"></dx-button>
+                            <dx-button class="mr-2" icon="copy" type="success" text="Coppy promotion"></dx-button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <dx-select-box [items]="promtionType" [(value)]="this.promotion.promoType" displayExpr="typeName" valueExpr="promoType" placeholder="Choose promotion type"></dx-select-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-check-box [(value)]="this.isActive" class="mr-2" text="Active"></dx-check-box>
+                        <dx-check-box [(value)]="this.isCombine" text="Combine"></dx-check-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-select-box [items]="customerType" [(value)]="this.promotion.customerType" displayExpr="name" valueExpr="value" placeholder="Choose customer"></dx-select-box>
+                    </div>
+                    <div class="col-md-5">
+                        <dx-text-box [(value)]="this.CustomerSelected"></dx-text-box>
+                    </div>
+                    <div class="col-md-1">
+                        <dx-button icon="search" (onClick)="openModal(template)"></dx-button>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <dx-date-box #fromCalendar id="fromCalendar" [(value)]="this.promotion.validDateFrom"> </dx-date-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-date-box #toCalendar id="toCalendar" [(value)]="this.promotion.validDateTo"> </dx-date-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-date-box #fromTime type="time" id="toCalendar" [(value)]="this.validTimeFrom"> </dx-date-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-date-box #toTime type="time" id="toCalendar" [(value)]="this.validTimeTo"> </dx-date-box>
+                    </div>
+                    <div class="col-md-4">
+                        <dx-check-box [(value)]="this.isMon" class="mr-2" text="Mo"></dx-check-box>
+                        <dx-check-box [(value)]="this.isTue" class="mr-2" text="Tu"></dx-check-box>
+                        <dx-check-box [(value)]="this.isWed" class="mr-2" text="We"></dx-check-box>
+                        <dx-check-box [(value)]="this.isThu" class="mr-2" text="Th"></dx-check-box>
+                        <dx-check-box [(value)]="this.isFri" class="mr-2" text="Fr"></dx-check-box>
+                        <dx-check-box [(value)]="this.isSat" class="mr-2" text="Sa"></dx-check-box>
+                        <dx-check-box [(value)]="this.isSun" class="mr-2" text="Su"></dx-check-box>
+                    </div>
+
+                </div>
+                <dx-tab-panel class="mt-2">
+                    <dxi-item title="Buy" class="mt-2">
+                        <dxo-label location="left" alignment="right">
+                            <!-- or "left" | "center" -->
+                        </dxo-label>
+                        <div class="row ">
+                            <div class="col-md-6">
+
+                                <dx-button class="mr-2" (onClick)="addRowBuy()" icon="add" text="Add Row"> </dx-button>
+                                <dx-button class="mr-2" icon="close" text="Delete Row"> </dx-button>
+                            </div>
+                            <div class="col-md-2" style="text-align: right;">
+                                <label style="vertical-align:middle;">{{'Total' | translate}}</label>
+                            </div>
+                            <div class="col-md-2">
+                                <dx-text-box value="0"></dx-text-box>
+                            </div>
+                            <div class="col-md-2">
+                                <dx-text-box value="0"></dx-text-box>
+                            </div>
+
+                        </div>
+                        <div class="table-wrap mt-2 mb-2">
+                            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.buyLines" keyExpr="lineNum" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                                <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
+                                </dxo-editing>
+                                <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"></dxi-column>
+                                <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+                                <dxi-column alignment="center" dataField="lineType" caption="line Type" [minWidth]="120">
+                                    <dxo-lookup [dataSource]="this.lineType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <dxi-column dataField="keyId" caption="Line Code" editCellTemplate="singleDropDownBoxEditor">
+                                    <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <dxi-column dataField="lineCode" [visible]="false" caption="Line Code"></dxi-column>
+                                <dxi-column dataField="lineName" caption="Line Name"></dxi-column>
+                                <dxi-column dataField="lineUom" caption="Line Uom"></dxi-column>
+                                <dxi-column dataField="valueType" caption="Value Type"></dxi-column>
+                                <dxi-column dataField="condition1" caption="Condition 1"></dxi-column>
+                                <dxi-column dataField="value1" caption="Value 1"></dxi-column>
+                                <dxi-column dataField="condition2" caption="Condition 2"></dxi-column>
+                                <dxi-column dataField="value2" caption="Value 2"></dxi-column>
+                                <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+                                    <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true"
+                                                [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemBuySelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+
+                                                <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                                <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                                <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+                    </dxi-item>
+                    <dxi-item title="Get" class="mt-2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dx-button class="mr-2" icon="add" (onClick)="addRowGet()" text="Add Row"> </dx-button>
+                                <dx-button class="mr-2" icon="close" text="Delete Row"> </dx-button>
+                            </div>
+                            <div class="col-md-2" style="text-align: right;">
+                                <label style="vertical-align:middle;">Discount</label>
+                            </div>
+                            <div class="col-md-2">
+                                <dx-select-box [items]="discountType" displayExpr="name" valueExpr="value" placeholder="Disount Type"></dx-select-box>
+                            </div>
+                            <div class="col-md-2">
+                                <dx-text-box value="0"></dx-text-box>
+                            </div>
+
+                        </div>
+                        <div class="table-wrap mt-2 mb-2">
+                            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #gett id="controlList" [dataSource]="this.getLines" keyExpr="lineNum" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                                <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true">
+                                </dxo-editing>
+                                <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"></dxi-column>
+                                <dxi-column alignment="center" dataField="lineType" caption="line Type" [minWidth]="120">
+                                    <dxo-lookup [dataSource]="this.lineType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <dxi-column dataField="keyId" caption="Line Code" editCellTemplate="singleDropDownBoxEditor">
+                                    <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                                </dxi-column>
+                                <!-- <dxi-column dataField="lineCode" [allowEditing]="false" caption="Line Code"  >
+
+            </dxi-column> -->
+                                <dxi-column dataField="lineCode" [visible]="false" caption="Line Code"></dxi-column>
+                                <dxi-column dataField="lineName" caption="Line Name"></dxi-column>
+                                <dxi-column dataField="lineUom" caption="Line Uom"></dxi-column>
+                                <dxi-column dataField="valueType" caption="Value Type"></dxi-column>
+                                <dxi-column dataField="condition1" caption="Condition 1"></dxi-column>
+                                <dxi-column dataField="value1" caption="Value 1"></dxi-column>
+                                <dxi-column dataField="condition2" caption="Condition 2"></dxi-column>
+                                <dxi-column dataField="value2" caption="Value 2"></dxi-column>
+
+
+                                <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+                                    <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true"
+                                                [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemGetSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+
+
+                                                <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                                <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                                <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+                                <!-- <ng-container  *ngFor="let col of cols; let i = index"  >
+              <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i === 0"></dxi-column>
+              <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i !== 0" alignment="center"
+              cellTemplate="toggleCellTemplate"> 
+              </dxi-column>
+            </ng-container> 
+            <div *dxTemplate="let d of 'toggleCellTemplate'">
+            
+            </div> -->
+
+                            </dx-data-grid>
+                        </div>
+                    </dxi-item>
+                </dx-tab-panel>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer Search' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <!-- <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment> -->
+        <app-management-promotion-customer (customersSelected)="updateCustomerSelected($event)"></app-management-promotion-customer>
+    </div>
+</ng-template>

@@ -1,0 +1,54 @@
+<!-- <div class="blog-slider "   >
+    <div class="blog-slider__wrp swiper-wrapper">
+      <div class="blog-slider__item swiper-slide">
+        <div class="blog-slider__img">
+          <img   src="../../../../assets/images/System/setup.svg" alt="New Order">
+        </div>
+        <div class="blog-slider__content">
+          <span class="blog-slider__code">{{store.storeId}}</span>
+          <div class="blog-slider__title">{{store.storeName}}</div>
+          <div class="blog-slider__text">{{store.address}}</div>
+          <button  style="cursor: pointer; width: 100%;" class=" submit-btn button-select" (click)="selectStore()" >{{'Select' | translate}}</button>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div> -->
+
+<div class="blog-sider-common Header" [ngClass]="{ rowLock : index === this.hoverStore}" (click)="selectStore()">
+
+    <div class="blog-slider-store" style="background-image: url('../../../../assets/images/items/Picture6.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
+        <div class="blog-slider-store-background">
+        </div>
+    </div>
+    <div class="infomation">
+        <div class="row h-100">
+            <div class="col-md-12">
+                <h2 class="title"><b>{{store.storeName}}</b></h2>
+                <div class="address">{{store.address}}</div>
+                <div class="code" *ngIf="index !== this.hoverStore">
+                    {{store.storeId}}
+
+
+                </div>
+                <div class="code" *ngIf="index === this.hoverStore">
+
+                    <div class="item">
+                        <button> 
+                      <i class="far fa-hand-point-right arrow1"></i>
+                      {{store.storeId}}
+                      <!-- <i class="fa fa-long-arrow-right arrow1" aria-hidden="true"></i> -->
+                    </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- <div class="col-md-3 blog-slider-store-img d-none">
+        <img src="../../../../assets/images/System/shops.svg" alt="New Order">
+      </div> -->
+        </div>
+    </div>
+</div>

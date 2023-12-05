@@ -1,0 +1,99 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="item-searchbar" class="section-title"> {{'Goods Return' | translate}}</label>
+            </div>
+            <div class="col-md-8" style="text-align: right;">
+                <span class="section-title color-primary pr-2" style="cursor: pointer;" (click)="filterbills('All')">
+                    <span class="count-name"  >  {{'Total' | translate}}</span>
+                <span class="count-numbers">({{this.totalBill | number}})</span>
+                </span>
+                <ng-container *ngIf="this.openBill!==0">
+                    |
+                    <span class="section-title  pr-2" [ngClass]="this.selectType==='O' ? ' statusSelected  color-info':''" style="cursor: pointer;" (click)="filterbills('O')">
+                    <span class="count-name"  >  {{'Open' | translate}}</span>
+                    <span class="count-numbers">({{this.openBill | number}})</span>
+                    </span>
+                </ng-container>
+
+                <ng-container *ngIf="this.closedBill!==0">
+                    |
+                    <span class="section-title  pr-2" [ngClass]="this.selectType==='C' ? ' statusSelected  color-success':''" style="cursor: pointer;" (click)="filterbills('C')">
+                        <span class="count-name" >  {{'Closed' | translate}}</span>
+                    <span class="count-numbers">({{this.closedBill | number}})</span>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="this.cancelBill!==0">
+                    |
+                    <span class="section-title" [ngClass]="this.selectType==='N' ? ' statusSelected  color-danger':''" style="cursor: pointer;" (click)="filterbills('N')">
+                        <span class="count-name" >  {{'Canceled' | translate}}</span>
+                    <span class="count-numbers">({{this.cancelBill | number}})</span>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                {{'From Date' | translate}}
+                <dx-date-box #fromCalendar id="fromCalendar" [value]="this.fromdate" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2">
+                {{'To Date' | translate}}
+                <dx-date-box #toCalendar id="fromCalendar" [value]="this.todate" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+
+            </div>
+            <div class="col-md-2">
+                {{'Status' | translate}}
+                <dx-select-box #cbbStatus [value]="statusOptions[0].value" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+            </div>
+            <div class="col-md-3">
+                {{'Bill No' | translate}}
+                <dx-text-box #transId></dx-text-box>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <dx-button class="mr-2 mt-3" style="width:60%" icon="fas fa-eye" type="success" (onClick)="loadList()" text="{{'View' | translate}}"></dx-button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.list" (onToolbarPreparing)="onToolbarPreparing($event)" keyExpr="purchaseId" [showRowLines]="true" [allowColumnResizing]="true" [showRowLines]="true"
+                [showBorders]="true" [columnAutoWidth]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <!-- <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"  ></dxi-column> -->
+                <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+
+                <dxi-column dataField="purchaseId" caption="{{'Purchase ID' | translate}}"></dxi-column>
+                <dxi-column dataField="cardCode" caption="{{'Card Code' | translate}}" [calculateCellValue]="cardNameColumn_calculateCellValue">
+                </dxi-column>
+                <dxi-column dataField="invoiceAddress" caption="{{'Invoice Address' | translate}}"></dxi-column>
+                <!-- <dxi-column dataField="refTransId" caption="{{'Good Receipt PO Reference' | translate}}"></dxi-column> -->
+                <dxi-column dataField="docTotal" caption="{{'Doc Total' | translate}}" [customizeText]="customizeText"></dxi-column>
+                <dxi-column dataField="sapNo" caption="{{'SAP No' | translate}}"></dxi-column>
+                <dxi-column dataField="grpoNo" caption="{{'GPFO No' | translate}}"></dxi-column>
+                <dxi-column dataField="refPurchaseID" caption="{{'BaseEntry' | translate}}"></dxi-column>
+                <dxi-column dataField="objType" caption="{{'Object Type' | translate}}"></dxi-column>
+                <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+                <dxi-column dataField="createdOn" caption="{{'Created On' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"></dxi-column>
+                <dxi-column dataField="createdBy" caption="{{'Created By' | translate}}"></dxi-column>
+                <dxi-column alignment="center" dataField="docStatus" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.docStatus | statusFormat"></div>
+                </div>
+                <!-- <div *dxTemplate="let cell of 'usedTemplate'">
+                    <div [innerHtml]="cell.data.isUsed | statusFormat"></div>
+                </div> -->
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let data of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="viewDetail(data)"></dx-button>
+                    <dx-button icon="fa fa-print" text="{{'Print' | translate}}" (onClick)="PrintDetail(data.data)"></dx-button>
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,461 @@
+<main class="wrap">
+    <div class="container-fluid">
+        <div class="main-section">
+            <div class="card p-3">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <app-upload-image [CompanyCode]="this.item?.companyCode" [ItemCode]="this.item?.itemCode" [ImagePath]="this.item?.imageUrl"></app-upload-image>
+
+                        <div class="card-body">
+                            <div>
+                                <strong>{{'Name' | translate}}:</strong>
+                                <p>{{this.item?.itemName}}</p>
+                            </div>
+                            <div>
+                                <strong>{{'Item Code' | translate}}:</strong>
+                                <p>{{item?.itemCode}}</p>
+                            </div>
+
+                            <div>
+                                <strong>{{'Created Date' | translate}}:</strong>
+                                <p>{{item?.createdOn | date: 'mediumDate'}}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+
+
+                            <button form="editForm" *ngIf="this.canUpdate" [disabled]="!editForm.dirty" class="btn btn-success btn-block">{{'Save Changes' | translate}}</button>
+                            <button form="editForm" *ngIf="!this.canUpdate" class="btn btn-success btn-block">{{'Permmission Denied' | translate}}</button>
+                            <ng-container *ngIf="this.itemListing!==null && this.itemListing!==undefined && this.itemListing.length > 0">
+                                <h3 class="mt-3">{{'Store Listing' | translate}}</h3>
+                                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.itemListing" [showBorders]="true">
+
+                                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                    <dxo-search-panel [visible]="true" [width]="340" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    <dxi-column dataField="storeId" caption="{{'Store ID' | translate}}" dataType="string"> </dxi-column>
+                                    <dxi-column dataField="storeName" caption="{{'Store Name' | translate}}" dataType="string"> </dxi-column>
+
+                                    <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                                    <div *dxTemplate="let cell of 'statusTemplate'">
+                                        <dx-switch width="20%" alignment="center" [disabled]="!this.canUpdate" (onValueChanged)="updateListing(cell.data)" [(value)]="cell.data.statusTemp">
+                                        </dx-switch>
+
+                                    </div>
+
+                                </dx-data-grid>
+
+                            </ng-container>
+
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div *ngIf="editForm.dirty" class="alert alert-info">
+                            <strong>{{'Information' | translate}}:</strong> {{'You have made changes. Any unsaved changes will be lost!' | translate}}
+                        </div>
+                        <div class="row">
+                            <div class="tab-panel col-md-12">
+                                <tabset class="member-tabset">
+                                    <tab class=" mt-3" heading="Item Information">
+                                        <form #editForm="ngForm" id="editForm" (ngSubmit)="updateItem()">
+                                            <div class="form-group">
+                                                <label for="itemName">{{'Item Name' | translate}} </label>
+                                                <input class="form-control" id="itemName" name="itemName" rows="6" [(value)]="item.itemName">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description">{{'Description' | translate}}</label>
+                                                <input class="form-control" name="description" rows="6" [(value)]="item.itemDescription">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="foreignName">{{'Foreign Name' | translate}}</label>
+                                                <input class="form-control" name="foreignName" rows="6" [(ngModel)]="item.foreignName" [(value)]="item.foreignName">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="defaultPrice">{{'Default Price' | translate}}</label>
+                                                <input class="form-control" name="defaultPrice" rows="6" [(value)]="item.defaultPrice">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="capacityValue">{{'Capacity Value' | translate}}</label>
+                                                <input class="form-control" name="capacityValue" rows="6" [(value)]="item.capacityValue">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="voucherCollection">{{'Voucher Collection' | translate}}</label>
+                                                <input class="form-control" name="voucherCollection" rows="6" [(value)]="item.voucherCollection">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inventoryUom">{{'Inventory UoM' | translate}}</label>
+
+                                                        <dx-select-box #ddlinventoryUom [(value)]="this.item.inventoryUOM"  name="inventoryUom" [dataSource]="this.uomList" displayExpr="uomName" valueExpr="uomCode" itemTemplate="item">
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.uomName}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="status">{{'Status' | translate}}</label>
+                                                        <dx-select-box #ddlStatus [(value)]="this.item.status"  name="status" 
+                                                                [dataSource]="this.statusOptions" displayExpr="name" valueExpr="value" itemTemplate="item">
+
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.name}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="salesTaxCode">{{'Sales Tax' | translate}}</label>
+                                                        <dx-select-box #ddlSalesTax [value]="this.item.salesTaxCode" [(ngModel)]="this.item.salesTaxCode" name="salesTaxCode" [dataSource]="this.taxList" displayExpr="taxName" valueExpr="taxCode" itemTemplate="item">
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.taxName}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="purchaseTaxCode">{{'Purchase Tax' | translate}}</label>
+
+                                                        <dx-select-box #ddlPurchaseTax [value]="this.item.purchaseTaxCode" [(ngModel)]="this.item.purchaseTaxCode" name="purchaseTaxCode" [dataSource]="this.taxList" displayExpr="taxName" valueExpr="taxCode" itemTemplate="item">
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.taxName}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="mcid">{{'Merchandise' | translate}}</label>
+                                                        <dx-select-box #ddlMerchandise [value]="this.item.mcid" [(ngModel)]="this.item.mcid" name="mcid" [dataSource]="this.merchandise" displayExpr="mcname" valueExpr="mcid" itemTemplate="item">
+
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.mcid}} - {{data.mcname}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="itemGroupId">{{'Item Group' | translate}}</label>
+                                                        <dx-select-box #ddItemGroup [value]="this.item.itemGroupId" [(ngModel)]="this.item.itemGroupId" name="itemGroupId" [dataSource]="this.itemGroupList" displayExpr="igname" valueExpr="igid" itemTemplate="item">
+
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.igid}} - {{data.igname}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="rejectPayType">{{'Reject Payment Type' | translate}}</label>
+
+                                                        <dx-drop-down-box name="rejectPayType" [(ngModel)]="this.item.rejectPayType"  [(value)]="this.rejectPayTypeList" (onValueChanged)="onRejectPayTypeListSelectionChanged($event)" valueExpr="Code" displayExpr="Name" placeholder="Select a value..." [showClearButton]="true" [dataSource]="this.paymentTypes">
+
+                                                            <div *dxTemplate="let data of 'content'">
+                                                                <dx-data-grid [dataSource]="this.paymentTypes"  [columns]="['Code', 'Name']" [selection]="{ mode: 'multiple' }" [hoverStateEnabled]="true" keyExpr="Code" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: true }" [scrolling]="{ mode: 'virtual' }"
+                                                                    [height]="345" [(selectedRowKeys)]="this.rejectPayTypeList">
+                                                                </dx-data-grid>
+                                                            </div>
+                                                        </dx-drop-down-box>
+
+                                                        <!-- <dx-select-box #ddlPaymentType [value]="this.item.rejectPayType" [(ngModel)]="this.item.rejectPayType" name="rejectPayType" [dataSource]="this.paymentTypes" displayExpr="Name" valueExpr="Code" itemTemplate="item">
+
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.Code}} - {{data.Name}}</div>
+                                                            </div>
+                                                        </dx-select-box> -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- itemCategory1: string="";
+                      itemCategory2: string="";
+                      itemCategory3: string=""; -->
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="itemCategory1">{{'Item Categories' | translate}} 1</label>
+                                                        <input class="form-control" name="itemCategory1" rows="6" [(value)]="item.itemCategory_1">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="itemCategory2">{{'Item Categories' | translate}} 2</label>
+
+                                                        <input class="form-control" name="itemCategory2" rows="6" [(value)]="item.itemCategory_2">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="itemCategory2">{{'Item Categories' | translate}} 3</label>
+                                                        <input class="form-control" name="itemCategory3" rows="6" [(value)]="item.itemCategory_3">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="validDate">{{'Valid Date' | translate}}</label>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <dx-date-box name="validfrom" id="validfrom" [value]="this.item.validFrom" [displayFormat]="this.dateFormat" [(ngModel)]="this.item.validFrom" width="100%"></dx-date-box>
+                                                        <!-- <input type="text" placement="top"  [(value)]="item.validFrom"
+                                  placeholder="Valid from"
+                                  class="form-control"
+                                  name="validfrom"
+                                  id="validfrom"
+                                  bsDatepicker> -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <dx-date-box name="validto" id="validto" [value]="this.item.validTo" [displayFormat]="this.dateFormat" [(ngModel)]="this.item.validTo" width="100%"></dx-date-box>
+                                                        <!-- <input type="text"
+                                  name="validto" placement="top"  [(value)]="item.validTo"
+                                  id="validto"
+                                  placeholder="Valid to"
+                                  class="form-control"
+                                  bsDatepicker> -->
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="form-group">
+
+                                                <!-- <label for="validDate">Custom</label> -->
+                                                <div class="row">
+
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField1">{{'Item Type' | translate}}</label>
+                                                        <input class="form-control" name="customField1" rows="6" [(value)]="item.customField1">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField2">{{'Custom Field' | translate}} 2</label>
+                                                        <input class="form-control" name="customField2" rows="6" [(value)]="item.customField2">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField3">{{'Sex' | translate}}</label>
+                                                        <input class="form-control" name="customField3" rows="6" [(value)]="item.customField3">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField4">{{'Inventory Control Type' | translate}}</label>
+                                                        <dx-select-box #ddlcustomField4 [value]="this.item.customField4" [(ngModel)]="this.item.customField4" name="customField4" [dataSource]="this.custom4Options" displayExpr="name" valueExpr="value" itemTemplate="item">
+
+                                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                                <div class='product-name'>{{data.name}}</div>
+                                                            </div>
+                                                        </dx-select-box>
+                                                        <!-- <input class="form-control" name="customField4" rows="6"   [(value)]="item.customField4"> -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField5">{{'Custom Field' | translate}} 5</label>
+                                                        <input class="form-control" name="customField5" rows="6" [(value)]="item.customField5">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField6">{{'Custom Field' | translate}} 6</label>
+                                                        <input class="form-control" name="customField6" rows="6" [(value)]="item.customField6">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField7">{{'Custom Field' | translate}} 7</label>
+                                                        <input class="form-control" name="customField7" rows="6" [(value)]="item.customField7">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField8">{{'Capacity' | translate}}</label>
+                                                        <input class="form-control" name="customField8" rows="6" [(value)]="item.customField8">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField9">{{'Custom Field' | translate}} 9</label>
+                                                        <input class="form-control" name="customField9" rows="6" [(value)]="item.customField9">
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-6 form-group">
+                                                        <label for="customField10">{{'Time Frame Qty' | translate}}</label>
+                                                        <input class="form-control" name="customField10" rows="6" [(value)]="item.customField10">
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="form-group">
+
+                                                <label for="validDate"> {{ 'Other' | translate }}</label>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box  name="is Serial" id="isSerial" [(value)]="item.isSerial" [width]="120" text="is Serial"></dx-check-box>
+
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box  name="is Bom" id="isBom" [(value)]="item.isBom" [width]="120" text="is Bom"></dx-check-box>
+
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box name="is Voucher" id="isVoucher" [(value)]="item.isVoucher" [width]="120" text="is Voucher"></dx-check-box>
+
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box  name="Returnable" id="returnable" [(value)]="item.returnable" [width]="120" text="Returnable"></dx-check-box>
+
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box  name="isPriceTime" id="isPriceTime" [(value)]="item.isPriceTime" [width]="120" text="is Price Time"></dx-check-box>
+
+                                                    </div>
+                                                    <div class="col-xs-12 col-12 col-md-4 form-group">
+                                                        <dx-check-box  name="isFixedQty" id="isFixedQty" [(value)]="item.isFixedQty" [width]="120" [text]="  (item?.defaultFixedQty !== null && item?.defaultFixedQty !== undefined && item?.defaultFixedQty !== 0) ? ' is Fixed Qty (' + item?.defaultFixedQty +')' : ' is Fixed Qty' "></dx-check-box>
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </form>
+
+                                    </tab>
+
+                                    <tab heading="Variant">
+
+                                    </tab>
+
+                                    <tab *ngIf="item.isSerial" heading="Serial">
+                                        <div class="row  mt-2" *ngIf="this.genSerial">
+                                            <div class="col-md-6 mt-2">
+                                                <div class="col-icon-search">
+                                                    <!-- <i class="fab fa-adn" -->
+                                                    <i class="fab fa-adn" aria-hidden="true"></i>
+                                                    <input class="form-control" type="search" #prefix placeholder="Prefix" aria-label="Prefix">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <!-- <i class="fas fa-list-ol -->
+                                                <div class="col-icon-search">
+                                                    <i class="fas fa-list-ol" aria-hidden="true"></i>
+                                                    <input class="form-control" type="text" #numOfGen placeholder="Num Of Gen" aria-label="Num Of Gen">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <div class="col-icon-search">
+                                                    <i class="fas fa-list-ol" aria-hidden="true"></i>
+                                                    <input class="form-control" type="text" #randomNumberLen placeholder="Random Number Length" aria-label="Random Number Length">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <div class="col-icon-search">
+                                                    <i class="fas fa-list-ol" aria-hidden="true"></i>
+                                                    <input class="form-control" type="text" #runingNumberLen placeholder="Running Number Length" aria-label="Running Number Length">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <div class="col-icon-search">
+                                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                                    <dx-date-box #expDate placeholder="Expiry Date" id="fromCalendar" [displayFormat]="this.dateFormat"> </dx-date-box>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+
+                                                <dx-button style="width: 100%;" icon="fas fa-random" type="success" text="Generate Serial" (onClick)="generateSerial(prefix.value, numOfGen.value, randomNumberLen.value, runingNumberLen.value ,expDate.value )">
+                                                </dx-button>
+                                            </div>
+                                        </div>
+
+                                        <dx-data-grid class="mt-2" id="grid-container" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.itemSerials" keyExpr="serialNum" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="saveSerial($event)" [showBorders]="true">
+                                            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="true">
+                                            </dxo-editing>
+                                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+                                            <dxo-paging [pageSize]="10"></dxo-paging>
+                                            <!-- <dxo-filter-row
+                            [visible]="true"
+                        ></dxo-filter-row> -->
+                                            <dxi-column dataField="serialNum" caption="Serial Num"></dxi-column>
+                                            <dxi-column dataField="expDate" dataType="Exp Date" alignment="right" dataType="datetime" format="d/M/yyyy"></dxi-column>
+                                            <dxi-column dataField="createdOn" dataType="Created Date" alignment="right" dataType="datetime" format="d/M/yyyy"></dxi-column>
+                                        </dx-data-grid>
+                                    </tab>
+                                    <tab *ngIf="item.isSerial" heading="Serial Stock">
+                                        <!--  -->
+                                        <!-- <dx-select-box [value]="this.storage[0].slocId" [dataSource]="this.storage"  displayExpr="slocId" valueExpr="slocId" ></dx-select-box> -->
+                                        <dx-data-grid id="grid-container" [dataSource]="this.itemSerialStock" keyExpr="serialNum" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="saveSerialStock($event)" [showBorders]="true">
+                                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+                                            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="true">
+                                            </dxo-editing>
+
+                                            <dxo-paging [pageSize]="10"></dxo-paging>
+
+                                            <dxi-column dataField="serialNum" caption="Serial Num">
+                                                <dxo-lookup [dataSource]="this.itemSerials" displayExpr="serialNum" valueExpr="serialNum">
+                                                </dxo-lookup>
+                                            </dxi-column>
+                                            <dxi-column dataField="slocId" caption="SLoc">
+                                                <dxo-lookup [dataSource]="this.storage" displayExpr="slocId" valueExpr="slocId">
+                                                </dxo-lookup>
+                                            </dxi-column>
+                                            <dxi-column dataField="stockQty" caption="Stock Qty"></dxi-column>
+
+                                        </dx-data-grid>
+                                    </tab>
+                                    <tab *ngIf="item.isBom" heading="Bom">
+                                        <dx-data-grid #dataGrid id="grid-container" [dataSource]="this.bomModel?.lines" keyExpr="id" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="saveBOM($event)" (onRowRemoved)="deleteBomLine($event)" [showBorders]="true">
+                                            <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+                                            </dxo-editing>
+                                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+                                            <dxo-paging [pageSize]="10"></dxo-paging>
+                                            <!-- <dxo-filter-row
+                            [visible]="true"
+                        ></dxo-filter-row> -->
+                                            <dxi-column dataField="keyId" caption="Item Code" editCellTemplate="singleDropDownBoxEditor">
+                                                <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                            </dxi-column>
+                                            <dxi-column dataField="itemCode" [visible]="false" [allowEditing]="false" caption="Item Code"></dxi-column>
+                                            <dxi-column dataField="itemName" [allowEditing]="false" caption="Item Name"></dxi-column>
+                                            <dxi-column dataField="uomCode" [allowEditing]="false" caption="UoM" alignment="center"></dxi-column>
+                                            <dxi-column dataField="quantity" caption="Quantity" alignment="center">
+                                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                            </dxi-column>
+                                            <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+                                                <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dropDownOptions]="dropDownOptions" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId"
+                                                    contentTemplate="contentTemplate">
+                                                    <div *dxTemplate="let e of 'contentTemplate'">
+                                                        <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true"
+                                                            (onSelectionChanged)="onSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                            <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                                            <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                                            <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+
+                                                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                            <dxo-selection mode="single"></dxo-selection>
+                                                        </dx-data-grid>
+                                                    </div>
+                                                </dx-drop-down-box>
+                                            </div>
+                                        </dx-data-grid>
+                                    </tab>
+                                </tabset>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

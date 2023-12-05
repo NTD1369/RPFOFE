@@ -1,0 +1,29 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+
+        <div>
+            <!-- a.back-btn svg -->
+            <a routerLink="/admin/shift" class="back-btn">
+                <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
+
+            </a>
+            <label for="item-searchbar" class="section-title">{{'Detail Shift' | translate}}</label>
+
+        </div>
+        <div class="table-wrap">
+            <dx-data-grid (onToolbarPreparing)="onToolbarPreparing($event)" id="gridContainer" [dataSource]="this.list" [showBorders]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxi-column dataField="shiftId" dataType="string" caption="{{'Shift ID' | translate}}"> </dxi-column>
+                <dxi-column dataField="paymentCode" dataType="string" caption="{{'Payment Code' | translate}}"> </dxi-column>
+                <dxi-column dataField="value" dataType="number" [customizeText]="customizeText" caption="{{'Value' | translate}}"> </dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

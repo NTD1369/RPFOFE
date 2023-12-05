@@ -1,0 +1,65 @@
+<form *ngIf="this.initDataCompleted" [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+  <div class="col-md-12">
+      <div class="row">
+          <ng-container *ngFor="let value of this.groupControlList">
+              <div class="col-md-12">
+                  <div class="row">
+                      <ng-container *ngFor="let item of value.arrayGroup">
+                          <div class="col-md-6 form-group" *ngIf="item.isView">
+                              <label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span> </label>
+                              <input *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [required]="item.require"  [attr.disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null" formControlName="{{item.controlId}}"
+                                  name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+
+                              <dx-date-box name="{{item.controlId}}" [value]="model[item.controlId]" formControlName="{{item.controlId}}" 
+                              [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" [(ngModel)]="model[item.controlId]" 
+                              *ngIf="value.controlType==='DateTime' && item.isView"
+                                  type="datetime" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null">
+
+                              </dx-date-box>
+
+                              <dx-date-box name="{{item.controlId}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='Date' && item.isView"
+                                type="date" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null">
+                              </dx-date-box>
+                              <dx-switch *ngIf="value.controlType==='CheckBox' && item.isView" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null">
+                              </dx-switch>
+                              <ng-container *ngIf="value.controlType==='DropDown' && item.isView">
+                                <ng-container *ngIf="item.custom1?.length > 0">
+                                    <dx-select-box showClearButton="true" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" [searchEnable]="true"
+                                        name="{{item.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                        [dataSource]="this.setDataSoure(item.controlId)" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" 
+                                        [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]">
+
+                                    </dx-select-box>
+                                </ng-container>
+                                <ng-container *ngIf="item.custom1?.length <= 0">
+                                    <dx-select-box showClearButton="true" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" [searchEnable]="true"
+                                        name="{{item.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                        [dataSource]="this[item.optionName]" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" 
+                                        [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                        [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]">
+
+                                    </dx-select-box>
+                                </ng-container>
+                            </ng-container>
+<!--                                 
+                              <dx-select-box   [style]="{'width':'100%'}" formControlName="{{item.controlId}}" 
+                              name="{{item.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{item.controlName}} ---"
+                                  [dataSource]="this[item.optionName]" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" 
+                                  [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"
+                                  [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]"></dx-select-box> -->
+                               <label *ngIf="item.require && editForm.get(item.controlId).invalid" [ngClass] = "'error'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                          </div>
+                      </ng-container>
+                  </div>
+              </div>
+          </ng-container>
+
+      </div>
+  </div>
+  <!-- <p>Form Status: {{ editForm.status }} {{editForm.valid }} {{editForm.dirty }}</p> -->
+  <div class="col-md-12 text-right">
+      <!-- form="editForm" !editForm.dirty ||-->
+      <button [disabled]="!editForm.valid || !editForm.dirty" type="submit" *ngIf="checkPermission('btnSave' ,'V')" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+  </div>
+
+</form>

@@ -1,0 +1,122 @@
+<!-- {{this.shortCutModel | json}} -->
+
+<div class="grey-wrapper right-modal-section" id="discountNumberX">
+    <div class="typing-section">
+        <div class="action-section mb-1" *ngIf="isPercentSelected">
+            <button type="reset" class="pay-option-btn  ml-1 mr-2" (click)="toggleMedthod('Discount Percent')" style="width: 49%;height: 70px;">
+        <i class="far fa-check-circle"></i>
+        {{'Percent' | translate}}
+      </button>
+            <button type="reset" class="pay-option-btn ml-1 mr-2" (click)="toggleMedthod('Discount Amount')" style="width: 49%;height: 70px;">
+
+        {{'Amount' | translate}}
+      </button>
+            <button type="reset" class="pay-option-btn-clear ml-1 mr-2" (click)="reset()" style="width: 31.4%; height: 70px;">
+        <i class="fas fa-redo-alt"></i> Clear
+      </button>
+        </div>
+
+        <div class="action-section mb-1" *ngIf="!isPercentSelected">
+            <button type="reset" class="pay-option-btn ml-1 mr-2" (click)="toggleMedthod('Discount Percent')" style="width: 49%;height: 70px;">
+        {{'Percent' | translate}}
+      </button>
+            <button type="reset" class="pay-option-btn mr-1 mr-2" (click)="toggleMedthod('Discount Amount')" style="width: 49%;height: 70px;">
+        <i class="far fa-check-circle"></i>
+        {{'Amount' | translate}}
+      </button>
+            <button type="reset" class="pay-option-btn-clear ml-1 mr-2" (click)="reset()" style="width: 31.4%;height: 70px;">
+        <i class="fas fa-redo-alt"></i>
+        {{'Clear' | translate}}
+      </button>
+
+
+        </div>
+        <div class="number-pad">
+
+            <div class="row">
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('1')">1</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('2')">2</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('3')">3</button>
+                </div>
+                <div class="number-div">
+                    <button class="pay-option-btn" *ngIf="isPercentSelected" (click)=" pressDiscountKey('5', true, true) ">5%</button>
+                    <button class="pay-option-btn" *ngIf="!isPercentSelected && (this.denoList[0]?.value !== null && this.denoList[0]?.value !== undefined && this.denoList[0]?.value !== '') " (click)=" pressDiscountKey(this.denoList[0]?.value, true, true) ">{{this.denoList[0]?.value | currencyFormat}} </button>
+                </div>
+
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('4')">4</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('5')">5</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('6')">6</button>
+                </div>
+                <div class="number-div">
+                    <button class="pay-option-btn" *ngIf="isPercentSelected" (click)="pressDiscountKey('10',true, true)  ">10%</button>
+                    <button class="pay-option-btn" *ngIf="!isPercentSelected && (this.denoList[1]?.value !== null && this.denoList[1]?.value !== undefined && this.denoList[1]?.value !== '') " (click)=" pressDiscountKey(this.denoList[1]?.value, true, true) ">{{this.denoList[1]?.value | currencyFormat}}</button>
+
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('7')">7</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('8')">8</button>
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('9')">9</button>
+                </div>
+                <div class="number-div">
+                    <button class="pay-option-btn" *ngIf="isPercentSelected" (click)="pressDiscountKey('15',true, true) ">15%</button>
+                    <button class="pay-option-btn" *ngIf="!isPercentSelected && (this.denoList[2]?.value !== null && this.denoList[2]?.value !== undefined && this.denoList[2]?.value !== '') " (click)=" pressDiscountKey(this.denoList[2]?.value, true, true) "> {{this.denoList[2]?.value | currencyFormat}}</button>
+
+                </div>
+                <div class="number-div">
+                    <button class="number-btn" (click)="pressDiscountKey('0')">0</button>
+                </div>
+
+                <div class="number-div">
+                    <button></button>
+                </div>
+
+                <div class="number-div" *ngIf="this.storeSelected.currencyCode === 'VND'">
+                    <button class="number-btn" (click)="pressDiscountKey('000')">000</button>
+                </div>
+
+                <div class="number-div" *ngIf="this.storeSelected.currencyCode !== 'VND'">
+                    <button class="number-btn" (click)="pressDiscountKey('.')">.</button>
+                </div>
+                <!-- <div class="number-div">
+          <button class="number-btn" (click)="pressDiscountKey('00')">00</button>
+        </div> -->
+                <div class="number-div">
+                    <button class="pay-option-btn" *ngIf="isPercentSelected" (click)="pressDiscountKey('100',true, true)  ">100%</button>
+                    <button class="pay-option-btn" *ngIf="!isPercentSelected && (this.denoList[3]?.value !== null && this.denoList[3]?.value !== undefined && this.denoList[3]?.value !== '') " (click)=" pressDiscountKey(this.denoList[3]?.value, true, true) ">{{this.denoList[3]?.value | currencyFormat}}</button>
+
+                </div>
+                <!-- <div class="number-div submit-div">
+          <button class="submit-btn" (click)="addOrder()" >Submit</button>
+      
+        </div> -->
+
+            </div>
+
+        </div>
+        <!-- <div class="action-section mt-1">
+          
+
+            <button type="reset" class="btn-agree w-100" (click)="closeNumPad()" style="height: 70px; border-radius: 10px;">
+        <i class="fa fa-check"  style="font-size: 40px;"></i>
+      </button>
+
+        </div> -->
+
+    </div>
+</div>
+
+<ng-keyboard-shortcuts  [shortcuts]="shortcuts"></ng-keyboard-shortcuts>

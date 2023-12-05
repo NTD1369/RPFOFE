@@ -1,0 +1,22 @@
+.btnCart{
+    height: 70px;
+    width: 70px;
+    /* right: 0px; */
+    /* position: inherit; */
+    margin-right: 20%;
+}
+#lblCartQuantity
+{
+    position: absolute;
+    /* right: 10px; */
+    color: red;
+    width: 40px;
+    bottom: 10px;
+    /* right: -40%; */
+    /* left: 0px; */
+    /* right: -10px; */
+    font-weight: 800;
+    background-color: aqua;
+    padding: 5px;
+    border-radius: 25px;
+}

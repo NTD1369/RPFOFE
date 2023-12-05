@@ -1,0 +1,39 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Loyalty' | translate}}</label>
+
+        </div>
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.list" (onToolbarPreparing)="onToolbarPreparing($event)" keyExpr="loyaltyId" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true"
+                [columnAutoWidth]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <!-- <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"  ></dxi-column> -->
+                <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+
+                <dxi-column dataField="loyaltyId" caption="{{'Loyalty ID' | translate}}"></dxi-column>
+                <dxi-column dataField="loyaltyName" caption="{{'Loyalty Name' | translate}}"></dxi-column>
+                <dxi-column dataField="loyaltyType" caption="{{'Loyalty Type' | translate}}"></dxi-column>
+                <dxi-column dataField="validDateFrom" caption="{{'From' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+                <dxi-column dataField="validDateTo" caption="{{'To' | translate}}" dataType="date" [format]="this.dateFormat "> </dxi-column>
+                <!-- <dxi-column dataField="isUsed"  caption="In Use" cellTemplate="usedTemplate" ></dxi-column>  -->
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'usedTemplate'">
+                    <div [innerHtml]="cell.data.isUsed | statusFormat"></div>
+                </div>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let data of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="viewDetail(data)"></dx-button>
+                    <dx-button icon="fa fa-times" text="{{'Delete' | translate}}" (onClick)="del(data)"></dx-button>
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

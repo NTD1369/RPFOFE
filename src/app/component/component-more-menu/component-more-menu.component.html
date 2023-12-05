@@ -1,0 +1,98 @@
+<div class="maintenance-cardCustom" style="height: 100%;">
+    <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent" [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode" [bounceEnabled]="pullDown" reachBottomText="Updating...">
+        <div class="row" *ngIf="showDrop" style="text-align: right;">
+            <div class="col-md-12 mb-2" style="width: 100%;">
+                <dx-drop-down-box *ngIf="searchShow" valueExpr="functionId" displayExpr="name" placeholder="{{'Search Menu' | translate}}" [showClearButton]="true" [dataSource]="this.menuListX">
+                    <div *dxTemplate="let data of 'content'">
+                        <dx-tree-view [style]="{'max-height':'calc(100vh - 40vh)','overflow':'auto'}" id="treeview" 
+                        [searchEnabled]="true" searchMode="contains" keyExpr="functionId" [items]="this.menuListX" 
+                        selectedExpr="isShowMenu" [expandAllEnabled]="true" [searchExpr]="['functionId', 'name']"
+                            expandedExpr="isParent" [selectionMode]="'single'" [selectNodesRecursive]="false" [selectByClick]="true" (onContentReady)="syncTreeViewSelection($event)" (onSelectionChanged)="treeView_itemSelectionChanged($event)">
+                            <div *dxTemplate="let item of 'item'" [routerLink]="[item.url]" (click)="closeMore() && showDrop=false">
+                                <!-- + ' (' + item.url + ')' -->
+                                {{ item.name | translate}}
+                            </div>
+                        </dx-tree-view>
+
+                    </div>
+                </dx-drop-down-box>
+            </div>
+
+        </div>
+        <div class="maintenance-row" style="width: 90%; ">
+
+            <div class="row" *ngIf="!showSub">
+                <div *ngFor="let item of this.parentList" class="maintenance-service-wrapper col-md-3 col-sm-4" routerLinkActive="router-link-active">
+
+
+                    <div class="maintenance-service-box" *ngIf="item.isParent===true" (click)="toggleAddNew(item)">
+                        <!-- <i class="fas "></i> -->
+                        <i class="fas fa-plus-circle fa-5x" style="position: absolute;  opacity: 0.04;     right: 10%;"></i>
+                        <!-- <i class="fas fa-angle-double-right" ></i> -->
+                        <span class="service-icon contain-image">
+                            <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+                        </span>
+                        <label> {{item.Name | translate}}</label>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" *ngIf="!showSub">
+                <div *ngFor="let item of this.noparentList" class="maintenance-service-wrapper col-md-3 col-sm-4" routerLinkActive="router-link-active">
+
+
+                    <div class="maintenance-service-box" *ngIf="item.isParent!==true" [routerLink]="[item.Url]" (click)="closeMore()">
+                        <span class="service-icon contain-image">
+                <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+              </span>
+                        <label>{{item.Name | translate}}</label>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row" *ngIf="showSub" [@slideInOut]>
+                <div class="col-md-12 mb-2 backRowMenu">
+                    <button (click)="backtoMenu()">
+                        <i class="fas fa-arrow-left fa-2x"></i>
+                    </button>
+                </div>
+                <div class="row" style="margin-top: 2rem!important;     width: 100%!important;">
+                    <div class="row moreMenuRow" *ngFor="let item of this.selectedMenu">
+                        <!-- lines -->
+
+                        <div class="col-md-12 titleRow pl-5 pb-3">
+                            <h3 style="font-weight: 500;"> <i class="fas fa-atlas" style="color: red;"></i> {{item.name | translate}}</h3>
+
+                        </div>
+                        <div *ngFor="let line of item" class="maintenance-service-wrapper col-md-3 col-sm-4" routerLinkActive="router-link-active">
+                            <ng-container *ngIf="line.CustomF2?.length > 0">
+                                <div class="maintenance-service-box" (click)="toolFunction(line.CustomF2)">
+                                    <span class="service-icon contain-image">
+                                            <img src="../../../../assets/images/System/{{line.Icon || 'item-master.svg'}}" alt="{{line.Name}}">
+                                        </span>
+                                    <label>{{line.Name | translate}}</label>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="line.CustomF2?.length <= 0">
+                                <div class="maintenance-service-box" [routerLink]="[line.Url]" (click)="closeMore()">
+                                    <span class="service-icon contain-image">
+                                            <img src="../../../../assets/images/System/{{line.Icon || 'item-master.svg'}}" alt="{{line.Name}}">
+                                        </span>
+                                    <label>{{line.Name | translate}}</label>
+                                </div>
+                            </ng-container>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </dx-scroll-view>
+
+
+</div>

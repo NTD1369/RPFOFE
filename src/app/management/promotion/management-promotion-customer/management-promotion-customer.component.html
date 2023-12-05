@@ -1,0 +1,104 @@
+<div class="row mt-2">
+    <div class="col-md-6">
+        <div class="row mb-2">
+            <div class="col-md-2">{{'Search' | translate}}</div>
+            <div class="col-md-8">
+                <dx-text-box #txtFilter></dx-text-box>
+            </div>
+            <div class="col-md-2">
+                <dx-button icon="search" (onClick)="loadCustomerList()">
+                </dx-button>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-2">{{'ID' | translate}}</div>
+            <div class="col-md-10">
+                <dx-text-box #txtId [(value)]="this.customer.id"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-2">{{'Name' | translate}}</div>
+            <div class="col-md-10">
+                <dx-text-box [disabled]='true' #txtName [(value)]="this.customer.name"></dx-text-box>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="row mb-2">
+            <div class="col-md-2">{{'Email' | translate}}</div>
+            <div class="col-md-10">
+                <dx-text-box [disabled]='true' #txtEmail [(value)]="this.customer.email"></dx-text-box>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-2">{{'Mobile' | translate}}</div>
+            <div class="col-md-10">
+                <dx-text-box [disabled]='true' #txtMobile [(value)]="this.customer.mobile"></dx-text-box>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <dx-text-box [disabled]='true' #txtVuiPoint [(value)]="this.customer.current_vui_point"></dx-text-box>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-2">
+        <!-- <dx-text-box #txtExternal_id  [(value)]="this.customer.external_id"  ></dx-text-box>    -->
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-md-6">
+        <dx-button icon="check" (onClick)="selectCustomer()" type="success" text="Select"></dx-button>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-md-12">
+        <ng-container *ngIf="this.source !== 'Capi'">
+            <dx-data-grid #dataGrid id="grid-selected" [(dataSource)]="this.customerSelectedList" [(selectedRowKeys)]="this.selectedKey" keyExpr="customerId" [showBorders]="true">
+                <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                </dxo-selection>
+        
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <!-- <dxi-column dataField="id" caption="id"  ></dxi-column> -->
+            
+                <dxi-column dataField="customerId" caption="Customer Id"></dxi-column>
+                <dxi-column dataField="phone" caption="Phone"></dxi-column>
+               
+            
+                <dxi-column dataField="customerName" caption="Name"></dxi-column>
+                <dxi-column dataField="email" caption="Email"></dxi-column>
+                <dxi-column dataField="vui_point" caption="External Id"></dxi-column>
+    
+            </dx-data-grid>
+        </ng-container>
+        <ng-container *ngIf="this.source === 'Capi'">
+            <dx-data-grid #dataGrid id="grid-selected" [(dataSource)]="this.customerSelectedList" [(selectedRowKeys)]="this.selectedKey" keyExpr="mobile" [showBorders]="true">
+                <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                </dxo-selection>
+        
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <!-- <dxi-column dataField="id" caption="id"  ></dxi-column> -->
+                
+                
+                    <dxi-column dataField="mobile" caption="Mobile"></dxi-column>
+                
+            
+                <dxi-column dataField="customerName" caption="Name"></dxi-column>
+                <dxi-column dataField="email" caption="Email"></dxi-column>
+                <dxi-column dataField="vui_point" caption="External Id"></dxi-column>
+    
+            </dx-data-grid>
+        </ng-container>
+    
+    </div>
+    <div class="col-md-12  mt-2" style="text-align: right;">
+        <dx-button icon="floppy" (onClick)="applyCustomer()" type="success" text="Apply"></dx-button>
+    </div>
+
+</div>

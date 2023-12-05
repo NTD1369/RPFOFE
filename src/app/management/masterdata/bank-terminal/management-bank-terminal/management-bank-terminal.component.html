@@ -1,0 +1,80 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class='row'>
+          <div class='col-md-4'>
+              <div class="search-wrap">
+                  <label for="item-searchbar" class="section-title">{{'Bank Terminal' | translate}}</label>
+
+              </div>
+          </div>
+          <div class='col-md-5'>
+
+          </div>
+          <div class='col-md-3'>
+
+          </div>
+      </div>
+
+      <div class="table-wrap mt-2 ">
+          <!--   -->
+
+          <dx-data-grid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" id="dataGrid" #dataGrid 
+                (onToolbarPreparing)="onToolbarPreparing($event)" 
+                (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="save($event)" (onRowRemoved)="remove($event)"
+              [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+              <dxo-editing mode="row"  [useIcons]="true" [allowUpdating]="true" >
+              </dxo-editing>
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}" location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+ 
+              <!-- <dxi-column dataField="storeId" caption="{{'Store' | translate}}">
+                  <dxo-lookup [dataSource]="this.storelist" displayExpr="storeName" valueExpr="storeId"> </dxo-lookup>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dxi-column> -->
+              <dxi-column dataField="paymentMethod" caption="{{'Payment Method' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+              <dxi-column dataField="shortName" caption="{{'Short Name' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+              <dxi-column dataField="terminalIdDefault" caption="{{'Terminal Id' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF1" caption="{{'Port Name' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF2" caption="{{'Custom F2' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF3" caption="{{'Custom F3' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF4" caption="{{'Custom F4' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF5" caption="{{'Custom F5' | translate}}" dataType="string"> </dxi-column>
+              <!-- <dxi-column dataField="fromDate" caption="{{'From Date' | translate}}" dataType="date"> </dxi-column>
+              <dxi-column dataField="toDate" caption="{{'To Date' | translate}}" dataType="date"> </dxi-column> -->
+<!-- 
+              <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                  <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dxi-column>
+              -->
+              <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | statusFormat"></div>
+              </div>
+              <div *dxTemplate="let data of 'totalGroupCount'">
+                  <dx-select-box [searchEnabled]="true" style="min-width: 300px;" [items]="this.storelist" placeholder="{{'Store' | translate}}" displayExpr="storeName" valueExpr="storeId" (onValueChanged)="loadCounter($event)"></dx-select-box>
+              </div>
+              <div *dxTemplate="let data of 'counterTemplate'">
+                <!-- publicIP: string; -->
+                <dx-select-box [searchEnabled]="true" #ddlCounter style="min-width: 300px;" [items]="this.counters" placeholder="{{'Counter' | translate}}" displayExpr="publicIP" valueExpr="publicIP" (onValueChanged)="selectCounter(ddlCounter.value)"></dx-select-box>
+            </div>
+          </dx-data-grid>
+      </div>
+  </div>
+</div>
+
+<!-- <ng-template #template >
+<div class="modal-header">
+<h4 class="modal-title pull-left" id="my-modal-title">Currency</h4> 
+<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+<img src="../../../assets/images/System/times.svg">
+</button>
+</div>
+
+<div class="modal-body">
+<div class="row">
+
+<app-management-currency-edit [model]="this.model"  style="width: 100%" (outModel)="updateModel($event)"></app-management-currency-edit> 
+</div>
+</div>
+</ng-template>  -->

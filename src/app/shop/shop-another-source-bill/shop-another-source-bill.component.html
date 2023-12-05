@@ -1,0 +1,130 @@
+<div class="center-wrap">
+    <!-- margin: auto;    -->
+    <div class="maintenance-card" style=" width: 100%; height: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'E-Commerce Sales History' | translate}}</label>
+
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{'From Date' | translate}}
+                <dx-date-box #fromCalendar id="fromCalendar" [value]="this.fromdate"  [displayFormat]="this.dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2">
+                {{'To Date' | translate}}
+                <dx-date-box #toCalendar id="fromCalendar" [value]="this.todate"  [displayFormat]="this.dateFormat"> </dx-date-box>
+
+            </div>
+            <div class="col-md-2">
+                {{'Status' | translate}}
+                <dx-select-box #cbbStatus [value]="statusOptions[0].value" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+            </div>
+            <div class="col-md-3">
+                {{'Bill No' | translate}}
+                <dx-text-box #transId></dx-text-box>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <button class="mr-2 mt-3 btn button-filter" style="width:60%; font-size: 15px;" (click)="loadBills(fromCalendar.value, toCalendar.value, cbbStatus.value,'', transId.value ,'')"><i
+            class="dx-icon dx-icon-search"></i> {{'Search' | translate}}</button>
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-1">
+
+            <div class="col-md-3">
+                <div class="card-counter primary">
+                    <i class="fas fa-cart-plus iconX"></i>
+                    <span class="count-numbers">{{this.totalBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;" (click)="filterbills('All')"> <i
+              class="fas fa-arrow-alt-circle-right"></i> {{'Total Bill' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter info">
+                    <!-- <i class="fas fa-hand-holding-usd "></i> -->
+                    <i class="fas fa-sync iconX"></i>
+                    <span class="count-numbers">{{this.holdBill | number}} </span>
+                    <span class="count-name" style="cursor: pointer;" (click)="filterbills('Ex')"> <i
+              class="fas fa-arrow-alt-circle-right"></i> {{'Hold' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter success">
+                    <i class="fas fa-clipboard-check iconX"></i>
+                    <span class="count-numbers">{{this.closedBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;" (click)="filterbills('C')"> <i
+              class="fas fa-arrow-alt-circle-right"></i> {{'Closed' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter danger ">
+                    <i class="fas fa-ban iconX"></i>
+                    <span class="count-numbers">{{this.cancelBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;" (click)="filterbills('N')"> <i
+              class="fas fa-arrow-alt-circle-right"></i> {{'Cancel' | translate}}</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-wrap">
+            <dx-data-grid *ngIf="this.bills!==null && this.bills!==undefined && this.bills?.length > 0" (onExporting)="onExporting($event)" [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [dataSource]="this.bills" [showRowLines]="true" [columnAutoWidth]="true" id="gridContainer" [columnResizingMode]="true" [showBorders]="true">
+                <!-- <div *dxTemplate="let data of 'content'">
+          <p>Popup content</p>
+        </div>
+        <dxi-toolbar-item
+            text="Title"
+            location="before">
+        </dxi-toolbar-item> -->
+
+                <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
+                <dxo-export *ngIf="this.bills !==null && this.bills?.length > 0" [enabled]="true"></dxo-export>
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <ng-container *ngFor="let col of this.controlList; let i = index">
+                    <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+                    </dxi-column>
+                    <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+                    </dxi-column>
+                    <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+                    </dxi-column>
+                    <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='number'" dataType="number" [customizeText]="customizeText">
+                    </dxi-column>
+                </ng-container>
+                <dxi-column cellTemplate="cellTemplate" [minWidth]="150" [fixed]="true" fixedPosition="left"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" class="mr-2" text="{{'View' | translate}}" (onClick)="OpenOrder(cell.data)"></dx-button>
+                    <ng-container *ngIf="cell.data.posType==='E' && cell.data.status==='O'">
+                        <dx-button icon="fas fa-sign-out-alt" class="mr-2" text="{{'Check Out' | translate}}" (onClick)="CheckOutOrder(cell.data)">
+                        </dx-button>
+                    </ng-container>
+                    <ng-container *ngIf="cell.data.posType!=='E' && cell.data.status==='O'">
+                        <dx-button icon="fas fa-sign-in-alt" class="mr-2" text="{{'Check In' | translate}}" (onClick)="CheckInOrder(cell.data)">
+                        </dx-button>
+                    </ng-container>
+
+
+                    <!-- <i class="fas fa-sign-out-alt"></i> -->
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'posTypeTemplate'">
+                    <div [innerHtml]="cell.data.posType | posTypeFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <!-- <p class="bill-time">Collected Status: <span
+                      [innerHtml]="this.order?.collectedStatus | statusFormat"></span></p> -->
+                    <div [innerHtml]="cell.data.collectedStatus | statusFormat"></div>
+                </div>
+            </dx-data-grid>
+
+        </div>
+    </div>
+
+</div>

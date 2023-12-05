@@ -1,0 +1,78 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Company' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.list" [showBorders]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="companyCode" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="companyName" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="foreignName" caption="{{'Foreign Name' | translate}}" dataType="string"> </dxi-column>
+
+                <dxi-column dataField="logo" caption="{{'Logo' | translate}}" dataType="string" cellTemplate="logoTemplate"> </dxi-column>
+                <div *dxTemplate="let cell of 'logoTemplate'">
+                    <div class="col-md-12 mt-2 mb-2" style="text-align: center;">
+                        <img [src]="cell.data.logo ? this.url + cell.data.logo : '../../../assets/images/System/LOGO-ABEO.png'" height="100">
+                    </div>
+                </div>
+                <dxi-column dataField="address" caption="{{'Address' | translate}}" dataType="string"> </dxi-column>
+
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <br />
+                    <br />
+                    <dx-button icon="fas fa-eye" text="{{'License' | translate}}" (onClick)="openLicenseModal(licenseTemplate)"></dx-button>
+
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Company' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-company-edit  [isNew]="this.isNew"  [model]="this.company" style="width: 100%" (outModel)="updateModel($event)"></app-management-company-edit>
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #licenseTemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'License' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+
+    <div class="modal-body">
+        <!-- <div class="row"> -->
+            <app-management-license-edit style="width: 100%"></app-management-license-edit> 
+        <!-- </div> -->
+    </div>
+</ng-template>

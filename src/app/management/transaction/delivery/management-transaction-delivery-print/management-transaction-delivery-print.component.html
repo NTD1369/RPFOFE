@@ -1,0 +1,245 @@
+<div class="deliveryPrint_background">
+  <div>
+  <div class="row text-right">
+    <div class="col-md-6 offset-md-6 text-right bt-info">
+        <dx-button *ngIf="this.version==='en'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-gb" type="default"> </dx-button>
+        <dx-button *ngIf="this.version==='vi'" (onClick)="switchVersion()" class="mr-4" stylingMode="outlined" icon="flag-icon flag-icon-vn" type="default"> </dx-button>
+        <dx-button class="btn-print delivery__print" icon="fa fa-print" text="Print" (onClick)="PrintPage()"></dx-button>
+    </div>
+</div>
+  
+<ng-container *ngIf="this.version === 'vi'">
+  <div class="row" style="margin-top:15px ;">
+    <div class="col-md-1"></div>
+    <div class="col-md-4 deliveryPrint_fsw-1">{{this.companyName}}</div>
+    <div class="col-md-6"></div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="deliveryPrint_fsw-2">Vận chuyển hàng</div>
+<div class="row" style="margin-top:10px ;">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Mã vận chuyển:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.purchaseId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Cửa hàng:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.storeId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw"  >Mã thẻ:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.cardCode}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Tên thẻ:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.cardName}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Được tạo bởi:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.createdBy}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Ngày tạo:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.createdOn | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Ngày bắt đầu:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.docDate | date: 'dd/MM/yyyy HH:mm:ss' }}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Ngày hết hạn:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.docDueDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Trạng thái:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.status}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Ghi chú:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.comment}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row mt-4" *ngIf="this.itemDetailPrint.lines.length > 0" style="margin:30px">
+  <table class="w-100 table-template">
+      <tr>
+          <th class="delivery__align">STT</th>
+          <th class="delivery__align">Mã sản phẩm </th>
+          <th class="delivery__align">Barcode</th>
+          <th class="delivery__align">Tên sản phẩm</th>
+          <th class="delivery__align">Đơn vị</th>
+          <th class="delivery__align">Giá tiền</th>
+          <th class="delivery__align">Số lượng</th>
+          <th class="delivery__align">Tổng tính tiền</th>
+      </tr>
+      <tr *ngFor="let item of this.itemDetailPrint.lines; let i = index">
+          <td class="delivery__align">{{i + 1}}</td>
+          <td class="delivery__align">{{item.itemCode}}</td>
+          <td class="delivery__align">{{item.barCode}}</td>
+          <td class="delivery__align">{{item.description}}</td>
+          <td class="delivery__align" >{{item.uomCode}}</td>
+          <td class="delivery__align" >{{item.price | number}}</td>
+          <td class="delivery__align" >{{item.quantity | number}}</td>
+          <td class="delivery__align" > {{item.lineTotal | number}}</td>
+      </tr>
+      <tr>
+          <td class="deliveryPrint__sum"  colspan="7">Tổng: {{this.itemDetailPrint.sumQuality | number}}</td>
+          <td class="delivery__align"  colspan="8">Tổng: {{this.itemDetailPrint.sumLineTotal | number}}</td>
+      </tr>
+  </table>
+</div>
+<div class="row mt-4" >
+  <div class="col-md-9">
+      </div>
+  <div class="col-md-3 ">
+      <span class="col-md-1 col-print-1 p-0"><b class="delivery__fonts">Ngày in phiếu:</b></span>
+      <span class="col-md-10 col-print-10 delivery__fonts">{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+  </div>
+</div>
+<div class="row mt-5 mb-4">
+  <div class="col-md-10 col-print-10 text-right delivery__fonts" >..........,Ngày.........Tháng..........Năm..............</div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-print-6 text-center deliveryPrint__footer"><b>Quản lý cửa hàng</b></div>
+  <div class="col-md-6 col-print-6 text-center deliveryPrint__footer"><b>Người vận chuyển</b></div>
+</div>
+
+  </ng-container>
+  <ng-container *ngIf="this.version === 'en'">
+    <div class="row" style="margin-top:10px ;">
+      <div class="col-md-1"></div>
+      <div class="col-md-4 deliveryPrint_fsw-1">{{this.companyName}}</div>
+      <div class="col-md-6"></div>
+      <div class="col-md-1"></div>
+    </div>
+  
+    <div class="deliveryPrint_fsw-2">Delivery</div>
+<div class="row" style="margin-top:15px ;">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Delivery:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.purchaseId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Store:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.storeId}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Card code:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.cardCode}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Card name:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.cardName}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Created by:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.createdBy}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Created on:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.createdOn | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Document date:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.docDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Document Due Date:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.docDueDate | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Status:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.status}}</div>
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-2 delivery__font_sw">Remark:</div>
+  <div class="col-md-8 delivery__fonts">{{this.itemDetailPrint.comment}}</div>
+  <div class="col-md-1"></div>
+</div>
+<div class="row mt-4" *ngIf="this.itemDetailPrint.lines.length > 0" style="margin:30px">
+  <table class="w-100 table-template">
+      <tr>
+          <th class="delivery__align">STT</th>
+          <th class="delivery__align">Item code</th>
+          <th class="delivery__align">Barcode</th>
+          <th class="delivery__align">Description</th>
+          <th class="delivery__align" >Uom</th>
+          <th class="delivery__align">Price</th>
+          <th class="delivery__align">Quantity</th>
+          <th class="delivery__align">Line Total</th>
+      </tr>
+      <tr *ngFor="let item of this.itemDetailPrint.lines; let i = index">
+          <td class="delivery__align">{{i + 1}}</td>
+          <td  class="delivery__align">{{item.itemCode}}</td>
+          <td  class="delivery__align">{{item.barCode}}</td>
+          <td  class="delivery__align">{{item.description}}</td>
+          <td  class="delivery__align">{{item.uomCode}}</td>
+          <td  class="delivery__align">{{item.price | number}}</td>
+          <td  class="delivery__align">{{item.quantity | number}}</td>
+          <td  class="delivery__align">{{item.lineTotal | number}}</td>
+      </tr>
+      <tr>
+          <td class="deliveryPrint__sum" colspan="7">Sum: {{this.itemDetailPrint.sumQuality | number}}</td>
+          <td class="delivery__align" colspan="8">Sum: {{this.itemDetailPrint.sumLineTotal | number}}</td>
+      </tr>
+  </table>
+</div>
+<div class="row mt-4" >
+  <div class="col-md-9">
+      </div>
+  <div class="col-md-3 ">
+      <span class="col-md-1 col-print-1 p-0"><b class="delivery__fonts">Print date:</b></span>
+      <span class="col-md-10 col-print-10 delivery__fonts" >{{this.date|date:"dd/MM/yyyy HH:mm:ss"}} </span>
+  </div>
+</div>
+<div class="row mt-5 mb-4">
+  <div class="col-md-10 col-print-10 text-right delivery__fonts">Date:.....................................................</div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-print-6 text-center deliveryPrint__footer"><b>Store Manager</b></div>
+  <div class="col-md-6 col-print-6 text-center deliveryPrint__footer"><b>Transfer By</b></div>
+</div>
+
+  </ng-container>
+
+</div>
+</div>

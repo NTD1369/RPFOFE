@@ -1,0 +1,27 @@
+<!-- MAIN BODY CONTENT -->
+ 
+  <div class="main-section">
+
+      <div class="center-wrap p-0">
+        <ng-container *ngIf="this.isNewShift!==true">
+          <div class="row" style="width: 100%;">
+              <ng-container *ngFor="let item of this.shiftList">
+                  <app-shop-shift-open style="  margin: 0px auto;" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12" (shiftSelected)="changeShift($event)" [shift]="item"></app-shop-shift-open>
+
+              </ng-container>
+
+          </div>
+        </ng-container>
+        <ng-container *ngIf="this.isNewShift">
+          <div class="row" style="width: 100%;">
+              <app-shop-tool-shift style="margin:auto;" [isShowCreate]="true"></app-shop-tool-shift>
+          </div>
+        </ng-container>
+    </div>
+    <ng-template #template >
+      <!-- <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment> -->
+      <app-component-notification (closeMoreMenu)="modalRef.hide()" [(inventoryListTS)]="inventoryListTS" [(inventoryListTR)]="inventoryListTR"></app-component-notification>
+
+  </ng-template>
+</div>
+ 

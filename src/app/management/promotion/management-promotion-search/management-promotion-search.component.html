@@ -1,0 +1,98 @@
+<!-- <div class="row">
+         -->
+    <div class="item-search-nav">
+        <div class="row">
+            <div class="col-md-3">
+                <dx-text-box placeholder="{{'Promotion Code' | translate}}" #promotioId></dx-text-box>
+            </div>
+            <div class="col-md-6">
+
+                <dx-text-box placeholder="{{'Promotion Name' | translate}}" #promotioName></dx-text-box>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <dx-button class="mr-2" (onClick)="searchPromotion(promotioId.value, promotioName.value, ddlPromotionType.value,
+        ddlCustomerType.value, fromCalendar.value, toCalendar.value, fromTime.value, toTime.value, chkMon.value, 
+        chkTue.value, chkWed.value, chkThu.value, chkFri.value, chkSat.value, chkSun.value, chkActive.value)" icon="search" type="success" text="{{'Find' | translate}}"></dx-button>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-2">
+            <dx-select-box [items]="promtionType" #ddlPromotionType displayExpr="typeName" valueExpr="promoType" placeholder="{{'Promotion Type' | translate}}"></dx-select-box>
+        </div>
+        <div class="col-md-2">
+            <dx-check-box #chkActive class="mr-2" text="{{'Active' | translate}}"></dx-check-box>
+            <!-- <dx-check-box #promotioId  text="Combine"></dx-check-box> -->
+        </div>
+        <div class="col-md-2">
+            <dx-select-box [items]="customerType" #ddlCustomerType displayExpr="name" valueExpr="value" placeholder="{{'Customer Type' | translate}}"></dx-select-box>
+        </div>
+        <div class="col-md-2">
+            <div class="dx-field">
+                <div class="dx-field-label">Combine</div>
+                <div class="dx-field-value">
+                  <dx-check-box  #chkCombine [(value)]="isCombine"></dx-check-box>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-3">
+          
+        </div>
+
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-2">
+            <dx-date-box #fromCalendar placeholder="{{'Start Date' | translate}}" id="fromCalendar"> </dx-date-box>
+        </div>
+        <div class="col-md-2">
+            <dx-date-box #toCalendar placeholder="{{'End Date' | translate}}" id="toCalendar"> </dx-date-box>
+        </div>
+        <div class="col-md-2">
+            <dx-date-box #fromTime type="time" id="toCalendar" placeholder="{{'Start Time' | translate}}"> </dx-date-box>
+        </div>
+        <div class="col-md-2">
+            <dx-date-box #toTime type="time" id="toCalendar" placeholder="{{'End Time' | translate}}"> </dx-date-box>
+        </div>
+        <div class="col-md-4">
+            <dx-check-box #chkMon class="mr-2" text="{{'Mon' | translate}}"></dx-check-box>
+            <dx-check-box #chkTue class="mr-2" text="{{'Tue' | translate}}"></dx-check-box>
+            <dx-check-box #chkWed class="mr-2" text="{{'Wed' | translate}}"></dx-check-box>
+            <dx-check-box #chkThu class="mr-2" text="{{'Thu' | translate}}"></dx-check-box>
+            <dx-check-box #chkFri class="mr-2" text="{{'Fri' | translate}}"></dx-check-box>
+            <dx-check-box #chkSat class="mr-2" text="{{'Sat' | translate}}"></dx-check-box>
+            <dx-check-box #chkSun class="mr-2" text="{{'Sun' | translate}}"></dx-check-box>
+        </div>
+
+    </div>
+    <dx-data-grid class="mt-2" #dataGrid id="grid-container" [dataSource]="this.promotionList" keyExpr="promoId" [(selectedRowKeys)]="this.selectedKey" [showBorders]="true">
+        <dxo-selection [showCheckBoxesMode]="checkBoxesMode" [mode]="this.mode"></dxo-selection>
+        <dxo-paging [pageSize]="10"></dxo-paging>
+
+        <dxi-column dataField="promoId" caption="{{'Promotion Code' | translate}}"></dxi-column>
+        <dxi-column dataField="promoName" caption="{{'Promotion Name' | translate}}"></dxi-column>
+        <ng-container *ngIf="this.isSAP">
+            <dxi-column dataField="sapPromoId" caption="{{'SAP Promotion ID' | translate}}"></dxi-column>
+            <dxi-column dataField="sapBonusBuyId" caption="{{'SAP Bonus Buy ID' | translate}}"></dxi-column>
+        </ng-container>
+        <dxi-column dataField="promoType" caption="{{'Promotion Type' | translate}}"></dxi-column>
+        <!-- <dxi-column dataField="status" caption="{{'Status' | translate}}"></dxi-column> -->
+        <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+ 
+        <div *dxTemplate="let cell of 'statusTemplate'">
+            <div [innerHtml]="cell.data.status | statusFormat"></div>
+        </div>
+    </dx-data-grid>
+
+    <!-- <dx-data-grid  [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt
+    id="controlList" [dataSource]="this.promotionList" keyExpr="promoId" [showRowLines]="true"
+    [showBorders]="true" [columnAutoWidth]="true"  [(selectedRowKeys)]="this.selectedKey"> 
+    <dxo-selection  [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+
+    </dx-data-grid> -->
+    <div class="row mt-2" style="text-align: right;">
+        <dx-button (onClick)='selectPromotion()' icon="check" type="success" text="{{'Select' | translate}}"></dx-button>
+
+    </div>
+<!-- </div> -->

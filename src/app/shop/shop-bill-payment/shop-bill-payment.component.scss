@@ -1,0 +1,112 @@
+
+.modal-discount-btn-wrap-amount{
+    margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+  }
+
+  .btn-discount-amount{
+    opacity: 0.6;
+    border: 2px solid #c5c5d1;
+    background: transparent;
+    padding: 10px 30px;
+    border-radius: 15px;
+  }
+  .btn-discount-amount:hover, .btn-discount-amount:active, .btn-discount-amount:focus {
+    background: #4fadaf;
+    color: white;
+    border-color: #4fadaf;
+    opacity: 1;
+  }
+
+  .right-modal-section{
+    height: 100%!important;
+    
+  }
+  .vertical-scroll
+  {
+    min-height: 220px!important;
+  }
+  .modal-payment-info{
+    height: 100px!important;
+    margin-top: 0px!important;
+  }
+  .lblTitle
+{
+    font-size: 15px!important;
+    font-weight: 700!important;
+    // color: darkslategray!important;
+}
+.lblNumber
+{
+    font-size: 30px!important;
+    font-weight: 700!important;
+    // color: darkslategray!important;
+}
+
+
+
+.hideContent {
+  opacity: 0!important;
+}
+.showContent {
+  opacity: 1!important;
+}
+.btnLoading {
+  z-index: 1100;
+  position: absolute;
+  top: 40%;
+  left: 48%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  text-align: center;
+}
+
+.spinner-grow {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  margin: 0 auto;
+  animation: spinner-grow .75s linear infinite;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+
+
+.hideContent {
+  opacity: 0!important;
+}
+
+.btnLoadingX {
+  z-index: 150;
+  position: absolute;
+  top: 40%;
+  left: 48%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  text-align: center;
+}
+
+.spinner-grow {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  margin: 0 auto;
+  animation: spinner-grow .75s linear infinite;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}

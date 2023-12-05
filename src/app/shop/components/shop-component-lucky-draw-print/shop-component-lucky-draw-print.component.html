@@ -1,0 +1,114 @@
+<style>
+  .textTitlePrint {
+      font-weight: 600;
+  }
+</style>
+
+<ng-container *ngIf="this.order!==null && this.order!==undefined">
+  <div class="col-md-6 col-sm-6  offset-md-6 text-right" id="dropdownWidth">
+      <dx-toolbar>
+          <dxi-item location="before" widget="dxDropDownButton" [options]="{
+        stylingMode: 'text',
+        displayExpr: 'name',
+        keyExpr: 'value',
+        useSelectMode: true,
+        items: widths,
+        selectedItemKey: width,
+        onSelectionChanged: onWidthChanged,
+        itemTemplate: 'widthsItem'
+      }">
+          </dxi-item>
+          <!-- selectedItemKey: 11.5, Giá trị cũ -->
+<!-- 
+          <div *dxTemplate="let data of 'widthsItem'">
+              {{data.name}}
+          </div> -->
+
+      </dx-toolbar>
+  </div>
+ 
+
+  <div #pdfContainer_1 *ngIf="this.PrintTemplate === 'Template1'">
+      <div class="center-wrap print-p print-main">
+
+          <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+              <!-- <h2 class="maintenance-heading" >Printing</h2> -->
+              <div class="maintenance-row">
+                  <div>
+                      <!--(printClicked)="printerMarkerClicked()"  ngxPrintItemMarker -->
+                      <div class="print-main-cl">
+                          <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                              <h3 class="text-center"><b #idName>{{this.order?.storeName}}</b></h3>
+
+                              <div class="text-center mb-2" style="font-size:15px; margin-bottom: 0 !important;">
+                                <h4> LUCKY DRAW ENTRY FORM </h4> 
+                              </div>
+                              
+                              <ng-container>
+                                  <div *ngIf="(this.order?.status!=='H' && this.order?.status!=='Hold') || ((this.order?.status==='H' || this.order?.status==='Hold') && (this.HoldBillPrintMode === '' || this.HoldBillPrintMode === 'Full' || this.HoldBillPrintMode === 'Header'))">
+                                 
+                                     
+                                      <!-- <container-element [ngSwitch]="this.order?.cusGrpId">
+                                          <some-element *ngSwitchCase="'1'">
+                                              <p> <label class="textTitlePrint">{{'Name' | translate}}: </label> {{this.order?.cusName}} </p>
+                                              <p> <label class="textTitlePrint">{{'NPIC/PASSWORD' | translate}}: </label> {{this.order?.cusId}} </p>
+                                              <p> <label class="textTitlePrint">{{'TEL NO' | translate}}: </label> {{this.order?.cusId}} </p>
+                                              <p *ngIf="this.order?.rewardPoints > 0"> <label class="textTitlePrint">{{'Point Balance' | translate}}: </label> 
+                                                {{this.order?.rewardPoints | number}}
+                                              </p> 
+                                          </some-element>
+
+                                          <some-element *ngSwitchDefault>
+                                           
+                                              <p *ngIf="this.order?.cusGrpId != '2'"> <label class="textTitlePrint">{{'Customer' | translate}}: </label> {{this.order?.cusName}} - {{this.order?.phone}}</p>
+                                          </some-element>
+                                      </container-element> -->
+                                      <p> <label class="textTitlePrint">{{'Name' | translate}}: </label> ___________________________</p>
+                                      <p> <label class="textTitlePrint">{{'IC/PASSPORT' | translate}}: </label> ___________________________</p>
+                                      <p> <label class="textTitlePrint">{{'TEL NO' | translate}}: </label>___________________________ </p>
+                                      <hr class="style5">
+                                      <p > 
+                                        <label class="textTitlePrint">{{'RECEIPT NO' | translate}}: </label>
+                                         {{this.order?.transId}}
+                                      </p>
+                                      <p > 
+                                        <label class="textTitlePrint">{{'RECEIPT DATE' | translate}}: </label>
+                                         {{this.order?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}
+                                      </p>
+                                      <p > 
+                                        <label class="textTitlePrint">{{'TOTAL AMT PURCHASE' | translate}}: </label>
+                                         {{this.order?.totalAmount | currencyFormat}}
+                                      </p>
+                                      <p > 
+                                        <label class="textTitlePrint">{{'Lucky Number' | translate}}: </label>
+                                         {{this.order?.luckyNo }}
+                                      </p>
+
+                                      <div style="font-size: 13px;" *ngIf="this.order?.storeAddress">Contact:({{this.order?.companyPhone}}) - {{this.order?.email}} <br>
+                                        <label style="font-size: 12px;"> - {{this.order?.storeAddress}}</label>
+                                    </div>
+                                  </div>
+                                  
+                              </ng-container>
+
+                          </div>
+                      </div>
+                  </div>
+
+ 
+              </div>
+          </div>
+      </div>
+
+
+  </div>
+  <div class="row mt-4 printPageShopCheck" *ngIf="this.PrintTemplate === 'Template1'">
+      <div class="col-md-12 w-100">
+          <button class="btn-search w-100" (click)="PrintPage(1)" style="padding: 10px 30px"><i
+                          class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+      </div>
+  </div>
+
+ 
+</ng-container>
+ 

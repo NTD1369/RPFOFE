@@ -1,0 +1,210 @@
+
+
+<div class="center-wrap" *ngIf="this.authService.storeSelected()!==null && this.authService.storeSelected()!==undefined">
+  <!-- class="maintenance-card" -->
+  <div class="mb-3" style="margin: auto;    width: 100%;     height: 100%!important;">
+
+      <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12">
+              <div class="search-wrap">
+                  <label for="item-searchbar" class="section-title">{{'Dashboard' | translate}}</label>
+              </div>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-3">
+              <div class="card-counter primary">
+                  <i class="fas fa-cart-plus iconX"></i>
+                  <span class="count-numbers">{{this.dashboard?.totalBill | number}}</span>
+                  <span class="count-name">{{'Total Bill' | translate}}</span>
+              </div>
+          </div>
+
+          <div class="col-md-3">
+              <div class="card-counter info">
+                  <i class="fas fa-hand-holding-usd iconX"></i>
+                  <span class="count-numbers">{{this.dashboard?.totalAmount | number}}</span>
+                  <span class="count-name">{{'Total Amount' | translate}}</span>
+              </div>
+          </div>
+
+          <div class="col-md-3">
+              <div class="card-counter success">
+                  <i class="fas fa-clipboard-check iconX"></i>
+                  <span class="count-numbers">{{this.dashboard?.totalSalesItem | number}}</span>
+                  <span class="count-name">{{'Total Item' | translate}}</span>
+              </div>
+          </div>
+
+          <div class="col-md-3">
+              <div class="card-counter danger ">
+                  <i class="fas fa-ban iconX"></i>
+                  <span class="count-numbers">{{this.dashboard?.cancelPercent | number}} %</span>
+                  <span class="count-name">{{'Cancel Order' | translate}}</span>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="maintenance-card mt-4" style="margin: auto;    width: 100%;     height: 100%;">
+
+      <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12">
+              <div class="search-wrap">
+                  <label for="item-searchbar" class="section-title">{{'Chart Area' | translate}}</label>
+              </div>
+          </div>
+          <div class="col-lg-6 col-md-12 col-sm-12">
+              <div class="row">
+                  <div class="col-md-1">
+                    <!-- {{'Top' | translate}}
+                    <dx-select-box
+                        [items]="simpleTops"
+                        [value]="simpleTops[10]"
+                        [readOnly]="true"
+                    ></dx-select-box> -->
+                  </div>
+                  <div class="col-md-4">
+                      {{'From Date' | translate}}
+                      <dx-date-box #fromCalendar id="fromCalendar" displayFormat="dd/MM/yyyy"> </dx-date-box>
+                  </div>
+                  <div class="col-md-4">
+                      {{'To Date' | translate}}
+                      <dx-date-box #toCalendar id="fromCalendar" displayFormat="dd/MM/yyyy"> </dx-date-box>
+
+                  </div>
+                  <div class="col-md-3">
+                      <dx-button class="mr-2 mt-3" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value, '10')" text="{{'Search' | translate}}">
+                      </dx-button>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <div class="row ">
+          <div class="col-lg-6 col-md-12 col-sm-12 mt-4">
+              <dx-pie-chart *ngIf="salesTop && salesTop.length" id="pie" type="doughnut" title="{{'Top Item by Quantity' | translate}}" palette="Soft Pastel" [dataSource]="this.salesTop">
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-legend horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+                  <dxi-series argumentField="itemCode" valueField="precentQuantity">
+                      <dxo-small-values-grouping mode="topN" [topCount]="20"></dxo-small-values-grouping>
+                      <dxo-label [visible]="true" format="fixedPoint" [customizeText]="customizeLabel">
+                          <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                      </dxo-label>
+                  </dxi-series>
+              </dx-pie-chart>
+          </div>
+          <div class="col-lg-6 col-md-12 col-sm-12 mt-4">
+              <dx-pie-chart *ngIf="salesTop && salesTop.length" id="pie" palette="bright" title="{{'Top Item by Amount' | translate}}" [dataSource]="this.salesTop">
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-legend horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+                  <dxi-series argumentField="itemCode" valueField="totalAmount">
+                      <dxo-small-values-grouping mode="topN" [topCount]="20"></dxo-small-values-grouping>
+                      <dxo-label [visible]="true" [format]="this.authService.numberFormat('amount')"  [customizeText]="customizeLabelX">
+                          <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                      </dxo-label>
+                  </dxi-series>
+              </dx-pie-chart>
+          </div>
+          <!-- <div class="col-lg-4 col-md-12 col-sm-12 mt-4">
+          <dx-pie-chart  *ngIf="salesTop && salesTop.length"
+              id="pie"
+              type="doughnut"
+              title="Top Item By Trans"
+              palette="Soft Pastel"
+              [dataSource]="this.salesTop">
+              <dxo-export [enabled]="true"></dxo-export>
+              <dxo-legend
+                  horizontalAlignment="center"
+                  verticalAlignment="bottom"></dxo-legend>
+              <dxi-series        
+                  argumentField="itemCode"
+                  valueField="totalTransId">
+                  <dxo-small-values-grouping
+                      mode="topN"
+                      [topCount]="3"></dxo-small-values-grouping>
+                  <dxo-label
+                      [visible]="true"
+                      format="fixedPoint"
+                      [customizeText]="customizeLabel">
+                      <dxo-connector
+                          [visible]="true"
+                          [width]="1"></dxo-connector>
+                  </dxo-label>
+              </dxi-series>
+          </dx-pie-chart>
+      </div> -->
+      </div>
+
+
+
+      <!-- <div class="row mt-4">
+          <div class="col-md-12">
+              <dx-chart #chart *ngIf="salesTop && salesTop.length > 0" id="chart" title="Top Item"
+                  [dataSource]="this.salesTop" (onPointClick)="onPointClick($event)">
+
+                  <dxi-series valueField="totalTransId" name="Total TransId"></dxi-series>
+                  <dxi-series valueField="totalQuantity" name="Total Quantity"></dxi-series>
+                  <dxi-series valueField="totalAmount" name="Total Amount"></dxi-series>
+                  <dxo-common-series-settings argumentField="itemCode" type="bar" hoverMode="allArgumentPoints"
+                      selectionMode="allArgumentPoints">
+                      <dxo-label [visible]="true" [format]="{
+                          type: 'fixedPoint',
+                          precision: '0'
+                      }">
+                      </dxo-label>
+                  </dxo-common-series-settings>
+                  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                  </dxo-legend>
+                  <dxo-export [enabled]="true"></dxo-export>
+              </dx-chart>
+          </div>
+
+      </div> -->
+
+      <div class="row mt-5">
+          <div class="col-md-12 ">
+              <div class="row ">
+                  <div class="col-md-6">
+                      <h3><b>{{'Sales report' | translate}}</b></h3>
+                  </div>
+                  <div class="col-md-6 text-right">
+                      <button (click)="loadChartOrderByPeriod(1)" class="button-period">{{'Week' | translate}}</button>
+                      <button (click)="loadChartOrderByPeriod(2)" class="button-period">{{'This Month' | translate}}</button>
+                      <button (click)="loadChartOrderByPeriod(3)" class="button-period">{{'This Year' | translate}}</button>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-12">
+              <dx-chart id="chartOrder" [dataSource]="dataSource">
+                  <dxo-title text="{{nameChartOrder | translate}}"></dxo-title>
+                  <dxi-series argumentField="Name" valueField="Value" type="bar" name="{{'Amount' | translate}}" color="#ffaa66"></dxi-series>
+                  <!-- <dxi-value-axis name="aaa" position="top">
+                      <dxo-grid [visible]="true"></dxo-grid>
+                      <dxo-title text="Amount"></dxo-title>
+                  </dxi-value-axis> -->
+                  <dxo-common-series-settings
+                    argumentField="state"
+                    type="bar"
+                    hoverMode="allArgumentPoints"
+                    selectionMode="allArgumentPoints"
+                    >
+                    <!-- [format]="{
+                        type: 'fixedPoint',
+                        precision: '0'
+                    }" -->
+                    <dxo-label
+                        [visible]="true"
+                        [format]="this.authService.numberFormat('amount')"
+                       
+                    >
+                    </dxo-label>
+                  </dxo-common-series-settings>
+                  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"></dxo-legend>
+                  <dxo-export [enabled]="true"></dxo-export>
+              </dx-chart>
+          </div>
+      </div>
+  </div>
+</div>

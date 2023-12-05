@@ -1,0 +1,136 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <!-- <div class="col-md-12"> -->
+        <div class="row">
+            <div class="col-md-6">
+                <label for="item-searchbar" class="section-title">{{'Item Serial' | translate}}</label>
+            </div>
+
+            <div class="col-md-6" style="text-align: right;">
+                <!-- <dx-button class="mr-2" icon="close" type="danger" *ngIf=" this.isUpdate" (onClick)="deleteRowGet()" text="{{'Change to N/A' | translate}}">
+                </dx-button>  -->
+
+                <dx-button class="mr-2" icon="close" type="danger" *ngIf=" this.isUpdate" (onClick)="changeToInactive()" text="{{'Change to Inactive' | translate}}">
+                </dx-button> 
+            </div>
+        </div>
+
+        <!-- </div> -->
+        <!-- <div class="search-wrap">
+          
+         
+      </div> -->
+      <div class="row justify-content-center flex-row mb-3 mt-2" *ngIf="storeOptions?.length > 0">
+             
+            <div class="col-md-2 mb-1">
+                {{'Store' | translate}}
+                <dx-select-box #cbbStore [value]="storeOptions[0].value" [searchEnabled]="true"
+                 [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+            </div>
+            <div class="col-md-2 mb-1">
+                {{'Item' | translate}}
+                 <dx-text-box #txtItem></dx-text-box>
+              </div>
+            <div class="col-md-2 mb-1">
+                {{'Keyword' | translate}}
+                 <dx-text-box #txtKeyword></dx-text-box>
+              </div>
+              <div class="col-md-2 mb-1">
+                <span >  {{'Display' | translate}}</span> 
+                <dx-number-box [value] = 'display' (onValueChanged)="changedisplay($event)" type ='number'  placeholder="{{'number' | translate}}" ></dx-number-box>
+            </div>
+            <div class="col-md-2 mt-3">
+            <ng-container *ngIf="this.isLoadingData===false">  
+                <dx-button class="mr-2 pt-1" icon="search" type="success" (onClick)="loadItems(cbbStore.value,'', txtItem.value, txtKeyword.value )" text="{{'Search' | translate}}"></dx-button>
+            </ng-container>
+            <ng-container *ngIf="this.isLoadingData===true">
+                <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+            </ng-container> 
+            
+            </div>
+        </div>
+        <div class="table-wrap mt-3">
+            <!-- (onToolbarPreparing)="onToolbarPreparing($event)" -->
+            <dx-data-grid *ngIf="this.items?.length > 0" [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridContainer" (onRowRemoved)="remove($event)" (onSaved)="updateModel($event)" (onEditorPreparing)="editorPreparing($event)" #dataGrid [dataSource]="this.items"
+                [allowColumnResizing]="true" [(selectedRowKeys)]="this.selectedKey" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                <!-- <dxo-editing mode="cell"  ></dxo-editing> -->
+                <dxo-editing mode="row" [useIcons]="true" [allowUpdating]="allowEditing" [allowDeleting]="allowDeleting">
+                </dxo-editing>
+                <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                </dxo-selection>
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+
+                <dxi-column dataField="itemCode" [allowEditing]='false' [groupIndex]="1" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="slocId" [allowEditing]='false' [groupIndex]="0" caption="{{'SlocId' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                <dxi-column dataField="serialNum" [allowEditing]='false' caption="{{'Serial Num' | translate}}" dataType="string" alignment="right"> </dxi-column>
+                <!-- <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}" dataType="number"> </dxi-column> -->
+                <dxi-column dataField="expDate" caption="{{'Exp Date' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat"> </dxi-column>
+                <dxi-column dataField="transId" [allowEditing]='false' caption="{{'Sales Tran' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                <dxi-column dataField="redeemedTransId" [allowEditing]='false' caption="{{'Redeemed by Tran' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                <!-- <dxi-column dataField="prefix" caption="{{'Prefix' | translate}}" dataType="string"> </dxi-column> -->
+                <!-- <dxi-column dataField="qrCode" caption="{{'QRCode' | translate}}" dataType="string"> </dxi-column> -->
+                <!-- <dxi-column dataField="status" caption="Status" dataType="string"> </dxi-column> -->
+                <!-- <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column> -->
+
+                <!-- <dxi-column cellTemplate="cellTemplate"></dxi-column>
+              <div *dxTemplate="let cell of 'cellTemplate'">
+                  <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+              </div> -->
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusSerialFormat"></div>
+                </div>
+                <dxi-column alignment="center" [allowEditing]='false' dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                    <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+
+                <dxi-column type="buttons">
+                    <dxi-button name="edit"></dxi-button>
+                    <dxi-button name="delete"></dxi-button>
+                    <!-- <dxi-button template="myCommand">
+                    <div *dxTemplate="let data of 'myCommand'">
+                       
+                       {{data.data.status}}
+                       
+                        <ng-container *ngIf="data.data.status==='I'">
+                         
+                        </ng-container>
+                        <ng-container *ngIf="data.data.status==='A'">
+                          <dxi-button name="delete"></dxi-button>
+                        </ng-container>
+                    </div>
+                </dxi-button> -->
+                </dxi-column>
+                <dxo-summary [recalculateWhileEditing]="true">
+                    <dxi-total-item column="serialNum" summaryType="count" [valueFormat]="this.authService.numberFormat('quantity')"></dxi-total-item>
+                    <!-- <dxi-total-item column="lineTotal" summaryType="sum" [valueFormat]="this.authService.numberFormat('amount')">
+                </dxi-total-item> -->
+                    <dxi-group-item column="serialNum" summaryType="count" [valueFormat]="this.authService.numberFormat('quantity')" [showInGroupFooter]="false" [alignByColumn]="true"></dxi-group-item>
+                </dxo-summary>
+                <!-- <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | StatusSerialFormat"></div>
+              </div> -->
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+<!-- 
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Item UoM' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-managemen-itemuom-edit [model]="this.model" style="width: 100%" (outModel)="updateModel($event)"></app-managemen-itemuom-edit>
+ 
+      </div>
+  </div>
+</ng-template> -->

@@ -1,0 +1,43 @@
+.button-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-end{
+    display: flex; 
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.bor-apply{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.input-phone{
+    margin: 0;
+    padding: 7px 9px 8px;
+    background: rgba(0,0,0,0);
+    color: #333;
+    font-size: 1em;
+    border-radius: 4px;
+    min-height: 34px;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.input-phone:focus{
+    border-color: #337ab7;
+}
+
+.loadingText{
+	position: absolute;
+    top: 55%;
+	left: 0%;
+    width: 100%;
+    text-align: center;
+	z-index: 100000;
+    // 99999
+    color: white;
+}

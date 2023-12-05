@@ -1,0 +1,128 @@
+.systemNotify{
+    position: fixed;
+    background-color: white;
+  
+    top: 0px;
+    z-index: 1100;
+    height: 90px;
+    color: red;
+    font-size: 25px;
+    font-weight: 600;
+    width: 100%;
+}
+/* .shopping-cart {
+  display: inline-block;
+  background: url('http://cdn1.iconfinder.com/data/icons/jigsoar-icons/24/_cart.png') no-repeat 0 0;
+  width: 45px;
+  height: 45px;
+  margin: 0 10px 0 0;
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+} */
+#custom-target {
+  position: relative;
+  width: 600px;
+  height: 300px;
+  border-style: solid;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.addImg{
+  width: 24px;
+  height: 24px;
+  margin: 0 10px 0 0;
+  position: fixed;
+  bottom: 20px;
+  left: 100px;
+  z-index: 1100;
+}
+.shake {
+  animation: shake-animation 1.2s ease infinite;
+  transform-origin: 50% 50%;
+}
+/* @-webkit-keyframes shake-animation {
+  0%, 100% {-webkit-transform: translateX(0);} 
+  10%, 30%, 50%, 70%, 90% {-webkit-transform: translateX(-10px);} 
+  20%, 40%, 60%, 80% {-webkit-transform: translateX(10px);} 
+}
+
+@keyframes shake-animation { 
+  0%, 100% {transform: translateX(0);} 
+  10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);} 
+  20%, 40%, 60%, 80% {transform: translateX(10px);} 
+}
+
+.shake { 
+  -webkit-animation-name: shake-animation; 
+  animation-name: shake-animation; 
+} */
+
+ @keyframes shake-animation {
+  0% { transform:translate(0,0) }
+ 1.78571% { transform:translate(5px,0) }
+ 3.57143% { transform:translate(0,0) }
+ 5.35714% { transform:translate(5px,0) }
+ 7.14286% { transform:translate(0,0) }
+ 8.92857% { transform:translate(5px,0) }
+ 10.71429% { transform:translate(0,0) }
+ 100% { transform:translate(0,0) }
+} 
+.item-shopping-cart{
+  display: inline-block;
+  background: url('http://cdn1.iconfinder.com/data/icons/jigsoar-icons/24/_cart.png') no-repeat 0 0;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px 0 0;
+  position: fixed;
+  bottom: 10px;
+  left: 100px;
+}
+
+.txtVersion{
+    position: fixed;
+    bottom: 10px;
+    padding-left: 1px;
+    z-index: 1000;
+    color: #BE2C2C;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+.dot {
+  height: 10px;
+  width: 10px; 
+  border-radius: 50%;
+  display: inline-block;
+}
+.success{
+  background-color: green;
+}
+.red{
+  background-color: red;
+}
+.warning{
+  background-color: orange;
+}
+#pot {
+    bottom: 15%;
+    width: 100%;
+    position: absolute;
+    -webkit-animation: linear infinite;
+    -webkit-animation-name: run;
+    -webkit-animation-duration: 5s;
+  }
+  @-webkit-keyframes run {
+    0% {
+      left: 0;
+    }
+    50% {
+      left: 100%;
+    }
+    100% {
+      left: 0;    
+    }
+  }
+   

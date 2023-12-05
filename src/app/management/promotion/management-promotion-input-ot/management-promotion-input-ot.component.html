@@ -1,0 +1,48 @@
+<div   style="padding: 20px;" *ngIf="this.ot!==null && this.ot!==undefined">
+  
+    <div class="row mt-2" >
+      <div class="col-md-4">Group Id</div>
+      <div class="col-md-8">
+        <input class="form-control"  [(ngModel)]="this.ot.lineCode"  [(value)]="this.ot.lineCode" type="search" #lineCode  
+        placeholder="{{'lineCode' | translate}}" aria-label="lineCode">
+      </div>
+      
+    </div>
+   
+      <div class="row">
+        <div class="col-md-12 mt-2">
+          <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="items" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " 
+               [(selectedRowKeys)]="this.selectedKey" [focusedRowEnabled]="true" [hoverStateEnabled]="true"  >
+              <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+              </dxo-search-panel>
+              <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+              <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+              <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+              <dxi-column dataField="barCode" caption="Barcode"></dxi-column>
+              <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+              </dxo-selection>
+          </dx-data-grid>
+         
+          <div class="row mt-2 mb-2">
+                
+            <div class="col-md-10">
+             
+              </div>
+            <div class="col-md-2">
+              <dx-button style="width: 100%;" icon="check" type="success" text="Select" (onClick)="applyOTGroup()">
+              </dx-button>
+  
+              </div>
+      
+          </div>
+        </div>
+      </div>
+       
+      
+
+    
+  </div>
+   
+ 

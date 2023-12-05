@@ -1,0 +1,106 @@
+<div class="deliveryReturnEdit__background">
+
+  <div class="row">
+      <div class="col-md-6">
+        <a routerLink="/admin/deliveryReturn" class="back-btn">
+            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+        </a>
+        <span class="deliveryReturnEdit__fsw">View return</span>
+      </div>
+      <div class="col-md-6" style="text-align: right;">
+        <dx-button class="btn-print" icon="fa fa-print" (onClick)="PrintDetail(this.itemDeliveryReturn)" text="{{'Print' | translate}}" style="color: #fff;"></dx-button>
+      </div>
+    </div>
+<ng-container>
+  <div class="row" style="margin-top: 10px;">
+    <div class="col-md-8">
+      <div class="row" >
+         <!-- *ngIf="this.itemDeliveryReturn !== null && this.itemDeliveryReturn !== undefined && this.itemDeliveryReturn.length>0" -->
+        <div class="col-md-3">
+            <label for="itemDetailId">{{'ID' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.purchaseId"></dx-text-box>
+        </div>
+        <div class="col-md-9">
+          <label for="customer">{{'Vendor' | translate}}</label>
+          <dx-text-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.cardName" aria-placeholder="Title"></dx-text-box>
+        
+        </div>
+        <div class="col-md-3">
+          <label >{{'Store' | translate}}</label>
+          <dx-text-box [readOnly]="true" #cbbStore [(value)]="this.itemDeliveryReturn.storeId"> </dx-text-box>
+        </div>
+        <div class="col-md-3">
+          <label >{{'Ref id' | translate}}</label>
+          <dx-text-box [readOnly]="true" #cbbRefId [(value)]="this.itemDeliveryReturn.prNum"> </dx-text-box>
+        </div>
+
+       
+
+   
+
+        <div class="col-md-3">
+          <label >{{'Order Date' | translate}}</label>
+          <dx-date-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.docDate"> </dx-date-box>
+      </div>
+      <div class="col-md-3">
+          <label >{{'Delivery Date' | translate}}</label>
+          <dx-date-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.docDueDate"> </dx-date-box>
+      </div>
+      <div class="col-md-3" >
+        <label >{{'Doc Status' | translate}}</label>
+        <!-- <dx-text-box [readOnly]="true" [style]="{'width':'100%'}" formControlName="status" name="status" [dataSource]="statusOptions" displayExpr="name" valueExpr="value" [(ngModel)]="this.itemDeliveryReturn.status" [(value)]="this.itemDeliveryReturn.status"></dx-text-box> -->
+        <dx-select-box [readOnly]="true" [style]="{'width':'100%'}" formControlName="status" name="status" placeholder="--- Select Status ---" [dataSource]="statusOptions" displayExpr="name" valueExpr="value" [(ngModel)]="this.itemDeliveryReturn.status" [(value)]="this.itemDeliveryReturn.status"></dx-select-box>
+
+      </div>
+      <div class="col-md-3">
+        <label >{{'Doc Entry' | translate}}</label>
+        <dx-text-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.docEntry"></dx-text-box>
+      </div>
+      <div class="col-md-3">
+        <label >{{'Created By' | translate}}</label>
+        <dx-text-box [readOnly]="true" [(value)]="this.itemDeliveryReturn.createdBy"></dx-text-box>
+      </div>
+      <div class="col-md-3" >
+        <label >{{'Created On' | translate}}</label>
+        <dx-date-box [readOnly]="true" #createdOn id="createdOn" [displayFormat]="this.dateFormat + ' HH:mm:ss'" [(ngModel)]="this.itemDeliveryReturn.createdOn" [(value)]="this.itemDeliveryReturn.createdOn"> </dx-date-box>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="col-md-4">
+      <label for="comment">{{'Remark' | translate}}</label>
+      <dx-text-area [readOnly]="true" [(value)]="this.itemDeliveryReturn.comment" aria-placeholder="Title" [height]="90"></dx-text-area>
+      <label for="InvoiceAddress">{{'Invoice Address' | translate}}</label>
+      <dx-text-area [readOnly]="true" [height]="90" [(value)]="this.itemDeliveryReturn.invoiceAddress"></dx-text-area>
+  </div> -->
+   
+</div>
+</ng-container>
+
+<div style="margin-top: 10px;">
+
+  <dx-data-grid
+    id="gridContainer"
+    [dataSource]="this.lines"
+    [showBorders]="true"
+  >
+  <dxi-column dataField="itemCode" caption="{{'Item code' | translate}}"></dxi-column>
+  <dxi-column [width]="400" dataField="description" caption="{{'Description' | translate}}"></dxi-column>
+  <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+  <dxi-column dataField="sLocId" caption="{{'Sloc' | translate}}"></dxi-column>
+  <dxi-column dataField="uomCode" caption="{{'Uom' | translate}}"></dxi-column>
+  <dxi-column dataField="price" caption="{{'Price' | translate}}" [format]="this.authService.numberFormat('price')"></dxi-column>
+  <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}" [format]="this.authService.numberFormat('quantity')"></dxi-column>
+  <dxi-column dataField="lineTotal" caption="{{'Line total' | translate}}" [format]="this.authService.numberFormat('amount')"></dxi-column>
+  <dxi-column dataField="comment" caption="{{'Remark' | translate}}"></dxi-column>
+  <!-- <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail> -->
+    <dxo-summary [recalculateWhileEditing]="true">
+    <dxi-total-item column="lineTotal" summaryType="{{'' | translate}}sum" [customizeText]="customizeText"></dxi-total-item>
+    <dxi-total-item column="quantity" summaryType="{{'' | translate}}sum" [valueFormat]="this.authService.numberFormat('quantity')"></dxi-total-item></dxo-summary>
+
+
+  </dx-data-grid>
+</div>
+
+
+
+</div>

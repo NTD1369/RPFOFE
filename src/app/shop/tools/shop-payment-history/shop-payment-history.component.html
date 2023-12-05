@@ -1,0 +1,68 @@
+<!-- 
+<div class="number-pad" > 
+  <div class="row mb-3 p3">
+ 
+    
+  
+  </div>
+ 
+</div> -->
+
+<div id='invoice-modal'>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title"> {{'Payment Histories' | translate}}</h4>
+
+
+      <button type="reset" class="reset-btn ml-3 " (click)="toggleVoucherList()" style="width: 13%;">
+        <i class="fas fa-ticket-alt"></i>
+
+      </button>
+
+      <button type="reset" class="reset-btn mr-1 closeCustom" (click)="closeModal()" style="width: 13%;">
+        <i class="fas fa-window-close"></i>
+
+      </button>
+      <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button> -->
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="this.showVoucherList">
+      <swiper #usefulSwiper [config]="config">
+        <div class="swiper-wrapper">
+            <div *ngFor="let item of this.itemShow" class="swiper-slide">
+                <button style="width:100%" class="mb-1 number-div number-divCus pt-2 pb-2 pay-option-btn" (click)="selectPayment(item)"> {{item.refNum }}
+                {{ item.shortName }}
+            </button>
+            </div>
+        </div>
+        <ng-container *ngIf="this.itemShow?.length > this.pageSize">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </ng-container>
+     </swiper>
+    </ng-container>
+    <ng-container *ngIf="!this.showVoucherList">
+      <swiper #usefulSwiper [config]="config">
+        <div class="swiper-wrapper">
+            <div *ngFor="let item of this.itemShow" class="swiper-slide">
+                <button style="width:100%" class="mb-1 number-div number-divCus pt-2 pb-2 pay-option-btn" (click)="selectPayment(item)"> {{item.currency }}
+                {{ item.shortName }}
+            </button>
+            </div>
+        </div>
+        <ng-container *ngIf="this.itemShow?.length > this.pageSize">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </ng-container>
+     </swiper>
+    </ng-container>
+    
+      
+
+  </div>
+
+</div>
+ 

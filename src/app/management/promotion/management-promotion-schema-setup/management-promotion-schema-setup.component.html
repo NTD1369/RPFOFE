@@ -1,0 +1,86 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a routerLink="/admin/promotion-schema" class="back-btn">
+                            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                        </a>
+                        <label for="item-searchbar" *ngIf="this.isEdit===true" class="section-title">{{'Edit Promotion Schema' | translate}}</label>
+
+                        <label for="item-searchbar" *ngIf="this.isEdit===false" class="section-title">{{'Create Promotion Schema' | translate}}</label>
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        <dx-button class="mr-2" (onClick)="openModal(template)" icon="add" type="default" text="{{'Add Row' | translate}}"></dx-button>
+                        <dx-button class="mr-2" *ngIf="this.canUpdate===true" (onClick)="saveSchema()" icon="floppy" type="success" text="{{'Save' | translate}}"></dx-button>
+                    </div>
+                </div>
+                <div class="item-search-nav mb-2">
+                    <div class="row mt-3 align-items-center">
+                        <div class="col-md-1">
+                            {{'Schema Code' | translate}}
+                        </div>
+                        <div class="col-md-3">
+                            <dx-text-box class="mt-1" [readOnly]="true" [(value)]="this.schema.schemaId"></dx-text-box>
+                        </div>
+
+                        <div class="col-md-1">
+                            {{'Schema Name' | translate}}
+
+                        </div>
+                        <div class="col-md-3">
+                            <dx-text-box class="mt-1" [(value)]="this.schema.schemaName"></dx-text-box>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-md-1">
+                            {{'Schema Type' | translate}}
+                        </div>
+                        <div class="col-md-3">
+                            <dx-select-box class="mt-1" #ddlAllowChain [value]="this.schema.allowChain" [(ngModel)]="this.schema.allowChain" name="AllowChain" [placeholder]="'Allow Chain'" [dataSource]="this.chainOptions" displayExpr="name" valueExpr="value" itemTemplate="item">
+                                <div *dxTemplate="let data of 'item'" class="custom-item">
+                                    <div class='product-name'>{{data.name}}</div>
+                                </div>
+                            </dx-select-box>
+                        </div>
+
+                        <div class="col-md-1">
+                            {{'Status' | translate}}
+                        </div>
+                        <div class="col-md-3">
+                            <dx-select-box class="mt-1" #ddlStatus [value]="this.schema.status" [(ngModel)]="this.schema.status" name="status" [placeholder]="'Status'" [dataSource]="this.statusOptions" displayExpr="name" valueExpr="value" itemTemplate="item">
+                                <div *dxTemplate="let data of 'item'" class="custom-item">
+                                    <div class='product-name'>{{data.name}}</div>
+                                </div>
+                            </dx-select-box>
+                        </div>
+                    </div>
+                </div>
+
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #dataGrid id="controlList" [dataSource]="this.schemaLine" keyExpr="lineNum" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                    <dxo-editing mode="cell" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+                    <dxi-column dataField="promoId" [allowEditing]="false" caption="{{'Promotion Code' | translate}}"></dxi-column>
+                    <dxi-column dataField="description" [allowEditing]="false" caption="{{'Promotion Name' | translate}}"></dxi-column>
+                    <dxi-column dataField="promoTypeName" [allowEditing]="false" caption="{{'Promotion Type' | translate}}"></dxi-column>
+                    <dxi-column dataField="priority" [allowEditing]="true" caption="{{'Priority' | translate}}"></dxi-column>
+                    <dxi-column dataField="isApply" caption="{{'Apply' | translate}}" [allowEditing]="false"></dxi-column>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion search' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <app-management-promotion-search [isMulti]="true" [isCombine]="false" (dataSelected)="applyPromotion($event)"></app-management-promotion-search>
+    </div>
+</ng-template>

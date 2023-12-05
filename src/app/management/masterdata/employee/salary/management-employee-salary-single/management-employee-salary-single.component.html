@@ -1,0 +1,58 @@
+<!-- <div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Employee Salary' | translate}}</label>
+
+      </div>
+     
+    
+  </div>
+</div> -->
+<!-- (onToolbarPreparing)="onToolbarPreparing($event)" -->
+<div class="table-wrap">
+  <dx-data-grid [style]="{'max-height':'calc(100vh - 23vh)','overflow':'auto'}" id="gridContainer" 
+   [dataSource]="this.salaryList" [allowColumnResizing]="true"
+    (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="save($event)" (onRowRemoved)="remove($event)"
+    [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+      <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-editing mode="row"  [useIcons]="true" [allowUpdating]="true"   [allowAdding]="true">
+      </dxo-editing>
+      <!-- <dxi-column dataField="employeeId" caption="{{'Employee ID' | translate}}" dataType="string"> </dxi-column>
+      <dxi-column dataField="employeeName" caption="{{'Employee Name' | translate}}" dataType="string"> </dxi-column>
+       
+      <dxi-column dataField="position" caption="{{'Position' | translate}}" dataType="string"> </dxi-column> -->
+      <dxi-column dataField="fromDate" caption="{{'From' | translate}}"  [format]="this.authService.loadFormat().dateFormat " dataType="date"> </dxi-column>
+      <dxi-column dataField="toDate" caption="{{'To' | translate}}"  [format]="this.authService.loadFormat().dateFormat  " dataType="date"> </dxi-column>
+      <dxi-column dataField="salary" caption="{{'Salary' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+      <!-- [format]='this.authService.numberFormat('number')' -->
+      <dxi-column dataField="customF1" caption="{{'Custom F1' | translate}}" dataType="string"> </dxi-column>
+      <dxi-column dataField="customF2" caption="{{'Custom F2' | translate}}" dataType="string"> </dxi-column>
+      <dxi-column dataField="customF3" caption="{{'Custom F3' | translate}}" dataType="string"> </dxi-column>
+      <dxi-column dataField="customF4" caption="{{'Custom F4' | translate}}" dataType="string"> </dxi-column>
+      <dxi-column dataField="customF5" caption="{{'Custom F5' | translate}}" dataType="string"> </dxi-column>
+
+      <!-- <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+      <div *dxTemplate="let cell of 'statusTemplate'">
+          <div [innerHtml]="cell.data.status | statusFormat"></div>
+      </div> -->
+    
+  </dx-data-grid>
+</div>
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Employee Salary' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-management-employee-salary-edit [isNew]="this.isNew"  [model]="this.employee" style="width: 100%" (outModel)="updateModel($event)"></app-management-employee-salary-edit>
+          
+      </div>
+  </div>
+</ng-template>

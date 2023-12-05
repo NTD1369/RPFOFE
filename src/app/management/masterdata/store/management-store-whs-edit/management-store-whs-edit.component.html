@@ -1,0 +1,63 @@
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+  <div class="col-md-12">
+      <div class="row">
+          <ng-container *ngFor="let value of this.groupControlList">
+              <div class="col-md-12">
+                  <div class="row">
+                      <ng-container *ngFor="let item of value.arrayGroup">
+                          <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')">
+                              <label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span></label>
+                              <input *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [required]="item.require" disabled = "true"
+                                  formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+
+                              <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='DateTime' && checkPermission(item.controlId,'V')"
+                                  type="datetime" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+
+                              </dx-date-box>
+                              <dx-switch *ngIf="value.controlType==='CheckBox' && checkPermission(item.controlId,'V')" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+                              </dx-switch>
+
+                              <dx-select-box *ngIf="value.controlType==='DropDown' && item.controlId !=='oWareHouseID' && checkPermission(item.controlId,'V')" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" placeholder="--- Select {{item.controlName}} ---" [dataSource]="this[item.optionName]"
+                                  displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" [(ngModel)]="model[item.controlId]"
+                                  [value]="model[item.controlId]"></dx-select-box>
+
+                                  <dx-drop-down-box [(value)]="this.gridBoxValue" 
+                                  *ngIf="value.controlType==='DropDown'&& item.controlId ==='oWareHouseID' && checkPermission(item.controlId,'V')" [style]="{'width':'100%'}" formControlName="{{item.controlId}}"
+                                   name="{{item.controlId | translate}}" placeholder="--- Select {{item.controlName}} ---"
+                                   [dataSource]="this.whsOptionsTypeO"
+                                  displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}"
+                                  [showClearButton]="true"
+                                   [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null" 
+                                     >
+                                   <div *dxTemplate="let data of 'content'">
+                                    <dx-data-grid
+                                            [dataSource]="this.whsOptionsTypeO"
+                                            keyExpr="{{item.optionValue}}"
+                                            [columns]="['whsCode', 'whsName']"
+                                            [selection]="{ mode: 'multiple' }"
+                                            [hoverStateEnabled]="true"
+                                            [paging]="{ enabled: true, pageSize: 10 }"
+                                            [filterRow]="{ visible: true }"
+                                            [scrolling]="{ mode: 'virtual' }"
+                                            [height]="345"
+                                            [(selectedRowKeys)]="this.gridBoxValue"
+                                    >
+                                    </dx-data-grid>
+                                </div>
+                                </dx-drop-down-box>
+                              <label *ngIf="item.require && editForm.get(item.controlId).invalid" [ngClass]="'error-text'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                          </div>
+                      </ng-container>
+                  </div>
+              </div>
+          </ng-container>
+      </div>
+
+  </div>
+
+  <div class="col-md-12 text-right">
+      <!-- [disabled]="!editForm?.dirty"  -->
+      <button [disabled]="!editForm.valid || !editForm.dirty"  form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+  </div>
+
+</form>

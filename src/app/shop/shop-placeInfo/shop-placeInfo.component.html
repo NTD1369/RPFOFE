@@ -1,0 +1,20 @@
+<div class="main-content ">
+  <div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto; width: 100%;">
+      <div class="search-wrap">
+        <label for="item-searchbar" class="section-title">{{'Place List' | translate}}</label>
+      </div>
+      <dx-data-grid id="gridContainer" [dataSource]="sourceData" [showBorders]="true">
+        <dxi-column caption="Place Name" dataField="placeName" dataType="string"></dxi-column>
+        <dxi-column caption="Description" dataField="description" dataType="string"></dxi-column>
+        <dxi-column cellTemplate="cellTemplate" [width]="350"></dxi-column>
+        <div *dxTemplate="let cell of 'cellTemplate'">
+          <div class="">
+            <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="ml-2"
+              (onClick)="moveTableCashier(cell.data)"></dx-button>
+          </div>
+        </div>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

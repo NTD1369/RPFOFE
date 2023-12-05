@@ -1,0 +1,1112 @@
+<div class="center-wrap" id="printAfter">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="maintenance-row">
+
+    <!-- <dx-button class="mr-2"  (onClick)="redeemVoucherMemberTest()" icon="fas fa-sign-in-alt" type="default" text="{{'Redeem Voucher Test' | translate}}"></dx-button> -->
+
+            <div class="col-md-12">
+                <div class="row mb-3" id="titleRow">
+                    <div class="col-md-6">
+                        <!-- <a routerLink="/shop/bills" class="back-btn">
+                            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                        </a> -->
+                        <label for="item-searchbar" class="section-title">{{'View Bill' | translate}}</label>
+                      
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button *ngIf="isPrintDetail" class="btn btn-back mr-2 fs-14 border-radius-5 default "
+                            style=" background-color: #26c6da; border: 2px solid #26c6da" (click)="PrintDetail()"><i
+                            class="fas fa-print"></i> {{'Print Detail' | translate}}
+                        </button>
+
+
+                        <ng-container *ngIf="this.order.status==='Hold' && this.order?.dataSource?.toLowerCase() !=='pos' && this.order?.dataSource?.toLowerCase() !=='grab'">
+                            <a class="btn button-filter mr-2 fs-14 border-radius-5" (click)="confirmOrder()"> <i class="fas fa-check"></i> {{'Confirm' | translate}} </a>
+                            <!-- <a  class="btn button-filter mr-2 fs-14 border-radius-5"> <i class="fa fa-times" aria-hidden="true"></i> Reject  </a> -->
+                            <button (click)="rejectOrder()" class="btn btn-back mr-2 fs-14 border-radius-5 "><i class="fa fa-times" aria-hidden="true"></i> {{'Reject' | translate}}</button>
+
+
+                        </ng-container>
+                        <ng-container *ngIf=" this.order.isCanceled==='N' && this.order.status==='I' && this.order?.dataSource?.toLowerCase()  =='pos'">
+                            <button class="btn button-filter mr-2 fs-14 border-radius-5"  (click)="confirmPayooOrder()"><i class="fas fa-save"></i> {{'Comfirm' | translate}}
+                            </button>
+
+                        </ng-container>
+                        <ng-container *ngIf="this.order.isCanceled==='N' &&  this.order.status==='I' && this.order?.dataSource?.toLowerCase()  =='pos'">
+                            <button class="btn btn-back mr-2 fs-14 border-radius-5 " (click)="rejectOrder()"><i class="fas fa-ban"></i> {{'Reject' | translate}}
+                            </button>
+
+                        </ng-container>
+                        <ng-container *ngIf="  this.order.status==='Open' && this.order?.dataSource?.toLowerCase()  !=='pos'">
+                            <button class="btn btn-back mr-2 fs-14 border-radius-5 default " style="    background-color: #26c6da; border: 2px solid #26c6da" (click)="PrintOrder(this.order)"><i class="fas fa-print"></i> {{'Print' | translate}}
+                            </button>
+
+                        </ng-container>
+                        <a *ngIf="!production" class="btn button-filter mr-2 fs-14 border-radius-5" (click)="DeliveryOrder(this.order)">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i> {{'Delivery' | translate}} </a>
+                            
+                        <ng-container *ngIf="this.showCheckInOut==='true' &&  this.order.status!=='Hold' &&  this.order.collectedStatus!=='Rejected' && this.order?.dataSource?.toLowerCase()  !=='pos'">
+                            <!-- <a *ngIf="this.order.status==='Open' && this.order.posType!=='E'  && this.checkPayment===false " class="btn button-return mr-2 fs-14 border-radius-5" (click)="openModal(templatePayment)">
+                                <i class="fa fa-credit-card" aria-hidden="true"></i> {{'Payment' | translate}}</a> -->
+                                <a *ngIf="this.order.status==='Open' && this.order.posType!=='E'  && this.checkPayment===false "  class="btn button-return mr-2 fs-14 border-radius-5" (click)="openPaymentModal(template)">
+                                    <i class="fa fa-credit-card" aria-hidden="true"></i> {{'Payment' | translate}}</a>
+                            <a *ngIf="this.order.status==='Open' && this.order.posType!=='E' && this.checkPayment===true" class="btn button-filter mr-2 fs-14 border-radius-5" (click)="CheckInOrder(this.order)">
+                                <i class="fas fa-sign-in-alt"></i> {{'Check In' | translate}} </a>
+                                <!--  -->
+                            <ng-container *ngIf="this.order.posType==='E' && this.order.collectedStatus!=='Rejected' && this.order.collectedStatus!=='Canceled'">
+                                <!-- Payment -->
+                                <!-- <a *ngIf="this.checkPayment===false " class="btn button-return mr-2 fs-14 border-radius-5" (click)="openModal(templatePayment)">
+                                    <i class="fa fa-credit-card" aria-hidden="true"></i> {{'Payment' | translate}}</a> -->
+
+                                    <a *ngIf="this.checkPayment===false " class="btn button-return mr-2 fs-14 border-radius-5" (click)="openPaymentModal(template)">
+                                        <i class="fa fa-credit-card" aria-hidden="true"></i> {{'Payment' | translate}}</a>
+                                        
+                                    <a  class="btn button-filter mr-2 fs-14 border-radius-5" (click)="CheckOutOrder(this.order)">
+                                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i> {{'Check Out' | translate}} </a>
+                                            
+                                       
+                            </ng-container>
+                            <!-- button-return border-radius-5 mr-2  -->
+
+                        </ng-container>
+
+                        <ng-container *ngIf="this.order.isCanceled ==='N' && this.order?.salesMode?.toLowerCase()==='sales' && this.order.collectedStatus === 'Completed' && this.order.status!=='Hold'  && this.order?.dataSource?.toLowerCase()==='pos'">
+                            <button class="btn button-return mr-2 fs-14 border-radius-5" (click)="ReturnOrder(this.order)"><i
+                            class="fa fa-undo" aria-hidden="true"></i> {{'Return' | translate}}</button>
+                            <button class="btn button-return mr-2 fs-14 border-radius-5" (click)="ExchangeOrder(this.order)">
+                            <i class="fas fa-exchange-alt"></i> {{'Exchange' | translate}}</button>
+                            <button *ngIf="  (this.order.status==='Closed' && (this.order.isCanceled==='N' || this.order.isCanceled==='0') && this.order.salesMode==='SALES' )" class="btn btn-back mr-2 fs-14 border-radius-5 " (click)="cancelOrder()"><i class="fa fa-times"
+                  aria-hidden="true"></i> {{'Cancel' | translate}}</button>
+                        </ng-container>
+
+                        <ng-container *ngIf="this.order.status==='Hold'">
+                            <button *ngIf="this.order?.salesMode?.toLowerCase() ==='sales' &&  this.order?.dataSource?.toLowerCase() ==='pos'" class="btn btn-back mr-2 fs-14 border-radius-5 " style="background-color: #66bb6a; border: 2px solid #66bb6a;" (click)="ReOrder(this.order)"><i
+                  class="fas fa-cart-arrow-down"></i> {{'Back to Order' | translate}}</button>
+
+                            <button *ngIf="this.order?.salesMode?.toLowerCase() ==='sales' &&  this.order?.dataSource?.toLowerCase() ==='pos'" class="btn btn-back mr-2 fs-14 border-radius-5 " (click)="cancelOrder()"><i class="fa fa-times"
+                  aria-hidden="true"></i>{{'Cancel' | translate}} </button>
+                        </ng-container>
+                        <!-- *ngIf="(this.order.salesMode.toLowerCase() ==='sales' && this.order?.dataSource?.toLowerCase() ==='pos') || this.order?.dataSource?.toLowerCase() ==='grab' " -->
+                        <button *ngIf="isPrint" class="btn btn-back mr-2 fs-14 border-radius-5 default " style="    background-color: #26c6da; border: 2px solid #26c6da" (click)="PrintOrder(this.order)"><i
+                            class="fas fa-print"></i> {{'Print' | translate}}</button>
+                        <button *ngIf="this.order?.status?.toLowerCase()==='closed' && this.order?.posType?.toLowerCase() ==='e'" class="btn btn-back mr-2 fs-14 border-radius-5 default" style="background-color: #26c6da; border: 2px solid #26c6da" (click)="SummaryOrder()"><i
+                            class="fas fa-print"></i> {{'Summary' | translate}}</button>
+                    </div>
+
+
+                </div>
+                <!-- <button  class="btn btn-back mr-2 fs-14 border-radius-5 " (click)="cancelOrder()"><i class="fa fa-times"
+                    aria-hidden="true"></i>{{'Cancel' | translate}} </button> -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="right-section p-0">
+                            <div class="row">
+                                <div class="bill-info-wrap" style="align-items: unset;    width: 100%;">
+                                    <div class="col-md-4  bill-info">
+                                        <p class="bill-number"> {{'Bill No' | translate}}: {{this.order.transId}}</p>
+                                        <p class="bill-date">{{'Date' | translate}}: {{this.order.createdOn | date: this.authService.loadFormat().dateFormat + ' HH:mm:ss'}}</p>
+                                        <!-- <p class="bill-time">Time: {{this.order.createdOn | date:''}}</p> -->
+                                        <p class="bill-time">{{'Sales Mode' | translate}}: {{this.order.salesMode}} </p>
+                                        <p *ngIf="this.order.dataSource.toLocaleLowerCase()==='pos' && this.order?.refTransId?.length > 0" class="bill-time">
+
+                                            <ng-container *ngIf="this.order?.collectedStatus!=='Canceled'">
+                                                {{'Original ID' | translate}}:
+                                            </ng-container>
+                                            <ng-container *ngIf="this.order?.collectedStatus==='Canceled'">
+                                                {{'Ref ID' | translate}}:
+                                            </ng-container>
+                                            {{this.order?.refTransId}}
+                                        </p>
+                                        <p class="bill-time">{{'Created By' | translate}}: {{this.order.createdBy}} </p>
+                                        <!-- <p class="bill-time">Status: <span [innerHtml]="this.order.status | statusFormat"></span></p> -->
+
+                                        <p class="bill-time">{{'Collected Status' | translate}}: <span [innerHtml]="this.order?.collectedStatus | statusFormat"></span></p>
+                                        <p class="bill-time" *ngIf="this.order.dataSource.toLocaleLowerCase()!=='pos'">{{'Pos Type' | translate}}: <span [innerHtml]="this.order?.posType | posTypeFormat"></span>
+                                            <span class="ml-3" *ngIf="this.order?.posType==='E'">/ {{'Contract No' | translate}}: {{this.order?.contractNo}}</span>
+                                        </p>
+                                        <p class="bill-time" *ngIf="this.order?.reason!==null && this.order?.reason!==undefined && this.order?.reason!==''">{{'Reason' | translate}}: {{this.order?.reason}} </p>
+                                        <p class="bill-time" *ngIf="this.order?.customF1?.length > 0">{{'Custom 1' | translate}}: {{this.order?.customF1}} </p>
+                                        <p class="bill-time" *ngIf="this.order?.customF2?.length > 0">{{'Custom 2' | translate}}: {{this.order?.customF2}} </p>
+                                        <p class="bill-time" *ngIf="this.order?.customF3?.length > 0">{{'Custom 3' | translate}}: {{this.order?.customF3}} </p>
+                                        <p class="bill-time" *ngIf="this.order?.customF4?.length > 0">{{'Custom 4' | translate}}: {{this.order?.customF4}} </p>
+                                        <p class="bill-time" *ngIf="this.order?.customF5?.length > 0">{{'Custom 5' | translate}}: {{this.order?.customF5}} </p>
+                                    </div>
+                                    <div class="col-md-4  bill-info">
+                                        <!-- <ng-container *ngIf="this.order?.cusName!==null && this.order?.cusName!==undefined">
+
+
+                                        </ng-container> -->
+
+                                        <p class="bill-number" *ngIf="this.order?.cusName?.length > 0"> {{'Customer' | translate}}: {{this.order?.cusName}}</p>
+                                        <p class="bill-date" *ngIf="this.order?.phone?.length > 0"> {{'Phone' | translate}}: {{this.order?.phone}}</p>
+                                        <p class="bill-date" *ngIf="this.order?.cusAddress?.length > 0"> {{'Address' | translate}}: {{this.order?.cusAddress}}</p>
+
+                                    </div>
+                                    <div class="col-md-4  bill-info">
+
+                                        <p class="bill-date"> {{'Data Source' | translate}}: {{this.order?.dataSource}}</p>
+                                        <p class="bill-date"> {{'Sales Channel' | translate}}: {{this.order?.salesChanel}}</p>
+                                        <p class="bill-date" *ngIf="this.order.dataSource.toLocaleLowerCase()!=='pos' && this.order?.omsId ?.length > 0"> {{'OMS ID' | translate}}: {{ this.order?.omsId }} </p>
+                                        <p *ngIf="this.order.dataSource.toLocaleLowerCase()!=='pos'" class="bill-time">{{'Ecom ID' | translate}}: {{this.order?.refTransId}} </p>
+                                        <p class="bill-date" *ngIf="this.order?.omsStatus?.length > 0"> {{'Ecom Status' | translate}}: {{ this.order?.omsStatus }} </p>
+
+                                        <p class="bill-date"> {{'Remarks' | translate}}: </p>
+                                        <dx-text-area [height]="90" [(value)]="this.order.remarks">
+                                        </dx-text-area>
+                                    </div>
+
+
+                                    <!-- <a class="primary-btn "  (click)="createBasket()" style="margin-left: -10%;" >
+                  <i class="fas fa-cart-arrow-down mr-2"></i>   Basket
+                </a> -->
+                                    <!--  -->
+
+                                </div>
+
+                            </div>
+                            <!-- (onEditorPrepared)="onEditorPreparing($event)" -->
+                            <dx-data-grid #dataGrid id="dataGrid" class="mt-2" [(dataSource)]="this.order.lines" 
+                                [allowColumnResizing]="true" [columnResizingMode]="true" [showRowLines]="true"
+                                (onRowPrepared)="onRowPrepared($event)" keyExpr="lineId" 
+                                [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true">
+                                <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                                <dxo-editing mode="row" [useIcons]="true" [allowUpdating]="this.order?.status==='Hold' && this.order?.dataSource!=='POS'"></dxo-editing>
+
+                                <!-- <dxi-column dataField="keyId"  [minWidth]="250"    caption="Item Code" editCellTemplate="itemDropDownBoxEditor">
+                    <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>  -->
+                                <dxi-column dataField="lineId" [allowEditing]="false" caption="{{'#' | translate}}"></dxi-column>
+
+                                <dxi-column dataField="itemCode" [allowEditing]="false" caption="{{'Item Code' | translate}}"></dxi-column>
+                                <!-- <dxi-column dataField="itemName" [allowEditing]="false" caption="Name" [minWidth]="180" > </dxi-column> -->
+                                <dxi-column dataField="itemName" [allowEditing]="false" caption="{{'Name' | translate}}" [minWidth]="180" cellTemplate="cellTemplate"></dxi-column>
+                                <div *dxTemplate="let cell of 'cellTemplate'">
+                                    {{cell.data.itemName}}
+                                    <ng-container *ngIf="cell.data.timeFrameId!==null && cell.data.timeFrameId!==undefined && cell.data.timeFrameId!==''">
+                                        <br> {{'Time Frame' | translate}}: {{cell.data.timeFrameId}} , {{cell.data.remark}}
+                                    </ng-container>
+                                    <!-- <ng-container *ngIf="cell.data?.isSerial || cell.data?.isVoucher ">
+                      <br>
+                      {{'isSerial' | translate}}:
+                   
+                    </ng-container> -->
+                                    <ng-container *ngIf="cell.data?.itemType==='Member' || cell.data?.itemType==='Class'">
+
+                                        {{'Date' | translate}}:{{cell.data?.startDate | dateFormat }} ~ {{cell.data?.endDate | dateFormat }}
+                                        <br> {{'Serial Num' | translate}}: {{ cell.data?.serialNum }}
+                                        <br> {{'Name' | translate}}: {{ cell.data?.name }}, {{'Phone' | translate}}: {{ cell.data?.phone }}
+                                    </ng-container>
+                                    <ng-container *ngIf="cell.data?.itemType==='Card'">
+                                        <br> {{'Card No' | translate}}: {{cell.data?.prepaidCardNo}}
+                                    </ng-container>
+
+                                </div>
+                                <!-- cellTemplate="diffCellTemplate" -->
+                                <dxi-column alignment="center" dataField="barCode" [setCellValue]="setBarcodeCellValue" [allowEditing]="this.order?.status==='Hold' && this.order?.dataSource!=='POS'" caption="{{'Barcode' | translate}}" [minWidth]="150">
+
+                                </dxi-column>
+                                <div *dxTemplate="let data of 'diffCellTemplate'">
+                                    <div class="col-md-12 p-1  pl-3 pr-2">
+
+                                        <dx-text-box valueChangeEvent="keyup" (onEnterKey)="inputBarcode(data.value)" placeholder="{{'Barcode' | translate}}"></dx-text-box>
+                                        <dx-button icon="check" class="submit-btn mr-2" style="height: 40px; top: 9px; width: 50px; position: absolute; right: 10px;" (onClick)="inputCustomer(data.value)"></dx-button>
+                                    </div>
+                                    <!-- <dx-text-box valueChangeEvent="keyup" [value]="data.value" (onEnterKey)="inputBarcode(data.value)" placeholder="Barcode"  ></dx-text-box> -->
+                                </div>
+                                <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="{{'UoM' | translate}}" [minWidth]="120">
+
+                                    <!-- <dxo-lookup  [dataSource]="this.uomList" displayExpr="uomName" valueExpr="uomCode"> </dxo-lookup>
+                      <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                </dxi-column>
+                                <dxi-column alignment="right" dataField="price" caption="{{'Price' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+
+                                <!-- <dxi-column alignment="center" dataField="currencyCode" [allowEditing]="false" caption="Currency" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column dataField="currencyRate" caption="Currency Rate" [minWidth]="80"> </dxi-column> -->
+                                <!-- <dxi-column alignment="center" dataField="taxCode"  [allowEditing]="this.mode!=='e'"  caption="Tax Code" [minWidth]="120" editCellTemplate="changeTaxCodeEditor">
+                      <dxo-lookup [dataSource]="this.taxList" displayExpr="taxName" valueExpr="taxCode" > </dxo-lookup>
+                      <dxi-validation-rule type="required"></dxi-validation-rule>
+                    </dxi-column> -->
+                                <!-- <dxi-column alignment="center" dataField="taxRate"  [visible]="false" caption="Tax Rate" [minWidth]="80"> </dxi-column>
+                    <dxi-column alignment="right"  dataField="taxAmt"  [customizeText]="customizeText"   [calculateCellValue]="taxAmtCellValue" [allowEditing]="false" caption="Tax Amt" dataType="number"[minWidth]="120"> </dxi-column> -->
+                                <dxi-column alignment="right" dataField="quantity" caption="{{'Quantity' | translate}}" [setCellValue]="setQtyValue" [allowEditing]="this.order?.status==='Hold' && this.order?.dataSource!=='POS'" dataType="number" [minWidth]="120">
+                                </dxi-column>
+                                <dxi-column alignment="right" dataField="lineTotal" [customizeText]="customizeText" [allowEditing]="false" caption="{{'Line Total' | translate}}" [minWidth]="120"> </dxi-column>
+                                <dxi-column alignment="right" dataField="lineTotalBefDis" [customizeText]="customizeText" [allowEditing]="false" caption="{{'Line Total Before Discount' | translate}}" [minWidth]="120"> </dxi-column>
+                                <dxi-column alignment="right" dataField="discountAmt" caption="{{'Discount Amt' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                <dxi-column dataField="remark" caption="{{'Remark' | translate}}" [minWidth]="220"> </dxi-column>
+                                <dxo-summary [recalculateWhileEditing]="true">
+                                    <dxi-total-item column="lineTotal" [customizeText]="customizeText" summaryType="{{'sum' | translate}}"> 
+                                    </dxi-total-item>
+                                    <dxi-total-item column="lineTotalBefDis" [customizeText]="customizeText" summaryType="{{'sum' | translate}}"> 
+                                    </dxi-total-item>
+                                    <dxi-total-item column="discountAmt" [customizeText]="customizeText" summaryType="{{'sum' | translate}}"> 
+                                    </dxi-total-item>
+                                    <dxi-total-item column="quantity" [customizeText]="customizeText" summaryType="{{'sum' | translate}}"></dxi-total-item>
+
+                                    
+                                </dxo-summary>
+                                <!--  -->
+                                <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                    <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value"
+                                                [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+
+                                                <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+
+                                <div *dxTemplate="let cellInfo of 'changeTaxCodeEditor'">
+                                    <dx-drop-down-box #gridTaxBox [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="taxList" [(value)]="cellInfo.value" displayExpr="taxName" valueExpr="taxCode" contentTemplate="contentTemplate">
+                                        <div *dxTemplate="let e of 'contentTemplate'">
+                                            <dx-data-grid #itemGrid keyExpr="taxCode" [dataSource]="taxList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [allowColumnResizing]="true" [selectedRowKeys]="[cellInfo.value]"
+                                                [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+
+                                                <dxi-column dataField="taxCode" caption="{{'Tax Code' | translate}}"></dxi-column>
+                                                <dxi-column dataField="taxName" caption="{{'Tax Name' | translate}}"></dxi-column>
+
+                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                <dxo-selection mode="single"></dxo-selection>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                    <!-- <dx-drop-down-box #gridTaxBox [(value)]="cellInfo.value" valueExpr="taxCode" 
+                            displayExpr="taxName"
+                            placeholder="Select tax..." contentTemplate="contentTemplate" [showClearButton]="true" [dataSource]="this.taxList" >
+                       <div *dxTemplate="let e of 'contentTemplate'">
+                            <dx-data-grid   keyExpr="taxCode"  [dataSource]="this.taxList"
+                                    [columns]="['taxCode', 'taxName']" [selection]="{ mode: 'single' }"
+                                    [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                                    [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                    [height]="345" [(selectedRowKeys)]="cellInfo.value"
+                                    (onSelectionChanged)= "onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event, e, e.component)"
+                                    >
+                              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                              <dxo-search-panel [visible]="true"  [width]="240"  placeholder="Search..."
+                              location="before"></dxo-search-panel>
+                              <dxo-scrolling mode="virtual"></dxo-scrolling>
+                            </dx-data-grid>
+                        </div>
+                    </dx-drop-down-box> -->
+                                </div>
+                                <!-- getFilteredUom(cell) (onFocusIn)="isDropDownBoxOpened(dropDownUoM,cell.data)"-->
+                                <div *dxTemplate="let cell of 'changeUoMCodeEditor'">
+                                    <dx-drop-down-box #dropDownUoM [(value)]="cell.data.uomCode" valueExpr="uomCode" displayExpr="uomName" placeholder="{{'Select UoM' | translate}}..." [showClearButton]="true" [dataSource]="this.uomList">
+                                        <div *dxTemplate="let data of 'content'">
+                                            <dx-data-grid #gridUoMBox keyExpr="uomCode" [dataSource]="this.uomList" [columns]="['uomCode', 'uomName']" [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                                [height]="345" [(selectedRowKeys)]="cell.data.uomCode" (onSelectionChanged)="onUoMSelectionChanged($event, cell)">
+                                                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                                <dxo-search-panel [visible]="true" [width]="240" placeholder="{{'Search' | translate}}..." location="before">
+                                                </dxo-search-panel>
+                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            </dx-data-grid>
+                                        </div>
+                                    </dx-drop-down-box>
+                                </div>
+                                <div *dxTemplate="let line of 'detail'">
+
+                                    <ng-container *ngIf="line.data?.lines!==null && line.data?.lines!==undefined  && line.data?.lines?.length > 0">
+                                        <div class="master-detail-caption">{{'Lines' | translate}}:</div>
+                                        <dx-data-grid [dataSource]="line.data.lines" keyExpr="lineId" [showBorders]="true" [columnAutoWidth]="true">
+
+                                            <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                            <dxi-column dataField="itemName" caption="{{'Description' | translate}}"></dxi-column>
+                                            <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}"></dxi-column>
+                                            <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}"></dxi-column>
+
+                                        </dx-data-grid>
+                                    </ng-container>
+                                    <ng-container *ngIf="line.data?.serialLines!==null && line.data?.serialLines!==undefined && line.data?.serialLines.length > 0">
+
+                                        <div class="master-detail-caption">{{'Serial' | translate}}:</div>
+                                        <dx-data-grid [dataSource]="line.data.serialLines" keyExpr="lineId" [showBorders]="true" [columnAutoWidth]="true">
+
+                                            <dxo-editing mode="cell" *ngIf="this.order.status==='H'" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                                            <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+
+                                        </dx-data-grid>
+                                    </ng-container>
+
+                                </div>
+
+                            </dx-data-grid>
+                            <div class="total-bill">
+                                <div class="row">
+                                    <div class="col-md-4 offset-md-8">
+                                        <div *ngIf="this.order.totalAmount !==null && this.order.totalAmount!==undefined && this.order.totalAmount !== 0 " class="discount-div">
+                                            <p>{{'Bill Total' | translate}}</p>
+                                            <p>{{ this.order.totalAmount | currencyFormat}}</p>
+                                        </div>
+                                        <div *ngIf="this.order.discountAmount !==null && this.order.discountAmount!==undefined && this.order.discountAmount !== 0 " class="discount-div">
+                                            <p>{{'Discount on Total Bill' | translate}}</p>
+                                            <p>{{this.order.discountAmount | currencyFormat}}</p>
+                                        </div>
+                                        <div *ngIf="this.order.totalDiscountAmt !==null && this.order.totalDiscountAmt!==undefined && this.order.totalDiscountAmt !== 0 " class="discount-div">
+                                            <p>{{'Total Discount' | translate}}</p>
+                                            <p>{{this.order.totalDiscountAmt | currencyFormat}}</p>
+                                        </div>
+                                        <div *ngIf="this.order?.paymentDiscount !==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount !== 0 " class="discount-div">
+                                            <p>{{'Payment Discount' | translate}}</p>
+                                            <p>{{this.order.paymentDiscount | currencyFormat}}</p>
+                                        </div>
+                                        <div class="discount-div" *ngIf="this.order?.roundingOff !== null && this.order?.roundingOff !==undefined && this.order?.roundingOff !== 0">
+                                            <p>{{'Rounding' | translate}}</p>
+                                            <p>{{this.order?.roundingOff | currencyFormat}}</p>
+                                        </div>
+                                        <div class="payable-div">
+                                            <p>{{'Total Payable' | translate}}</p>
+                                            <p>{{this.order.totalPayable| currencyFormat}}</p>
+                                        </div>
+                                        
+                                        <div class="payable-div" *ngIf="this.order?.paymentDiscount !==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount !== 0 " >
+                                            <p>{{'Actual Amount' | translate}}</p>
+                                            <p>{{(this.order.totalPayable - this.order.paymentDiscount) | currencyFormat}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <ng-container *ngIf=" this.order?.payments?.length > 0">
+                                <div class="payable-div">
+                                    <label class="titleText"><i class="fas fa-tags"></i> {{'Payment' | translate}}</label>
+                                </div>
+
+                                <div class="bill-wrapper total-bill">
+                                    <dx-data-grid #dataGrid id="dataGrid" class="mt-2" [(dataSource)]="this.order.payments" [allowColumnResizing]="true" [columnResizingMode]="true" (onRowPrepared)="onRowPrepared($event)" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                                        [showBorders]="true"  [showRowLines]="true">
+                                        <dxi-column alignment="center" dataField="lineId" [allowEditing]="false" caption="{{'#' | translate}}"></dxi-column> 
+
+                                        <dxi-column dataField="paymentCode" [visible]='false' caption="{{'Payment Method' | translate}}" [allowEditing]="false"></dxi-column>
+                                        <dxi-column dataField="shortName" caption="{{'Payment Method' | translate}}" [allowEditing]="false"></dxi-column>
+                                        <dxi-column dataField="currency" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0" caption="{{'Currency' | translate}}" [allowEditing]='false' dataType="string">
+                                        </dxi-column>
+                                        <dxi-column alignment="right" dataField="chargableAmount" caption="{{'Chargable' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+
+                                        <dxi-column alignment="right" dataField="paymentDiscount" caption="{{'Payment Discount' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column alignment="right" *ngIf="this.order?.paymentDiscount !==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount !== 0 "  dataField="receivedAmt" caption="{{'Actual Amount' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column alignment="right" dataField="collectedAmount" caption="{{'Collected' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column dataField="fcAmount" [format]="this.authService.numberFormat('amount')" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0" caption="{{'FC Collected' | translate}}"
+                                            [allowEditing]='false'>
+                                        </dxi-column>
+                                        <dxi-column alignment="right" dataField="changeAmt" caption="{{'Change Amount' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column dataField="refNumber" caption="{{'Ref. Number' | translate}}" [allowEditing]="false"></dxi-column>
+
+                                        <dxo-summary>
+                                            <dxi-total-item column="paymentDiscount" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+                                            <dxi-total-item column="receivedAmt" *ngIf="this.order?.paymentDiscount !==null && this.order.paymentDiscount!==undefined && this.order.paymentDiscount !== 0 "  [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+                                            <!-- <dxi-total-item column="chargableAmount"  [customizeText]="customizeText"   summaryType="sum">  </dxi-total-item>    -->
+                                            <dxi-total-item column="collectedAmount" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+                                            <dxi-total-item column="shortName" summaryType="{{'count' | translate}}"></dxi-total-item>
+                                        </dxo-summary>
+                                        <!--  -->
+
+
+                                    </dx-data-grid>
+
+
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="this.order?.contractPayments?.length > 0">
+                                <div class="payable-div mt-3">
+                                    <label class="titleText"><i class="fas fa-tags"></i> {{'Summary Payment' | translate}}</label>
+                                </div>
+                                <div class="bill-wrapper total-bill">
+                                    <dx-data-grid #dataGrid id="dataGrid" class="mt-2" [(dataSource)]="this.order.contractPayments" [allowColumnResizing]="true" [columnResizingMode]="true" (onRowPrepared)="onRowPrepared($event)" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                                        [showBorders]="true">
+                                        <dxi-column dataField="transId" caption="{{'Transaction' | translate}}" [allowEditing]="false"></dxi-column>
+                                        <dxi-column dataField="paymentCode" caption="{{'Payment Method' | translate}}" [allowEditing]="false"></dxi-column>
+                                        <!-- <dxi-column dataField="shortName" caption="{{'Payment Method' | translate}}" [allowEditing]="false"></dxi-column> -->
+                                        <dxi-column dataField="currency" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0" caption="{{'Currency' | translate}}" [allowEditing]='false' dataType="string">
+                                        </dxi-column>
+
+                                        <dxi-column alignment="right" dataField="paymentDiscount" caption="{{'Payment Discount' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column alignment="right" dataField="chargableAmount" caption="{{'Chargable' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column alignment="right" dataField="collectedAmount" caption="{{'Collected' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column dataField="fcAmount" [format]="this.authService.numberFormat('amount')" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0" caption="{{'FC Collected' | translate}}"
+                                            [allowEditing]='false'>
+                                        </dxi-column>
+                                        <dxi-column alignment="right" dataField="changeAmt" caption="{{'Change Amount' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                                        <dxi-column dataField="refNumber" caption="{{'Ref. Number' | translate}}" [allowEditing]="false"></dxi-column>
+
+                                        <dxo-summary>
+                                            <dxi-total-item column="paymentDiscount" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+                                            
+                                            <!-- <dxi-total-item column="chargableAmount"  [customizeText]="customizeText"   summaryType="sum">  </dxi-total-item>    -->
+                                            <dxi-total-item column="collectedAmount" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+                                            <dxi-total-item column="shortName" summaryType="{{'count' | translate}}"></dxi-total-item>
+                                        </dxo-summary>
+                                        <!--  -->
+
+
+                                    </dx-data-grid>
+
+
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="this.order?.invoice !== null  && this.order?.invoice !== undefined && this.order?.invoice?.length > 0">
+                                <div class="payable-div">
+                                    <label class="titleText"><i class="fas fa-tags"></i> {{'Invoice' | translate}}</label>
+                                </div>
+
+                                <div>
+                                    <table class="table-shop-bill-detail">
+                                        <tr>
+                                            <th>{{'Customer Name' | translate}}</th>
+                                            <th>{{'Customer Company Name' | translate}}</th>
+                                            <th>{{'Phone' | translate}}</th>
+                                            <th>{{'Tax Code' | translate}}</th>
+                                            <th>{{'Email' | translate}}</th>
+                                            <th>{{'Address' | translate}}</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{this.order?.invoice?.customerName}}</td>
+                                            <td>{{this.order?.invoice?.name}}</td>
+                                            <td>{{this.order?.invoice?.phone}}</td>
+                                            <td>{{this.order?.invoice?.taxCode}}</td>
+                                            <td>{{this.order?.invoice?.email}}</td>
+                                            <td>{{this.order?.invoice?.address}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="this.order?.deliveries?.length > 0">
+
+                                <div class="payable-div mt-4">
+                                    <label class="titleText"><i class="fas fa-tags"></i> {{'Deliveries' | translate}}</label>
+                                </div>
+
+                                <div class="bill-wrapper">
+                                    <dx-data-grid #dataGrid id="dataGrid" class="mt-2" [(dataSource)]="this.order.deliveries" [allowColumnResizing]="true" [columnResizingMode]="true" (onRowPrepared)="onRowPrepared($event)" keyExpr="deliveryType" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                                        [showBorders]="true">
+                                        <dxi-column dataField="deliveryType" caption="{{'Delivery Type' | translate}}" [allowEditing]="false"></dxi-column>
+                                        <dxi-column dataField="deliveryMethod" caption="{{'Delivery Method' | translate}}" [allowEditing]="false" [minWidth]="120">
+                                        </dxi-column>
+                                        <dxi-column alignment="right" dataField="deliveryFee" caption="{{'Delivery Fee' | translate}}" [allowEditing]="false" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+
+                                        <dxo-summary>
+                                            <dxi-total-item column="deliveryFee" [customizeText]="customizeText" summaryType="{{'sum' | translate}}">
+                                            </dxi-total-item>
+
+                                        </dxo-summary>
+                                        <!--  -->
+
+                                    </dx-data-grid>
+
+
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div id="orderPrint" *ngIf="this.outPutModel!==null && this.outPutModel!==undefined">
+    
+    <app-shop-component-order-print [(order)]="this.outPutModel"  [poleValue]="this.poleValue" [autoPrint]='true'></app-shop-component-order-print>
+    
+</div> -->
+<div class="content-center app-print-shop" *ngIf="this.outPutModel!==null && this.outPutModel!==undefined">
+    <app-shop-component-order-print [(order)]="this.outPutModel" [poleValue]="this.poleValue" [autoPrint]='true'></app-shop-component-order-print>
+</div>
+<ng-template #template>
+    <app-shop-bill-payment (Modal)="saveModelNew($event)"></app-shop-bill-payment>
+</ng-template>
+<!-- 
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Payment' | translate}}</h4>
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body" *ngIf="showModal">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-action"></div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{'Payment Discount' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll">
+
+                                <div class="t-row" *ngFor="let payment of order.payments">
+                                    <div class="t-cell cell-action"> 
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{payment.paymentDiscount | currencyFormat}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                       
+                                        <p>{{payment.chargableAmount | currencyFormat}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{payment.collectedAmount | currencyFormat}}</p>
+
+                                    </div>
+                                    
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-payment-info">
+                        <div>
+                            <label>{{'Bill Amount' | translate}}</label>
+                            <p>{{this.order.totalAmount | currencyFormat}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Discount' | translate}}</label>
+                            <p>{{this.order.paymentDiscount | currencyFormat}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Chargable' | translate}}</label>
+                            <p> {{this.order.totalPayable - this.order.paymentDiscount | currencyFormat}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Collected' | translate}}</label>
+                            <p>{{this.order.totalReceipt | currencyFormat}}</p>
+                        </div>
+
+                        <div>
+                            <label>{{'Amount Left' | translate}}</label>
+                            <p>0</p>
+                        </div>
+                        <div>
+                            <label>{{'Amount Change' | translate}}</label>
+                            <p>{{this.order.amountChange | currencyFormat}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</ng-template> -->
+
+<ng-template #templatePayment>
+    <!-- <app-shop-bill-payment (Modal)="addOrder($event)"></app-shop-bill-payment> -->
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Payment' | translate}}</h4>
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body" *ngIf="showModal">
+
+        <div class="row">
+            <div class="col-md-12 mb-2">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll mb-2" style="    min-height: unset;">
+
+                                <div class="t-row" *ngFor="let payment of this.chargedPayment ; let i = index">
+
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-charged">
+
+                                        <p>{{payment.chargableAmount | currencyFormat}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{payment.collectedAmount | currencyFormat }}</p>
+
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="col-12 col-lg-7 " *ngIf=" this.isPayment===true">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-action"></div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll mb-2" style="min-height: 300px;">
+
+                                <div class="t-row" *ngFor="let payment of this.order.payments ; let i = index" [class.selectRow]="i==this.selectedRow">
+                                    <div class="t-cell cell-action">
+                                        <a href="javascript:void" class="delete-btn" (click)="removePayment(payment)">
+                                            <img src="../../../../assets/images/System/close.svg" alt="close">
+                                        </a>
+
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-charged">
+
+                                        <p>{{payment.chargableAmount | currencyFormat}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+
+                                        <div class="search-wrap typing-section-input-wrap inputAmount">
+                                            <input type="text" #input type="text" value="{{payment.collectedAmount | currencyFormat}}" (change)="inputNumFix(input.value, false)" (keyup)="inputNumFix(input.value, false)" (focus)="setClickedRow(i, payment)" placeholder="Amount" class="typing-section-input txtAmount">
+                                            <!-- <img class="clear-input" style="right: 5%;" *ngIf="i==this.selectedRow" #txtInput src="../../../../assets/images/System/close.svg" (click)="removePayment(payment)" alt="clear"> -->
+                                        </div>
+                                    </div>
+                                    <div class="t-cell cell-ref">
+
+                                        <div class="search-wrap typing-section-input-wrap inputAmount">
+                                            <label *ngIf="payment.isRequire">  {{payment.refNumber }}
+                                                <p *ngIf="payment.paymentCode=='PrepaidCard'">{{ payment.mainBalance | number}}/{{payment.subBalance | currencyFormat}}</p>
+                                            </label>
+                                            <ng-container *ngIf="!payment.isRequire">
+                                                <input type="text" #input2 type="text" value="{{payment.refNumber }}" (change)="changeValuePayment(input.value, i, payment, 'refNum')" (keyup)="changeValuePayment(input.value, i, payment, 'refNum')" placeholder="Ref Number" (focus)="setClickedRow(i, payment, 'refNum')"
+                                                    class="typing-section-input txtAmount">
+                                                <a *ngIf="i==this.selectedRow" (click)="clearRefNumPayment(payment)"><i class="fas fa-eraser"></i></a>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-payment-info">
+                        <div>
+                            <label>{{'Bill Amount' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).totalAmount | currencyFormat}}</p>
+
+                        </div>
+                        <div>
+                            <label>{{'Total Discount' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).discountAmount | currencyFormat}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Chargable' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).chargableAmount | currencyFormat}}</p>
+
+                        </div>
+                        <div>
+                            <label>{{'Total Collected' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).totalCollected | currencyFormat}}</p>
+
+                        </div>
+
+                        <div>
+                            <label>{{'Amount Left' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).leftAmount | currencyFormat}}</p>
+
+                        </div>
+                        <div>
+                            <label>{{'Amount Change' | translate}}</label>
+                            <p>{{ (paymentTotal$ | async).changeAmount | currencyFormat}}</p>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-discount-btn-wrap">
+                    <ng-container *ngFor="let item of this.denolist">
+                        <button class="btn-discount-amount mb-3" (click)="inputNumFix(item.value, true)">{{item.value | currencyFormat}}</button>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5" *ngIf=" this.isPayment===true">
+                <div class="grey-wrapper right-modal-section">
+                    <div class="typing-section">
+                        <div class="number-pad" *ngIf="isShowOtherPayment">
+                            <div class="row" style="    min-height: 50vh;">
+                                <div class="number-div" *ngFor="let payment of this.paymentMethodOtherList">
+                                    <button class="pay-option-btn" (click)="addPayment(payment, true, payment.isRequireRefnum)">{{payment.paymentDesc}}</button>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="padding: 0px 5px;">
+                                    <div class="action-section">
+
+
+                                        <button type="reset" class="reset-btn mr-1" (click)="closeOtherPad()" style="    width: 23%;">
+                                            <i class="fas fa-window-close"></i>
+
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="number-pad" *ngIf="!isShowOtherPayment">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-4 number-div">
+
+                                            <button class="number-btn" (click)="pressKey('1')">1</button>
+
+                                        </div>
+                                        <div class="col-md-4 number-div">
+
+                                            <button class="number-btn" (click)="pressKey('2')">2</button>
+
+                                        </div>
+                                        <div class="col-md-4 number-div">
+
+                                            <button class="number-btn" (click)="pressKey('3')">3</button>
+
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('4')">4</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('5')">5</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('6')">6</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('7')">7</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('8')">8</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('9')">9</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('0')">0</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('.')">.</button>
+                                        </div>
+                                        <div class="col-md-4 number-div">
+                                            <button class="number-btn" (click)="pressKey('000')"><i class="fas fa-arrow-right"></i></button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3 ">
+                                    <div class="row">
+                                        <div class="col-md-12 number-div" *ngFor="let payment of this.paymentMethodShowList">
+                                            <button class="pay-option-btn" (click)="addPayment(payment , null , payment.isRequireRefnum)">{{payment.paymentDesc}}</button>
+                                        </div>
+
+                                        <div class="col-md-12 number-div">
+                                            <button class="pay-option-btn" (click)="showOtherPayment()"> {{'Other' | translate}}</button>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="number-div submit-div">
+
+                                    <button class="submit-btn" (click)="saveModel()"> {{'Submit' | translate}}</button>
+                                    <!-- <button class="submit-btn" (click)="addOrder()" >Add Order</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #Deliveries>
+    <div id='discount-modal'>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{'Deliveries' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="grey-wrapper left-modal-section">
+                        <div class="table-wrap horizontal-scrol">
+                            <div class="discount-modal-table custom-table l">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-item">
+                                            <p>{{'Delivery Type' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>{{'Delivery Method' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p>{{'Delivery Fee' | translate}}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="t-body vertical-scroll">
+
+                                    <div class="t-row" *ngFor="let delivery of this.order.deliveries let i = index">
+                                        <div class="t-cell cell-item">
+                                            <p>{{delivery?.deliveryType}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>
+                                                {{delivery?.deliveryMethod}}
+                                            </p>
+                                        </div>
+
+                                        <div class="t-cell cell-price">
+                                            <p>{{delivery?.deliveryFee | currencyFormat}}</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-payment-info">
+                            <div>
+                                <label>{{'Bill Discount' | translate}}</label>
+                            </div>
+
+                            <p>{{this.order.discountRate == null ? 0 : this.order.discountRate | currencyFormat}}</p>
+                            <div>
+                                <label>{{'Bill Amount' | translate}}</label>
+                                <p>{{this.order?.totalAmount | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Discount' | translate}}</label>
+                                <p>{{this.order.totalDiscountAmt == null ? 0 : this.order.totalDiscountAmt | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Amount' | translate}}</label>
+                                <p>{{ this.order?.totalReceipt | currencyFormat}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+
+
+<ng-template #ManualPromotion>
+    <div id='discount-modal'>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion' | translate}} / {{'Discount' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="grey-wrapper left-modal-section">
+                        <div class="table-wrap horizontal-scrol">
+                            <div class="discount-modal-table custom-table l">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-item">
+                                            <p>{{'Item Code' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>{{'Description' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p>{{'UoM' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{'Price' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{'Quantity' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-discount">
+                      <p>Discount Type</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{'Discount' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{'Subtotal' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="t-body vertical-scroll">
+
+                                    <div class="t-row" *ngFor="let item of this.order.lines; let i = index">
+                                        <div class="t-cell cell-item">
+                                            <p>{{item?.itemCode}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>
+                                                {{item?.itemName}}
+                                            </p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p> {{item?.uomCode }}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{item?.price | currencyFormat}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{item?.quantity | currencyFormat}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-quantity">
+                      <p>{{item.discountType}}</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{item?.discountAmt | currencyFormat}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{item?.quantity * item?.price - item?.discountAmt | currencyFormat}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-payment-info">
+                            <div>
+                                <label>{{'Bill Discount' | translate}}</label>
+                            </div>
+
+                            <p>{{this.order.discountRate == null ? 0 : this.order.discountRate | currencyFormat}}</p>
+                            <div>
+                                <label>{{'Bill Amount' | translate}}</label>
+                                <p>{{this.order?.totalAmount | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Discount' | translate}}</label>
+                                <p>{{this.order.totalDiscountAmt == null ? 0 : this.order.totalDiscountAmt | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Amount' | translate}}</label>
+                                <p>{{ this.order?.totalReceipt | currencyFormat}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</ng-template>

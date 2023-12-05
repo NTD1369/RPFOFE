@@ -1,0 +1,57 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'License Plate' | translate}}</label>
+
+      </div>
+
+      <div class="table-wrap">
+          <dx-data-grid (onToolbarPreparing)="onToolbarPreparing($event)" [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridContainer"  [dataSource]="this.LicensePlates" [showBorders]="true" [showRowLines]="true" >
+
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" autocomplete="off" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+              <dxi-column dataField="licensePlate" caption="{{'License Plate' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="startDate" caption="{{'Start Date' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat"> </dxi-column>
+              <dxi-column dataField="endDate" caption="{{'End Date' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat"></dxi-column>
+              <dxi-column dataField="times" caption="{{'Times' | translate}}"> </dxi-column>
+
+              <dxi-column cellTemplate="cellTemplate"></dxi-column>
+              <div *dxTemplate="let cell of 'cellTemplate'">
+                  <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+              </div>
+          </dx-data-grid>
+      </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'License Plate' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-management-licensePlate-edit [model]="this.LicensePlate" style="width: 100%"></app-management-licensePlate-edit>
+      </div>
+  </div>
+</ng-template>
+<!-- <ng-template #templateImport>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'License Plate' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+  
+    <div class="modal-body">
+        <div class="row">
+            <app-management-import-LicensePlate  style="width: 100%"></app-management-import-LicensePlate>
+        </div>
+    </div>
+  </ng-template> -->

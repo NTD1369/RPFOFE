@@ -1,0 +1,85 @@
+<div style="padding: 20px;">
+    <!-- <div class="col-md-8"> -->
+    <div class="row mt-2">
+        <div class="col-md-4">{{'Start Date' | translate}}</div>
+        <div class="col-md-8">
+            <dx-date-box id="selected-date" [displayFormat]="this.authService.loadFormat().dateFormat" (onValueChanged)="handleValueChange($event)" width="100%" [(ngModel)]="this.item.memberDate" [(value)]="this.item.memberDate"> </dx-date-box>
+        </div>
+
+
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-4">{{'End Date' | translate}}</div>
+        <div class="col-md-8">
+            <dx-date-box readOnly='true' [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(ngModel)]="this.item.endDate" [(value)]="this.item.endDate"> </dx-date-box>
+        </div>
+
+
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-4">{{'Quantity' | translate}}</div>
+        <div class="col-md-8">
+            <input class="form-control" [readOnly]='this.selectedKey?.length > 0' [(ngModel)]="this.item.quantity" [(value)]="this.item.quantity" type="{{'Search' | translate}}" #quantity placeholder="{{'Quantity' | translate}}" aria-label="Quantity">
+        </div>
+
+    </div>
+    <div class="mt-4" *ngIf="display">
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="col-icon-search">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input class="form-control" type="search" #filter (change)="filterBy(filter.value)" (keyup)="filterBy(filter.value)" placeholder="{{'Search' | translate}}" aria-label="Search">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <dx-button *ngIf="this.isCreateSerial" style="width: 100%;" icon="add" type="success" (onClick)="createSerial(filter.value)">
+                </dx-button>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-2">
+                <dx-button style="width: 100%;" icon="sortdown" type="warning" text="{{'Top' | translate}}" (onClick)="selectFromTop()"> </dx-button>
+            </div>
+            <div class="col-md-2">
+                <dx-button style="width: 100%;" icon="indent" type="warning" text="{{'Random' | translate}}" (onClick)="selectRandom()"> </dx-button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-2">
+                <dx-data-grid id="grid-container" [dataSource]="this.itemSerials" keyExpr="serialNum" [(selectedRowKeys)]="this.selectedKey" [showBorders]="true">
+                    <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection> -->
+                    <dxo-paging [pageSize]="10"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="false" [useIcons]="true">
+                    </dxo-editing>
+                    <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                    </dxo-selection>
+                    <dxi-column dataField="serialNum"   [allowEditing]="false" [allowDeleting]="false" caption="{{'Serial Num' | translate}}"></dxi-column>
+
+                    <dxi-column dataField="expDate" [allowEditing]="false" caption="{{'EXP Date' | translate}}" [allowDeleting]="false" dataType="Exp Date" alignment="right" dataType="datetime" [format]="this.authService.loadFormat().dateFormat"></dxi-column>
+                    <dxi-column dataField="name" caption="{{'Name' | translate}}"></dxi-column>
+                    <dxi-column dataField="phone" caption="{{'Phone' | translate}}"></dxi-column>
+                    <dxi-column *ngIf="this.authService.checkRole('isCheckLicensePlate' , '', 'V' )" dataField="licensePlates" caption="{{'License Plates' | translate}}"></dxi-column>
+                </dx-data-grid>
+                <div class="row mt-2 mb-2">
+
+                    <div class="col-md-10">
+                        <label *ngIf="this.selectedKey.length > 0">{{'Serial Selected' | translate}}: </label> {{this.selectedKey}}
+                    </div>
+                    <div class="col-md-2">
+                        <dx-button style="width: 100%;" icon="check" type="success" text="{{'Select' | translate}}" (onClick)="saveSelection()">
+                        </dx-button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+</div>

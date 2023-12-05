@@ -1,0 +1,92 @@
+<div class="col-md-12" *ngIf="(shiftHeader$ | async) === null && !isShowCreate" style="padding-right: 50px;">
+    <div class="bill-wrapper">
+        <a class="primary-btn payment-btn" (click)="createShift()">{{'CreateShift' | translate}}</a>
+    </div>
+   
+</div>
+<div *ngIf="isShowCreate">
+    <div class="col-md-12" style="padding-right: 50px;">
+        <div class="bill-info">
+            <h2 class="maintenance-heading"> {{'ShiftNo' | translate}}: {{this.shiftNum}} </h2>
+
+            <p class="bill-date">{{'Date' | translate}}: {{ currentDate | date: this.authService.loadFormat().dateFormat  }}</p>
+            <p class="bill-time">{{'Time' | translate}}: {{ currentDate | date:'HH:mm:ss' }}</p>
+        </div>
+    </div>
+    <div class="col-md-12">
+
+        <div class="search-wrap barcode-wrap" style=" width: 100%; margin-top: 10px;">
+            <img src="../../../assets/images/System/price-import.svg" style="    width: 25px;" class="img-fluid">
+       
+            <input #txtAmount class="form-control" [ngModel]="this.shiftHeader.openAmt | numberPipe" (ngModelChange)="this.shiftHeader.openAmt=$event" style="  border: 1px solid #c6c5cb;" type="text" placeholder="Open Amount" aria-label="text">
+
+        </div>
+
+    </div>
+    <div class="col-md-12">
+     
+        <div class="bill-wrapper">
+            <ng-container *ngIf="production === false">
+                  <a class="primary-btn" (click)="startShiftForTest()">
+                    {{'Start Shift Test' | translate}}
+                  </a>
+
+            </ng-container>
+            <ng-container *ngIf="canStartShift === true"> 
+                <a class="primary-btn" (click)="startShift()">
+                    {{'StartShift' | translate}}
+                </a>
+                <a class="primary-btn" style="background-color: #c44040;" (click)="cancelShift()">
+                    {{'Cancel' | translate}}
+                </a>
+            </ng-container>
+            <ng-container *ngIf="canStartShift === false"> 
+                 
+                  <h2 class="mt-4" style="color:red; width: 100%; text-align: center;">
+                    {{'Permission denied' | translate}}
+                  </h2>
+                
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" *ngIf="shiftHeader$ | async as shiftHeader" style="width: 100%; padding-right: 50px;">
+    <h2 class="maintenance-heading">{{'ShiftNo' | translate}}: <label>{{shiftHeader.shiftId}}</label> </h2>
+    <div class="bill-details">
+
+        <div class="detail">
+            <div>
+                <label class="detail-title">{{'Store' | translate}}</label>
+            </div>
+            <div>
+                <p class="detail-value">{{shiftHeader?.storeId}}</p>
+            </div>
+        </div>
+        <div class="detail">
+            <div>
+                <label class="detail-title">{{'Open Amt' | translate}}</label>
+            </div>
+            <div>
+                <p class="detail-value">{{shiftHeader?.openAmt}}</p>
+            </div>
+        </div>
+        <div class="detail">
+            <div>
+                <label class="detail-title">{{'Created On' | translate}}</label>
+            </div>
+            <div>
+                <p class="detail-value">{{shiftHeader?.createdOn | date: this.authService.loadFormat().dateFormat + ' HH:mm:ss'}}</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="bill-wrapper" *ngIf="!startFirst || this.canEndShift">
+        <a class="primary-btn payment-btn" (click)="endShift()"> {{'End Shift' | translate}}</a>
+    </div>
+    <div class="bill-wrapper" *ngIf="startFirst">
+        <h3>{{'Wait for minute' | translate}} ......</h3>
+    </div>
+</div>
+
+<!-- <ng-keyboard-shortcuts  [shortcuts]="shortcuts"></ng-keyboard-shortcuts> -->

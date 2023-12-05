@@ -1,0 +1,256 @@
+.custom-select {
+    padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+}
+
+// .right-grid{
+//     padding-top: 20px;
+// }
+.p-inputtext {
+    margin: 0;
+    position: absolute;
+    margin-left: 50px;
+    width: 88%;
+}
+ 
+.guidBasketId{
+    top: -20px;
+    position: inherit;
+    text-align: right;
+    color: #c44040;
+    font-size: large;
+    font-weight: 400;
+    right: 20px;
+}
+.right-section.shop-order-grocery-section {
+    margin-top: unset;
+}
+
+.grocery-cashier-page .center-wrap .left-grid {
+    max-width: unset !important;
+    padding-right: unset !important;
+}
+
+.grocery-cashier-page .center-wrap .right-grid {
+    max-width: unset !important;
+}
+
+.right-grid.shop-order-grocery-grid {
+    margin-top: 0px !important;
+}
+
+.center-wrap .right-grid {
+    height: calc(100vh - 17vh) !important;
+}
+
+.billType {
+    color: #c44040 !important;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.custom-table .t-cell.cell-action {
+    max-width: 80px !important;
+}
+
+.rowLock {
+    background-color: gainsboro !important;
+}
+
+.search-wrap>.dx-texteditor-buttons-container {
+    display: none !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #c44040 !important;
+    border-color: #c44040 !important;
+}
+
+.p-inputtext {
+    margin: 0;
+    position: absolute;
+    margin-left: 50px;
+    width: 88%;
+}
+
+.hideChildren {
+    display: none;
+}
+
+.showChildren {
+    display: block;
+}
+
+#rowAction {
+    position: absolute;
+    background-color: aliceblue;
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    height: 100%;
+    // display: inline-flex;
+    max-height: 80px;
+    max-height: 60px;
+}
+
+.actionrow .nav-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: transparent;
+    width: 100%;
+    // height: 110px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ee9a3a;
+}
+
+.promotionLine {
+    background-color: #AFF0F1!important;
+}
+
+.kselected {
+    background-color: #AFF0F1!important;
+}
+.promoItem {
+    background-color: #bad7f5!important;
+}
+.actionrow .nav-card span.nav-card-text {
+    margin-top: 5px;
+}
+
+.cell-desc-child-row {
+    width: 100% !important;
+    max-width: 500px !important;
+    min-width: 250px !important;
+}
+
+.cell-price-cus {
+    width: 100% !important;
+    max-width: 170px !important;
+}
+
+.grocery-cashier-page .center-wrap .main-content .table-wrap .t-cell.cell-desc {
+    max-width: unset !important;
+}
+
+.cell-discount {
+    max-width: 150px !important;
+}
+
+#otherItem {
+    display: block !important;
+}
+
+@media print {
+    #billPrint {
+        display: none;
+    }
+    #orderPrint {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 1199px) {
+    .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table {
+        min-width: 100%;
+    }
+}
+
+.ellipsis-cus {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-title {
+    color: #a2a2a2;
+    font-weight: 500;
+    margin-bottom: 0;
+    font-size: 18px;
+}
+
+.detail-value {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+// .left-grid-grocery {
+//     width: 70%;
+//     margin-left: 20px;
+//     margin-right: 15px;
+// }
+// .right-grid-grocery {
+//     width: 27%;
+//     margin-right: 15px;
+// }
+.username.name-cus {
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+    // .left-grid-grocery {
+    //     width: 65%;
+    //     margin-left: 15px;
+    //     margin-right: 15px;
+    // }
+    // .right-grid-grocery {
+    //     width: 32%;
+    //     margin-right: 0;
+    // }
+    .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-body {
+        height: calc(100vh - 300px);
+    }
+    .acc-cus {
+        padding: 0;
+    }
+}
+
+.hideContent {
+    opacity: 0!important;
+}
+
+.btnLoading {
+    z-index: 150;
+    position: absolute;
+    top: 40%;
+    left: 48%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    text-align: center;
+}
+
+.spinner-grow {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    background-color: currentColor;
+    border-radius: 50%;
+    opacity: 0;
+    margin: 0 auto;
+    animation: spinner-grow .75s linear infinite;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.txtTotalPayable {
+    font-size: 60px!important;
+    font-weight: 700!important;
+    color: darkslategray!important;
+}
+
+.grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail {
+    padding: 1px 0px;
+}
+
+

@@ -1,0 +1,27 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Price List Mapping' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridCurency" [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'"
+                (onSaved)="save($event)" (onRowRemoved)="remove($event)">
+                <dxo-editing mode="row" [useIcons]="true" [allowUpdating]="true">
+                </dxo-editing>
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column dataField="priceListId" [allowEditing]="false" caption="{{'Price List ID' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="priceListName" caption="{{'Price List Name' | translate}}">
+
+                </dxi-column>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

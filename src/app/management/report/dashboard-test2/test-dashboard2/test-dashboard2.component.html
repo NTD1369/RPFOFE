@@ -1,0 +1,96 @@
+<div>
+  <div class="row justify-content-center flex-row mb-3 mt-2 mt-5">
+   
+    <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      
+      <dx-select-box #cbbStoreList [items]="storeList" displayExpr="storeName" valueExpr="storeId"
+      placeholder="Store list"></dx-select-box>  
+    </div>
+    <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      
+      <dx-select-box #cbbviewType [items]="viewType"  displayExpr="name" valueExpr="value"
+      placeholder="view type"></dx-select-box>  
+    </div>
+    <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      
+      <dx-select-box #cbbtopType [items]="topType"  displayExpr="name" valueExpr="value"
+      placeholder="top type"></dx-select-box>  
+    </div>
+    <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      
+      <dx-date-box #cbbfromdate [value]='this.fromDate'  [displayFormat]="this.authService.loadFormat().dateFormat"
+      ></dx-date-box>  
+    </div>
+    <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      <dx-date-box #cbbtodate  [value]='this.toDate'  [displayFormat]="this.authService.loadFormat().dateFormat"
+      ></dx-date-box>  
+    </div>
+   
+    <div class="col-md-2"  >
+      <ng-container >  
+        <dx-button  class="mr-2 pt-1 search-dashboard" icon="search" type="success" 
+        (onClick)="this.loadData(cbbStoreList.value, cbbfromdate.value, cbbtodate.value,cbbviewType.value, cbbtopType.value )" 
+         
+        
+        text="{{'Search' | translate}}"></dx-button>
+      </ng-container>   
+    </div>
+        
+  </div> 
+
+  <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+      
+    <dx-select-box #cbbchartviewtype [items]="chartviewType"  [(value)]="this.chartType" displayExpr="name" valueExpr="value"
+    placeholder="barchart"></dx-select-box>  
+  </div>
+  <div>
+    <div class="">
+      <h3>Sales Transaction Detail 
+        <span *ngIf="cbbStoreList.value?.length>0"> - Store:{{cbbStoreList.value}} </span>
+        <span  *ngIf="cbbviewType.value?.length>0">- View Type:{{cbbviewType.value}}</span> 
+        <span *ngIf="cbbtopType.value>0">- Top:{{cbbtopType.value}}</span>  
+      </h3>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-6">
+    <dx-data-grid
+  id="gridContainer"
+  [dataSource]="sourceData"
+  keyExpr="IGId"
+  [columns]="[ 'IGName', 'Value']"
+  [showBorders]="true"
+>
+</dx-data-grid>
+
+  </div>
+  <div class="col-6">
+    <dx-pie-chart *ngIf="this.chartType === 'peichart'"
+  id="pie"
+  title="Area of Countries"
+  palette="bright"
+  [dataSource]="sourceData"
+ 
+>
+  <dxi-series argumentField="IGName" valueField="Value">
+    <dxo-label [visible]="true">
+      <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+    </dxo-label>
+  </dxi-series>
+  <dxo-size [width]="500"></dxo-size>
+ 
+</dx-pie-chart>
+
+  </div>
+
+</div>
+<dx-chart id="chart" [dataSource]="sourceData" *ngIf="this.chartType == 'barchart'" >
+  <dxi-series
+    argumentField="IGName"
+    valueField="Value"
+    name="My oranges"
+    type="bar"
+    color="#ffaa66"
+  >
+  </dxi-series>
+</dx-chart>

@@ -1,0 +1,70 @@
+
+<div id='invoice-modal'>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title"> {{'Assign Staff' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+  </div>
+  <ng-container *ngIf="initData">
+    <div class="modal-body">
+  
+      <div class="row">
+      
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              {{'Consultant' | translate}}
+            </div>
+            <div class="col-md-6">
+              <dx-select-box #ddlStaff
+                [dataSource]="this.employeeList" [searchEnabled]="true" [(value)]="this.consultant"
+                displayExpr="employeeName" valueExpr="employeeId"  >
+                <div *dxTemplate="let data of 'item'">
+                  <div class="custom-item">
+                   
+                    {{ data.employeeName }} ({{ data.employeeId }}) 
+                    
+                  </div>
+                </div>
+              </dx-select-box>
+            </div>
+        </div>
+
+        </div>
+          <div class="col-md-12 mt-2 pt-2" style="border-top: solid 1px gray;">
+            {{'Implementation Staff' | translate}}
+              <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}"   id="gridContainer" 
+              [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+              [columnAutoWidth]="true"  [(selectedRowKeys)]="this.selectedKey"  [dataSource]="this.employeeList" >
+                 
+                  <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                  </dxo-selection>
+                  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                  <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  
+                  <dxi-column dataField="employeeId" caption="{{'Id' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column dataField="employeeName" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column dataField="position" caption="{{'Position' | translate}}" dataType="string"> </dxi-column>
+                    
+                  
+              </dx-data-grid>
+          </div>
+          
+ 
+      </div>
+    </div>
+    <div class="modal-footer"  >
+      <div class="col-md-12 text-right">
+        <button (click)="assignStaff()" class="btn-agree width-200 height-60">{{'Assign' | translate}}</button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!initData">
+    <h2> {{ 'Loading data' | translate}}</h2>
+  </ng-container>
+ 
+</div>
+ 

@@ -1,0 +1,103 @@
+<div class="user-greet dropdown-item">
+  <!-- style="bottom: 10px; position: absolute;" -->
+  <!-- <a class="dropdown-toggle mr-2" href="https://staging.whiteorangesoftware.com/abeo/index.html#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+ 
+</a> -->
+
+
+
+  <div class="row" style="    width: 100%;">
+      <div class="col-md-2 p-0">
+          <!-- ../../../../assets/images/System/logo.svg -->
+          <img src="../../../../assets/images/System/logo.svg" alt="user image">
+      </div>
+      <div class="col-md-6">
+          <h6>
+              {{'Welcome' | translate}},
+              <br/>
+              <span class="username">{{authService.decodeToken?.unique_name | titlecase}}</span>
+              <br/>
+              <!-- <span class="username"></span> -->
+              <h5>
+                {{'Role' | translate}}: {{this.authService.getCurrentInfor().roleName | titlecase}}
+              </h5>
+          </h6>
+          <!-- <span class="username">
+              Role: {{authService }}
+
+
+          </span> -->
+      </div>
+
+      <div class="col-md-4">
+          <dx-select-box [width]="135" id="custom-templates" [dataSource]="countries" displayExpr="name" valueExpr="code" #selectedLang [value]="selectedCountry.code" fieldTemplate="field" (onValueChanged)="switchLang(selectedLang)">
+              <div *dxTemplate="let data of 'field'">
+                  <div class="custom-item">
+                      <span class="ml-2 flag-icon flag-icon-{{data && data.flag.toLowerCase()}}">
+      
+                </span>
+                      <dx-text-box class="product-name" [value]="data && data.name" [readOnly]="true"></dx-text-box>
+
+                  </div>
+              </div>
+              <div *dxTemplate="let data of 'item'">
+                  <div class="custom-item">
+                      <span [class]="'flag-icon flag-icon-' + data.flag.toLowerCase() "></span>
+                      <div>{{data.name}}</div>
+                  </div>
+              </div>
+          </dx-select-box>
+          <br />
+
+      </div>
+  </div>
+
+  <div class="dropdown-divider"></div>
+  <div class="row">
+
+      <div class="col-md-4">
+          <h2></h2>
+      </div>
+      <div class="col-md-7" style="text-align: right;">
+          <h2></h2>
+
+      </div>
+
+  </div>
+
+  <div style="width: 100%; ">
+      <ng-container *ngIf="this.authService.storeSelected()!==null ">
+          <a class="dropdown-item" style="font-size: 16px;"> <img width="32" height="31.826" src="../../../../assets/images/System/setup.svg" alt="New Order"> {{authService.storeSelected().storeId}} {{authService.storeSelected().storeName}}
+          </a>
+      </ng-container>
+   
+      <!-- bottom: 100px; position: absolute; -->
+      <a class="dropdown-item" style="font-size: 16px;" [routerLink]="['/admin/user-infor']"> <i class="fas fa-user-circle"></i> {{'MyAccount' | translate}}</a>
+  
+      <ng-container *ngIf="this.authService.storeSelected()!==null ">
+          <a class="dropdown-item" style="font-size: 16px;" (click)="selectStore()"> <i class="fas fa-bug"></i> {{'Switch Store' | translate}}</a>
+      </ng-container>
+      <!-- Button HTML (to Trigger Modal) -->
+      <a class="dropdown-item  " style="font-size: 16px;" (click)="openModal(changePassTemplate)"><i class="fa fa-unlock" aria-hidden="true"></i> {{'Change password' | translate}}</a>
+      <a class="dropdown-item" style="font-size: 16px; cursor: pointer;" (click)="logout()"><i class="fas fa-sign-out-alt"></i> {{'Logout' | translate}}</a>
+  </div>
+  <div class="dropdown-divider" style="padding-bottom: 5px;"></div>
+
+  <ng-template #changePassTemplate>
+      <div class="modal-header  ">
+          <h4 class="modal-title pull-left" id="my-modal-title">{{'Change password' | translate}}</h4>
+          <button type="button" class="close pull-right" aria-label="Close"  (click)="this.modalRef.hide()" > 
+              <img src="../../../assets/images/System/times.svg">
+          </button>
+      </div>
+      
+      <div class="modal-body">
+          <div class="row">
+              <app-changepassword style=" width: 100%; "></app-changepassword>
+          </div>
+      </div>
+  </ng-template>
+<!-- 
+  <ng-keyboard-shortcuts  [shortcuts]="shortcuts"></ng-keyboard-shortcuts>
+  <ng-keyboard-shortcuts-help [key]="'`'"  [closeKey]="'escape'" [title]="'Help ' "></ng-keyboard-shortcuts-help>    -->
+  

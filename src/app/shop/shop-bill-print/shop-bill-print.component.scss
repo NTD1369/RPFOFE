@@ -1,0 +1,30 @@
+ table {
+     font-family: arial, sans-serif;
+     border-collapse: collapse;
+     width: 100%;
+ }
+ 
+ td,
+ th {
+     border: 1px solid #dddddd;
+     text-align: left;
+     padding: 8px;
+ }
+ 
+ tr:nth-child(even) {
+     background-color: #dddddd;
+ }
+ 
+ hr.style5 {
+     background-color: #fff;
+     border-top: 2px dashed #8c8b8b;
+ }
+ 
+ @media print {
+     .center-wrap,
+     .maintenance-card,
+     .maintenance-row {
+         padding-top: 0;
+         padding-bottom: 0;
+     }
+ }

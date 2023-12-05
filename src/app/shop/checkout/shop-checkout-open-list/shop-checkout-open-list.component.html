@@ -1,0 +1,56 @@
+<div class="center-wrap">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- </div> (onToolbarPreparing)="onToolbarPreparing($event)"  -->
+            <div class="right-section">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [dataSource]="this.bills" [showBorders]="true">
+                    <!-- <div *dxTemplate="let data of 'content'">
+          <p>Popup content</p>
+        </div>
+        <dxi-toolbar-item
+            text="Title"
+            location="before">
+        </dxi-toolbar-item> -->
+
+                    <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                    <dxi-column dataField="transId" caption="{{'Bill No' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="cusName" caption="{{'Customer Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="contractNo" caption="{{'Contract No' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="phone" caption="{{'Phone' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="totalPayable" caption="{{'Total Payable' | translate}}" [customizeText]="customizeText" dataType="number"></dxi-column>
+                    <dxi-column alignment="center" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                    <dxi-column dataField="refTransId" caption="{{'Ecom Id' | translate}}" dataType="string"> </dxi-column>
+                    <!-- <dxi-column dataField="salesPerson" caption="Sales Person" dataType="string"></dxi-column> -->
+                    <!-- <dxi-column dataField="storeId" caption="Store Id" dataType="string"> </dxi-column> -->
+                    <!-- <dxi-column dataField="dataSource" caption="dataSource" dataType="string"> </dxi-column> -->
+                    <dxi-column cellTemplate="cellTemplate" [minWidth]="520"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button icon="fas fa-eye" class="mr-2" text="{{'View' | translate}}" (onClick)="OpenOrder(cell.data)"></dx-button>
+                        <!-- <dx-button icon="check"  class="mr-2"  text="Confirm" (onClick)="ConfirmOrder(cell.data)"></dx-button>  -->
+                        <ng-container *ngIf="cell.data.posType==='E' && cell.data.status==='O'">
+                            <dx-button icon="fas fa-sign-out-alt" class="mr-2" text="{{'Check Out' | translate}}" (onClick)="CheckOutOrder(cell.data)">
+                            </dx-button>
+                        </ng-container>
+                        <ng-container *ngIf="cell.data.posType!=='E' && cell.data.status==='O'">
+                            <dx-button icon="fas fa-sign-in-alt" class="mr-2" text="{{'Check In' | translate}}" (onClick)="CheckInOrder(cell.data)">
+                            </dx-button>
+                        </ng-container>
+
+
+                        <!-- <i class="fas fa-sign-out-alt"></i> -->
+                    </div>
+                    <div *dxTemplate="let cell of 'statusTemplate'">
+                        <div [innerHtml]="cell.data.status | statusFormat"></div>
+                    </div>
+
+                </dx-data-grid>
+
+            </div>
+        </div>
+
+    </div>

@@ -1,0 +1,194 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Pick up history' | translate}}</label>
+
+      </div>
+      <div class="row justify-content-center flex-row mb-3 mt-2">
+        <div class="col-md-2 mb-1">
+            <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-2 mb-1">
+            <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-2 mb-1">
+            <dx-button class="mr-2" icon="search" type="success" (onClick)="loadItems(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button>
+        </div>
+    </div>
+
+      <div class="table-wrap">
+        <dx-data-grid id="gridContainer" #dataGrid [style]="{'max-height':'calc(100vh - 25vh)','overflow':'auto'}" 
+        [dataSource]="this.items" [columnAutoWidth]="true"   [showRowLines]="true"
+        (onToolbarPreparing)="onToolbarPreparing($event)"  [wordWrapEnabled]="true" [showBorders]="true" [allowColumnResizing]="true" 
+        [columnResizingMode]="true"  dataRowTemplate="dataRowTemplateName">
+       <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+       <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+       <dxo-scrolling mode="virtual"></dxo-scrolling>
+       <dxo-group-panel [visible]="true"></dxo-group-panel>
+       <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+
+       <!-- <dxo-toolbar>
+        <dxi-item name="groupPanel"></dxi-item>
+        <dxi-item location="after">
+          <dx-button
+            icon="exportpdf"
+            text="Export to PDF"
+            (onClick)="exportGrid($event)"
+          >
+          </dx-button>
+        </dxi-item>
+        <dxi-item name="searchPanel"></dxi-item>
+      </dxo-toolbar> -->
+
+       <dxi-column dataField="storeId" dataType="string"  [groupIndex]="0"  caption="{{'Store' | translate}}"> </dxi-column>
+       <dxi-column dataField="counterId" dataType="string" [groupIndex]="1" caption="{{'Counter' | translate}}"> </dxi-column>
+       <dxi-column dataField="shiftId" dataType="string"    caption="{{'Shift' | translate}}"> </dxi-column>
+      
+       <dxi-column  dataField="shiftDate" dataType="date" caption="{{'Shift Date' | translate}}" [format]="this.authService.loadFormat().dateFormat"> </dxi-column>
+       <dxi-column  dataField="customF1" dataType="number" caption="{{'Collection' | translate}} 1" [format]="this.authService.numberFormat('amount')"   > </dxi-column>
+
+       <dxi-column dataField="customF2" dataType="number" caption="{{'Collection' | translate}} 2" [format]="this.authService.numberFormat('amount')" > </dxi-column>
+
+       <dxi-column dataField="customF3" dataType="number" caption="{{'Collection' | translate}} 3" [format]="this.authService.numberFormat('amount')" > </dxi-column>
+     
+       <dxi-column dataField="customF4" dataType="number" caption="{{'Collection' | translate}} 4" [format]="this.authService.numberFormat('amount')"    > </dxi-column>
+    
+       <dxi-column dataField="customF5" dataType="number" caption="{{'Collection' | translate}} 5" [format]="this.authService.numberFormat('amount')"  > </dxi-column>
+       <dxi-column dataField="print" > 
+
+
+       </dxi-column>
+
+       <ng-container *dxTemplate="let celldata of 'dataRowTemplateName'">
+        <tr class="main-row">
+          <td> <p style="display: none;">
+            {{ celldata.data.storeId }}
+          </p> </td>
+          <td>
+            <p style="display: none;">
+              {{ celldata.data.counterId }}
+            </p> 
+          </td>
+          <td style="width: 200px">{{ celldata.data.shiftId }}</td>
+          <td>{{ celldata.data.shiftDate | date:this.authService.loadFormat().dateFormat  }}</td>
+          <td  >
+            <dx-button class="btnEdit" *ngIf="celldata.data.customF1?.length > 0"  
+                 (onClick)="openEditModal(  celldata.data, '1')">
+               <i   class="far fa-edit"></i>
+               {{ celldata.data.customF1 | currencyFormat}}
+               <!-- <br>
+               <p *ngIf="employee.data?.pickupBy?.length > 0">   {{'Pick By' | translate}}:   {{ employee.data.pickupBy }}</p>
+             -->
+              </dx-button>
+              <ng-container *ngIf="!(celldata.data.customF1?.length > 0)">
+                {{ celldata.data.customF1 }}
+              </ng-container>
+              
+          </td>
+          <td  >
+            <dx-button class="btnEdit" *ngIf="celldata.data.customF2?.length > 0 "  
+                 (onClick)="openEditModal(  celldata.data, '2')">
+               <i   class="far fa-edit"></i>
+               {{ celldata.data.customF2 | currencyFormat}}
+               <!-- {{'Pick By' | translate}}:   {{ employee.data.pickupBy }} -->
+              </dx-button>
+              <ng-container *ngIf="!(celldata.data.customF2?.length > 0)">
+                {{ celldata.data.customF2 }}
+              </ng-container>
+              
+          </td>
+          <td  >
+            <dx-button class="btnEdit" *ngIf="celldata.data.customF3?.length > 0"  
+                 (onClick)="openEditModal(  celldata.data, '3')">
+               <i   class="far fa-edit"></i>
+               {{ celldata.data.customF3 | currencyFormat}}
+               <!-- {{'Pick By' | translate}}:   {{ employee.data.pickupBy }} -->
+              </dx-button>
+              <ng-container *ngIf="!(celldata.data.customF3?.length > 0)">
+                {{ celldata.data.customF3 }}
+              </ng-container>
+              
+          </td>
+          <td  >
+            <dx-button class="btnEdit" *ngIf="celldata.data.customF4?.length > 0"  
+                 (onClick)="openEditModal(  celldata.data, '4')">
+               <i   class="far fa-edit"></i>
+               {{ celldata.data.customF4 | currencyFormat}}
+               <!-- {{'Pick By' | translate}}:   {{ employee.data.pickupBy }} -->
+              </dx-button>
+              <ng-container *ngIf="!(celldata.data.customF4?.length > 0)">
+                {{ celldata.data.customF4 }}
+              </ng-container>
+              
+          </td>
+          <td  >
+            <dx-button class="btnEdit" *ngIf="celldata.data.customF5?.length > 0"  
+                 (onClick)="openEditModal(  celldata.data, '5')">
+               <i   class="far fa-edit"></i>
+               {{ celldata.data.customF5 | currencyFormat }}
+               
+               <!-- {{'Pick By' | translate}}:   {{ employee.data.pickupBy }} -->
+              </dx-button>
+              <ng-container *ngIf="!(celldata.data.customF5?.length > 0)">
+                {{ celldata.data.customF5 }}
+              </ng-container>
+              
+          </td>
+          <td  >
+            
+              <dx-button icon="print" text="{{'Print' | translate}}" (onClick)="printPick(celldata.data)"></dx-button>
+          </td>
+          <!-- <td >{{ employee.data.customF2  }}</td>
+          <td>{{ employee.data.customF3 }}</td>
+          <td>{{ employee.data.customF4 }}</td>
+          <td>{{ employee.data.customF5 }}</td> -->
+          <!-- <td><dx-button *ngIf="canAdd" icon="add" text="{{'Add' | translate}}" (onClick)="openModal(true,  employee.data)"></dx-button></td> -->
+        </tr>
+        <!-- <tr class="notes-row">
+          <td>  </td>
+          <td> </td>
+          <td> <dx-button *ngIf="employee.data.customF1?.length > 0"   icon="add" text="{{'Edit' | translate}}" (onClick)="openEditModal(  employee.data, '1')"></dx-button></td>
+          <td> <dx-button  *ngIf="employee.data.customF2?.length > 0"  icon="add" text="{{'Edit' | translate}}" (onClick)="openEditModal(  employee.data, '2')"></dx-button></td>
+          <td> <dx-button  *ngIf="employee.data.customF3?.length > 0" icon="add" text="{{'Edit' | translate}}" (onClick)="openEditModal(  employee.data, '3')"></dx-button></td>
+          <td> <dx-button  *ngIf="employee.data.customF4?.length > 0" icon="add" text="{{'Edit' | translate}}" (onClick)="openEditModal(  employee.data, '4')"></dx-button></td>
+          <td> <dx-button   *ngIf="employee.data.customF5?.length > 0 " icon="add" text="{{'Edit' | translate}}" (onClick)="openEditModal(  employee.data, '5')"></dx-button></td>
+         
+        </tr> -->
+      </ng-container> 
+       <!-- <dxi-column cellTemplate="cellPrintTemplate"></dxi-column>
+       <div *dxTemplate="let cell of 'cellPrintTemplate'">
+          
+           <dx-button icon="add" text="{{'Add' | translate}}" (onClick)="openModal(true, cell.data)"></dx-button>
+         
+       </div> -->
+      
+       <div *dxTemplate="let data of 'totalGroupCount'">
+         <dx-select-box [value]="this.storeId" style="min-width: 300px;" [searchEnabled]="true"
+          [items]="this.storelist" placeholder="{{'Store' | translate}}" displayExpr="storeName" 
+          valueExpr="storeId" (onValueChanged)="loadCounter($event, fromCalendar.value, toCalendar.value)"></dx-select-box>
+     </div>
+      <div *dxTemplate="let data of 'exportoPDF'">
+        <!-- <i class=""></i> -->
+         <dx-button icon="fas fa-file-pdf" text="{{'PDF' | translate}}" (onClick)="exportGrid()"></dx-button>
+      </div>
+     </dx-data-grid>
+
+          <!-- <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer"  
+              [dataSource]="this.items" [showBorders]="true">
+
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+ 
+              <dxi-column dataField="storeId" caption="{{'Store Id' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="counterId" caption="{{'Counter Id' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="shiftId" caption="{{'Shift Id' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="pickupBy" caption="{{'Pickup By' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="amount" caption="{{'Amount' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="createdOn" caption="{{'Created On' | translate}}" dataType="date"> </dxi-column>
+
+           
+          </dx-data-grid> -->
+      </div>
+  </div>
+</div>

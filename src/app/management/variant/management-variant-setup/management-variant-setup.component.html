@@ -1,0 +1,392 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+      <div class="maintenance-row">
+          <div class="col-md-12">
+              <div class="row">
+
+                  <div class="col-md-6">
+                      <a routerLink="/admin/crm-list" class="back-btn">
+                          <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+
+                      </a>
+                      <label for="item-searchbar" *ngIf="this.mode==='edit'" class="section-title">{{'Edit Item Variant' | translate}}</label>
+                      <label for="item-searchbar" *ngIf="this.mode!=='copy' && this.mode!=='edit'" class="section-title">{{'Create Item Variant' | translate}}</label>
+                  </div>
+                  <div class="col-md-6 mb-2" style="text-align: right;">
+                      <ng-container *ngIf="this.mode!=='copy' && this.mode!=='edit'">
+                         
+                      </ng-container>
+                      <ng-container *ngIf="this.mode==='edit' || this.mode==='copy'">
+                          <dx-button class="mr-2 mb-2" (onClick)="addNewVariant()" type="default" icon="add" text="{{'Add' | translate}}">
+                          </dx-button>
+                      </ng-container>
+                    
+                      <dx-button class="mr-2" (onClick)="saveChanges()" icon="floppy" type="success" text="{{'Save' | translate}}" style="margin-top:-10px;"></dx-button>
+
+                  </div>
+
+              </div>
+
+
+              <div class="item-search-nav mt-2">
+
+
+                  <div class="row ">
+                      <div class="col-md-5">
+                          <div class="row mb-2">
+                              <div class="col-md-4"> {{'ID' | translate}} <span class="requid-default">*</span></div>
+                              <div class="col-md-8">
+                                  <dx-text-box [readOnly]="true" [(value)]="this.itemVariant.variantId"></dx-text-box>
+                              </div>
+                          </div>
+
+                          <div class="row mb-2">
+                              <div class="col-md-4"> {{'Description' | translate}}</div>
+                              <div class="col-md-8">
+                                  <dx-text-box [(value)]="this.itemVariant.description"></dx-text-box>
+                              </div>
+                          </div>
+ 
+                      </div>
+
+                      <div class="col-md-7">
+ 
+                          <div class="row mb-2">
+                              <div class="col-md-6">
+                                  <div class="row">
+                                      <div class="col-md-6"> {{'Start Date' | translate}}</div>
+                                      <div class="col-md-6">
+                                          <dx-date-box #fromCalendar id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat" [(ngModel)]="this.itemVariant.validFrom" [(value)]="this.itemVariant.validFrom"> </dx-date-box>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-6">
+                                  <div class="row">
+                                      <div class="col-md-3"> {{'End Date' | translate}}</div>
+                                      <div class="col-md-6">
+                                          <dx-date-box #toCalendar  id="toCalendar" [displayFormat]="this.authService.loadFormat().dateFormat" [(ngModel)]="this.itemVariant.validTo" [(value)]="this.itemVariant.validTo"> </dx-date-box>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+ 
+                      </div>
+
+                  </div>
+              </div>
+
+              <div class="row mt-2">
+
+
+              </div>
+
+
+              <dx-tab-panel *ngIf=" this.showGrid" [selectedIndex]="getTabSelected" class="mt-2">
+                  <dxi-item title="Buy" [visible]="buyTab" class="mt-2">
+                      <dxo-label location="left" alignment="right">
+
+                      </dxo-label>
+                      <div class="row " style="    width: 98%;">
+                          <div class="col-md-6">
+
+                              <dx-button class="mr-2 ml-2" *ngIf="buygridShow" type="default" (onClick)="addRowBuy()" icon="add" text="{{'Add Row' | translate}}">
+                              </dx-button>
+                              <dx-button class="mr-2" *ngIf="buygridShow" type="danger" (onClick)="deleteRowGet()" icon="close" text="{{'Delete Row' | translate}}">
+                              </dx-button>
+                          </div>
+                          <!-- <div class="col-md-2" style="text-align: right;">
+                              <label style="vertical-align:middle;">{{'Total' | translate}}</label>
+                          </div>
+                          <div class="col-md-2">
+                              <dx-number-box [disabled]="this.buyTabtotalText1" [(value)]="this.loyalty.totalBuyFrom" format="#,##0.##" value="0"></dx-number-box>
+                          </div>
+                          <div class="col-md-2">
+                              <dx-number-box format="#,##0.##" value="0" [disabled]="this.buyTabtotalText2" [(value)]="this.loyalty.totalBuyTo"></dx-number-box>
+                          </div> -->
+
+                      </div>
+                      <div class="table-wrap mt-2 mb-2">
+                          <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt *ngIf="buygridShow" id="controlList" [dataSource]="this.buyLines" keyExpr="lineNum" [showRowLines]="true" [allowColumnResizing]="true" (onEditorPrepared)="onEditorPrepared($event)"
+                              (onEditorPreparing)="onEditorPreparing($event)" [showBorders]="true" [columnAutoWidth]="true">
+
+                              <dxo-editing mode="cell" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
+                              </dxo-editing>
+                              <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                              </dxo-selection>
+                              <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="{{'Line Num' | translate}}">
+                              </dxi-column>
+
+                              <dxi-column dataField="collectType" caption="{{'Line Type' | translate}}" [minWidth]="120" [setCellValue]="setGetLineTypeValue">
+                                  <dxo-lookup [dataSource]="this.lineType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+
+
+                              <dxi-column dataField="keyId" caption="{{'Line Code' | translate}}" editCellTemplate="singleDropDownBoxEditor">
+
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+
+                              <dxi-column dataField="lineCode" [visible]="false" caption="{{'Line Code' | translate}}"></dxi-column>
+                              <dxi-column dataField="lineName" [allowEditing]="false" [visible]="buyTablineName" caption="{{'Line Name' | translate}}">
+                              </dxi-column>
+                              <dxi-column dataField="lineUom" [allowEditing]="false" [visible]="buyTablineUom" caption="{{'Line UoM' | translate}}">
+                              </dxi-column>
+                           
+                              <!-- <dxi-column dataField="valueType" [visible]="buyTabvalueType" caption="{{'Value Type' | translate}}">
+                                  <dxo-lookup [dataSource]="this.conditionType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+
+                              <dxi-column dataField="condition1" [setCellValue]="setBuyCodition1Value" [visible]="buyTabcondition1" caption="{{'Condition' | translate}} 1">
+                                  <dxo-lookup [dataSource]="this.condition1Type" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+                              <dxi-column dataField="value1" [visible]="buyTabvalue1" caption="{{'Value' | translate}} 1" [customizeText]="customizeText"></dxi-column>
+                              <dxi-column dataField="condition2" [visible]="buyTabcondition2" caption="{{'Condition' | translate}} 2">
+                                  <dxo-lookup [dataSource]="this.condition2Type" displayExpr="name" valueExpr="value"> </dxo-lookup>
+
+                              </dxi-column> -->
+                              <!-- <dxi-column dataField="value2" [visible]="buyTabvalue2" caption="{{'Value' | translate}} 2" [customizeText]="customizeText"></dxi-column> -->
+                              <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+                                  <ng-container *ngIf="cellInfo.data.collectType === 'ItemCode'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [allowColumnResizing]="true" [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemBuySelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                  <ng-container *ngIf="cellInfo.data.collectType.toLowerCase() === 'barcode'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100" [allowColumnResizing]="true" [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onBarcodeItemBuySelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                  <ng-container *ngIf="cellInfo.data.collectType === 'ItemGroup'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="this.merchandiseCategory" [(value)]="cellInfo.value" displayExpr="mcname" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #merchandiseGrid keyExpr="keyId" [dataSource]="this.merchandiseCategory" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100" [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onGroupBuySelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="mcid" caption="{{'ID' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="mcname" caption="{{'Name' | translate}}"></dxi-column>
+
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                 
+                              </div>
+                          </dx-data-grid>
+                      </div>
+
+                  </dxi-item>
+                  <dxi-item title="Map" [visible]="getTab" class="mt-2">
+
+                      <div class="row" style="    width: 98%;">
+                          <div class="col-md-4">
+                              <dx-button class="mr-2 ml-2" icon="add" *ngIf="getgridShow" type="default" (onClick)="addRowGet()" text="Add Row">
+                              </dx-button>
+                              <dx-button class="mr-2" icon="close" *ngIf="getgridShow" type="danger" (onClick)="deleteRowGet()" text="Delete Row">
+                              </dx-button>
+                          </div>
+
+                          <div class="col-md-8">
+                              <div class="row" style="justify-content: flex-end; align-items: center;">
+                                  <div class="col-md-2" style="text-align: right;">
+                                      <label style="vertical-align:middle; margin-bottom: 0;">Earn</label>
+                                  </div>
+                                  <!-- <div class="col-md-2">
+                                      <dx-select-box #cbbTotalEarnType [disabled]="this.getTabtotalText1" [(value)]="this.loyalty.totalEarnType " (onValueChanged)="getTotalValueChange(cbbTotalEarnType.value)" [items]="discountType" displayExpr="name" valueExpr="value" placeholder="Disount Type">
+                                      </dx-select-box>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <dx-number-box value="0" [disabled]="this.getTabtotalText2" format="#,##0.##" [(value)]="this.loyalty.totalEarnValue">
+                                      </dx-number-box>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <dx-number-box value="0" [placeholder]="'Max value'" format="#,##0.##" [disabled]="this.disableTotalMax" [(value)]="this.loyalty.maxTotalEarnValue"></dx-number-box>
+                                  </div>
+                                  <div class="col-md-1"></div> -->
+                              </div>
+
+                          </div>
+
+                      </div>
+                      <div class="table-wrap mt-2 mb-2">
+
+                          <dx-data-grid *ngIf="getgridShow" (onEditorPrepared)="onEditorPrepared($event)" 
+                          (onEditorPreparing)="onEditorPreparing($event)" [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto','padding':'10px'}"
+                           #gett id="controlList" [dataSource]="this.mapLines"
+                              keyExpr="lineNum" [showRowLines]="true" [allowColumnResizing]="true" [showBorders]="true" [columnAutoWidth]="true">
+
+                              <dxo-editing mode="cell" [allowUpdating]="true" [useIcons]="true" [allowDeleting]="true">
+                              </dxo-editing>
+                              <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+                              </dxo-selection>
+                              <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="{{'Line Num' | translate}}">
+                              </dxi-column>
+
+                              <dxi-column dataField="collectType" caption="{{'Line Type' | translate}}" [setCellValue]="setGetLineTypeValue" [minWidth]="120">
+                                  <dxo-lookup [dataSource]="this.lineType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+
+                              <dxi-column dataField="keyId" caption="{{'Line Code' | translate}}" editCellTemplate="singleDropDownBoxEditor">
+
+                                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+
+                              <dxi-column dataField="lineCode" [visible]="false" caption="{{'Line Code' | translate}}"></dxi-column>
+                              <dxi-column dataField="lineName" [allowEditing]="false" [visible]="getTablineName" caption="{{'Line Name' | translate}}">
+                              </dxi-column>
+                              <dxi-column dataField="lineUom" [allowEditing]="false" [visible]="getTablineUom" caption="{{'Line UoM' | translate}}">
+                              </dxi-column>
+
+                              <dxi-column dataField="selectionType"  caption="{{'Selection Type' | translate}}">
+                                  <dxo-lookup [dataSource]="this.selecttionType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+
+                              </dxi-column>
+                              <!-- <dxi-column dataField="condition1" [setCellValue]="setGetCodition1Value" [visible]="getTabcondition1" caption="{{'Condition' | translate}} 1">
+                                  <dxo-lookup [dataSource]="this.condition1Type" displayExpr="name" valueExpr="value"> </dxo-lookup>
+
+                              </dxi-column>
+                              <dxi-column dataField="value1" [visible]="getTabvalue1" caption="{{'Value' | translate}} 1" [customizeText]="customizeText"></dxi-column>
+                              <dxi-column dataField="condition2" [visible]="getTabcondition2" caption="{{'Condition' | translate}} 2">
+                                  <dxo-lookup [dataSource]="this.condition2Type" displayExpr="name" valueExpr="value"> </dxo-lookup>
+
+                              </dxi-column>
+                              <dxi-column dataField="value2" [visible]="getTabvalue2" caption="{{'Value' | translate}} 2" [customizeText]="customizeText"></dxi-column>
+
+                              <dxi-column dataField="valueType" [visible]="getTabvalueType" caption="{{'Value Type' | translate}}">
+                                  <dxo-lookup [dataSource]="this.valueType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+
+                              </dxi-column>
+                              <dxi-column dataField="earnValue" [visible]="getTabgetValue" caption="{{'Value' | translate}}"></dxi-column>
+                              <dxi-column dataField="maxAmtDis" caption="{{'Max Value' | translate}}" [customizeText]="customizeText"></dxi-column> -->
+                              <div *dxTemplate="let cellInfo of 'singleDropDownBoxEditor'">
+                                  <ng-container *ngIf="cellInfo.data.collectType === 'ItemCode'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="this.getdataSource('ItemCode')" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="this.getdataSource('ItemCode')" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100  " [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemGetSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                  <ng-container *ngIf="cellInfo.data.collectType.toLowerCase()== 'barcode'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="this.getdataSource('ItemCode')" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="this.getdataSource('ItemCode')" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onBarcodeItemGetSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                  <ng-container *ngIf="cellInfo.data.collectType === 'ItemGroup'">
+                                      <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="this.getdataSource('ItemGroup')" [(value)]="cellInfo.value" displayExpr="mcname" valueExpr="keyId" contentTemplate="contentTemplate">
+                                          <div *dxTemplate="let e of 'contentTemplate'">
+                                              <dx-data-grid #merchandiseGrid keyExpr="keyId" [dataSource]="this.getdataSource('ItemGroup')" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() - (15 * this.authService.getWindowHeight()) / 100 " [selectedRowKeys]="[cellInfo.value]"
+                                                  [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onGroupGetSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                                  <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before">
+                                                  </dxo-search-panel>
+                                                  <dxi-column dataField="mcid" caption="{{'ID' | translate}}"></dxi-column>
+                                                  <dxi-column dataField="mcname" caption="{{'Name' | translate}}"></dxi-column>
+
+                                                  <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                                  <dxo-selection mode="single"></dxo-selection>
+                                              </dx-data-grid>
+                                          </div>
+                                      </dx-drop-down-box>
+                                  </ng-container>
+                                  
+                              </div>
+
+
+                          </dx-data-grid>
+                      </div>
+                  </dxi-item>
+                
+              </dx-tab-panel>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <img src="../../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+
+      <app-management-promotion-customer (customersSelected)="updateCustomerSelected($event)">
+      </app-management-promotion-customer>
+  </div>
+</ng-template>
+
+<!-- <ng-template #promotemplate>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion search' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <img src="../../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <app-management-promotion-search [isMulti]="false" [isCombine]="false" (dataSelected)="applyPromotion($event)">
+      </app-management-promotion-search>
+  </div>
+</ng-template> -->

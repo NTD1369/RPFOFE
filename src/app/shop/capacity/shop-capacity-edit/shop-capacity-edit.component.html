@@ -1,0 +1,23 @@
+<div class="container-fluid">
+    <div class="main-section">
+
+        <div class="row">
+            <form #editForm="ngForm" id="editForm" style="width: 100%;" (ngSubmit)="saveModel()">
+                <div class="form-group">
+                    <label for="productName">{{'Name' | translate}} </label>
+                    <input class="form-control" id="productName" name="productName" rows="6" [(ngModel)]="this.model.productName">
+                </div>
+                <div class="form-group">
+                    <label for="appointmentDate">{{'Appointment Date' | translate}} </label>
+                    <input disabled class="form-control" id="appointmentDate" name="appointmentDate" rows="6" [(ngModel)]="this.model.appointmentDate">
+                </div>
+                <div class="form-group">
+                    <label for="quantity">{{'Quantity' | translate}} </label>
+                    <input class="form-control" id="quantity" name="quantity" rows="6" [(ngModel)]="this.model.quantity">
+                </div>
+                <a (click)="saveModel()" class="primary-btn">{{'Save' | translate}}</a>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Price List Setup' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridCurency" [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'"
+                (onSaved)="save($event)" (onRowRemoved)="remove($event)">
+                <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+                </dxo-editing>
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column dataField="cusGrpId" caption="{{'Group' | translate}}" dataType="string">
+                    <dxo-lookup [dataSource]="this.cusGrps" displayExpr="cusGrpDesc" valueExpr="cusGrpId"> </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="priceListId" caption="{{'Price List ID' | translate}}">
+                    <dxo-lookup [dataSource]="this.pricelistIds" displayExpr="priceListId" valueExpr="priceListId"> </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="priority" caption="{{'Priority' | translate}}"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                    <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                </dxi-column>
+
+                <!-- <dxi-column  cellTemplate="cellTemplate"></dxi-column> -->
+                <!-- <div *dxTemplate="let cell of 'cellTemplate'">
+              <dx-button icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+          </div> -->
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

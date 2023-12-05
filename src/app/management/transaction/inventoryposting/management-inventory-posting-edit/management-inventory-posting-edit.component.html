@@ -1,0 +1,265 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <a routerLink="/admin/inventory/posting" class="back-btn">
+                            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                        </a>
+                        <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">{{'Edit Inventory Posting' | translate}}</label>
+                        <label for="item-searchbar" *ngIf="this.mode!=='e'" class="section-title">{{'Create Inventory Posting' | translate}}</label>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <span *ngIf="this.mode==='e'">
+                            <dx-button class="mr-2 mb-2 btn-print" icon="fa fa-print" text="Print" (onClick)="PrintDetail(this.inventory)" style="color: #fff;"></dx-button>
+                        </span>
+
+                        <span *ngIf="this.mode!=='e'">
+                            <dx-button class="mr-2" (onClick)="openModal(template)" icon="add" type="success" text="{{'Select Counted Document' | translate}}"></dx-button>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="tree-list-demo mt-2">
+                    <ng-container *ngIf="this.lines.length>0">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'ID' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="this.inventory.status==='C'" [readOnly]="true" [value]="this.inventory.ipid"></dx-text-box>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" *ngIf="this.mode==='e'">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'Created On' | translate}}</div>
+                                    <div class="dx-field-value mt-2">
+                                        <label>{{this.inventory.createdOn | date: this.dateFormat + ' HH:mm:ss'}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 align-items-center">
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'Description' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="this.inventory.status==='C'" [(ngModel)]="this.inventory.name" [value]="this.inventory?.name"></dx-text-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'Doc Date' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <!-- [(value)]="this.inventory.docDate" -->
+                                        <dx-date-box [readOnly]="this.inventory.status==='C'" [(ngModel)]="this.inventory.docDate" [displayFormat]="this.dateFormat +' HH:mm:ss'" [value]="this.inventory?.docDate" id="doc-date" width="100%"></dx-date-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label"> {{'Doc Due Date' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <!-- [(value)]="this.inventory.docDueDate" -->
+                                        <dx-date-box [readOnly]="this.inventory.status==='C'" [(ngModel)]="this.inventory.docDueDate" [displayFormat]="this.dateFormat +' HH:mm:ss'" [value]="this.inventory?.docDueDate" id="doc-due-date" width="100%"></dx-date-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mt-2 align-items-center">
+
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label"> {{'Store' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="this.inventory.status==='C'" [readOnly]="true" [(ngModel)]="this.inventory.storeId" [value]="this.inventory?.storeId"></dx-text-box>
+
+                                        <!-- <dx-select-box #ddlFrom [readOnly]="this.inventory.status==='C'" [(ngModel)]="this.inventory.storeId" [value]="this.inventory?.storeId" (onValueChanged)="onStoreChanged(ddlFrom.selectedItem)" [dataSource]="this.storeList" displayExpr="storeName" valueExpr="storeId"
+                                            itemTemplate="item">
+
+                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data.storeId}} - {{data.storeName}}</div>
+                                            </div>
+                                        </dx-select-box> -->
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label"> {{'Remark' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <!-- [(ngModel)]="this.inventory.remark" -->
+                                        <dx-text-box [readOnly]="this.inventory.status==='C'" [(ngModel)]="this.inventory.comment" [value]="this.inventory?.comment"></dx-text-box>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2 align-items-center">
+                            <div class="col-md-12">
+                                <ng-container *ngIf="this.inventory.isCanceled==='Y' || (this.inventory.refId!==null && this.inventory.refId!==undefined)">
+                                    <div class="row">
+                                        <div class="col-md-4">
+
+                                            <div class="dx-field">
+                                                <div class="dx-field-label"> {{'Doc Status' | translate}}</div>
+                                                <div class="dx-field-value">
+                                                    <dx-select-box #ddlStatus [readOnly]="true" [style]="{'width':'100%'}" name="status" placeholder="--- Select Status ---" [dataSource]="docStatus" displayExpr="name" valueExpr="value" [value]="this.inventory.status" [(ngModel)]="this.inventory.status"></dx-select-box>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <ng-container *ngIf="this.inventory.refId!==null && this.inventory.refId!==undefined">
+                                            <div class="col-md-4">
+                                                <div class="dx-field-label"> {{'Ref ID' | translate}}</div>
+                                                <div class="dx-field-value mt-2">
+                                                    <p> {{this.inventory.refId}}</p>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="this.isNew">
+                                            <div class="col-md-4" style="text-align: right;">
+
+                                                <dx-button type="success" icon="check" *ngIf="this.isSave && this.inventory.status!=='C' && (this.canEdit && this.mode==='e') || (this.mode!=='e' && this.canAdd)" text="Save" (onClick)="saveModel()"></dx-button>
+                                                <dx-button type="success" icon="check" *ngIf="!this.isSave" text="Saving"></dx-button>
+                                            </div>
+                                        </ng-container>
+
+                                    </div>
+                                </ng-container>
+                                <!-- && this.inventory.refId===null -->
+                                <!-- {{this.inventory.status +' x '+this.inventory.refId}} -->
+                                <ng-container *ngIf="this.inventory.status!=='N' && (this.inventory.refId===null || this.inventory.refId===undefined)">
+                                    <div class="row">
+                                        <div class="col-md-4">
+
+                                            <div class="dx-field" *ngIf="this.mode==='e'">
+                                                <div class="dx-field-label"> {{'Doc Status' | translate}}</div>
+                                                <div class="dx-field-value">
+                                                    <dx-select-box [readOnly]="this.inventory.status==='C'" #ddlStatus [style]="{'width':'100%'}" name="status" placeholder="--- {{'Select Status' | translate}} ---" [dataSource]="docStatus" displayExpr="name" valueExpr="value" [value]="this.inventory.status"
+                                                        [(ngModel)]="this.inventory.status"></dx-select-box>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+
+
+                                        </div>
+                                        <div class="col-md-4" style="text-align: right;">
+
+                                            <dx-button icon="check" *ngIf="this.isNew ||  this.mode!=='e' || (this.inventory.refId===null || this.inventory.refId===undefined)" text="Save" (onClick)="saveModel()"></dx-button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <!-- <dx-button *ngIf="this.mode!=='e' && this.inventory.fromStore!=='' && this.inventory.fromStore!== null &&this.inventory.fromStore!==undefined  && this.inventory.toStore!=='' && this.inventory.toStore!== null &&this.inventory.toStore!==undefined" icon="check" text="Save"  (onClick)="saveModel()"></dx-button>   -->
+                            </div>
+                        </div>
+                        <dx-data-grid #dataGrid id="invenLine" (onRowPrepared)="onRowPrepared($event)" (onRowInserted)="onRowInserted($event)" [(dataSource)]="this.lines" [allowColumnResizing]="true" [columnResizingMode]="true" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                            [showBorders]="true" (onInitNewRow)="this.isEditGrid=true" (onEditingStart)="this.isEditGrid=true" (onSaved)="this.isEditGrid=false" (onEditCanceled)="this.isEditGrid=false" (onExporting)="onExporting($event)">
+                            <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                            <dxo-export *ngIf="this.lines!==null && this.lines?.length>0 && this.lines !==undefined  && this.mode==='e'" [enabled]="true"></dxo-export>
+                            <!-- <dxi-column dataField="keyId" caption="{{'Item Code' | translate}}" editCellTemplate="itemDropDownBoxEditor">
+                                <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column> -->
+                            <dxi-column dataField="itemCode"  [allowEditing]="false" caption="{{'Item Code' | translate}}"></dxi-column>
+
+                            <dxi-column dataField="description" [allowEditing]="false" caption="{{'Description' | translate}}" [minWidth]="80"> </dxi-column>
+
+                            <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}" [minWidth]="150"> </dxi-column>
+                            <!--  -->
+                            <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="{{'UoM' | translate}}" [minWidth]="120">
+
+                            </dxi-column>
+                            <dxi-column [format]="this.authService.numberFormat('amount')" [visible]="false" dataField="price" [allowEditing]="false" alignment="right" dataType="number" [minWidth]="120"></dxi-column>
+                            <!-- <dxi-column dataField="slocId" caption="{{'Bins Code' | translate}}" [minWidth]="120">
+                                <dxo-lookup [dataSource]="this.SlocList" displayExpr="slocId" valueExpr="slocId"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column> -->
+
+                            <dxi-column dataField="slocId" caption="{{'Bins Code' | translate}}" [minWidth]="120"> </dxi-column>
+
+                            <dxi-column alignment="right" dataField="quantity" caption="{{'Variance' | translate}}" dataType="number" [format]="this.authService.numberFormat('quantity')" [minWidth]="120">
+
+                            </dxi-column>
+
+                            <!-- <dxi-column dataField="currencyRate" caption="Currency Rate" [minWidth]="80"> </dxi-column> -->
+                            <dxi-column alignment="right" dataField="lineTotal" [visible]="false" [format]="this.authService.numberFormat('amount')" [allowEditing]="false" caption="{{'Line Total' | translate}}" [minWidth]="120"> </dxi-column>
+
+                            <dxo-summary [recalculateWhileEditing]="true">
+                                <dxi-total-item column="lineTotal" summaryType="{{'sum' | translate}}" [valueFormat]="this.authService.numberFormat('amount')">
+
+                                </dxi-total-item>
+                                <dxi-total-item column="quantity" summaryType="{{'sum' | translate}}" [valueFormat]="this.authService.numberFormat('quantity')"></dxi-total-item>
+                            </dxo-summary>
+                            <!--  -->
+                            <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                    <div *dxTemplate="let e of 'contentTemplate'">
+                                        <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() <= 1024 ? this.authService.getWindowHeight() * 35 / 100 : this.authService.getWindowHeight()* 40/ 100 " [selectedRowKeys]="[cellInfo.value]"
+                                            [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                            <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                            <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                            <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                            <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection mode="single"></dxo-selection>
+                                        </dx-data-grid>
+                                    </div>
+                                </dx-drop-down-box>
+                            </div>
+
+                            <div *dxTemplate="let line of 'detail'">
+                                <!-- <ng-container *ngIf="line.data.lines!==null"> -->
+                                <div class="master-detail-caption">{{'Serial' | translate}}:</div>
+                                <dx-data-grid [dataSource]="line.data.lines" keyExpr="serialNum" [showBorders]="true" [columnAutoWidth]="true">
+                                    <dxo-editing mode="cell" [allowAdding]="this.inventory.status!=='C'" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="this.inventory.status!=='C'"></dxo-editing>
+
+                                    <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+                                    <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}"></dxi-column>
+                                </dx-data-grid>
+                                <!-- </ng-container> -->
+
+                            </div>
+                        </dx-data-grid>
+                    </ng-container>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Counted List' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <app-management-inventory-counted-list (dataSelected)="countedSelected($event)"></app-management-inventory-counted-list>
+
+    </div>
+</ng-template>

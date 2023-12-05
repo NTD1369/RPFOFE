@@ -1,0 +1,1631 @@
+<!-- topmenu -->
+
+<ul class="sidebar horizontal-scroll">
+    <!-- {{!(ShowMenu$ | async)}} -->
+    <li style="cursor: pointer;" id="moreMenu">
+        <!-- (click)="togleSubmenu()"   (click)="showSide()" -->
+        <a class="nav-card" (click)="toggleMoreOptions()">
+            <span class="nav-card-img">
+        
+        <i class="fa fa-th" aria-hidden="true"></i>
+      </span>
+            <span class="nav-card-text" style="text-transform: uppercase;"> {{'More' | translate}} </span>
+
+
+        </a>
+
+        <dx-popup #popMore shadingColor="rgba(0, 0, 0, 0.5)" [shading]="true" [showTitle]="true" title="{{'More' | translate}}"
+         [dragEnabled]="true" [closeOnOutsideClick]="true" [fullScreenWidth]="false" [resizeEnabled]="false" [(visible)]="moreOptionsVisible">
+            <!-- <dxo-position
+              my="left"
+              at="left"  of="#targetElement"
+              > </dxo-position>
+           -->
+            <div *dxTemplate="let data of 'content'">
+                <div id="test" [style.max-width]="this.authService.getWindowWidth() - (20 * this.authService.getWindowWidth()) / 100  + 'px'" style="height: inherit;">
+                    <app-component-more-menu (closeMoreMenu)="toggleMoreOptions()" [(showDrop)]="moreOptionsVisible"></app-component-more-menu>
+                </div>
+                <div class="row" *ngIf="ShowLicenseKey==='true'">
+                    <div class="col-md-6">
+                        <h4>{{'Key' | translate}}: {{ this.userLicense }}</h4>
+                    </div>
+                    <!-- <div class="col-md-6"> 
+                        <dx-button stylingMode="outlined" type="default" [width]="120">
+                            <label style="margin:.1rem;">
+                                <i class="fas fa-paperclip"></i>
+                                {{'Select File' | translate}}
+                                <input hidden type="file" (change)="onFileChange($event)" multiple="false">
+                            </label>
+                         </dx-button>
+                    </div> -->
+                </div>
+            </div>
+        </dx-popup>
+        <!-- -->
+        <!-- target="#link4"  -->
+        <!-- <dx-popover id="testPop"  
+        target="#link4"
+        [showCloseButton]="true"
+        [shading]="true" 
+        [width]="'auto'" #popup
+        [height]="'auto'" 
+        [dragEnabled]="true" 
+        shadingColor="rgba(0, 0, 0, 0.5)"
+        [(visible)]="moreOptionsVisible" 
+       > 
+        <div *dxTemplate="let data of 'content'" (resized)="onResized($event)">  
+          <app-component-more-menu></app-component-more-menu>
+          
+        </div>
+    </dx-popover> -->
+    </li>
+    <li *ngIf="this.notification" style="cursor: pointer;" id="Notification">
+        <!-- (click)="togleSubmenu()"   (click)="showSide()" -->
+        <a class="nav-card" (click)="openModelNotifyTransfer(TranferNotify)">
+            <span class="nav-card-img">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <span *ngIf="count>0" class="badge badge-pill badge-danger" style="height: 55px; font-size:60%;margin-top: 30%;">{{count}}</span>
+      </span>
+            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Notification' | translate}} </span>
+        </a>
+        <!-- <dx-popup #popNotify shadingColor="rgba(0, 0, 0, 0.5)" [shading]="true" [showTitle]="true" title="{{'Notification' | translate}}" 
+        [dragEnabled]="true" [closeOnOutsideClick]="true" [fullScreenWidth]="false" [resizeEnabled]="false" [(visible)]="NotifyOptionsVisible"
+       > -->
+            <!-- <dxo-position
+              my="left"
+              at="left"  of="#targetElement"
+              > </dxo-position>
+           -->
+            
+        <!-- </dx-popup> -->
+    </li>
+    <ng-container *ngFor="let item of menuList">
+        <li routerLinkActive="router-link-active" style="cursor: pointer;">
+            <a class="nav-card" (click)="this.redirectUrl(item?.functionId, item?.url, item?.name)">
+                <!-- [routerLink]="[item.url]" -->
+                <span class="nav-card-img">
+                <!-- <img  width="32" height="31.826" src="../../../../assets/images/System/setup.svg" alt="New Order"> -->
+                <img style="    width: 100%;" src="../../../../assets/images/System/{{item.icon || 'item-master.svg'}}" alt="{{item.name}}">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28.186" height="31.317" viewBox="0 0 28.186 31.317">
+                  <defs>
+                    <lineargradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+                      <stop offset="0" stop-color="#00a571"></stop>
+                      <stop offset="1" stop-color="#1a7458"></stop>
+                    </lineargradient>
+                  </defs>
+                  <path id="Path_129" data-name="Path 129" d="M29.62,33.317H4.566A1.566,1.566,0,0,1,3,31.752V3.566A1.566,1.566,0,0,1,4.566,2H29.62a1.566,1.566,0,0,1,1.566,1.566V31.752A1.566,1.566,0,0,1,29.62,33.317ZM10.829,12.961v3.132H23.356V12.961Zm0,6.263v3.132H23.356V19.225Z" transform="translate(-3 -2)" fill="url(#linear-gradient)"></path>
+                </svg> -->
+              </span>
+                <!-- {{'BillSearch' | translate}}  -->
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{item.name | translate}}</span>
+            </a>
+            <hr class="style-six">
+        </li>
+
+    </ng-container>
+    <ng-template #PrintTemplate>
+        <app-shop-component-order-print [(order)]="this.outPutModel" [poleValue]="this.poleValue"></app-shop-component-order-print>
+    </ng-template>
+    <li class="paymentMenu" id="otherItem" *ngIf="this.showOtherItem==='true' && (basket$ | async)?.salesType?.toLowerCase() !== 'return' && (basket$ | async)?.salesType?.toLowerCase() !== 'exchange' && (basket$ | async)?.salesType?.toLowerCase() !== 'ex'  && (basket$ | async)?.salesType?.toLowerCase() !== 'receive'" style="cursor: pointer;">
+
+        <a class="nav-card active" (click)="openModal(OtherItem)">
+            <span class="nav-card-img">
+          <img  width="32" height="31.826" src="../../../../assets/images/System/billpayment.png" alt="New Order">
+        </span>
+            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Other Item' | translate}} </span>
+
+        </a>
+        <!-- <a class="nav-card active" (click)="openModal(OtherItem)">
+            <span class="nav-card-img">
+              <img style="width: 100%;" src="../../../../assets/images/System/billpayment.png" alt="{{item.name}}">
+             </span>
+            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Other Item' | translate}}</span>
+        </a> -->
+        <hr class="style-six">
+
+
+    </li>
+    <!-- 
+  <li style="cursor: pointer;">
+    <a class="nav-card"  [routerLink]="['/shop/bills/holdinglist']" >
+      <span class="nav-card-img">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="31.826" viewBox="0 0 32 31.826">
+          <g id="surface1" transform="translate(-0.124 -0.2)" opacity="0.9">
+            <path id="Path_3" class="discount-icon" data-name="Path 3" d="M12.591.219a.994.994,0,0,0-.9.389L9.6,3.442l-3.534.118a1.03,1.03,0,0,0-.971.853L4.552,7.908,1.481,9.658a1.024,1.024,0,0,0-.463,1.2L2.141,14.2.278,17.189a.977.977,0,0,0,.158,1.242l2.524,2.45-.271,3.534a1.008,1.008,0,0,0,.734,1.045l3.381.971L8.16,29.655a1.015,1.015,0,0,0,1.129.621l3.455-.7,2.76,2.213a.969.969,0,0,0,.621.232.99.99,0,0,0,.621-.232L19.5,29.581l3.455.7a.989.989,0,0,0,1.129-.582l1.355-3.263,3.381-.971a1.01,1.01,0,0,0,.739-1.045l-.276-3.534,2.529-2.45a.976.976,0,0,0,.153-1.242L30.1,14.2l1.124-3.342a1.018,1.018,0,0,0-.463-1.2l-3.071-1.75-.542-3.495a1.03,1.03,0,0,0-.971-.853l-3.534-.118L20.551.608A1.012,1.012,0,0,0,19.309.3L16.125,1.811,12.941.3A.976.976,0,0,0,12.591.219ZM11.152,8.687A3.413,3.413,0,0,1,14.8,12.334a3.673,3.673,0,0,1-.971,2.681,3.59,3.59,0,0,1-2.681,1.01,4.122,4.122,0,0,1-2.021-.468A2.958,2.958,0,0,1,7.889,14.2a4.37,4.37,0,0,1-.424-1.868,4.177,4.177,0,0,1,.424-1.824A2.946,2.946,0,0,1,9.131,9.15,4.121,4.121,0,0,1,11.152,8.687Zm7.96.113h1.981L13.173,23.444H11.231Zm-7.921,1.592a.827.827,0,0,0-.7.35,2.913,2.913,0,0,0-.389,1.671,2.913,2.913,0,0,0,.389,1.671.875.875,0,0,0,1.4,0,2.913,2.913,0,0,0,.389-1.671,2.936,2.936,0,0,0-.389-1.671A.808.808,0,0,0,11.191,10.392Zm9.9,5.826a3.591,3.591,0,0,1,2.681.971,3.532,3.532,0,0,1,1.01,2.6A3.414,3.414,0,0,1,21.094,23.4a4.035,4.035,0,0,1-1.981-.468,2.939,2.939,0,0,1-1.282-1.321,4.2,4.2,0,0,1-.389-1.824,4.014,4.014,0,0,1,.389-1.784,2.939,2.939,0,0,1,1.282-1.321A4.033,4.033,0,0,1,21.094,16.218Zm-.039,1.592a.792.792,0,0,0-.7.35,2.916,2.916,0,0,0-.384,1.671,2.916,2.916,0,0,0,.384,1.671.808.808,0,0,0,.7.35.821.821,0,0,0,.7-.35,2.913,2.913,0,0,0,.389-1.671,3.073,3.073,0,0,0-.389-1.71A.792.792,0,0,0,21.054,17.811Z" transform="translate(0 0)"></path>
+          </g>
+        </svg>
+      </span>
+      <span class="nav-card-text" style="text-transform: uppercase;"> {{'HoldList' | translate}} </span>
+    </a>
+    <hr class="style-six">
+  </li> -->
+
+    <!-- {{(basket$ | async)?.items?.length }} && *ngIf="(basket$ | async)?.items?.length > 0 " (basket$ | async)?.salesType?.toLowerCase()!=='return'-->
+    <ng-container *ngIf="(basket$ | async)?.items?.length > 0 && (basket$ | async)?.placeId?.length <= 0 && (basket$ | async)?.salesType?.toLowerCase()!=='return' && (basket$ | async)?.salesType?.toLowerCase()!=='receive'  && (basket$ | async)?.salesType?.toLowerCase()!=='card'">
+        <li class="paymentMenu" style="cursor: pointer;">
+            <a class="nav-card active" (click)="holdOrder()">
+                <span class="nav-card-img">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+            <g id="surface1" transform="translate(-2.961 -2.961)" opacity="0.9">
+              <path id="Path_86" data-name="Path 86" class="hold-icon" d="M18.958,2.961a16,16,0,1,0,16,16A16,16,0,0,0,18.958,2.961Zm1.335,4a1.336,1.336,0,0,1,1.335,1.33v8.672a.665.665,0,1,0,1.33,0v-6a1.335,1.335,0,0,1,2.671,0V21.745l2.565-2.365.011.016a1.626,1.626,0,0,1,1.093-.438,1.666,1.666,0,0,1,1.663,1.663,1.607,1.607,0,0,1-.56,1.219l.016.016-6.5,5.964a5.954,5.954,0,0,1-4.275,1.81H17.628a6.667,6.667,0,0,1-6.666-6.671V12.292a1.333,1.333,0,0,1,2.665,0v4.671a.668.668,0,0,0,1.335,0V9.627a1.333,1.333,0,1,1,2.665,0v7.336a.665.665,0,0,0,1.33,0V8.292A1.336,1.336,0,0,1,20.294,6.962Z" fill="#484545"></path>
+            </g>
+          </svg>
+        </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'Hold' | translate}} </span>
+            </a>
+            <hr class="style-six">
+
+
+        </li>
+    </ng-container>
+
+
+
+    <!--  -->
+    <ng-container *ngIf="(basket$ | async)?.items?.length > 0 && (basket$ | async)?.salesType?.toLowerCase()!=='return' && (basket$ | async)?.salesType?.toLowerCase()!=='receive' && (basket$ | async)?.salesType?.toLowerCase()!=='card'">
+        <li class="paymentMenu" id="discount" (click)="openPromotionModal(ManualDiscount, false,false)" style="cursor: pointer;">
+
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="31.826" viewBox="0 0 32 31.826">
+            <g id="surface1" transform="translate(-0.124 -0.2)" opacity="0.9">
+              <path id="Path_3" class="discount-icon" data-name="Path 3" d="M12.591.219a.994.994,0,0,0-.9.389L9.6,3.442l-3.534.118a1.03,1.03,0,0,0-.971.853L4.552,7.908,1.481,9.658a1.024,1.024,0,0,0-.463,1.2L2.141,14.2.278,17.189a.977.977,0,0,0,.158,1.242l2.524,2.45-.271,3.534a1.008,1.008,0,0,0,.734,1.045l3.381.971L8.16,29.655a1.015,1.015,0,0,0,1.129.621l3.455-.7,2.76,2.213a.969.969,0,0,0,.621.232.99.99,0,0,0,.621-.232L19.5,29.581l3.455.7a.989.989,0,0,0,1.129-.582l1.355-3.263,3.381-.971a1.01,1.01,0,0,0,.739-1.045l-.276-3.534,2.529-2.45a.976.976,0,0,0,.153-1.242L30.1,14.2l1.124-3.342a1.018,1.018,0,0,0-.463-1.2l-3.071-1.75-.542-3.495a1.03,1.03,0,0,0-.971-.853l-3.534-.118L20.551.608A1.012,1.012,0,0,0,19.309.3L16.125,1.811,12.941.3A.976.976,0,0,0,12.591.219ZM11.152,8.687A3.413,3.413,0,0,1,14.8,12.334a3.673,3.673,0,0,1-.971,2.681,3.59,3.59,0,0,1-2.681,1.01,4.122,4.122,0,0,1-2.021-.468A2.958,2.958,0,0,1,7.889,14.2a4.37,4.37,0,0,1-.424-1.868,4.177,4.177,0,0,1,.424-1.824A2.946,2.946,0,0,1,9.131,9.15,4.121,4.121,0,0,1,11.152,8.687Zm7.96.113h1.981L13.173,23.444H11.231Zm-7.921,1.592a.827.827,0,0,0-.7.35,2.913,2.913,0,0,0-.389,1.671,2.913,2.913,0,0,0,.389,1.671.875.875,0,0,0,1.4,0,2.913,2.913,0,0,0,.389-1.671,2.936,2.936,0,0,0-.389-1.671A.808.808,0,0,0,11.191,10.392Zm9.9,5.826a3.591,3.591,0,0,1,2.681.971,3.532,3.532,0,0,1,1.01,2.6A3.414,3.414,0,0,1,21.094,23.4a4.035,4.035,0,0,1-1.981-.468,2.939,2.939,0,0,1-1.282-1.321,4.2,4.2,0,0,1-.389-1.824,4.014,4.014,0,0,1,.389-1.784,2.939,2.939,0,0,1,1.282-1.321A4.033,4.033,0,0,1,21.094,16.218Zm-.039,1.592a.792.792,0,0,0-.7.35,2.916,2.916,0,0,0-.384,1.671,2.916,2.916,0,0,0,.384,1.671.808.808,0,0,0,.7.35.821.821,0,0,0,.7-.35,2.913,2.913,0,0,0,.389-1.671,3.073,3.073,0,0,0-.389-1.71A.792.792,0,0,0,21.054,17.811Z" transform="translate(0 0)" fill="#ec8f24"></path>
+            </g>
+          </svg>
+        </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'Discount' | translate}} </span>
+            </a>
+            <hr class="style-six">
+
+
+
+        </li>
+    </ng-container>
+    <ng-container *ngIf="(basket$ | async)?.items?.length > 0 && (basket$ | async)?.salesType?.toLowerCase()!=='return'  && (basket$ | async)?.salesType?.toLowerCase()!=='receive' && (basket$ | async)?.salesType?.toLowerCase()!=='card'">
+        <li class="paymentMenu" id="promotion" (click)="openPromotionModal(ManualPromotion, false,false)" style="cursor: pointer;">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+            <img  width="32" height="31.826" src="../../../../assets/images/System/promotionSetup.svg" alt="New Order">
+          </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'Promotion' | translate}} </span>
+
+            </a>
+            <!-- <a class="nav-card active">
+              <span class="nav-card-img">
+                
+                <img style="    width: 100%;" src="../../../../assets/images/System/promotionSetup.svg" alt="{{item.name}}">
+            
+               </span>
+              <span class="nav-card-text" style="text-transform: uppercase;"> {{'Promotion' | translate}} </span>
+          </a> -->
+            <hr class="style-six">
+
+
+
+        </li>
+    </ng-container>
+
+    <!-- [closeOnOutsideClick]="false" -->
+    <dx-popover target="#discount" position="top" [width]="300" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)" [(visible)]="withDiscountVisible">
+        <div *dxTemplate="let data of 'content'">
+
+            <div class="cus-maintenance-card">
+                <!-- <h2 class="maintenance-heading">Choose Sales Type</h2> toggleDiscountOptions() &&-->
+                <div class="row">
+                    <div class="col-md-6 maintenance-access-wrapper" (click)=" openPromotionModal(ManualDiscount, true ,false)">
+                        <div class="maintenance-service-box">
+                            <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Clear promotion">
+            </span>
+                            <label> {{'Clear promotion' | translate}}</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 maintenance-access-wrapper" (click)=" openPromotionModal(ManualDiscount, false,false)">
+                        <div class="maintenance-service-box">
+                            <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Keep promotion">
+            </span>
+                            <label> {{'Keep promotion' | translate}}</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </dx-popover>
+
+
+
+    <ng-container *ngIf="this.currentShift!==null && this.currentShift!==undefined">
+        <!-- <li style="cursor: pointer;" >
+           
+            <a class="nav-card active" (click)="pickUpAmount()">
+                <span class="nav-card-img">
+                    <img  width="32" height="31.826" src="../../../../assets/images/System/recharge-icon.png" alt="Pickup Amount">
+                 </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'Pickup Amount' | translate}} </span>
+            </a>
+            <hr class="style-six">
+ 
+        </li> -->
+
+        <li style="cursor: pointer;" id="orderMenu">
+            <!-- <a class="nav-card active" (click)="openPromotionModal(ManualDiscount)"  >
+        custom-shop-house-icon 
+      </a> -->
+
+            <a class="nav-card active" (click)="newOrder()">
+                <span class="nav-card-img">
+          <img  width="32" height="31.826" src="../../../../assets/images/System/setup.svg" alt="New Order">
+        </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'In Shop' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+
+
+        </li>
+
+
+
+        <!-- id="orderMenu" -->
+        <!-- <li style="cursor: pointer;">
+     
+      <a class="nav-card active" [routerLink]="['/shop/bills/ecom-bill']">
+        <span class="nav-card-img">
+          <img  width="32" height="31.826" src="../../../../assets/images/System/shopping.svg" alt="New Order">
+        </span>
+        <span class="nav-card-text" style="text-transform: uppercase;"> {{'Online' | translate}} </span>
+      
+         </a>
+      <hr class="style-six">
+    </li>
+  
+   -->
+        <li style="cursor: pointer;" id="checkIn" *ngIf="this.showCheckInOut==='true'" (click)="toggleCheckInOptions()">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+          <img  width="32" height="31.826" src="../../../../assets/images/System/innovation.svg" alt="New Order">
+        </span>
+                <span class="nav-card-text" id="CheckInCheckOut" style="text-transform: uppercase;"> {{'Check In / Out' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" id="tools" *ngIf="this.showToolBox==='true' && this.toolList?.length >0" (click)="toggleToolsOptions()">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+            <img  width="32" height="31.826" src="../../../../assets/images/System/innovation.svg" alt="New Order">
+            </span>
+                <span class="nav-card-text" id="ToolsBox" style="text-transform: uppercase;"> {{'Tools' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="this.authService.checkRole('Spc_ReturnOrder' , '', 'V' )" (click)="toggleModeOptions('Return')">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                <img  width="32" height="31.826" src="../../../../assets/images/System/refund.svg" alt="Return">
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'Return' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="this.authService.checkRole('Spc_ExchangeOrder' , '', 'V' )" (click)="toggleModeOptions('Exchange')">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                <img  width="32" height="31.826" src="../../../../assets/images/System/exchange.png" alt="Exchange">
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'Exchange' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="this.authService.checkRole('Spc_CancelOrder' , '', 'V' )" (click)="toggleModeOptions('Cancel')">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                <img  width="32" height="31.826" src="../../../../assets/images/System/cancel.svg" alt="Cancel">
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'CancelOrder' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="this.authService.checkRole('isCheckLicensePlate' , '', 'V' )" (click)="toggleModeOptions('CheckLicensePlate')">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                    <img  width="32" height="31.826" src="../../../../assets/images/System/ticket-64.png" alt="Cancel">
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'Check License Plate ' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="showTool_ClearCache" (click)="ShowClearModal()">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                    <i class="fas fa-eraser"></i>
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'Clear Cache' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+        <li style="cursor: pointer;" *ngIf="this.salesDummy==='true' && this.authService.checkRole('Spc_ReceiveOrder' , '', 'V' )" (click)="checkInTrans()">
+
+            <a class="nav-card active">
+                <span class="nav-card-img">
+                <img  width="32" height="31.826" src="../../../../assets/images/System/ticket-64.png" alt="Cancel">
+              </span>
+                <span class="nav-card-text" id="ChangeMode" style="text-transform: uppercase;"> {{'Receive' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+
+
+        <!-- <li style="cursor: pointer;">
+
+            <a class="nav-card active" href="/shop/bills/scanbarcode">
+                <span class="nav-card-img">
+    <img  width="32" height="31.826" src="../../../../assets/images/System/barcode.svg" alt="New Order">
+  </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'Scan Barcode' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li> -->
+    </ng-container>
+    <ng-container *ngIf="this.currentShift===null || this.currentShift===undefined">
+
+        <li style="cursor: pointer;" id="orderMenu">
+
+            <a class="nav-card active" (click)="newOrder()">
+                <span class="nav-card-img">
+          <img  width="32" height="31.826" src="../../../../assets/images/System/setup.svg" alt="New Order">
+        </span>
+                <span class="nav-card-text" style="text-transform: uppercase;"> {{'In Shop' | translate}} </span>
+
+            </a>
+            <hr class="style-six">
+        </li>
+    </ng-container>
+
+
+</ul>
+<dx-popover target="#ToolsBox" position="top" [width]="500" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)" [(visible)]="withToolsVisible">
+    <div *dxTemplate="let data of 'content'">
+        <div class="row">
+            <div *ngFor="let line of toolList" class="maintenance-service-wrapper col-md-3 col-sm-4" routerLinkActive="router-link-active">
+                <ng-container *ngIf="line.CustomF2?.length > 0">
+                    <div class=" maintenance-service-box" (click)="toolFunction(line.CustomF2)">
+                        <span class="service-icon contain-image">
+                                <img src="../../../../assets/images/System/{{line.Icon || 'tools.svg'}}" alt="{{line.Name}}">
+                            </span>
+                        <label>{{line.Name | translate}}</label>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="line.CustomF2?.length <= 0">
+                    <div class=" maintenance-service-box" [routerLink]="[line.Url]" (click)="closeMore()">
+                        <span class="service-icon contain-image">
+                                <img src="../../../../assets/images/System/{{line.Icon || 'tools.svg'}}" alt="{{line.Name}}">
+                            </span>
+                        <label>{{line.Name | translate}}</label>
+                    </div>
+                </ng-container>
+               
+            </div>
+        </div>
+       
+        <!-- <div class="row">
+            <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-voucher']" (click)="toggleCheckInOptions()">
+                <div class="maintenance-service-box">
+                    <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Retail">
+        </span>
+                    <label> {{'Check In (Voucher)' | translate}}</label>
+                </div>
+            </div>
+            <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-orderid']" (click)="toggleCheckInOptions()">
+                <div class="maintenance-service-box">
+                    <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+        </span>
+                    <label> {{'Check In (Bill No)' | translate}}</label>
+                </div>
+            </div>
+            <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/bills/ecom-checkout-bill']" (click)="toggleCheckInOptions()">
+                <div class="maintenance-service-box">
+                    <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+        </span>
+                    <label> {{'Check Out' | translate}}</label>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</dx-popover>
+
+<dx-popover target="#CheckInCheckOut" position="top" [width]="300" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)" [(visible)]="withCheckInCheckOutVisible">
+    <div *dxTemplate="let data of 'content'">
+
+        <div *ngIf="checkInbyMenber || checkInbySerial"  class="cus-maintenance-card">
+            <!-- <h2 class="maintenance-heading">Choose Sales Type</h2> -->
+            <div class="row">
+                <div *ngIf="checkInbySerial"  class=" maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-serial']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Retail">
+            </span>
+                        <label> {{'Check In (Serial)' | translate}}</label>
+                    </div>
+                </div>
+                <div *ngIf="checkInbyMenber"  class=" maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-member']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+            </span>
+                        <label> {{'Check In (Member)' | translate}}</label>
+                    </div>
+                </div>
+                <div class=" maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-orderid']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+            </span>
+                        <label> {{'Check In (Bill No)' | translate}}</label>
+                    </div>
+                </div>
+                <div class=" maintenance-access-wrapper" [routerLink]="['/shop/bills/ecom-checkout-bill']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+            </span>
+                        <label> {{'Check Out' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <ul class="sidebar horizontal-scroll">
+      
+      <li style="cursor: pointer;" id="moreMenu">
+      
+        <a class="nav-card" (click)="toggleCheckInOptions()">
+          <span class="nav-card-img">
+            
+            <i class="fa fa-th" aria-hidden="true"></i>
+          </span>
+          <span  class="nav-card-text" style="text-transform: uppercase;"> {{'Check In (Voucher)' | translate}} </span>
+        
+              
+        </a>
+      
+      
+      </li>
+      
+      <li style="cursor: pointer;" id="moreMenu">
+      
+        <a class="nav-card" (click)="toggleCheckInOptions()">
+          <span class="nav-card-img">
+            
+            <i class="fa fa-th" aria-hidden="true"></i>
+          </span>
+          <span  class="nav-card-text" style="text-transform: uppercase;"> {{'Check In (Order Id)' | translate}} </span>
+        
+              
+        </a>
+      
+      
+      </li>
+      
+      <li style="cursor: pointer;" id="moreMenu">
+      
+        <a class="nav-card" (click)="toggleCheckInOptions()">
+          <span class="nav-card-img">
+            
+            <i class="fa fa-th" aria-hidden="true"></i>
+          </span>
+          <span  class="nav-card-text" style="text-transform: uppercase;"> {{'Check Out' | translate}} </span>
+        
+              
+        </a>
+      
+      
+      </li>
+    </ul> -->
+            <!-- <div class="col-md-4">Check In By Voucher</div>
+      <div class="col-md-4">Check In By Order Id</div>
+      <div class="col-md-4">Check Out</div> -->
+        </div>
+        <div *ngIf="!checkInbyMenber &&  !checkInbySerial"  class="cus-maintenance-card">
+            <!-- <h2 class="maintenance-heading">Choose Sales Type</h2> -->
+            <div class="row">
+                <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-voucher']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Retail">
+            </span>
+                        <label> {{'Check In (Voucher)' | translate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/checkin-by-orderid']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+            </span>
+                        <label> {{'Check In (Bill No)' | translate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4 maintenance-access-wrapper" [routerLink]="['/shop/bills/ecom-checkout-bill']" (click)="toggleCheckInOptions()">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+              <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+            </span>
+                        <label> {{'Check Out' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+
+         
+        </div>
+    </div>
+</dx-popover>
+
+
+
+<!-- <dx-popover target="#ChangeMode" position="top" [width]="300" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)" [(visible)]="ModeVisible">
+    <div *dxTemplate="let data of 'content'">
+
+        <div class="cus-maintenance-card">
+            <div class="row">
+                <div class="col-md-6 maintenance-access-wrapper" (click)="toggleModeOptions('Return')">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+                          <img src="../../../../assets/images/System/inventory-tranction.svg" alt="Retail">
+                        </span>
+                        <label> {{'Return' | translate}}</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 maintenance-access-wrapper" (click)="toggleModeOptions('Exchange')">
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+                        <img src="../../../../assets/images/System/sales.svg" alt="Sales">
+                      </span>
+                        <label> {{'Exchange' | translate}}</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</dx-popover> -->
+
+<ng-template #template>
+    <!-- <div class="modal-header">
+    <h4 class="modal-title pull-left" id="my-modal-title">Payment</h4>
+    
+    <div  class="nav-user-info d-none d-lg-flex" *ngIf="basket$ | async as basket" >
+      <div class="point-div" *ngIf="basket.customer !== null">
+        <span class="username" style="cursor: pointer;"  [routerLink]="['/shop/order/customer']"> {{basket.customer.customerName}}</span>
+        <span class="nav-phone greeting">
+          <a href="tel:852-320-1400">
+            <img src="../../../../assets/images/System/phone.svg" alt="phone">{{basket.customer.phone}}
+          </a>
+        </span>
+      </div>
+  
+      <div class="nav-contact">
+        <span class="points greeting ml-1">
+          <img src="../../../../assets/images/System/coins.svg" alt="coins">Class :
+          <span class="red" >{{basket.customer?.customerGrpId}}</span>
+        </span>
+        <span class="nav-mail greeting ml-1">
+          <a href="mailto:davidt@abeoinc.com">
+            <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.joinedDate}}
+          </a>
+        </span>
+       
+      </div>
+    </div>
+    
+
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+  </div>
+
+  <div class="modal-body" *ngIf="showModal">
+    <div class="row">
+      <div class="col-12 col-lg-7">
+        <div class="grey-wrapper left-modal-section">
+          <div class="table-wrap">
+            <div class="payment-modal-table custom-table horizontal-scroll">
+              <div class="t-head">
+                <div class="t-row">
+                  <div class="t-cell cell-action"></div>
+                  <div class="t-cell cell-action">
+                    <p>No.</p>
+                  </div>
+                  <div class="t-cell cell-payment">
+                    <p>Payment Type</p>
+                  </div>
+                  <div class="t-cell cell-discount">
+                    <p>Payment Discount</p>
+                  </div>
+                  <div class="t-cell cell-charged">
+                 
+                    <p>Amount</p>
+                  </div>
+                  <div class="t-cell cell-amount">
+                    <p>Collected</p>
+                  </div>
+                 
+                  <div class="t-cell cell-ref">
+                    <p>Ref. Number</p>
+                  </div>
+                
+                </div>
+              </div>
+              
+              <div class="t-body vertical-scroll" *ngIf="basket$ | async as basket">
+              
+                 <div (click)="changeValuePayment(focus.value, i, payment)" class="t-row" *ngFor="let payment of basket.payments; let i = index" [class.selectRow]="i==this.selectedRow"   >
+                  <div class="t-cell cell-action">
+                    <a class="delete-btn" (click)="removePayment(payment)">
+                      <img src="../../../../assets/images/System/close.svg" alt="close">
+                    </a>
+                
+                  </div>
+                  <div class="t-cell cell-action">
+                    <p>{{payment.lineNum}}</p>
+                  </div>
+                  <div class="t-cell cell-payment">
+                    <p>{{payment.id}}</p>
+                  </div>
+                  <div class="t-cell cell-discount">
+                    <p>{{payment.paymentDiscount | number}}</p>
+                  </div>
+                  <div class="t-cell cell-charged">
+                   
+                    <p>{{payment.paymentCharged | number}}</p>
+                  </div>
+                  <div class="t-cell cell-amount">
+                  
+                    <div class="search-wrap typing-section-input-wrap inputAmount" >
+                      <input type="text"  #focus  type="text"  (change)="changeValuePayment(focus.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)"
+                       value="{{payment.paymentTotal | number}}" (focus)="setClickedRow(i, payment)" (focusout)="removeselect(i, payment)"
+                        placeholder="Amount"   class="typing-section-input txtAmount">
+                        <a   *ngIf="i==this.selectedRow"  (click)="clearAmountPayment(payment)"><i class="fas fa-eraser"></i></a>
+                      </div> 
+                  </div>
+                   <div class="t-cell cell-ref">
+                    <p>{{payment.refNum}}</p>
+                    <div class="search-wrap typing-section-input-wrap inputAmount" >
+                      <input type="text"   type="text"   value="{{payment.refNum }}" 
+                        placeholder="Ref Number"   class="typing-section-input txtAmount">
+                        <a   *ngIf="i==this.selectedRow"  (click)="clearAmountPayment(payment)"><i class="fas fa-eraser"></i></a>
+                     
+                    </div> 
+                  </div>
+               
+                </div>
+             
+              </div>  
+            </div>
+          </div>
+          <div class="modal-payment-info">
+            <div>
+              <label>Bill Amount</label>
+              <p>{{(basketTotal$ | async).total | number}}</p>
+            </div>
+            <div>
+              <label>Total Discount</label>
+              <p>{{(basketTotal$ | async).discountTotal | number}}</p>
+            </div>
+            <div>
+             
+              <label>Total Amount</label>
+              <p> {{(basketTotal$ | async).charged | number}}</p>
+            </div>
+            <div>
+              <label>Total Collected</label>
+              <p>{{(basketTotal$ | async).totalAmount | number}}</p>
+            </div>
+           
+            <div>
+              <label>Amount Left</label>
+              <p>{{(basketTotal$ | async).amountLeft | number}}</p>
+            </div>
+            <div>
+              <label>Amount Change</label>
+              <p>{{(basketTotal$ | async).changeAmount | number}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-discount-btn-wrap">
+          <button class="discount-btn" (click)="inputNum('20000')">20,000</button>
+          <button class="discount-btn" (click)="inputNum('50000')">50,000</button>
+          <button class="discount-btn" (click)="inputNum('100000')">100,000</button>
+          <button class="discount-btn" (click)="inputNum('200000')">200,000</button>
+          <button class="discount-btn" (click)="inputNum('500000')">500,000</button>
+        </div>
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="grey-wrapper right-modal-section" >
+          <div class="typing-section">
+            <div class="number-pad"  *ngIf="isShowOtherPayment">
+              <div class="row" style="    min-height: 53vh;" >
+                <div class="number-div">
+                  <button class="pay-option-btn"  (click)="addPayment('Paypal', true)" >Paypal</button>
+                </div>
+                <div class="number-div">
+                  <button class="pay-option-btn"  (click)="addPayment('Payonee', true)">Payonee</button>
+                </div>
+               
+              </div>
+              <div class="row"> 
+                <div class="col-md-12" style="padding: 0px 5px;">
+                  <div class="action-section"  >
+                    
+                  
+                    <button type="reset" class="reset-btn mr-1" (click)="closeOtherPad()" style="    width: 23%;" > 
+                      <i class="fas fa-window-close"></i>
+                  
+                    </button>
+                    
+                  </div>
+                </div>
+               
+              </div>
+            </div>
+          
+            <div class="number-pad" *ngIf="!isShowOtherPayment">
+              <div class="row">
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('1')" >1</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('2')">2</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('3')">3</button>
+                </div>
+                <div class="number-div">
+                  <button class="pay-option-btn"   (click)=" addPayment('Cash') " >Cash</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('4')">4</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('5')">5</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('6')">6</button>
+                </div>
+                <div class="number-div">
+                  <button class="pay-option-btn"  (click)="addPayment('Credit')  " >Credit</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('7')">7</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('8')">8</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('9')">9</button>
+                </div>
+                <div class="number-div">
+                  <button class="pay-option-btn" (click)="addPayment('NAPAS') ">NAPAS</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('0')">0</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('.')">.</button>
+                </div>
+                <div class="number-div">
+                  <button class="number-btn"  (click)="pressKey('000')"><i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="number-div">
+                  <button class="pay-option-btn" (click)="showOtherPayment()">Other</button>
+                </div>
+                <div class="number-div submit-div">
+                  <button class="submit-btn" (click)="addOrder()" >Submit</button>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+    <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment>
+</ng-template>
+
+
+<ng-template #ManualDiscount>
+    <!-- <div id='discount-modal' *ngIf="basket$ | async as basket">
+        <div class="modal-header">
+            <div class="row" style="width: 100%">
+                <div class="col-md-7">
+                    <h4 class="modal-title pull-left" id="my-modal-title"> {{'Discount' | translate}}</h4>
+                </div>
+
+            </div> 
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal(true)"> 
+                <img src="../../../assets/images/System/times.svg">
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row" style="width:100%">
+                <ng-container *ngIf="approveDisplay">
+                    <div class="col-md-6">
+                        <h3 style="color: red;">{{'Note' | translate}} *</h3>
+                        <h4>
+                            {{'The approver will be responsible for any errors or disputes.' | translate}}
+                            <br> {{'Please make sure this' | translate}}
+                        </h4>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'User' | translate}} <span class="requid-default" style="color: red;">*</span></div>
+                            <div class="col-md-8">
+                                <dx-text-box #txtUserApprove></dx-text-box>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'Password' | translate}} <span class="requid-default" style="color: red;">*</span></div>
+                            <div class="col-md-8">
+                                <dx-text-box #txtPassApprove mode="password"></dx-text-box>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'Note' | translate}}</div>
+                            <div class="col-md-8">
+                                <dx-text-area #txtNote [height]="90" [maxLength]="maxLength" [(value)]="value">
+                                </dx-text-area>
+                               
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <dx-button text="{{'Back' | translate}}" class="submit-btn" icon="fas fa-arrow-circle-left fa-2x" (onClick)="this.approveDisplay= false">
+                                </dx-button>
+                            </div>
+                            <div class="col-md-6" style="    text-align: end;">
+                             
+                                <dx-button #btnApprove class="submit-btn" text="{{'Approve' | translate}}" icon="fas fa-check-circle fa-2x" (onClick)="approveDiscount(txtUserApprove.value, txtPassApprove.value, txtNote.value)">
+                                </dx-button>
+                            </div>
+
+                        </div>
+                    </div>
+                   
+
+                </ng-container>
+                <ng-container *ngIf="!approveDisplay">
+
+                    <div class="col-lg-7">
+                        <div class="grey-wrapper left-modal-section">
+                            <div class="table-wrap horizontal-scrol">
+                                <div class="discount-modal-table custom-table l">
+                                    <div class="t-head">
+                                        <div class="t-row">
+                                         
+                                            <div class="t-cell cell-desc">
+                                                <p>{{'Description' | translate}}</p>
+                                            </div>
+                                           
+                                            <div class="t-cell cell-price">
+                                                <p>{{'Price' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity">
+                                                <p>{{'Quantity' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount Type' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-subsotal">
+                                                <p>{{'Subtotal' | translate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="t-body vertical-scroll">
+                                       
+                                        <div class="t-row" *ngFor="let item of basket.promotionItems; let i = index" (click)="setDiscountClickedRow(i, item)" [class.selectRow]="i==this.discountSelectedRow" [class.promotionLine]="item?.promotionIsPromo==='1'">
+                                            <ng-container *ngIf="(item?.promotionIsPromo!=='1' ) && item.quantity > 0">
+                                              
+                                                <div class="t-cell cell-desc">
+                                                    
+                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                        {{item.id}}
+                                                    </span>
+                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                        <container-element [ngSwitch]="item.barcode">
+                                                            <some-element *ngSwitchCase=" null || undefined || ''"> {{item.id}}</some-element>
+                                                            <some-element *ngSwitchDefault> {{item.barcode}}</some-element>
+                                                        </container-element> 
+                                                    </span>
+                                                    -
+                                                    <p> {{item.uom}}</p>
+                                                    <br />
+                                                    <p>
+                                                        {{item.productName}}
+                                                    </p>
+                                                </div>
+                                               
+                                                <div class="t-cell cell-price">
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+                                                        <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis!==null && item?.promotionPriceAfDis!==item.price">
+                                                            <label class="mr-2 textOrigionalX"> {{item.price | currencyFormat}}</label>
+                                                            <label class="mr-2 textPromotion"> {{item?.promotionPriceAfDis | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis===null || item?.promotionPriceAfDis===item.price">
+                                                            <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.quantity | currencyFormat}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.discountType}}</p>
+                                                </div>
+
+                                                <div class="t-cell cell-discount">
+                                                    <ng-container *ngIf="item.quantity <= 0">
+                                                        <p>0</p>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.quantity > 0">
+
+                                                        <div class="search-wrap typing-section-input-wrap inputAmount">
+
+                                                            <input [disabled]="this.manualDiscountSetting !== 'All' && this.manualDiscountSetting !== 'Details'" 
+                                                            type="text" #inputDiscount pattern="[0-9]+" [ngModel]="item.discountValue | numberPipe" 
+                                                            (ngModelChange)="item.discountValue=$event" (change)="keyUpValue(inputDiscount.value, i, item, inputDiscount)" 
+                                                            name="inputDiscount" (keyup)="keyUpValue(inputDiscount.value, i, item, inputDiscount)" (focus)="setDiscountClickedRow(i, item)"
+                                                             (focusout)="onFocusOutEvent($event)" placeholder="0" class="typing-section-input txtAmount">
+                                                            <a *ngIf="i==this.discountSelectedRow" (click)="returnDiscountRow(item)"><i class="fas fa-undo-alt"></i></a>
+                                                        </div>
+                                                    </ng-container>
+
+                                                </div>
+                                                <div class="t-cell cell-subsotal">
+
+
+
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="item?.promotionIsPromo==='1' || (item?.promotionIsPromo==='1' && item?.promotionType!=='Fixed Quantity')">
+                                              
+                                                <div class="t-cell cell-desc">
+                                                    <i style="    color: orangered; font-size:20px" class="fas fa-gift"></i>
+                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                        {{item.id}}
+                                                    </span>
+                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                        <container-element [ngSwitch]="item.barcode">
+                                                            <some-element *ngSwitchCase=" null || undefined || ''"> {{item.id}}</some-element>
+                                                            <some-element *ngSwitchDefault> {{item.barcode}}</some-element>
+                                                        </container-element> 
+                                                    </span>
+                                                     -
+                                                    <p> {{item.uom}}</p>
+                                                    <br />
+                                                    <p>
+                                                        {{item.productName}}
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="t-cell cell-price">
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+                                                        <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis!==null && item?.promotionPriceAfDis!==item.price">
+                                                            <label class="mr-2 textOrigionalX"> {{item.price | currencyFormat}}</label>
+                                                            <label class="mr-2 textPromotion"> {{item?.promotionPriceAfDis | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis===null || item?.promotionPriceAfDis===item.price">
+                                                            <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.quantity | currencyFormat}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                </div>
+
+                                                <div class="t-cell cell-discount">
+
+                                                </div>
+                                                <div class="t-cell cell-subsotal">
+
+
+
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-payment-info" >
+
+                                <div>
+                                    <label>{{'Bill Discount' | translate}}</label>
+                                    <p style="font-weight:800;  text-transform: capitalize;"> {{this.discountAllBillType}} </p>
+                                </div>
+                                
+                                <div class="search-wrap typing-section-input-wrap inputAmount" style="margin-top: 7px; ">
+                                    <input [disabled]="this.manualDiscountSetting !== 'All' && this.manualDiscountSetting !== 'Header'" type="text" 
+                                    placeholder="0" #discountAllbill (focus)="discountAllBillSelected()" [ngModel]="discountAllBill" 
+                                    (ngModelChange)="discountAllBill=$event" (change)="discountTotalBill(discountAllbill.value)" 
+                                    (keyup)="discountTotalBill(discountAllbill.value)" placeholder="Value" class="typing-section-input txtAmount">
+
+                                </div>
+
+                                <div>
+                                    <label>{{'Total Amount' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.total | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <label>{{'Total Discount' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.discountTotal==null ? 0: (basketDiscountTotal$ | async)?.discountTotal | currencyFormat}}</p>
+                                   
+                                </div>
+                                <div>
+                                    <label>{{'Rounding' | translate}}</label>
+                                    <p>{{-(basketDiscountTotal$ | async)?.billRoundingOff | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <label>{{'Total Payable' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.subtotal | currencyFormat}}</p>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-5">
+                     
+                        <div class="grey-wrapper right-modal-section"> 
+                            <app-numpad-discount (amount)="addNumToTextbox($event, false, true)" [(model)]="this.numpadParram"></app-numpad-discount> 
+                            <div class="action-section">
+
+                                <button type="reset" class="reset-btn" (click)="openPromotionModal(ManualDiscount, true, true)">{{'Reset' | translate}}</button>
+                                <button type="button" class="submit-btn" (click)="ApplyDiscount()">{{'Ok' | translate}}</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+    </div> -->
+    <app-shop-manual-discount (outputDiscount)="ApplyDiscount($event)" [(discountApprove)]="this.discountApprove"></app-shop-manual-discount>
+</ng-template>
+
+<ng-template #ManualPromotion>
+
+    <!-- <div id='discount-modal' *ngIf="basket$ | async as basket">
+        <div class="modal-header">
+            <div class="row" style="width: 100%">
+                <div class="col-md-7">
+                    <h4 class="modal-title pull-left" id="my-modal-title"> {{'Promotion' | translate}}</h4>
+                </div>
+
+            </div> 
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal(true)"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row" style="width:100%">
+                <ng-container *ngIf="approveDisplay">
+                    <div class="col-md-6">
+                        <h3 style="color: red;">{{'Note' | translate}} *</h3>
+                        <h4>
+                            {{'The approver will be responsible for any errors or disputes.' | translate}}
+                            <br> {{'Please make sure this' | translate}}
+                        </h4>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'User' | translate}} <span class="requid-default" style="color: red;">*</span></div>
+                            <div class="col-md-8">
+                                <dx-text-box #txtUserApprove></dx-text-box>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'Password' | translate}} <span class="requid-default" style="color: red;">*</span></div>
+                            <div class="col-md-8">
+                                <dx-text-box #txtPassApprove mode="password"></dx-text-box>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4">{{'Note' | translate}}</div>
+                            <div class="col-md-8">
+                                <dx-text-area #txtNote [height]="90" [maxLength]="maxLength" [(value)]="value">
+                                </dx-text-area>
+                                
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <dx-button text="{{'Back' | translate}}" class="submit-btn" icon="fas fa-arrow-circle-left fa-2x" (onClick)="this.approveDisplay= false">
+                                </dx-button>
+                            </div>
+                            <div class="col-md-6" style="    text-align: end;">
+                              
+                                <dx-button #btnApprove class="submit-btn" text="{{'Approve' | translate}}" icon="fas fa-check-circle fa-2x" (onClick)="approveDiscount(txtUserApprove.value, txtPassApprove.value, txtNote.value)">
+                                </dx-button>
+                            </div>
+
+                        </div>
+                    </div>
+                 
+
+
+                </ng-container>
+                <ng-container *ngIf="!approveDisplay">
+
+                    <div class="col-lg-7">
+                        <div class="grey-wrapper left-modal-section">
+                            <div class="table-wrap horizontal-scrol">
+                                <div class="discount-modal-table custom-table l">
+                                    <div class="t-head">
+                                        <div class="t-row">
+                                          
+                                            <div class="t-cell cell-desc">
+                                                <p>{{'Description' | translate}}</p>
+                                            </div>
+                                          
+                                            <div class="t-cell cell-price">
+                                                <p>{{'Price' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity">
+                                                <p>{{'Quantity' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount Type' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-subsotal">
+                                                <p>{{'Subtotal' | translate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="t-body vertical-scroll">
+
+                                        <div class="t-row" *ngFor="let item of basket.promotionItems; let i = index" (click)="setDiscountClickedRow(i, item)" [class.selectRow]="i==this.discountSelectedRow" [class.promotionLine]="item?.promotionIsPromo==='1'">
+                                            <ng-container *ngIf="(item?.promotionIsPromo!=='1' ) && item.quantity > 0">
+                                         
+                                                <div class="t-cell cell-desc">
+                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                        {{item.id}}
+                                                    </span>
+                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                        <container-element [ngSwitch]="item.barcode">
+                                                            <some-element *ngSwitchCase=" null || undefined || ''"> {{item.id}}</some-element>
+                                                            <some-element *ngSwitchDefault> {{item.barcode}}</some-element>
+                                                        </container-element> 
+                                                    </span>
+                                                     -
+                                                    <p> {{item.uom}}</p>
+                                                    <br />
+                                                    <p>
+                                                        {{item.productName}}
+                                                    </p>
+                                                </div>
+                                            
+                                                <div class="t-cell cell-price">
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+                                                        <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis!==null && item?.promotionPriceAfDis!==item.price">
+                                                            <label class="mr-2 textOrigionalX"> {{item.price | currencyFormat}}</label>
+                                                            <label class="mr-2 textPromotion"> {{item?.promotionPriceAfDis | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis===null || item?.promotionPriceAfDis===item.price">
+                                                            <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.quantity | currencyFormat}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.discountType}}</p>
+                                                </div>
+
+                                                <div class="t-cell cell-discount">
+                                                    <ng-container *ngIf="item.quantity <= 0">
+                                                        <p>0</p>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.quantity > 0">
+
+                                                        <div class="search-wrap typing-section-input-wrap inputAmount">
+                                                            <input type="text" disabled #discount pattern="[0-9]+" [ngModel]="item.discountValue | numberPipe" (ngModelChange)="item.discountValue=$event" (change)="keyUpValue(discount.value, i, item, discount)" name="inputField" (keyup)="keyUpValue(discount.value, i, item, discount)"
+                                                                (focus)="setDiscountClickedRow(i, item)" (focusout)="onFocusOutEvent($event)" placeholder="0" class="typing-section-input txtAmount">
+
+                                                        </div>
+                                                    </ng-container>
+
+                                                </div>
+                                                <div class="t-cell cell-subsotal">
+
+
+
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="item?.promotionIsPromo==='1' || (item?.promotionIsPromo==='1' && item?.promotionType!=='Fixed Quantity')">
+                                              
+                                                <div class="t-cell cell-desc">
+                                                    <i style="    color: orangered; font-size:20px" class="fas fa-gift"></i>
+                                                    <span *ngIf="this.printShow==='ItemCode'">
+                                                        {{item.id}}
+                                                    </span>
+                                                    <span *ngIf="this.printShow!=='ItemCode'">
+                                                        <container-element [ngSwitch]="item.barcode">
+                                                            <some-element *ngSwitchCase=" null || undefined || ''"> {{item.id}}</some-element>
+                                                            <some-element *ngSwitchDefault> {{item.barcode}}</some-element>
+                                                        </container-element> 
+                                                    </span>
+                                                     -
+                                                    <p> {{item.uom}}</p>
+                                                    <br />
+                                                    <p>
+                                                        {{item.productName}}
+                                                    </p>
+                                                </div>
+                                              
+                                                <div class="t-cell cell-price">
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+                                                        <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis!==null && item?.promotionPriceAfDis!==item.price">
+                                                            <label class="mr-2 textOrigionalX"> {{item.price | currencyFormat}}</label>
+                                                            <label class="mr-2 textPromotion"> {{item?.promotionPriceAfDis | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionPriceAfDis===null || item?.promotionPriceAfDis===item.price">
+                                                            <label class="mr-2 textPromotion">  {{item.price | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                    <p>{{item.quantity | currencyFormat}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity">
+                                                </div>
+
+                                                <div class="t-cell cell-discount">
+
+                                                </div>
+                                                <div class="t-cell cell-subsotal">
+
+
+
+                                                    <ng-container *ngIf="basket.clearPromotion===true">
+
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="basket.clearPromotion===false">
+                                                        <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                            <label class="mr-2 textOrigionalX"> {{item.lineTotal | currencyFormat}}</label>
+                                                            <br/>
+                                                            <label class="mr-2 textPromotion">   {{item?.promotionLineTotal | currencyFormat}}</label>
+
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                            <label class="mr-2 textPromotion">  {{item.lineTotal | currencyFormat}}</label>
+                                                        </ng-container>
+
+                                                    </ng-container>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-payment-info">
+
+                                <div>
+                                    <label>{{'Bill Discount' | translate}}</label>
+                                    <p style="font-weight:800;  text-transform: capitalize;"> {{this.discountAllBillType}} </p>
+                                </div>
+
+                                <div class="search-wrap typing-section-input-wrap inputAmount" style="margin-top: 7px; ">
+                                    <input disabled type="text" placeholder="0" #discountAllbill (focus)="discountAllBillSelected()" [ngModel]="discountAllBill | currencyFormat" (ngModelChange)="discountAllBill=$event" (change)="discountTotalBill(discountAllbill.value)" (keyup)="discountTotalBill(discountAllbill.value)"
+                                        placeholder="Value" class="typing-section-input txtAmount">
+
+                                </div>
+
+                                <div>
+                                    <label>{{'Total Amount' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.total | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <label>{{'Total Discount' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.discountTotal==null ? 0: (basketDiscountTotal$ | async)?.discountTotal | currencyFormat}}</p>
+                                  
+                                </div>
+                                <div>
+                                    <label>{{'Rounding' | translate}}</label>
+                                    <p>{{ -(basketDiscountTotal$ | async)?.billRoundingOff | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <label>{{'Total Payable' | translate}}</label>
+                                    <p>{{(basketDiscountTotal$ | async)?.subtotal | currencyFormat}}</p>
+                                   
+                                </div>
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="grey-wrapper right-modal-section">
+                            <h5>{{'ManualApplyPromotion' | translate}}</h5>
+                            <div class="promotion-wrap">
+                                <dx-tab-panel class="mt-2 showPromotioList" style="height: 280px;" [(selectedIndex)]="selectedIndex">
+                                    <dxi-item title="Voucher/ Promotion" class="mt-2">
+                                        <dxo-label location="left" alignment="right">
+
+                                        </dxo-label>
+                                        <p></p>
+                                        <ng-container *ngIf="(basket$ | async)?.voucherApply !== null && (basket$ | async)?.voucherApply !== undefined && (basket$ | async)?.voucherApply.length > 0">
+                                            <div *ngFor="let item of (basket$ | async)?.voucherApply; let i = index" class="promotion-input search-wrap">
+
+                                                <span *ngIf="item.discount_code !== 'xyz_123'" id="PromotionApply{{item.discount_code}}" (click)="openPromotionDetail(item)" class="voucherDisplay">
+                                        {{item.voucher_code}}
+                                    </span>
+
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngFor="let item of this.promolist">
+
+                                            <div class="promotion-input search-wrap">
+
+
+                                                <input type="text" [disabled]='true' value="{{item.promoName}}">
+                                                <a (click)="applyPromotionDiscount(item)" title="{{item.promoId}}" class="reset-btn apply-btn">{{'Apply' | translate}}</a>
+                                            </div>
+                                        </ng-container>
+
+                                    </dxi-item>
+                                    <dxi-item title="Schema" class="mt-2">
+                                        <p></p>
+
+                                        <ng-container *ngFor="let item of this.schemalist">
+
+                                            <div class="promotion-input search-wrap">
+
+                                                <input type="text" [disabled]='true' value="{{item.schemaName !== null && item.schemaName !== null && item.schemaName !== '' ? item.schemaName : item.schemaId}}">
+                                                <a (click)="applySchemaDiscount(item)" class="reset-btn apply-btn">{{'Apply' | translate}}</a>
+                                            </div>
+                                        </ng-container>
+
+                                    </dxi-item>
+                                </dx-tab-panel>
+                            </div>
+
+                            <div class="promotion-wrap mt-3 mb-3" style="height: unset;">
+                                <div class="promotion-input search-wrap">
+                                    <input type="text" placeholder="{{'Voucher' | translate}}" [(ngModel)]="voucherValue" #txtVoucher>
+                                    
+                                    <a class="reset-btn apply-btn mr-2" (click)="findVoucherDetail(txtVoucher.value, itemTemplate)">{{'Apply' | translate}}</a>
+                                </div>
+                            </div>
+
+                            <div class="action-section">
+                                <button type="reset" class="reset-btn" (click)="openPromotionModal(ManualPromotion, true, true)">{{'Reset' | translate}}</button>
+                                <button type="button" class="submit-btn" (click)="ApplyDiscount()">{{'Ok' | translate}}</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </ng-container>
+
+            </div>
+        </div>
+    </div> -->
+    <app-shop-manual-promotion (outputPromotion)="ApplyPromotion($event)" [(discountApprove)]="this.discountApprove"></app-shop-manual-promotion>
+</ng-template>
+
+
+<ng-template #OtherItem> 
+   <app-shop-other-item [modalRef]="this.modalRef"></app-shop-other-item> 
+</ng-template>
+
+<ng-template #itemTemplate id="itemByVoucher">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Item Voucher' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="table-wrap">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.itemByVouchers" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemName" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button icon="fas fa-eye" text="{{'Apply' | translate}}" (onClick)="ApplyData(cell.data)"></dx-button>
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #TranferNotify style="max-height: 100vh-20vh;" >
+    <div class="modal-header">
+        <h5 class="modal-title pull-left" id="my-modal-title">{{'Notification' | translate}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+            <img src="../../../assets/images/System/times.svg">
+          </button>
+        </div>
+    <!-- <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment> -->
+    <app-component-notification (closeMoreMenu)="modalRef.hide()" [(inventoryListTS)]="inventoryListTS" [(inventoryListTR)]="inventoryListTR"></app-component-notification>
+
+</ng-template>
+<ng-template #CheckLicensePlate style="max-height: 100vh-20vh;" >
+    <div class="modal-header">
+        <h5 class="modal-title pull-left" id="my-modal-title">{{'License Plate' | translate}}</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+            <img src="../../../assets/images/System/times.svg">
+          </button>
+        </div>
+    <!-- <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment> -->
+    <app-shop-search-license-plate [(key)]="LicensePlate" (dataSelected)="SelectLicense($event)" (closeMoreMenu)="modalRef.hide()" ></app-shop-search-license-plate>
+
+</ng-template>
+<div id="orderPrint" *ngIf="this.outPutModel!==null && this.outPutModel!==undefined">
+    <!-- <div class="center-wrap content-center">
+        <div class="maintenance-card">  class="maintenance-row"-->
+    <!-- <div #printMain> -->
+    <!-- <div class="col-md-12" > -->
+    <app-shop-component-order-print [(order)]="this.outPutModel" [(typeOrder)]="this.typeOrder" [poleValue]="this.poleValue" [autoPrint]='true'></app-shop-component-order-print>
+    <!-- </div> -->
+    <!-- </div> -->
+    <!-- </div>
+    </div> -->
+</div>

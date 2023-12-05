@@ -1,0 +1,36 @@
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+    <div class="col-md-12">
+        <div class="row">
+            <ng-container *ngFor="let value of this.groupControlList">
+                <div class="col-md-12">
+                    <div class="row">
+                        <ng-container *ngFor="let item of value.arrayGroup">
+                            <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')">
+                                <label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span></label>
+                                <input *ngIf="item.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [required]="item.require" [attr.disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId,'E')?'disabled':null" formControlName="{{item.controlId}}"
+                                    name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+
+                                <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="item.controlType==='DateTime' && checkPermission(item.controlId,'V')"
+                                    type="datetime" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+
+                                </dx-date-box>
+                                <dx-switch *ngIf="item.controlType==='CheckBox' && checkPermission(item.controlId,'V')" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+                                </dx-switch>
+
+                                <dx-select-box *ngIf="item.controlType==='DropDown' && checkPermission(item.controlId,'V')" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{item.controlName | translate}} ---"
+                                    [dataSource]="this[item.optionName]" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"
+                                    [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]"></dx-select-box>
+                                     <label *ngIf="item.require && editForm.get(item.controlId).invalid" [ngClass] = "'error'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="col-md-12 text-right">
+        <button [disabled]="!editForm.valid || !editForm.dirty" *ngIf="checkPermission('btnSave' ,'V')" form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+    </div>
+
+</form>

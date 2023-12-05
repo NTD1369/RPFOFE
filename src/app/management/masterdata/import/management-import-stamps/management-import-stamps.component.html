@@ -1,0 +1,79 @@
+<div class="center-wrap" id="cl-print">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="item-searchbar" class="section-title">{{'Stamp' | translate}}</label>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <dx-button class="mr-2" (onClick)="downloadTemplate()" icon="xlsxfile" type="default" text="{{'Template' | translate}}"> </dx-button>
+                        <dx-button class="mr-2" stylingMode="outlined" type="default" [width]="120">
+                            <label style="margin:.1rem;">
+                                <i class="fas fa-paperclip"></i>
+                                {{'Select File' | translate}}
+                                <input hidden type="file" (change)="onFileChange($event)" multiple="false">
+                            </label>
+                        </dx-button>
+
+                        <dx-button class="mr-2" (click)="this.showFilter(itemTemplate)" icon="add" type="default" text="{{'Add' | translate}}"></dx-button>
+                        <dx-button class="mr-2" [enable]="this.onOffSave" (onClick)="saveGrid()" icon="floppy" type="success" text="{{'Save' | translate}}"></dx-button>
+                        <dx-button class="btn-print" (onClick)="PrintPage()" *ngIf="this.arrNewItemStamps.length > 0" icon="fas fa-file-import" type="success" text="{{'Print' | translate}}"> </dx-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <dx-select-box #ddlStoreId [value]="this.storeId" (onValueChanged)="StoreChange(ddlStoreId.value)" [(ngModel)]="this.storeId" name="storeId" [dataSource]="this.storeList" displayExpr="storeName" valueExpr="storeId" itemTemplate="item">
+                        <div *dxTemplate="let data of 'item'" class="custom-item">
+                            <div class='product-name'>{{data.storeId}}-{{data.storeName}}</div>
+                        </div>
+                    </dx-select-box>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div *ngIf="this.arrNewShowGridErr.length > 0" style="color: red; padding-left: 15px;">{{'Item Code Error'| translate}}: {{this.arrNewShowGridErr}}</div>
+            </div>
+
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-md-12">
+                    <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="dataGrid" #dataGrid [(dataSource)]="this.arrNewShowGrid" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                        <dxo-editing mode="cell" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="false"></dxo-editing>
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column dataField="itemCode" [allowEditing]="false" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                        <dxi-column dataField="itemName" [allowEditing]="false" caption="{{'Item Name' | translate}}" dataType="string"> </dxi-column>
+                        <dxi-column dataField="uomName" [allowEditing]="false" caption="{{'UoM' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                        <dxi-column dataField="priceAfterTax" [allowEditing]="false" caption="{{'Price' | translate}}" dataType="number" alignment="right"> </dxi-column>
+                        <dxi-column dataField="barCode" [allowEditing]="false" caption="{{'Barcode' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                        <dxi-column dataField="numberofPrints" [allowEditing]="true" caption="{{'Number of Prints' | translate}}" dataType="number" alignment="center"> </dxi-column>
+
+                    </dx-data-grid>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="this.arrNewItemStamps.length > 0">
+    <app-stamps-template [model]="this.arrNewItemStamps"></app-stamps-template>
+</div>
+
+<ng-template #itemTemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Item' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <app-shop-search-item style="width: 100%" (ItemsSelected)="addItemToBasketX($event)"></app-shop-search-item>
+        </div>
+    </div>
+</ng-template>

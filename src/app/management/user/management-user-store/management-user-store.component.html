@@ -1,0 +1,29 @@
+<dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.storeList"
+     [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [showBorders]="true">
+     <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+    <dxi-column dataField="storeId" caption="{{'Store Code' | translate}}" dataType="string"> </dxi-column>
+    <dxi-column dataField="storeName" caption="{{'Store Name' | translate}}" dataType="string"> </dxi-column>
+    <dxi-column dataField="address" caption="{{'Address' | translate}}" dataType="string"> </dxi-column>
+    <dxi-column dataField="storeDescription" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+
+    <dxi-column alignment="center" dataField="isCheck" caption="{{'Status' | translate}}"></dxi-column>
+
+    <dxi-column cellTemplate="cellTemplate" [fixed]="true" fixedPosition="left" ></dxi-column>
+    <div *dxTemplate="let cell of 'cellTemplate'">
+        <ng-container *ngIf="cell.data.isCheck">
+            <dx-button type="danger" text="{{'Remove' | translate}}" (onClick)="update(cell.data)"> </dx-button>
+        </ng-container>
+        <ng-container *ngIf="cell.data.isCheck!==true">
+            <dx-button type="success" text="{{'Assign' | translate}}" (onClick)="update(cell.data)"> </dx-button>
+        </ng-container>
+        
+     
+       
+    </div>
+
+
+</dx-data-grid>

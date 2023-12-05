@@ -1,0 +1,177 @@
+<div class="maintenance-card toggle-services-display" [ngClass]=" isShown ? ' show-services':''">
+    <h2 class="maintenance-heading">{{'MAINTENANCE' | translate}}</h2>
+    <div class="maintenance-row">
+        <div *ngFor="let item of this.listSub" class="maintenance-service-wrapper" routerLinkActive="router-link-active">
+            <div class="maintenance-service-box" [routerLink]="[item.Url]" (click)="close()">
+                <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="Function">
+        </span>
+                <label>{{item.Name}}</label>
+            </div>
+        </div>
+        <!-- 
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/setup.svg" alt="Group Setup">
+        </span>
+        <label>Outlet Group Setup</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+          <span class="service-icon contain-image">
+            <img src="../../../../assets/images/System/setup.svg" alt="Outlet Setup">
+          </span>
+        
+        <label>Outlet Setup</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/assign-price.svg" alt="Assign Price">
+        </span>
+        <label>Outlet Assign Price</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/price-import.svg" alt="Price Import">
+        </span>
+        <label>Outlet Price Import</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/customer-management.svg" alt="Customer Management">
+        </span>
+        <label>Customer Management</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/output-tax.svg" alt="Outlet Tax">
+        </span>
+        <label>Outlet Tax</label>
+      </div>
+    </div>
+
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/assign-doc.svg" alt="Assign Doc">
+        </span>
+        <label>Assign Doc Auto ID</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/settings.svg" alt="Point Setting">
+        </span>
+        <label>Point Setting</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/payment.svg" alt="Payment Master">
+        </span>
+        <label>Payment Master</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/items-group.svg" alt="Item Group">
+        </span>
+        <label>Item Group</label>
+      </div>
+    </div>
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box"  [routerLink]="['/admin/roles']">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/item-master.svg" alt="Role">
+        </span>
+        <label>Role</label>
+      </div>
+    </div> -->
+
+        <!-- <div class="maintenance-service-wrapper" routerLinkActive="router-link-active">
+      <div class="maintenance-service-box" [routerLink]="['/admin/permissions']"  >
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/item-master.svg" alt="Permission">
+        </span>
+        <label>Permission</label>
+      </div>
+    </div>
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box" [routerLink]="['/admin/setting-roles']">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/employee.svg" alt="Permission Setup">
+        </span>
+        <label>Permission Setup</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper"  >
+      <div class="maintenance-service-box" routerLinkActive="router-link-active" >
+        <a [routerLink]="['/admin/masterdata/item']" (click)="close()" >
+          <span class="service-icon contain-image">
+            <img src="../../../../assets/images/System/item-setup.svg" alt="Item Setup">
+          </span>
+          <label>Item Setup</label>
+        </a>
+        
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/remark.svg" alt="Remark Setup">
+        </span>
+        <label>Remark Setup</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/return.svg" alt="Sales Return Setup">
+        </span>
+        <label>Sales Return Setup</label>
+      </div>
+    </div>
+
+    <div class="maintenance-service-wrapper">
+      <div class="maintenance-service-box">
+        <span class="service-icon contain-image">
+          <img src="../../../../assets/images/System/item-master.svg" alt="Item Master Import">
+        </span>
+        <label>Item Master Import</label>
+      </div>
+    </div>
+   -->
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-xl-6">
+
+        </div>
+    </div>
+</div>

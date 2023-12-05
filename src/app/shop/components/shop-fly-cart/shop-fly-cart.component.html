@@ -1,0 +1,91 @@
+<img class="hideElement" id="addImg" src="http://cdn1.iconfinder.com/data/icons/jigsoar-icons/24/_cart.png">
+<!-- <button class="item-shopping-cart" (click)="function($event)" ></button> -->
+<!--     
+<div  [@changeDivSize]='currentState'  class="cd-cart__triggerX text-replace">  
+
+  <footer class="cd-cart__footer">
+    <a  (click)="changeState()" class="cd-cart__checkout">
+      Checkout - $<span>25.99</span>
+    </a>
+  </footer>
+</div>
+<div  *ngIf="currentState==='initial'" (click)="changeState()" [@fadeInOut] class="shopping-cart cd-cart__trigger text-replace">
+  Cart
+  <ul class="cd-cart__count"> 
+    <li>1</li>
+    <li>2</li>
+  </ul> 
+</div> -->
+
+
+<input type="checkbox" id="click"> 
+<!-- <label for="click" *ngIf="this.currentState === 'initial'" class="shopping-cart" (click)="changeState()">
+    <i id="iconShow"   class="fab fa-facebook-messenger"></i>
+   
+</label>
+<label for="click" class="shopping-cart"  *ngIf="this.currentState !== 'initial'" (click)="changeState()">
+  
+  <i id="iconClose" class="fas fa-times"></i> 
+</label> -->
+ 
+<a routerLink="/shop/cart">
+  <ng-container *ngIf="this.currentState === 'initial'">
+    <label [@fadeInOut]  for="click" (click)="changeState()" class="shopping-cart">
+      <!-- <i   class="fab fa-facebook-messenger"></i> -->
+      <i class="fab fa-opencart"></i>
+    </label>
+ </ng-container>
+ <ng-container *ngIf="this.currentState !== 'initial'">
+  <label [@fadeInOut] for="click" (click)="changeState()" class="shopping-cart">
+ 
+    <i   class="fas fa-times"></i>
+  </label>
+</ng-container>
+
+</a>
+
+<div class="wrapper" id="wrapperFly">
+   <div class="head-text">
+      {{ 'Cart' | translate }}
+   </div>
+   <div class="chat-box">
+      <div class="desc-text">
+         Please fill out the form below to start chatting with the next available agent.
+      </div>
+      <!-- <form action="#">
+         <div class="field">
+            <input type="text" placeholder="Your Name" required>
+         </div>
+         <div class="field">
+            <input type="email" placeholder="Email Address" required>
+         </div>
+         <div class="field textarea">
+            <textarea cols="30" rows="10" placeholder="Explain your queries.." required></textarea>
+         </div>
+         <div class="field">
+            <button type="submit">Start Chat</button>
+         </div>
+      </form> -->
+     
+      <!-- <div class="btn-container">
+        <button>
+          <span class="text">Hover</span>
+          <div class="icon-container">
+            <div class="icon icon--left">
+              <i class="far fa-arrow-alt-circle-right"></i>
+             
+            </div>
+            <div class="icon icon--right">
+             
+              <i class="far fa-arrow-alt-circle-right"></i>
+            </div>
+          </div>
+        </button>
+      </div> -->
+   </div>
+   <div class="footer">
+  
+      <button class="close mb-2" (click)="changeState()">Close</button>
+     
+    </div>
+</div>

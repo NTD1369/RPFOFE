@@ -1,0 +1,201 @@
+<!--  
+<div class="center-wrap"> 
+ 
+  <div class="row">
+    <div class="col-md-12">
+       
+      <div class="main-content " > -->
+<div class="center-wrap"  [appIsLoading]="this.loadingService.isLoading(this, this.LoadingIndicator.MANUAL)">
+    <div class="maintenance-card" style=" width: 100%; height: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'In Shop Sales History' | translate}}</label>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                {{'From Date' | translate}}
+                <dx-date-box #fromCalendar id="fromCalendar" [value]="this.fromdate" [displayFormat]="this.dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2">
+                {{'To Date' | translate}}
+                <dx-date-box #toCalendar id="fromCalendar" [value]="this.todate" [displayFormat]="this.dateFormat"> </dx-date-box>
+
+            </div>
+            <div class="col-md-2">
+                {{'Status' | translate}}
+                <dx-select-box #cbbStatus [value]="statusOptions[0].value" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+            </div>
+            <div class="col-md-3">
+                {{'Bill No' | translate}}
+                <dx-text-box #transId></dx-text-box>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <dx-button class="mr-2 mt-3" style="width:60%" icon="fas fa-eye" type="success" (onClick)="loadBills(fromCalendar.value, toCalendar.value, cbbStatus.value,'', transId.value ,'')" text="{{'View' | translate}}"></dx-button>
+            </div>
+        </div>
+        <div class="row mt-2">
+
+            <div class="col-md-3">
+                <div class="card-counter primary" (click)="filterbills('All')">
+                    <i class="fas fa-cart-plus iconX"></i>
+                    <span class="count-numbers">{{this.totalBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;"> <i class="fas fa-arrow-alt-circle-right"></i> {{'Total Bill' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter info" (click)="filterbills('Ex')">
+                    <!-- <i class="fas fa-hand-holding-usd "></i> -->
+                    <i class="fas fa-sync iconX"></i>
+                    <span class="count-numbers">{{this.exchangeBill  | number}} / {{this.returnBill  | number}}</span>
+                    <span class="count-name" style="cursor: pointer;"> <i class="fas fa-arrow-alt-circle-right"></i> {{'Exchange' | translate}} / {{'Return' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter success" (click)="filterbills('C')">
+                    <i class="fas fa-clipboard-check iconX"></i>
+                    <span class="count-numbers">{{this.closedBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;"> <i class="fas fa-arrow-alt-circle-right"></i> {{'Closed' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-counter danger " (click)="filterbills('N')">
+                    <i class="fas fa-ban iconX"></i>
+                    <span class="count-numbers">{{this.cancelBill | number}}</span>
+                    <span class="count-name" style="cursor: pointer;"> <i class="fas fa-arrow-alt-circle-right"></i> {{'Cancel' | translate}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="table-wrap  mt-2" *ngIf="this.controlList?.length > 0">
+
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" *ngIf="!this.isLoading && this.bills?.length > 0 " id="gridContainer" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.bills" [showBorders]="true"
+                [focusedRowEnabled]="true" keyExpr="transId" [(selectedRowKeys)]="this.selectedKey" mode="single">
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <ng-container  *ngIf="this.controlList?.length >0">
+                    <ng-container *ngFor="let col of this.controlList; let i = index">
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="col?.isView" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+                        </dxi-column> 
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="col?.isView" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+                        </dxi-column>
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="col?.isView" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+                        </dxi-column>
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [visible]="col?.isView" *ngIf="col.custom2==='number'" dataType="number" [customizeText]="customizeText">
+                        </dxi-column>
+                    </ng-container>
+                </ng-container>
+                
+              
+ 
+
+                <dxi-column cellTemplate="cellTemplate" [minWidth]="this.minWidthAction" [fixed]="true" fixedPosition="left"
+                 *ngIf="this.buttonList!==null&& this.buttonList!==undefined&& this.buttonList.length > 0 "></dxi-column>
+
+           
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <ng-container *ngIf="this.innerWidth > 1024">
+
+                        <ng-container *ngFor="let col of this.buttonList; let i = index">
+                            <!--   -->
+                            <dx-button [icon]="col.optionName" class="mr-2" [text]="col.controlName | translate" *ngIf="checkBtnShow(col.controlId, cell.data, col.require)" (onClick)="col.controlId ==='btnView' ? OpenOrder(cell.data) : 
+                              col.controlId ==='btnReturn' ? ReturnOrder(cell.data) : 
+                            
+                              col.controlId ==='btnExchange' ? ExchangeOrder(cell.data) :  
+                              col.controlId ==='btnPrint' ? PrintOrder(cell.data) : null">
+                            </dx-button>
+                        </ng-container>
+                      
+                    </ng-container>
+                    <ng-container *ngIf="this.innerWidth <= 1024">
+                        <dx-button class="button-info" stylingMode="outlined" text="{{'More' | translate}}" type="default" (onClick)="showInfo(cell.data)">
+                        </dx-button>
+
+                    </ng-container>
+
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                   
+                    <div [innerHtml]="cell.data.collectedStatus | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+            <dx-popup [width]="300" [height]="280" [showTitle]="true" title="Information" [dragEnabled]="false" [closeOnOutsideClick]="true" [showCloseButton]="false" container=".dx-viewport" [(visible)]="popupVisible">
+
+                <!-- <dxi-toolbar-item *ngIf="checkPermission('btnView','V')" 
+                    widget="dxButton"
+                    toolbar="bottom"
+                    location="before"
+                    [options]="detailButtonOptions">
+                </dxi-toolbar-item>
+                <dxi-toolbar-item [disabled]="this.bill?.isCanceled==='N' && this.bill?.salesMode==='SALES' && checkPermission('btnReturn','V')"
+                    widget="dxButton"
+                    toolbar="bottom"
+                    location="center"
+                    [options]="returnButtonOptions">
+                </dxi-toolbar-item>
+                <dxi-toolbar-item [disabled]="this.bill?.isCanceled==='N' && this.bill?.salesMode==='SALES' && checkPermission('btnExchange','V')"
+                    widget="dxButton"
+                    toolbar="bottom"
+                    location="center"
+                    [options]="exchangeButtonOptions">
+                </dxi-toolbar-item>
+                <dxi-toolbar-item *ngIf="checkPermission('btnPrint','V')" 
+                  widget="dxButton"
+                  toolbar="bottom"
+                  location="center"
+                  [options]="printButtonOptions">
+              </dxi-toolbar-item>
+                <dxi-toolbar-item
+                    widget="dxButton"
+                    toolbar="bottom"
+                    location="after"
+                    [options]="closeButtonOptions">
+                </dxi-toolbar-item> -->
+
+                <dxo-position at="center" my="center" [of]="positionOf">
+                </dxo-position>
+                <div *dxTemplate="let data of 'content'">
+                    <h4>
+                        {{'Trans Id' | translate}}: {{this.bill.transId}}
+                    </h4>
+                    <h4 *ngIf="this.bill?.cusName !==null && this.bill?.cusName!==undefined">
+                        {{'Customer Name' | translate}}: {{this.bill.cusName}}
+                    </h4>
+                    <h4>
+                        {{'Total Receipt' | translate}}: {{this.bill.totalReceipt}}
+                    </h4>
+                    <h4>
+                        {{'StoreId' | translate}}: {{this.bill.storeId}}
+                    </h4>
+                    <h4>
+                        {{'Data Source' | translate}}: {{this.bill.dataSource}}
+                    </h4>
+                    <div class="row mt-4">
+                        <ng-container *ngFor="let col of this.buttonList; let i = index">
+
+                            <dx-button [icon]="col.optionName" class="mr-2" [text]="col.controlName | translate" *ngIf="checkBtnShow(col.controlId, this.bill, col.require)" (onClick)="col.controlId ==='btnView' ? OpenOrder(this.bill) : 
+                          col.controlId ==='btnReturn' ? ReturnOrder(this.bill) :  
+                          col.controlId ==='btnExchange' ? ExchangeOrder(this.bill) :  
+                          col.controlId ==='btnPrint' ? PrintOrder(this.bill) : null">
+                            </dx-button>
+                            <!-- col.controlId ==='btnCancel' ? cancelOrder(this.bill) : -->
+                        </ng-container>
+                        <dx-button type="danger" stylingMode="outlined" icon="fas fa-times-circle" class="mr-2" text="{{'Close' | translate}}" (onClick)="closePopup()"></dx-button>
+                    </div>
+
+                </div>
+            </dx-popup>
+
+        </div>
+    </div>
+
+</div>
+
+<ng-keyboard-shortcuts [shortcuts]="shortcuts"></ng-keyboard-shortcuts>

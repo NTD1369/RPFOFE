@@ -1,0 +1,90 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Salary Target Summary' | translate}}</label>
+
+      </div>
+      <div class="row justify-content-center flex-row mb-3 mt-2">
+        
+        <div class="col-md-2 mb-1">
+            {{'From Date' | translate}}
+              <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-2 mb-1">
+            {{'To Date' | translate}}
+              <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <!-- <div class="col-md-2 mb-1">
+            {{'Store' | translate}}
+            <dx-select-box #cbbStore  [searchEnabled]="true" [value]="storeOptions[0].value" [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+        </div> -->
+          <div class="col-md-3 mt-3">
+            <!-- <i class="fas fa-random"></i> -->
+            <dx-button class="mr-2 pt-1" icon="search"  type="success" (onClick)="loadDataSimulate(fromCalendar.value, toCalendar.value)" text="{{'View Data' | translate}}"></dx-button>
+            <dx-button *ngIf="this.list !==null && this.list?.length > 0 && this.status === 'N'"  class="mr-2 pt-1" icon="fas fa-random" type="danger" (onClick)="createSummary()" text="{{'Submit & Create Data' | translate}}"></dx-button>
+            <ng-container  >  
+             
+              <!-- <dx-button class="mr-2 pt-1" icon="xlsxfile" type="default" text="{{'Excel' | translate}}" (onClick)="downloadExcel(fromCalendar.value, toCalendar.value,cbbStore.selectedItem)"></dx-button> -->
+            </ng-container>
+            <!-- <ng-container *ngIf="this.isLoadingData===true">
+                <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+            </ng-container>  -->
+             
+          </div>
+    </div>
+      <!-- (onToolbarPreparing)="onToolbarPreparing($event)" -->
+      <div class="table-wrap">
+          <dx-data-grid #dataGrid [style]="{'max-height':'calc(100vh - 23vh)','overflow':'auto'}" id="gridContainer" 
+           [dataSource]="this.list" [allowColumnResizing]="true"
+            [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+              <dxo-export *ngIf="this.list !==null && this.list?.length > 0" [enabled]="true"></dxo-export>
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <!-- [useIcons]="true" -->
+              <dxo-editing mode="cell" [allowUpdating]="this.status === 'N'" [allowDeleting]="this.status === 'N'"  [useIcons]="true" >
+              </dxo-editing>
+              <dxi-column dataField="employeeId" [allowEditing]="false" caption="{{'Employee ID' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="employeeName" [allowEditing]="false" caption="{{'Employee Name' | translate}}" dataType="string"> </dxi-column> 
+              <dxi-column dataField="position" [allowEditing]="false" caption="{{'Position' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="salary" [allowEditing]="false" caption="{{'Salary' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+              <dxi-column dataField="commisionValue" [allowEditing]="true"  caption="{{'Commision Value' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+              <dxi-column dataField="SalesTarget" [allowEditing]="false" caption="{{'Sales Target' | translate}}"  dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+              <dxi-column dataField="lineTotal" [allowEditing]="true"  [calculateCellValue]="lineTotalCellValue" caption="{{'Line Total' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+              <!-- <dxi-column dataField="salary" caption="{{'Salary' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column>
+              <dxi-column dataField="salary" caption="{{'Salary' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')" > </dxi-column> -->
+              <!-- [format]='this.authService.numberFormat('number')' -->
+              <dxi-column dataField="customF1" caption="{{'Custom F1' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF2" caption="{{'Custom F2' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF3" caption="{{'Custom F3' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF4" caption="{{'Custom F4' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="customF5" caption="{{'Custom F5' | translate}}" dataType="string"> </dxi-column>
+<!-- 
+              <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+              <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | statusFormat"></div>
+              </div> -->
+              <!-- <dxi-column cellTemplate="cellTemplate"></dxi-column>
+              <div *dxTemplate="let cell of 'cellTemplate'">
+                  <dx-button icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+              </div> -->
+          </dx-data-grid>
+      </div>
+  </div>
+</div>
+
+<!-- <ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Employee Salary' | translate}} | {{this.model?.employeeName }} | {{this.model?.position }}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-management-employee-salary-single [isNew]="this.isNew"  [modelInput]="this.model" style="width: 100%" (outModel)="updateModel($event)"></app-management-employee-salary-single>
+          
+      </div>
+  </div>
+</ng-template> -->

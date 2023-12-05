@@ -1,0 +1,177 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Promotion' | translate}}</label>
+
+        </div>
+        <div class="table-wrap">
+            <div class="item-search-nav">
+                <div class="row">
+                    <div class="col-md-3">
+                        <span> {{'Promotion Code' | translate}}</span>
+                        <dx-text-box class="mt-1" placeholder="{{'Promotion Code' | translate}}" #promotioId></dx-text-box>
+                    </div>
+                    <div class="col-md-5">
+                        <span >  {{'Promotion Name' | translate}}</span> 
+                        <dx-text-box class="mt-1" placeholder="{{'Promotion Name' | translate}}" #promotioName></dx-text-box>
+                    </div>
+                  
+                    <div class="col-md-2">
+                        <span >  {{'Status' | translate}}</span> 
+                        <dx-select-box class="mt-1" [items]="statusOptions" [value]="statusOptions[0].value" #chkActive displayExpr="name" valueExpr="value" placeholder="{{'Status' | translate}}"></dx-select-box>
+                       
+                    </div>
+                    <div class="col-md-2">
+                        <span >  {{'Display' | translate}}</span> 
+                        <dx-number-box [value] = 'display' (onValueChanged)="changedisplay($event)" type ='number' class="mt-1" placeholder="{{'number' | translate}}" ></dx-number-box>
+                    </div>
+                </div>
+            </div>
+            <ng-container  *ngIf="showMore">
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <span >  {{'Promotion Type' | translate}}</span> 
+                        <dx-select-box class="mt-1" [items]="promtionType" #ddlPromotionType displayExpr="typeName" valueExpr="promoType" placeholder="{{'Promotion Type' | translate}}"></dx-select-box>
+                    </div>
+                   
+                    <div class="col-md-2">
+                        <span >  {{'Customer Type' | translate}}</span> 
+                        <dx-select-box class="mt-1" [items]="customerType" #ddlCustomerType displayExpr="name" valueExpr="value" placeholder="{{'Customer Type' | translate}}"></dx-select-box>
+                    </div>
+                    <div class="col-md-2">
+                        <span >  {{'Start Date' | translate}}</span> 
+                        <dx-date-box class="mt-1"  #fromCalendar [displayFormat]="this.authService.loadFormat().dateFormat" placeholder="{{'Start Date' | translate}}" id="fromCalendar"> </dx-date-box>
+                    </div>
+                    <div class="col-md-2">
+                        <span >  {{'End Date' | translate}}</span> 
+                        <dx-date-box  class="mt-1" #toCalendar [displayFormat]="this.authService.loadFormat().dateFormat" placeholder="{{'End Date' | translate}}" id="toCalendar"> </dx-date-box>
+                    </div>
+                    <!-- <div class="col-md-3">
+                      
+                    </div> -->
+            
+                </div>
+                <div class="row mt-3">
+                    
+                    <!-- <div class="col-md-2">
+                        <dx-date-box #fromTime type="time" id="toCalendar" placeholder="{{'Start Time' | translate}}"> </dx-date-box>
+                    </div>
+                    <div class="col-md-2">
+                        <dx-date-box #toTime type="time" id="toCalendar" placeholder="{{'End Time' | translate}}"> </dx-date-box>
+                    </div> -->
+                    <div class="col-md-4">
+                        <span >  {{'Day Of Week' | translate}}</span> 
+                        <br />
+                        <div class="mt-2">
+                            <dx-check-box #chkMon [value]="true" class="mr-2" text="{{'Mon' | translate}}"></dx-check-box>
+                            <dx-check-box #chkTue [value]="true" class="mr-2" text="{{'Tue' | translate}}"></dx-check-box>
+                            <dx-check-box #chkWed [value]="true" class="mr-2" text="{{'Wed' | translate}}"></dx-check-box>
+                            <dx-check-box #chkThu [value]="true" class="mr-2" text="{{'Thu' | translate}}"></dx-check-box>
+                            <dx-check-box #chkFri [value]="true" class="mr-2" text="{{'Fri' | translate}}"></dx-check-box>
+                            <dx-check-box #chkSat [value]="true" class="mr-2" text="{{'Sat' | translate}}"></dx-check-box>
+                            <dx-check-box #chkSun [value]="true" class="mr-2" text="{{'Sun' | translate}}"></dx-check-box>
+                        </div>
+                       
+                    </div>
+                  
+                    <div class="col-md-6">
+                        <span >  {{'Combine' | translate}}</span> 
+                        <br />
+                        <div class="mt-2">
+                            <dx-check-box #chkCombine   class="mr-2" text="{{'Combine' | translate}}" [(value)]="isCombine"></dx-check-box>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-2">
+                        <div class="dx-field">
+                            <div class="dx-field-label">{{'Combine' | translate}}</div>
+                            <div class="dx-field-value">
+                              <dx-check-box  #chkCombine [(value)]="isCombine"></dx-check-box>
+                            </div>
+                          </div>
+                    </div> -->
+                </div>
+                <div class="row mt-2" >
+                    <div class="col-md-12" style="text-align: right;">
+                        <dx-button class="mr-2" (onClick)="showMore=false"   icon="fas fa-filter"  type="default" text="{{'-' | translate}}"></dx-button>
+                         
+                        <dx-button class="mr-2" (onClick)="searchPromotion(promotioId.value, promotioName.value, ddlPromotionType.value,
+                        ddlCustomerType.value, fromCalendar.value, toCalendar.value, null, null, chkMon.value, 
+                        chkTue.value, chkWed.value, chkThu.value, chkFri.value, chkSat.value, chkSun.value, chkActive.value)" 
+                        icon="search" type="success" text="{{'Search' | translate}}"></dx-button>
+                    </div>
+                  
+    
+                </div>
+            </ng-container>
+        <ng-container *ngIf="!showMore">
+            <div class="row mt-2" >
+                <div class="col-md-12" style="text-align: right;">
+                    
+                    <dx-button class="mr-2" (onClick)="showMore=true"  icon="fas fa-filter"  type="default" text="{{'+' | translate}}"></dx-button>
+                    <dx-button class="mr-2" (onClick)="searchPromotion(promotioId.value, promotioName.value, null,
+                    null, null, null, null, null,null, 
+                    null, null, null, null, null, null, chkActive.value)" 
+                    icon="search" type="success" text="{{'Search' | translate}}"></dx-button>
+                </div>
+              
+
+            </div>
+        </ng-container>
+            
+         
+        </div>
+        <div class="table-wrap mt-3">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.promotionList" (onToolbarPreparing)="onToolbarPreparing($event)" keyExpr="promoId" [allowColumnResizing]="true" [showRowLines]="true"
+                [showBorders]="true" [columnAutoWidth]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <!-- <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling> -->
+                <dxo-paging [pageSize]="10"> </dxo-paging>
+                <dxo-pager
+                  [visible]="true"
+                  [allowedPageSizes]="allowedPageSizes"
+                  [displayMode]="displayMode"
+                  [showPageSizeSelector]="true"
+                  [showInfo]="true"
+                  [showNavigationButtons]="true"
+                >
+                </dxo-pager>
+
+
+
+                <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="{{'Line Num' | translate}}"></dxi-column>
+                <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+
+                <dxi-column dataField="promoId" caption="{{'Promotion Code' | translate}}"></dxi-column>
+                <dxi-column dataField="promoName" caption="{{'Promotion Name' | translate}}"></dxi-column>
+                <dxi-column dataField="promoType" caption="{{'Promotion Type' | translate}}"></dxi-column>
+                <!-- customerType: string=""; -->
+                <!-- <dxi-column dataField="customerType" caption="Promotion Type"></dxi-column>  -->
+                <ng-container *ngIf="this.isSAP">
+                    <dxi-column dataField="sapPromoId" caption="{{'SAP Promotion ID' | translate}}"></dxi-column>
+                    <dxi-column dataField="sapBonusBuyId" caption="{{'SAP Bonus Buy ID' | translate}}"></dxi-column>
+                </ng-container>
+
+                <dxi-column dataField="validDateFrom" caption="{{'From' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+                <dxi-column dataField="validDateTo" caption="{{'To' | translate}}" dataType="date" [format]="this.dateFormat "> </dxi-column>
+                <dxi-column dataField="isUsed" caption="{{'In Use' | translate}}" cellTemplate="usedTemplate"></dxi-column>
+                <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'usedTemplate'">
+                    <div [innerHtml]="cell.data.isUsed | statusFormat"></div>
+                </div>
+                <dxi-column cellTemplate="cellTemplate"  [fixed]="true" fixedPosition="right"></dxi-column>
+                <div *dxTemplate="let data of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="viewDetail(data)"></dx-button>
+                    <dx-button icon="fa fa-times"  type="danger" text="{{'Delete' | translate}}" (onClick)="delPromotion(data)"></dx-button>
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

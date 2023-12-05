@@ -1,0 +1,151 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Item Store Listing' | translate}}</label>
+           
+         
+      </div>
+      <div class="table-wrap">
+          <!-- <div class="content-end ">
+          
+          </div> -->
+        
+          <button  style="width: 160px;height: 45px;position: absolute; ;right: 180px; top: 115px;" (click)="clickEvent()" class="btn-add mr-60"> <i
+              style="font-size: 16px;" class="dx-icon dx-icon-add mr-2"></i> {{'More option' | translate}}</button>
+          <form [formGroup]="customerSearchForm" id="customerSearchForm" (ngSubmit)="searchItem()">
+              <div class="row mb-2 mr-2" style="float: right;">
+                  <button style="  width: 160px; height: 45px; position: absolute; right: 40px;    top: 115px;" form="customerSearchForm" class="btn button-filter"> <i class="dx-icon dx-icon-search mr-2"></i> {{'Search' | translate}}</button>
+              </div>
+
+              <div class="row mt-4 mb-4" style="clear: both;">
+                  <ng-container *ngFor="let item of this.groupControlList">
+                      <div class="col-md-12">
+                          <div class="row">
+                              <ng-container *ngFor="let value of item.arrayGroup">
+                                  
+                                  <div class="col-md-4 mb-2">
+                                      <div class="row">
+                                          <div class="col-md-4 d-flex align-items-center">
+                                              <!-- <label for="{{value.controlId}}"> {{value.controlName | translate}}</label> -->
+                                              <label *ngIf="item.controlType==='TextBox' " for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                              <label *ngIf="item.controlType !=='TextBox' " [ngClass]="status ? 'd-block' : 'd-none'" for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                          </div>
+                                          <div class="col-md-8">
+                                              <dx-switch *ngIf="item.controlType==='CheckBox'" [ngClass]="status ? 'd-block' : 'd-none'" [(ngModel)]="model[value.controlId]" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(value)]="model[value.controlId]"></dx-switch>
+
+                                              <input *ngIf="item.controlType==='TextBox' " class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="model[value.controlId]">
+      
+                                              <dx-date-box name="{{value.controlId | translate}}" [ngClass]="status ? 'd-block' : 'd-none'" [value]="model[value.controlId]" displayFormat="dd/MM/yyyy" formControlName="{{value.controlId}}" [(ngModel)]="model[value.controlId]" *ngIf="item.controlType==='DateTime'"
+                                                  type="datetime">
+                                              </dx-date-box>
+      
+                                              <dx-select-box *ngIf="item.controlType==='DropDown'" [ngClass]="status ? 'd-block' : 'd-none'" showClearButton="true" [style]="{'width':'100%'}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                  [dataSource]="this[value.optionName]" displayExpr="{{value.optionKey}}" valueExpr="{{value.optionValue}}" [(ngModel)]="model[value.controlId]" [value]="model[value.controlId]"></dx-select-box>
+                                                  
+                                              <!-- <dx-switch *ngIf="item.controlType==='CheckBox' " [(ngModel)]="model[value.controlId]" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(value)]="model[value.controlId]"></dx-switch>
+
+                                              <input *ngIf="item.controlType==='TextBox' &&  value.controlId ==='customerId'" class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="this.customerId">
+                                              <input *ngIf="item.controlType==='TextBox' &&  value.controlId !=='customerId'" class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="model[value.controlId]">
+
+                                              <dx-date-box name="{{value.controlId | translate}}" [value]="model[value.controlId]" displayFormat="dd/MM/yyyy" formControlName="{{value.controlId}}" [(ngModel)]="model[value.controlId]" *ngIf="item.controlType==='DateTime'" type="datetime">  
+                                              </dx-date-box>
+                                              <dx-select-box *ngIf="item.controlType==='DropDown'" showClearButton="true" [style]="{'width':'100%'}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                  [dataSource]="this[value.optionName]" displayExpr="{{value.optionKey}}" valueExpr="{{value.optionValue}}" [(ngModel)]="model[value.controlId]" [value]="model[value.controlId]"></dx-select-box> -->
+                                          </div>
+
+                                      </div>
+                                  </div>
+                              </ng-container>
+                          </div>
+                      </div>
+
+                  </ng-container>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-8"> 
+                  <dx-data-grid  [style]="{'max-height':'calc(100vh - 45vh)','overflow':'auto'}" id="gridContainer" 
+                    #gridContainer [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" (onToolbarPreparing)="onToolbarPreparing($event)"
+                      (onContentReady)="contentReady($event)" [dataSource]="this.items" [showBorders]="true">
+                      [remoteOperations]="true" [wordWrapEnabled]="true"
+                      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                      <dxo-editing mode="cell"  [useIcons]="true" [allowUpdating]="false" 
+                      [allowDeleting]="true" [confirmDelete]="false"></dxo-editing>
+                      <dxi-column [fixed]="true" fixedPosition="left"  type="buttons">
+                        <dxi-button name="delete"></dxi-button>
+                      </dxi-column>
+                      <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                      <dxo-scrolling mode="virtual" rowRenderingMode="virtual"></dxo-scrolling>
+
+                      <dxi-column dataField="stt" caption="{{'No.' | translate}}" alignment="center"> </dxi-column>
+                      <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="itemName" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="foreignName" caption="{{'Foreign Name' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                      <dxi-column dataField="inventoryUomCode" caption="{{'Inventory UoM' | translate}}" dataType="string" alignment="center"> </dxi-column>
+                      <dxi-column dataField="defaultPrice" caption="{{'Default Price' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="itemGroupId" caption="{{'Group' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="itemGroupName" caption="{{'Group Name' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="customField1" caption="{{'Item Type' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="customField4" caption="{{'Item Management' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="salesTaxCode" caption="{{'Sales Tax Code' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="salesTaxName" caption="{{'Sales Tax Name' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="salesTaxRate" caption="{{'Sales Tax Rate' | translate}}" dataType="string"> </dxi-column>
+
+                      <dxi-column dataField="itemCategory_1" caption="{{'Category' | translate}} 1" dataType="string"> </dxi-column>
+
+                      <dxi-column dataField="isBom" caption="{{'Is BOM' | translate}}"> </dxi-column>
+                      <dxi-column dataField="isVoucher" caption="{{'Is Voucher' | translate}}"> </dxi-column>
+                      <dxi-column dataField="isSerial" caption="{{'Is Serial' | translate}}"> </dxi-column>
+                      <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                      <!-- <dxi-column cellTemplate="cellTemplate" [fixed]="true" fixedPosition="right"></dxi-column>
+                      <div *dxTemplate="let cell of 'cellTemplate'">
+                          <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="getItem( cell.data)"></dx-button>
+                      </div> -->
+                      <div *dxTemplate="let cell of 'statusTemplate'">
+                          <div [innerHtml]="cell.data.status | statusFormat"></div>
+                      </div>
+                      <div *dxTemplate="let data of 'totalGroupCount'">
+                        <dx-button class="mr-2" (onClick)="downloadTemplate()" icon="xlsxfile" type="default" text="{{'Template' | translate}}"> </dx-button>
+                        
+                        <label style="margin:.1rem;">
+                          <dx-button stylingMode="outlined" type="default" [width]="120">
+                              <i class="fas fa-paperclip"></i>
+                              {{'Select File' | translate}} 
+                              <input hidden type="file" (change)="onFileChange($event)" multiple="false">
+                            </dx-button>
+                        </label>
+                    </div>
+                  
+
+
+                  </dx-data-grid>
+                </div>
+                <div class="col-md-4">
+                  <dx-list #store
+                      [dataSource]="storeList"  [style]="{'max-height':'calc(100vh - 45vh)','overflow':'auto'}" 
+                      [height]="1400"
+                      [searchEnabled]="true"
+                      [selectionMode]="selectionModeValue"
+                      [selectAllMode]="selectAllModeVlaue"
+                      [showSelectionControls]="true" 
+                      searchMode="contains"
+                      [(selectedItemKeys)]="this.selectedKey" >
+                    <div *dxTemplate="let data of 'item'">
+                      <div>{{ data.storeId }} - {{ data.storeName }} </div>
+                    </div>
+                  </dx-list>
+                  <div class="col-md-12" style="text-align: right;">
+                    <button (click)="applyStoreListing()" style="margin-top: 25px;  width: 160px; height: 45px; " type="default"  class="btn button-filter"> {{'Apply' | translate}}</button>
+
+                  </div>
+                </div>
+              </div>
+            
+          </form>
+      </div>
+
+  </div>
+</div>

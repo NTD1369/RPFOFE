@@ -1,0 +1,304 @@
+<div class="center-wrap">
+    
+    <div class="right-section" style="min-height: calc(100vh - 50px);">
+        <div class="row" style="width: 100%;" *ngIf="this.source !== 'Local' && this.source !== 'Tera'">
+            <h2 class="loadingText" *ngIf="this.message?.length > 0" > {{ this.message }}
+
+                <h2 style="text-align: center;
+                margin-top: 30px;
+                color: white;">{{ display }}</h2>
+            </h2>
+            <div class="col-md-1 d-flex align-items-center">
+                {{'Phone No' | translate}}
+            </div>
+            <div class="col-md-3">
+                <dx-text-box #filter></dx-text-box>
+                <!-- <input class="input-phone" #filter type="number"> -->
+            </div>
+            <div class="col-md-1 d-flex align-items-center">
+                {{'Name' | translate}}
+            </div>
+            <div class="col-md-3">
+                <dx-text-box #filterName></dx-text-box>
+            </div>
+            <div class="col-md-4">
+                <dx-button class="mr-2" (onClick)="filterBy(filter.value, filterName.value)" icon="fas fa-eye" type="default" text="{{'Find' | translate}}"></dx-button>
+                <ng-container *ngIf="this.canAdd">
+                    <dx-button class="mr-2" (onClick)="openModal(true, null,template)" icon="add" type="success" text="{{'Add' | translate}}"></dx-button>
+                </ng-container>
+
+
+            </div>
+
+
+        </div>
+        <div class="row" style="width: 100%;" *ngIf="this.source === 'Tera'">
+            <h2 class="loadingText" *ngIf="this.message?.length > 0" > {{ this.message }}
+
+                <h2 style="text-align: center;
+                margin-top: 30px;
+                color: white;">{{ display }}</h2>
+            </h2>
+            <div class="col-md-1 d-flex align-items-center">
+                {{'Phone No' | translate}}
+            </div>
+            <div class="col-md-3">
+                <dx-text-box #filter></dx-text-box>
+                <!-- <input class="input-phone" #filter type="number"> -->
+            </div>
+            <div class="col-md-1 d-flex align-items-center">
+                {{'Name' | translate}}
+            </div>
+            <div class="col-md-3">
+                <dx-text-box #filterName></dx-text-box>
+            </div>
+            <div  class="col-md-1 d-flex align-items-center">
+                {{'email' | translate}}
+            </div>
+            <div  class="col-md-3">
+                <dx-text-box #filteremail></dx-text-box>
+            </div>
+
+            <div class="col-md-4">
+                <dx-button class="mr-2" (onClick)="filterBy(filter.value, filterName.value,filteremail.value)" icon="fas fa-eye" type="default" text="{{'Find' | translate}}"></dx-button>
+                <ng-container *ngIf="this.canAdd">
+                    <dx-button class="mr-2" (onClick)="openModal(true, null,templatetera)" icon="add" type="success" text="{{'Add' | translate}}"></dx-button>
+                </ng-container>
+
+
+            </div>
+
+
+        </div>
+        <div class="table-wrap mt-2" *ngIf="this.source === 'Local' || (this.customers !== null && this.customers !== undefined && this.customers.length > 0)">
+            <ng-container *ngIf="this.source !== 'Local' && this.source !== 'Tera'">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.customers">
+
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column dataField="mobile" caption="{{'Phone' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="email" caption="{{'Email' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="first_name" caption="{{'Name' | translate}}" dataType="string" [calculateCellValue]="cardNameColumn_calculateCellValue"> </dxi-column>
+                    <dxi-column dataField="address" caption="{{'Address' | translate}}" dataType="string"> </dxi-column>
+
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button class="mr-2" icon="check" text="Select" (onClick)="selectCustomer(cell.data)"></dx-button>
+                        <ng-container *ngIf="this.canEdit">
+                            <dx-button class="mr-2" *ngIf="this.source !== 'Local'" icon="edit" text="{{'Edit' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                        </ng-container>
+                        <ng-container *ngIf="this.canAdd">
+                            <dx-button class="mr-2" icon="add" text="{{'Clone' | translate}}" (onClick)="openModal(true, cell.data, template)"></dx-button>
+                        </ng-container>
+
+                    </div>
+
+                </dx-data-grid>
+            </ng-container>
+            <ng-container *ngIf="this.source === 'Tera'">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.customers">
+
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column dataField="mobile" caption="{{'Phone' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="email" caption="{{'Email' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="customerName"caption="{{'Name' | translate}}" dataType="string" > </dxi-column>
+                    <dxi-column dataField="address" caption="{{'Address' | translate}}" dataType="string"> </dxi-column>
+
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button class="mr-2" icon="check" text="Select" (onClick)="selectCustomer(cell.data)"></dx-button>
+                        <ng-container *ngIf="this.canEdit">
+                            <dx-button class="mr-2" *ngIf="this.source !== 'Local'" icon="edit" text="{{'Edit' | translate}}" (onClick)="openModal(false, cell.data, templatetera)"></dx-button>
+                        </ng-container>
+                        <ng-container *ngIf="this.canAdd">
+                            <dx-button class="mr-2" icon="add" text="{{'Clone' | translate}}" (onClick)="openModal(true, cell.data, templatetera)"></dx-button>
+                        </ng-container>
+
+                    </div>
+
+                </dx-data-grid>
+            </ng-container>
+            <ng-container *ngIf="this.source === 'Local'">
+
+                <form [formGroup]="customerSearchForm" id="customerSearchForm" (ngSubmit)="searchItem()">
+                    <div class="content-end">
+                        <dx-button style="width: 200px; height: 50px; color: #fff" class="mr-2 btn button-filter" (onClick)="openModal(true, null, localTemplate)"> <i class="dx-icon dx-icon-add mr-2"></i> {{'Add' | translate}}</dx-button>
+                        <button style="width: 400px; height: 50px;" form="customerSearchForm" class="btn button-filter"> <i class="dx-icon dx-icon-search mr-2"></i> {{'Search' | translate}}</button>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="row mt-4 mb-4">
+                            <ng-container *ngFor="let item of this.groupControlList">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <ng-container *ngFor="let value of item.arrayGroup">
+                                            <!-- <div *ngIf="checkPermission(value.controlId,'V')" class="col-md-4 mb-2"> -->
+                                                     <div *ngIf="value.isView" class="col-md-4 mb-2">
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex align-items-center">
+                                                        <label for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <dx-switch *ngIf="item.controlType==='CheckBox' " [(ngModel)]="model[value.controlId]" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(value)]="model[value.controlId]"></dx-switch>
+
+                                                        <input *ngIf="item.controlType==='TextBox' &&  value.controlId ==='customerId'" class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="this.customerId">
+                                                        <input *ngIf="item.controlType==='TextBox' &&  value.controlId !=='customerId'" class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="model[value.controlId]">
+
+                                                        <dx-date-box name="{{value.controlId | translate}}" [value]="model[value.controlId]" displayFormat="dd/MM/yyyy" formControlName="{{value.controlId}}" [(ngModel)]="model[value.controlId]" *ngIf="item.controlType==='DateTime'" type="datetime">
+                                                        </dx-date-box>
+                                                         
+                                                    <ng-container *ngIf="item.controlType==='DropDown'">
+                                                        <ng-container *ngIf="value.custom1?.length > 0">
+                                                            <!-- <dx-select-box showClearButton="true" [style]="{'width':'100%'}" formControlName="{{value.controlId}}"
+                                                                name="{{value.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                                [dataSource]="this.setDataSoure(value.controlId)" displayExpr="{{value.optionKey}}" valueExpr="{{value.optionValue}}" 
+                                                                [(ngModel)]="model[value.controlId]" [value]="model[value.controlId]">
+            
+                                                            </dx-select-box>
+                                                             -->
+                                                            <dx-select-box  showClearButton="true" [style]="{'width':'100%'}" 
+                                                                formControlName="{{value.controlId}}" name="{{value.controlId | translate}}"
+                                                                placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                                [dataSource]="this.setDataSoure(value.controlId)" displayExpr="{{value.optionKey}}" 
+                                                                valueExpr="{{value.optionValue}}" 
+                                                                [(ngModel)]="model[value.controlId]" [value]="model[value.controlId]">
+                                                            
+                                                            </dx-select-box>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="value.custom1?.length <= 0">
+                                                           
+                                                            <dx-select-box  showClearButton="true" [style]="{'width':'100%'}"
+                                                                formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" 
+                                                                placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                                [dataSource]="this[value.optionName]" displayExpr="{{value.optionKey}}" 
+                                                                valueExpr="{{value.optionValue}}" [(ngModel)]="model[value.controlId]" 
+                                                                [value]="model[value.controlId]">
+                                                            </dx-select-box>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                        
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+
+                            </ng-container>
+
+                        </div>
+                    </div>
+
+                    <dx-data-grid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.customers" [showBorders]="true">
+                        <!-- <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple">
+    </dxo-selection> -->
+                        <!-- [(selectedRowKeys)]="this.selectedKey" -->
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column dataField="customerId" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                        <dxi-column dataField="customerName" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+                        <!-- <dxi-column dataField="address" caption="Address" dataType="string"> </dxi-column> -->
+                        <dxi-column dataField="phone" caption="{{'Phone' | translate}}" dataType="string"> </dxi-column>
+                        <!-- <dxi-column dataField="email" caption="Email" dataType="string"> </dxi-column> -->
+
+                        <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                        <div *dxTemplate="let cell of 'cellTemplate'">
+                            <dx-button class="mr-2" icon="check" text="{{'Select' | translate}}" (onClick)="selectCustomer(cell.data)" style="font-size: 16px;"></dx-button>
+                            <dx-button class="mr-2" icon="edit" text="{{'Edit' | translate}}" (onClick)="openModal(false, cell.data, localTemplate)" style="font-size: 16px;"></dx-button>
+
+                        </div>
+
+
+                    </dx-data-grid>
+                </form>
+                <!-- <dx-data-grid   [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}"  (onToolbarPreparing)="onToolbarPreparing($event, localTemplate)"
+      id="gridContainer"  [allowColumnResizing]="true"   [showRowLines]="true"  [showBorders]="true" [columnAutoWidth]="true" 
+      [dataSource]="this.customers" 
+       >
+    
+      <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+      <dxo-search-panel [visible]="true"  [width]="540"  placeholder="Search..." location="before"></dxo-search-panel>
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      
+      <ng-container *ngIf="this.source === 'Local'">
+        <dxi-column dataField="customerId" caption="Code" dataType="string">  </dxi-column>
+        <dxi-column dataField="customerName" caption="Name" dataType="string"> </dxi-column> 
+        <dxi-column dataField="address" caption="Address" dataType="string">  </dxi-column> 
+        <dxi-column dataField="phone" caption="Phone" dataType="string">  </dxi-column>
+        <dxi-column dataField="email" caption="Email" dataType="string"> </dxi-column> 
+       
+      </ng-container>
+ 
+      <dxi-column  cellTemplate="cellTemplate"></dxi-column>
+      <div *dxTemplate="let cell of 'cellTemplate'">
+          <dx-button class="mr-2" icon="check" text="Select" (onClick)="selectCustomer(cell.data)"></dx-button> 
+          <dx-button class="mr-2"   icon="edit" text="Edit"  (onClick)="openModal(false, cell.data, localTemplate)"></dx-button>
+           
+      </div>
+     
+    </dx-data-grid> -->
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+<!-- *ngIf="this.message?.length > 0" -->
+<ng-template #localTemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}}
+            <span *ngIf="this.customer?.customerName?.length>0">
+                | {{this.customer?.customerName}}
+            </span> 
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <!-- <app-management-customer-edit [model]="this.customer" style="width: 100%" (outModel)="updateModel($event)"></app-management-customer-edit> -->
+            <app-management-customer-edit  [isNew]="this.isNew"  [model]="this.customer" style="width: 100%" (outModel)="updateModel($event)"></app-management-customer-edit>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}} 
+            <span *ngIf="this.customer?.customerName?.length>0">
+                | {{this.customer?.customerName}}
+            </span> </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+            <img src="../../../assets/images/System/times.svg">
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <app-shop-customer-edit [isNew]="this.isNew" [customer]="this.customer" (outModel)="updateModel($event)"></app-shop-customer-edit>
+
+    </div>
+</ng-template>
+<ng-template #templatetera>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}} 
+            <span *ngIf="this.customer?.customerName?.length>0">
+                | {{this.customer?.customerName}}
+            </span> </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+            <img src="../../../assets/images/System/times.svg">
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-shop-customer-tera-edit [isNew]="this.isNew" [customer]="this.customer" (outModel)="updateModel($event)"></app-shop-customer-tera-edit>
+    </div>
+</ng-template>

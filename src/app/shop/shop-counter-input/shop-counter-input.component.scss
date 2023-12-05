@@ -1,0 +1,66 @@
+.white-card {
+    background-color: #fff;
+    border-radius: 10px;
+    display: block;
+    min-height: 336px;
+    width: 100%;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.custom-wrapper {
+    flex: none!important;
+    max-width: fit-content!important;
+}
+.custom-select{
+    margin-bottom: 0px!important;
+    padding: unset!important;
+}
+.bill-details {
+    width: 100%;
+    border-top: 1px solid #e3e3e3;
+}
+
+.bill-details .detail {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.bill-details .detail div {
+    width: 50%;
+}
+
+details .detail div label {
+    font-size: 16px;
+}
+
+.bill-details .detail div label {
+    color: #a2a2a2;
+    font-weight: 500;
+    margin-bottom: 0;
+    font-size: 18px;
+}
+
+.bill-wrapper .primary-btn {
+    font-size: 18px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.search-wrap i {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+}
+
+.bill-date,
+.bill-time {
+    font-size: 15px;
+}
+
+.maintenance-heading {
+    font-weight: 600;
+}

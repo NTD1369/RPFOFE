@@ -1,0 +1,53 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Store Currency' | translate}}: {{this.storeId}}</label>
+
+        </div>
+
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <!-- <dxi-column dataField="paymentCode" caption="Code" dataType="string">  </dxi-column>
+            <dxi-column dataField="paymentDesc" caption="Desc" dataType="string"> </dxi-column> 
+            <dxi-column dataField="isShow" caption="Is Show" dataType="string">  </dxi-column> -->
+                <dxi-column dataField="currency" caption="{{'Currency' | translate}}" dataType="string"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+
+                    <dx-button class="mr-2" icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button class="mr-2" icon="far fa-times-circle" type="danger" text="{{'Delete' | translate}}" (onClick)="deleteData( cell.data )"></dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Store Currency' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-store-currency-edit [model]="this.model" [isNew]="this.isNew" style="width: 100%" (outModel)="updateModel($event)"></app-management-store-currency-edit>
+
+        </div>
+    </div>
+</ng-template>

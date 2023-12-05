@@ -1,0 +1,70 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <!-- <label for="item-searchbar" class="section-title">{{'License Plate' | translate}}</label> -->
+
+      </div>
+      <div class="row">
+          <div class="col-md-10">
+              <dx-button class="mr-2" (onClick)="downloadTemplate()" icon="xlsxfile" type="default" text="{{'Template' | translate}}"> </dx-button>
+
+              <dx-button stylingMode="outlined" type="default" [width]="120">
+                  <label style="margin:.1rem;">
+            <i class="fas fa-paperclip"></i>
+            {{'Select File' | translate}} 
+            <input hidden type="file" (change)="onFileChange($event)" multiple="false">
+          </label>
+              </dx-button>
+
+
+          </div>
+          <div class="col-md-2" style="text-align: right;">
+
+              <dx-button (onClick)="onImportData()" *ngIf="this.importContent.length > 0" icon="fas fa-file-import" type="success" text="{{'Import' | translate}}"> </dx-button>
+
+          </div>
+      </div>
+      <div class="row" *ngIf="this.importContent.length > 0" style="padding-top: 10px; ">
+          <div class="col-md-12">
+              <dx-data-grid #grid 
+              [selectedRowKeys]="[]"
+              id="gridContainer" [allowColumnResizing]="true" [showColumnLines]="true" 
+              [dataSource]="this.importContent" [showBorders]="true">
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              
+                 <dxo-selection mode="single"></dxo-selection>
+                  <dxi-column dataField="contract" caption="{{'Contract No' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column *ngIf="!this.isResult" dataField="startDate" caption="{{'Start Date' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column *ngIf="!this.isResult" dataField="endDate" caption="{{'End Date' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column *ngIf="!this.isResult" dataField="timesInDay" caption="{{'Times In Day' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+
+                  <dxi-column dataField="success" *ngIf="this.isResult" caption="{{'Success' | translate}}" dataType="string"> </dxi-column>
+                  <dxi-column dataField="message" *ngIf="this.isResult" caption="{{'Message' | translate}}" dataType="string"> </dxi-column>
+                  <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">   
+                </div>
+              </dx-data-grid>
+              <div id="employeeInfo" *ngIf="grid.selectedRowKeys.length" class="mt-5">
+                <!-- {{grid.selectedRowKeys|json}} -->
+                <dx-data-grid id="gridContainer2" [allowColumnResizing]="true" [showColumnLines]="true" 
+                [dataSource]="grid.instance.getSelectedRowsData()[0].lines" [showBorders]="true">
+
+                    <dxi-column dataField="licensePlate" caption="{{'License Plate' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="remark" caption="{{'Remark' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="customF1" caption="{{'contract' | translate}}" dataType="string"> </dxi-column>
+                    
+                    <!-- <dxi-column dataField="success" *ngIf="this.isResult" caption="{{'Success' | translate}}" dataType="string"> </dxi-column> -->
+                    <!-- <dxi-column dataField="message" *ngIf="this.isResult" caption="{{'Message' | translate}}" dataType="string"> </dxi-column> -->
+    
+                </dx-data-grid>
+              </div>
+          </div>
+      </div>
+     
+      <div class="row" *ngIf="this.importContent.length > 0" style="padding-top: 10px;">
+        <div *ngIf="this.importContent[0].lines.length > 0" class="col-md-12">
+          
+        </div>
+    </div>
+  </div>
+</div>

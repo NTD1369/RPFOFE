@@ -1,0 +1,104 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6"><label for="item-searchbar" class="section-title">{{'Sync Data Status' | translate}}</label></div>
+          <div class="col-md-6 text-right">
+              <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/report" text="{{'Report List' | translate}}">
+              </dx-button>
+          </div>
+      </div>
+
+      <div class="row justify-content-center flex-row mb-3 mt-2">
+          <div class="col-md-2 mb-1">
+            {{'From Date' | translate}}
+              <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-2 mb-1">
+            {{'To Date' | translate}}
+              <dx-date-box #toCalendar [value]='this.toDate' id="toCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-4 mb-1">
+            {{'Store' | translate}}
+            <dx-drop-down-box #cbbStore  [(value)]="gridBoxValue"   valueExpr="value" displayExpr="name" placeholder="Select a value..." [showClearButton]="true" [dataSource]="this.storeOptions">
+    
+              <div *dxTemplate="let data of 'content'">
+                  <dx-data-grid [dataSource]="this.storeOptions" [columns]="[ 'name']" [selection]="{ mode: 'multiple' }" [hoverStateEnabled]="true" keyExpr="value" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: true }" [scrolling]="{ mode: 'virtual' }"
+                      [height]="345" [(selectedRowKeys)]="gridBoxValue">
+                  </dx-data-grid>
+              </div>
+          </dx-drop-down-box>
+            <!-- <dx-select-box #cbbStore [value]="storeOptions[0].value" [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box> -->
+        </div>
+          <div class="col-md-2 mt-3">
+            <ng-container *ngIf="this.isLoadingData===false">  
+              <dx-button class="mr-2 pt-1" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button>
+            </ng-container>
+            <ng-container *ngIf="this.isLoadingData===true">
+                <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+            </ng-container> 
+             
+          </div>
+      </div>
+
+      <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onExporting)="onExporting($event)" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.list"
+          [showBorders]="true">
+
+          <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="560" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+          <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>
+
+          <ng-container *ngFor="let col of this.controlList; let i = index">
+            <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"
+              *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+            </dxi-column>
+
+            <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"
+              *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+            </dxi-column>
+            <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" 
+              *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+            </dxi-column>
+            <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum" 
+                 
+                *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                [format]='this.authService.numberFormat(col.custom2)'>
+            </dxi-column>
+          </ng-container>
+          <!-- <dxi-column dataField="createdOnG" caption="{{'Ngày ' | translate}}"   dataType="date" [format]="this.dateFormat " [groupIndex]="0">
+          </dxi-column>
+          <dxi-column dataField="groupName" caption="{{'Nhóm ' | translate}}"   dataType="string" [groupIndex]="1">
+          </dxi-column> -->
+          
+          <dxo-summary [recalculateWhileEditing]="true" >
+            <!-- <dxi-total-item column="lineTotal" summaryType="{{'' | translate}}sum" [customizeText]="customizeText">
+
+            </dxi-total-item> -->
+            <!-- <dxi-total-item column="quantity" summaryType="sum" [customizeText]="customizeText"></dxi-total-item> -->
+            <!-- <ng-container *ngFor="let col of this.controlList; let i = index">
+                    <dxi-group-item [column]="col.controlId" summaryType="sum" [alignByColumn]="true" *ngIf="col.controlId!=='price' && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number"
+                    [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-group-item>
+            </ng-container> -->
+            <ng-container *ngFor="let col of this.controlList; let i = index">
+                        
+              <dxi-group-item [valueFormat]="this.authService.numberFormat(col.custom2)" [alignByColumn]="true" [column]="col?.controlId" *ngIf="col?.groupItem?.length > 0 && col?.groupItem.includes('sum')" summaryType="sum">
+              </dxi-group-item>
+              <dxi-total-item [column]="col.controlId" summaryType="sum" *ngIf="(col.controlId!=='price' ) && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number"
+              [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+      </ng-container>
+            <!-- <dxi-total-item [column]="col.sum" summaryType="sum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+            [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+            <dxi-total-item [column]="col.sum" summaryType="sum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+            [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item> -->
+        </dxo-summary>
+          <div *dxTemplate="let cell of 'statusTemplate'">
+              <div [innerHtml]="cell.data.status | statusFormat"></div>
+          </div>
+
+      </dx-data-grid>
+
+  </div>
+</div>

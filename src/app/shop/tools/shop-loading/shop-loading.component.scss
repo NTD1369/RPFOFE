@@ -1,0 +1,185 @@
+
+.loadingText{
+	position: absolute;
+    top: 55%;
+	left: 0%;
+    width: 100%;
+    text-align: center;
+	color: aliceblue;
+}
+// .jumbotron h1,.jumbotron h4,.jumbotron h5{
+// 	color:#fff;
+//   }
+//   .jumbotron h1{
+// 	font-size: 27px;
+//   }
+//   .jumbotron h4{
+// 	font-size: 20px;
+//   }
+//   .jumbotron h5{
+// 	font-size: 16px;
+// 	color:#18bc9c;
+//   }
+//   .row{
+// 	background: #fafafa;
+	
+//   }
+//   .col-sm-2 h5 {
+// 	margin-top: 90px;
+//   }
+  
+//   .col-sm-2 {
+// 	padding: 10px;
+// 	border-radius: 4px;
+// 	height: 125px;
+// 	margin-bottom: 10px;
+// 	box-shadow: 0 0 1px #000;
+// 	border: 1px solid skyblue;
+//   }
+  
+//   .xmas_back{
+// 	 background: radial-gradient(circle at center, skyblue 10%,  #fff 100%);
+//   }
+  
+//   .close1 {
+// 	position: absolute;
+// 	top: 30px;
+// 	right: 30px;
+// 	font-weight: bold;
+// 	font-family: sans-serif;
+// 	cursor: pointer;
+// 	color: #000000;
+//   }
+  
+  /* ======= PreLoader CSS Start  ========*/
+  
+  /* 
+  /*=== mask === */
+  /*-- This code is for mask over all web content which will be 
+  fade out when your webpage get loaded. 
+   --*/
+  #mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	/* you can change color of mask here*/
+	background: #f3f3f3;
+	z-index: 99;
+	/* makes sure it stays on top */
+  }
+  
+  /*=== extra preloading text=== */
+  /** this code can be use for adding loading text under preloader */
+  #laoding_text {
+	display: block;
+	position: absolute;
+	font-family: sans-serif,arial;
+	top: 50%;
+	left: 50%;
+	height: 50px;
+	width: 50px;
+	margin: 50px 0 0 -25px;
+	padding: 2px 0;
+  }
+   
+  /*-----------------------------------------------------------------------*/
+  /**===== dots5 =====*/
+  #dots5 {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 46%;
+	height: 50px;
+	width: 50px;
+	margin: -25px 0 0 -25px;
+  }
+  
+  #dots5 span {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	background: rgba(0, 0, 0, 0.25);
+	border-radius: 50%;
+	-webkit-animation: dots5 1s infinite ease-in-out;
+			animation: dots5 1s infinite ease-in-out;
+  }
+  
+  #dots5 span:nth-child(1) {
+	left: 0px;
+	-webkit-animation-delay: 0.2s;
+			animation-delay: 0.2s;
+  }
+  
+  #dots5 span:nth-child(2) {
+	left: 45px;
+	-webkit-animation-delay: 0.3s;
+			animation-delay: 0.3s;
+  }
+  
+  #dots5 span:nth-child(3) {
+	left: 90px;
+	-webkit-animation-delay: 0.4s;
+			animation-delay: 0.4s;
+  }
+  
+  #dots5 span:nth-child(4) {
+	left: 135px;
+	-webkit-animation-delay: 0.5s;
+			animation-delay: 0.5s;
+  }
+  
+  @keyframes dots5 {
+	0% {
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  background: #d62d20;
+	}
+	25% {
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  background: #ffa700;
+	}
+	50% {
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  background: #008744;
+	}
+	100% {
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  background: #0057e7;
+	}
+  }
+  @-webkit-keyframes dots5 {
+	0% {
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  background: #d62d20;
+	}
+	25% {
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  background: #ffa700;
+	}
+	50% {
+	  -webkit-transform: translateY(10px);
+			  transform: translateY(10px);
+	  background: #008744;
+	}
+	100% {
+	  -webkit-transform: translateY(0px);
+			  transform: translateY(0px);
+	  background: #0057e7;
+	}
+  }
+  /** END of dots5 */

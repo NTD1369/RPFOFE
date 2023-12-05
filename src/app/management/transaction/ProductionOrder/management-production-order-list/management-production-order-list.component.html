@@ -1,0 +1,61 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+    <h3>Production order</h3>
+    <div class="row" style="margin-top: 15px;">
+      <div class="col-md-2 ">
+        {{'From Date' | translate}}
+        <dx-date-box #fromdate [(ngModel)]="this.fromDate" [value]='this.fromDate' [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+      </div>
+      <div class="col-md-2 ">
+        {{'To Date' | translate}}
+    
+        <dx-date-box #todate [value]='this.toDate' [(ngModel)]="this.toDate" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+      </div>
+      <!-- <div class="col-md-2">
+          {{'Status' | translate}}
+          <dx-select-box #cbbStatus [value]="statusOptions[0].value" [(ngModel)]="this.status" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+      </div> -->
+    
+      <div class="col-md-2">
+          {{'Bill No' | translate}}
+          <dx-text-box #transId  [(ngModel)]="this.key"  ></dx-text-box>
+      </div>
+      <div class="col-md-2"> </div>
+      
+     
+      <div class="col-md-4" style="text-align: right;">
+          <dx-button class="mr-2 mt-3" style="width:60%" icon="fas fa-eye" type="success" (onClick)="loadProduct()" text="{{'View' | translate}}"></dx-button>
+      </div>
+    </div>
+    <div style="margin-top: 10px;">
+      <dx-data-grid
+      id="gridContainer"
+      [dataSource]="loadProductItem"
+      [columnAutoWidth]="true" 
+      [showBorders]="true"
+    >
+        <dxi-column dataField="purchaseId" caption="{{'Source' | translate}}"></dxi-column>
+        <dxi-column dataField="companyCode" caption="{{'CompanyCode' | translate}}"></dxi-column>
+        <dxi-column dataField="storeId" caption="{{'Store id' | translate}}"></dxi-column>
+        <dxi-column dataField="storeName" caption="{{'Store name' | translate}}"></dxi-column>
+        <dxi-column dataField="type" caption="{{'Type' | translate}}"></dxi-column>
+        <dxi-column dataField="sapStatus" caption="{{'Sap status' | translate}}"></dxi-column>
+        <dxi-column dataField="productNo" caption="{{'Product no' | translate}}"></dxi-column>
+        <dxi-column dataField="description" caption="{{'Description' | translate}}"></dxi-column>
+        <dxi-column dataField="uomCode" caption="{{'Uom code' | translate}}"></dxi-column>
+        <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}" [format]="this.authService.numberFormat('quantity')" ></dxi-column>
+        <!-- <dxi-column dataField="warehouseCode" caption="{{'Warehouse' | translate}}"></dxi-column> -->
+        <dxi-column dataField="sapNo" caption="{{'Sap no' | translate}}"></dxi-column>
+        <dxi-column dataField="createdOn" caption="{{'Created on' | translate}}"></dxi-column>
+        <dxi-column dataField="createdBy" caption="{{'Created by' | translate}}"></dxi-column>
+        <dxi-column dataField="docEntry" caption="{{'Doc entry' | translate}}"></dxi-column>
+        <dxi-column cellTemplate="cellTemplate"></dxi-column>
+        <div *dxTemplate="let data of 'cellTemplate'">
+            <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="moveDetail(data)"></dx-button>
+            <dx-button icon="fas fa-eye" text="{{'Print' | translate}}" class="mr-2" (onClick)="PrintProductOrder(data)"></dx-button>
+        
+        </div>
+      </dx-data-grid>
+  </div>
+  </div>
+</div>

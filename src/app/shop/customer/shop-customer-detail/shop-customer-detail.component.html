@@ -1,0 +1,88 @@
+<div class="col-md-12">
+    <div>
+
+
+
+        <div class="tab-panel col-md-12">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-2">
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'First Name' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box #txtCustomerFirstName [readOnly]="true" [(value)]="this.customer.first_name"></dx-text-box>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Last Name' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box #txtCustomerFirstName [readOnly]="true" [(value)]="this.customer.last_name"></dx-text-box>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Mobile' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box #txtCustomerMobile [readOnly]="true" [(value)]="this.customer.mobile"></dx-text-box>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Email' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box #txtCustomerEmail [readOnly]="true" [(value)]="this.customer.email"></dx-text-box>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 mb-2">
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Source Of Customers' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-text-box #txtCustomersource_of_customers [readOnly]="true" [(value)]="this.customer.source_of_customers"></dx-text-box>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <dx-data-grid #dataGridVoucher [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" [(dataSource)]="this.customer.vouchers" keyExpr="code" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <!-- <dxo-editing mode="cell" [allowAdding]="true" [useIcons]="true"  [allowUpdating]="true" [allowDeleting]="true"></dxo-editing> -->
+
+                    <dxi-column dataField="code" caption="Code"></dxi-column>
+                    <!-- <dxi-column dataField="valid_till"  caption="valid_till"  dataType="date" [displayFormat]="this.dateFormat" ></dxi-column> -->
+
+                    <dxi-column dataField="discount_type" caption="{{'Discount Type' | translate}}"></dxi-column>
+                    <dxi-column dataField="discount_value" caption="{{'Discount Value' | translate}}"></dxi-column>
+                    <dxi-column dataField="discount_upto" caption="{{'Discount Upto' | translate}}"></dxi-column>
+                    <dxi-column dataField="discount_code" caption="{{'Discount Code' | translate}}"></dxi-column>
+                    <dxi-column dataField="is_ecom" caption="{{'isEcom' | translate}}"></dxi-column>
+                    <dxi-column dataField="max_redemption" caption="{{'Max Redemption' | translate}}"></dxi-column>
+                    <dxi-column dataField="min_bill_amount" caption="{{'Min Bill Amount' | translate}}"></dxi-column>
+                    <dxi-column dataField="redemption_count" caption="{{'Redemption Count' | translate}}"></dxi-column>
+                    <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <!-- <dx-button class="mr-2" icon="check" text="Select" (onClick)="selectCustomer(cell.data)"></dx-button> -->
+
+                    </div>
+
+                </dx-data-grid>
+
+            </div>
+
+        </div>

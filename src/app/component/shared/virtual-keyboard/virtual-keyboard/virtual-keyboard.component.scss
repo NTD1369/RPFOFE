@@ -1,0 +1,107 @@
+:host {
+    text-align: center;
+    background-color: #eee;
+    position: fixed;
+    height: 420px;
+    width: 100%;
+    left: 0;
+    bottom: -420px;
+    padding: 20px 0;
+    transition: all 250ms ease-in-out;
+  }
+  .hide{
+    display: none;
+  }
+  .show{
+    display: block;
+  }
+  :host(.shown) {
+    bottom: 0;
+  }
+  .reset-btn {
+    width: 50%;
+    font-size: 22px;
+    font-weight: 500;
+    color: white;
+    height: 60px;
+    background-color: #c44040!important;
+    border: 2px solid #c44040!important;
+}
+  button {
+    width: 60px;
+    height: 60px;
+    margin: 7px 7px;
+    font-size: 19px;
+    vertical-align: top;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
+  }
+  
+  button:active {
+    background-color: #ccc;
+  }
+  
+  button.special {
+    width: 60px;
+    background-color: #ccc;
+  }
+  #clearAll {
+    width: 120px;
+    background-color: #ccc;
+  }
+  
+  button.special {
+    font-size: 13px;
+  }
+  
+  button.special:active {
+    background-color: #999;
+  }
+  
+  button.clearAll {
+    width: 120px;
+    background-color: #ccc;
+  } 
+  button.clearAll {
+    font-size: 13px;
+  } 
+  button.clearAll:active {
+    background-color: #999;
+  }
+
+  button.toggled {
+    background-color: #555;
+    color: #fff;
+  }
+  .show{
+    display: block!important;
+  }
+  button.wide {
+    width: 80px;
+  }
+  button.wideenter {
+    width: 155px;
+  }
+  button.wideenter > i, button.wide > i {
+    font-size: 25px;
+  }
+ 
+  button.spacebar {
+    width: 300px;
+  }
+  
+
+  .visiblePanel{
+    width: 100%;
+    height: 100%;
+    display: none;
+    top: 0px;
+    background-color: bisque;
+    color: aliceblue;
+    position: fixed;
+    opacity: 0.2;
+}

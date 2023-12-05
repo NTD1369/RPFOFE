@@ -1,0 +1,27 @@
+.button-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-end{
+    display: flex; 
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.bor-apply{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.dx-switch {
+    width: 20% !important;
+    height: 24px;
+}
+
+.mr-60
+{
+    margin-right: 70px!important;
+}
+// body::-webkit-scrollbar-thumb{ background-image: linear-gradient(-45deg, #6a5af9, #d66efd); border-radius: 50px; }

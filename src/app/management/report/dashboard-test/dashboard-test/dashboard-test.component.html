@@ -1,0 +1,139 @@
+<div class="center-wrap" >
+  <div class="maintenance-card" style="margin: auto; width: 100%;">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6">
+              <label for="item-searchbar" class="section-title">{{'Dashboard Sales Transaction Detail' | translate}}</label>
+          </div>
+          <div class="col-md-6 text-right">
+            <dx-button  class="mr-2 pt-1 search-dashboard" icon="search" type="danger" 
+            (onClick)="exportGridToPDF(cbbtopType.value)" 
+            text="{{'Export' | translate}}"></dx-button>
+          </div>
+
+      </div>
+      
+      <div>
+        <div class="row justify-content-center flex-row mb-3 mt-2 mt-5">
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+            
+            <dx-select-box #cbbStoreList [items]="storeList" displayExpr="storeName" valueExpr="storeId"
+            placeholder="Store list"></dx-select-box>  
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+            <dx-select-box #cbbViewType [items]="viewType" displayExpr="name" valueExpr="value" 
+            placeholder="View type"></dx-select-box>
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+           
+            <dx-select-box #cbbtopType [items]="topType" displayExpr="name" valueExpr="value"
+            placeholder="Top"></dx-select-box>
+          </div>
+        
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard">
+            {{'From Date' | translate}}
+            <dx-date-box #fromdate [value]='this.fromDate' [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+
+          </div>
+          <div class="col-md-2 mb-1 d-flex input-search-dashboard">
+            {{'To Date' | translate}}
+            <dx-date-box #todate [value]='this.toDate' [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+              <div class="col-md-2"  >
+                <ng-container >  
+                  <dx-button  class="mr-2 pt-1 search-dashboard" icon="search" type="success" 
+                  (onClick)="this.loadData(cbbStoreList.value,fromdate.value,todate.value, cbbViewType.value ,cbbtopType.value)" 
+                  
+                  text="{{'Search' | translate}}"></dx-button>
+                </ng-container>   
+              </div>
+              
+        </div> 
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-6">
+            <div class="col-md-2 mb-1 d-flex input-search-dashboard" >
+           
+              <dx-select-box #cbbchartviewtype [items]="chartViewType" [(value)]="this.chartType" displayExpr="name" valueExpr="value"
+              placeholder="Top"></dx-select-box>
+            </div>
+          </div>
+
+        </div>
+       
+      </div>
+      <div id="pieDiv" >
+        <div class="col-md-12">
+          <h3>Sales Transaction Detail 
+            <span *ngIf="cbbStoreList.value?.length>0"> - Store:{{cbbStoreList.value}} </span>
+            <span  *ngIf="cbbViewType.value?.length>0">- View Type:{{cbbViewType.value}}</span> 
+            <span *ngIf="cbbtopType.value>0">- Top:{{cbbtopType.value}}</span>  
+          </h3>
+          <div class="row">
+            <div class="col-6">
+              <dx-data-grid #dataGrid
+              id="gridContainer"
+              [dataSource]="dataSource"
+              keyExpr="IGId"
+              [columns]="['IGName', 'Value']"
+              [showBorders]="true"
+        >
+  
+        <dxi-column dataField="IGName" caption="{{'IG Name' | translate}}"></dxi-column>
+        <dxi-column dataField="Value" caption="{{'Value' | translate}}"  [format]='this.authService.numberFormat("number")'></dxi-column>
+              </dx-data-grid>
+            </div>
+            <div class="col-6">
+              <dx-pie-chart #chart *ngIf="this.chartType === 'Peichart'"
+              id="pie"
+              title=""
+              palette="bright"
+              [dataSource]="dataSource"
+            >
+              <dxo-legend
+                orientation="horizontal"
+                itemTextPosition="right"
+                horizontalAlignment="center"
+                verticalAlignment="bottom"
+                [columnCount]="4"
+              ></dxo-legend>
+             
+              <dxi-series argumentField="IGName" valueField="Value">
+                <dxo-label
+                  [visible]="true"
+                  position="columns"
+                  [customizeText]="customizeLabel"
+                >
+                  <dxo-font [size]="16"></dxo-font>
+                  <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
+                </dxo-label>
+              </dxi-series>
+            </dx-pie-chart>
+            <dx-chart id="chart" [dataSource]="dataSource" *ngIf="this.chartType == 'Barchart'">
+              <dxi-series
+                argumentField="IGName"
+                valueField="Value"
+                name="My oranges"
+                type="bar"
+                color="#ffaa66"
+              >
+              </dxi-series>
+            </dx-chart>
+            
+            </div>
+
+          </div>      
+        </div>
+      </div>
+      
+      
+      <!-- <button (click)="export()">Export 1</button>
+      <button (click)="exportDiv()">Export 2</button> -->
+      </div>
+      </div>
+  </div>
+
+  
+
+
+ 

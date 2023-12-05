@@ -1,0 +1,152 @@
+<div class="center-wrap" >
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      
+        <div class="row" style="width:100%" *ngIf="this.role!==null && this.role!==undefined">
+            <div class="col-md-7">
+                <a routerLink="/admin/setting-roles" class="back-btn">
+                    <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                </a>
+                <label for="item-searchbar" class="section-title">{{'Role Authorization' | translate}}  || {{this.role.roleName | translate}} </label>
+            </div>
+          
+            <div class="col-md-5">
+                <div class="ml-3" style="width: 100%">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">{{'Default Screen' | translate}}</div>
+                        <div class="col-md-6 p-0">
+                            <!-- <dx-text-box #ddlDefaultScreen  [value]="this.role?.defaultScreen" [(ngModel)]="this.role.defaultScreen" style="height: 40px;"></dx-text-box> -->
+                            <!-- <dx-select-box #ddlDefaultScreen [style]="{'width':'100%'}" name="defaultScreen"
+                             placeholder="--- Default Screen ---"  [dataSource]="this.functionRouteList" displayExpr="name" valueExpr="url" 
+                            [value]="this.role?.defaultScreen" [(ngModel)]="this.role.defaultScreen"></dx-select-box> -->
+
+                         
+
+                            <dx-select-box placeholder="--- {{'Default Screen' | translate}} ---" id="defaultScreen" 
+                                #ddlDefaultScreen [items]="this.functionRouteList" name="defaultScreen" [(ngModel)]="this.role.defaultScreen" 
+                                id="defaultScreen" class="custom-select" displayExpr="name"
+                                valueExpr="url" itemTemplate="item" [searchEnabled]="true" searchMode="contains" 
+                                [searchExpr]="['url', 'name']" style="line-height: 1;">
+
+                                <div *dxTemplate="let data of 'item'" class="custom-item">
+                                    <!-- {{data.employeeId}} -  -->
+                                    <div class='product-name'>{{data.name | translate}}</div>
+                                </div>
+                            </dx-select-box>
+                        </div>
+                        <div class="col-md-3">
+                            <!--  -->
+                          
+
+                            <dx-button class="mr-2" icon="floppy" style="height: 40px; width: 100%;" type="success" 
+                            (onClick)="saveDefault(ddlDefaultScreen.value)" text="{{'Save' | translate}}"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <ng-container *ngIf="this.copyMode" >
+            <div class="row mt-5" style="width:100%">
+                <div class="col-md-4">
+                   
+                </div> 
+                <div class="col-md-4 ">
+                   <h5>{{'Copy from' | translate}} </h5> 
+                </div>
+                
+            </div>
+            <div class="row mt-1" style="width:100%">
+                <div class="col-md-4">
+                   
+                </div> 
+                <div class="col-md-4"> 
+                    <dx-select-box placeholder="--- {{'Role' | translate}} ---"  
+                        #ddlRole [items]=" this.roleList" name="ddlRole"  
+                        id="ddlRole" class="custom-select" displayExpr="roleName"
+                        valueExpr="roleId" itemTemplate="item" [searchEnabled]="true" searchMode="contains" 
+                        [searchExpr]="['roleId', 'roleName']" style="line-height: 1;">
+    
+                        <div *dxTemplate="let data of 'item'" class="custom-item"> 
+                            <div class='product-name'>  {{data.roleName | translate}}</div>
+                        </div>
+                    </dx-select-box>
+                </div>
+                 
+            </div>
+            <div class="row mt-3" style="width:100%">
+                <div class="col-md-4">
+                   
+                </div>
+                <div class="col-md-2">
+                    <dx-button class="mr-2" icon="floppy" style="height: 40px; width: 100%;" type="success"  (onClick)="saveCopy(ddlRole.value, ddlRole)" text="{{'Save changes' | translate}}"></dx-button>
+                    
+                </div>
+                <div class="col-md-2">
+                    <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="switchCopyMode(false)"> </button> -->
+                    <dx-button class="mr-2" icon="close" style="height: 40px; width: 100%;" type="danger" 
+                    (onClick)="switchCopyMode(false)" text="{{'Close' | translate}}"></dx-button>
+                </div>
+            </div>
+        </ng-container> 
+           
+        
+        <ng-container *ngIf="!this.copyMode" >
+            
+         
+            <div class="table-wrap" >
+                <dx-tree-list class="mt-3 tree-default" (onToolbarPreparing)="onToolbarPreparing($event)"  [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" 
+                id="functionList" [dataSource]="this.functionList" rootValue="" 
+                keyExpr="functionId" [showRowLines]="true" [showBorders]="true" parentIdExpr="ParentId"
+                [columnAutoWidth]="true">
+                <dxo-search-panel [visible]="true" [width]="400"></dxo-search-panel>
+                <ng-container *ngFor="let col of cols; let i = index">
+                    <dxi-column [dataField]="col.field" [caption]="  col.header | translate" *ngIf="i === 0"></dxi-column>
+                    <dxi-column [dataField]="col.field" [caption]="  col.header | translate" *ngIf="i !== 0" alignment="center" 
+                    cellTemplate="toggleCellTemplate">
+    
+                    </dxi-column>
+                </ng-container>
+    
+                <dxi-column caption="" cellTemplate="diffCellTemplate"></dxi-column>
+    
+                <div *dxTemplate="let d of 'toggleCellTemplate'">
+    
+                    <dx-switch width="20%" *ngIf=" d.data.ParentId !=='ShopPage' || (d.data.ParentId ==='ShopPage' && (d.column.dataField==='I'  || d.column.dataField==='V'))" 
+                    alignment="center" (onValueChanged)="onchange(d.data, d.column.dataField, d.data[d.column.dataField])" [(value)]="d.data[d.column.dataField]"></dx-switch>
+                    <!-- <p-checkbox [binary]="true"  (click)="onchange(d.data, d.column.dataField, d.data[d.column.dataField])" [(ngModel)]="d.data[d.column.dataField]"></p-checkbox>  -->
+                </div>
+                <div *dxTemplate="let d of 'diffCellTemplate'">
+    
+                    <dx-button icon="edit" (onClick)="openModal(true, d.data, template)"></dx-button>
+                </div>
+                <div *dxTemplate="let data of 'switchCopyModeButton'">
+                    <dx-button class="mr-2" icon="fa fa-clone" style="height: 40px; width: 100%;" type="default" 
+                    (onClick)="switchCopyMode(true)" text="{{'Copy from another role' | translate}}"></dx-button>
+                 </div>
+                
+            </dx-tree-list>
+     
+            </div>
+        </ng-container>
+      
+       
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Control Permission' | translate}} || {{this.selectedFunctionNode}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-setting-control-permission [selectNode]="this.selectedNodes" style="width: 100%;"></app-management-setting-control-permission>
+            <!-- <app-management-function-edit  [function]="this.function" (functionModel)="updateFunction($event)" style="width: 100%; padding: 5px 20px;" ></app-management-function-edit> -->
+        </div>
+    </div>
+</ng-template>

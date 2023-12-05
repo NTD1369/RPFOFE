@@ -1,0 +1,60 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Import BOM' | translate}}</label>
+
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <dx-button class="mr-2" (onClick)="downloadTemplate()" icon="xlsxfile" type="default" text="{{'Template' | translate}}"> </dx-button>
+
+                <dx-button stylingMode="outlined" type="default" [width]="120">
+                    <label style="margin:.1rem;">
+            <i class="fas fa-paperclip"></i>
+            {{'Select File' | translate}} 
+            <input hidden type="file" (change)="onBomFileChange($event)" multiple="false">
+          </label>
+                </dx-button>
+
+
+            </div>
+            <div class="col-md-2" style="text-align: right;">
+
+                <dx-button (onClick)="onImportData()" *ngIf="this.importContent.length > 0" icon="fas fa-file-import" type="success" text="{{'Import' | translate}}"> </dx-button>
+
+            </div>
+        </div>
+        <div class="row" *ngIf="this.importContent.length > 0" style="padding-top: 10px;">
+            <div class="col-md-12">
+                <dx-data-grid (onRowPrepared)="onRowPrepared($event)" id="gridContainer" [dataSource]="this.importContent" [showBorders]="true">
+                    <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                    <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}" dataType="number"> </dxi-column>
+                    <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="status" caption="Status" dataType="string"> </dxi-column>
+                    <dxi-column dataField="success" *ngIf="this.isResult" caption="{{'Success' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="message" *ngIf="this.isResult" caption="{{'Message' | translate}}" dataType="string"> </dxi-column>
+                    <div *dxTemplate="let line of 'detail'">
+                        <!-- <ng-container *ngIf="line.data.lines!==null"> -->
+                        <!-- <div class="master-detail-caption">Serial:</div> -->
+                        <dx-data-grid [dataSource]="line.data.lines" keyExpr="itemCode" [showBorders]="true" [columnAutoWidth]="true">
+                            <!-- <dxi-column type="buttons" [width]="110"> <dxi-button name="edit"></dxi-button> <dxi-button name="delete"></dxi-button>
+          
+                  </dxi-column> -->
+                            <!-- <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true"  [allowUpdating]="true" [allowDeleting]="true"></dxo-editing> -->
+
+                            <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                            <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                            <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}"></dxi-column>
+                            <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}"></dxi-column>
+                            <dxi-column dataField="status" caption="{{'Status' | translate}}"></dxi-column>
+                        </dx-data-grid>
+                        <!-- </ng-container> -->
+
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<header>
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg">
+      <!-- LOGO  href="https://staging.whiteorangesoftware.com/abeo/index.html" -->
+      <a class="navbar-brand" (click)="showSide()">
+        <img src="../../../../assets/images/System/logo.svg" alt="brand logo">
+      </a>
+      <div class="dropdown-wrap order-2 order-lg-1">
+        <div class="user-greet d-none d-lg-block">
+          <h6> {{'Welcome' | translate}}, <span class="username">{{authService.decodeToken?.unique_name | titlecase}}</span></h6>
+          <p class="greeting">
+            <!-- Welcome back to the workstation, have a good day -->
+          </p>
+        </div>
+        <!--  -->
+        <div class="dropdown">
+          <a class="dropdown-toggle mr-2" href="https://staging.whiteorangesoftware.com/abeo/index.html#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="../../../../assets/images/System/user.png" alt="user image">
+          </a>
+        
+          <!-- <p-dropdown [options]="countries" [style]="{'padding':'10px 0px 10px 10px' ,'border':'none'}"  #selectedLang  (onChange)="switchLang(selectedLang.value.code)" [(ngModel)]="selectedCountry" optionLabel="name" placeholder="Select a Country">
+            <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" style="display: inline-flex;" *ngIf="selectedCountry">
+                  <span [class]="'flag-icon flag-icon-' + selectedCountry.flag.toLowerCase() +' mr-2'"></span>
+                  
+                </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+                <div class="country-item" style="display: inline-flex;">
+                  <span [class]="'flag-icon flag-icon-' + country.flag.toLowerCase() +' mr-2'"></span>
+                 
+                  <div>{{country.name}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown> -->
+          <div class="dropdown-menu  mt-3" aria-labelledby="dropdownMenuLink">
+            <div class="user-greet dropdown-item">
+              <h6>
+                {{'Welcome' | translate}},
+                <span class="username">{{authService.decodeToken?.unique_name | titlecase}}</span>
+              </h6>
+              <div class="dropdown-divider"></div>
+            </div>
+
+            <a class="dropdown-item" href="#"> <i class="fas fa-user-circle"></i> {{'MyAccount' | translate}}</a>
+ 
+            <a class="dropdown-item" style="cursor: pointer;" (click)="logout()"><i class="fas fa-sign-out-alt"></i>{{'Logout' | translate}}</a>
+
+          
+          </div>
+        </div>
+        <dx-select-box [width]="135"
+        id="custom-templates"
+        [dataSource]="countries"
+        displayExpr="name"
+        valueExpr="code"
+        #selectedLang
+        [value]="selectedCountry.code"
+      
+        fieldTemplate="field" (onValueChanged)="switchLang(selectedLang)" 
+    >
+       <div *dxTemplate="let data of 'field'">
+            <div class="custom-item"  >
+               
+                <span class="ml-2 flag-icon flag-icon-{{data && data.flag.toLowerCase()}}">
+
+                </span>
+              
+                <dx-text-box class="product-name" 
+                    [value]="data && data.name" 
+                    [readOnly]="true"
+                ></dx-text-box>
+                <!-- <div>{{data && data.name}}</div> -->
+            </div>
+        </div>
+        <div *dxTemplate="let data of 'item'">
+            <div class="custom-item" >
+                <span [class]="'flag-icon flag-icon-' + data.flag.toLowerCase() "></span>
+                <div>{{data.name}}</div>
+            </div>
+        </div> 
+    </dx-select-box>
+      </div>
+       
+      <!-- <div class="ml-auto manager-action-flex">
+        <div class="manager-left-action">
+          <div class="manager-action-link">
+            <button type="button" class="btn-minimize">
+              <span class="manager-action-link-icon contain-image">
+                <img src="../../../../assets/images/System/minimize.svg" alt="exit">
+              </span> Minimize
+            </button>
+          </div>
+          <div class="manager-action-link border-btn">
+            <button type="button" class="btn-exit" (click)="logout()">
+              <span class="manager-action-link-icon contain-image">
+                <img src="../../../../assets/images/System/exit.svg" alt="exit">
+              </span> Exit
+            </button>
+          </div>
+        </div>
+      </div> -->
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,41 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Reason' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="width: 100%;">
+            <div class="col-md-3">
+                <dx-select-box (onValueChanged)="onLanguageChanged($event)" [dataSource]="langs" displayExpr="name" valueExpr="value" placeholder="{{'Language' | translate}}" [value]="langs[0].value"></dx-select-box>
+            </div>
+            <div class="col-md-9">
+                <dx-select-box #ddlReason (onValueChanged)="onReasonChanged($event)" [dataSource]="reasonFilterList" displayExpr="value" valueExpr="value" placeholder="{{'Reason' | translate}}"></dx-select-box>
+            </div>
+
+
+
+        </div>
+        <div class="row mt-2" style="width: 100%;">
+            <div class="col-md-12">
+                <div class="col-icon-search">
+
+                    <dx-text-box #txtReason [(ngModel)]="this.reasonText" placeholder="{{'Reason Input' | translate}}">
+                    </dx-text-box>
+                </div>
+            </div>
+        </div>
+        <div class="row  mt-2" style="width: 100%;">
+            <div class="col-md-6">
+                <dx-button icon="close" type="warning" text="{{'Cancel' | translate}}" (onClick)="cancel()">
+                </dx-button>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <dx-button icon="add" type="success" text="{{'OK' | translate}}" (onClick)="applyReason(txtReason.value)">
+                </dx-button>
+            </div>
+        </div>
+
+    </div>
+</div>

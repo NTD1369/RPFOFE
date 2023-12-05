@@ -1,0 +1,44 @@
+<div class="center-wrap">
+    <div class="maintenance-card w-100">
+        <h2 class="mb-4 mt-2"><b>{{'Report List' | translate}}</b></h2>
+        <div class="row">
+
+            <!-- Url -->
+
+            <ng-container *ngFor="let item of this.rptList">
+
+                <div class="col-md-12 titleRow pb-3">
+                    <h3 style="font-weight: 500;"> <i class="fas fa-atlas" style="color: red;"></i> {{item.name | translate}}</h3>
+
+                </div>
+                <div *ngFor="let line of item" class="maintenance-service-wrapper col-md-3 col-sm-4" routerLinkActive="router-link-active">
+
+
+
+                    <div class="maintenance-service-box" [routerLink]="[line.Url]">
+                        <span class="service-icon contain-image">
+                                <img src="../../../../assets/images/System/{{line.Icon || 'item-master.svg'}}" alt="{{line.Name}}">
+                            </span>
+                        <label>{{line.Name | translate}}</label>
+                    </div>
+
+
+
+
+                </div>
+                <!-- </div> -->
+                <!-- <div class="col-md-2 mb-4" [routerLink]='rpt.Url'>
+                    <div class="maintenance-service-box">
+                        <span class="service-icon contain-image">
+                          <img src="../../../../assets/images/System/{{rpt.Icon || 'assign-doc.svg'}}" [alt]="rpt.functionId">
+                        
+                        </span>
+                        <label>{{rpt.Name}}</label>
+                    </div>
+                </div> -->
+            </ng-container>
+
+
+        </div>
+    </div>
+</div>

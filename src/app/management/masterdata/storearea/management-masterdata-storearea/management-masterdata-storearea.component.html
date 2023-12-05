@@ -1,0 +1,50 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Play Zone' | translate}}</label>
+
+        </div>
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridContainer"
+             (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.items" [showBorders]="true"  [showRowLines]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="storeAreaId" caption="{{'Zone Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="storeAreaName" caption="{{'Zone Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="description" caption="{{'Remark' | translate}}" dataType="string"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Play Zone' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-masterdata-storearea-edit [model]="this.model" style="width: 100%" (outModel)="updateModel($event)"></app-management-masterdata-storearea-edit>
+
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>

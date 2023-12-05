@@ -1,0 +1,24 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Item' | translate}} {{this.item.itemCode}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-1 text-right">{{'Name' | translate}}:</div>
+            <div class="col-md-9"><b>{{this.item.itemDescription}}</b></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1 text-right">{{'Price' | translate}}:</div>
+            <div class="col-md-9"><b>{{this.item.defaultPrice | number}}</b></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1 text-right">{{'UoM' | translate}}:</div>
+            <div class="col-md-9"><b>{{this.item.inventoryUom}}</b></div>
+        </div>
+    </div>
+</div>

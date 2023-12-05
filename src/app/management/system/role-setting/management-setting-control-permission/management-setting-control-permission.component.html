@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="main-section">
+
+
+
+        <div id="divAddNew" *ngIf="showEdit" [@slideInOut]>
+            <div class="col-md-12" style="text-align: right;">
+                <button (click)="toggleAddNew()">
+             <i class="fas fa-arrow-left"></i> {{'Back' | translate}}
+          </button>
+            </div>
+            <br />
+            <app-management-control-edit [model]="this.control" (outModel)="saveControl($event)"></app-management-control-edit>
+
+        </div>
+        <div id="divList" *ngIf="!showEdit">
+            <!-- <ng-container *ngIf="!this.isGridComponent">
+
+        <div class="item-search-nav">
+          <div class="row align-items-end">
+            <div class="col-lg-4 col-12">
+              <div class="search-wrap">
+               
+                <input type="search" id="item-searchbar"  placeholder="Type Keywords">
+              
+              </div>
+            </div>
+            <div class="col-lg-4 col-12">
+              
+            </div>
+            <div class="col-lg-4 col-12">
+              <button class="btn btn-success btn-block" (click)="toggleAddNew()"><i class="fas fa-plus-square"></i> Add New</button> 
+            </div>
+          
+          </div>
+        </div>
+      </ng-container> -->
+            <ng-container *ngIf="this.isGridComponent">
+                <div class="col-md-12" style="text-align: right;">
+                    <button (click)="backToControlList()">
+             <i class="fas fa-arrow-left"></i> {{'Back' | translate}}
+          </button>
+                </div>
+            </ng-container>
+
+
+            <br />
+            <div class="table-wrap custom-table-auto-flow">
+                <dx-tree-list [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #billGrid id="controlList" 
+                [dataSource]="this.functionList" [height]="this.height" keyExpr="ControlId" [showRowLines]="true" [showBorders]="true" 
+                [columnAutoWidth]="true">
+                    <dxo-search-panel [visible]="true" [width]="400"></dxo-search-panel>
+                    <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder" [allowDropInsideItem]="allowDropInsideItem" [allowReordering]="allowReordering" [showDragIcons]="showDragIcons"></dxo-row-dragging>
+                    <ng-container *ngFor="let col of cols; let i = index">
+                        <dxi-column [dataField]="col.field" [caption]="col.header | translate" *ngIf="i === 0" cellTemplate="displayCellTemplate">
+
+                        </dxi-column>
+                        <!-- <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i === 0"></dxi-column> -->
+                        <dxi-column [dataField]="col.field" [caption]="col.header | translate" *ngIf="i > 0" alignment="center" cellTemplate="toggleCellTemplate">
+
+                        </dxi-column>
+
+                    </ng-container>
+                    <dxi-column dataField="ControlType" caption="{{'Control Type' | translate}}" [visible]='!this.isGridComponent' alignment="center"> </dxi-column>
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <ng-container *ngIf="cell.data.ControlType==='Grid'">
+                            <dx-button icon="fa fa-print" text="Column" (onClick)="editGridControl(cell.data.ControlId)"></dx-button>
+                        </ng-container>
+                    </div>
+                    <div *dxTemplate="let d of 'displayCellTemplate'">
+
+                        <label (click)="editControl(d.data.ControlId)"> {{d.data[d.column.dataField]}}</label>
+
+                    </div>
+                    <div *dxTemplate="let d of 'toggleCellTemplate'">
+                        <dx-switch (onValueChanged)="onchange(d.data, d.column.dataField, d.data[d.column.dataField])" [(value)]="d.data[d.column.dataField]"></dx-switch>
+                    </div>
+
+                </dx-tree-list>
+                <!-- <p-treeTable  [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #tt [value]="this.functionList" [columns]="this.cols" selectionMode="checkbox">
+
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th *ngFor="let col of columns; let i = index" [ngStyle]="col.header === 'Control Id' ? {'width': '30rem'} : ''">
+                      {{col.header}}
+                         </th>
+                
+              </tr>
+          </ng-template>
+          <ng-template   pTemplate="body" let-col let-rowNode let-rowData="rowData" let-columns="columns">
+              <tr>
+              
+                
+                  <td  *ngFor="let col of columns; let i = index"  >
+                         
+                    <p-checkbox [binary]="true"  (click)="onchange(rowData, col.field, rowData[col.field])" [(ngModel)]="rowData[col.field]"  *ngIf="i != 0"> </p-checkbox> 
+            
+                    <label *ngIf="i == 0" (click)="editControl(rowData[col.field])"> {{rowData[col.field]}}</label>
+                  
+                  </td>
+                  
+              </tr>
+          </ng-template>
+        </p-treeTable> -->
+            </div>
+
+        </div>
+
+    </div>
+</div>

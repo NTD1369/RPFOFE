@@ -1,0 +1,62 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Item' | translate}}</label>
+
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <dx-button class="mr-2" (onClick)="downloadTemplate()" icon="xlsxfile" type="default" text="{{'Template' | translate}}"> </dx-button>
+
+                <dx-button stylingMode="outlined" type="default" [width]="120">
+                    <label style="margin:.1rem;">
+              <i class="fas fa-paperclip"></i>
+              {{'Select File' | translate}} 
+              <input hidden type="file" (change)="onFileChange($event)" multiple="false">
+            </label>
+                </dx-button>
+
+
+            </div>
+            <div class="col-md-2" style="text-align: right;">
+
+                <dx-button (onClick)="onImportData()" *ngIf="this.importContent.length > 0" icon="fas fa-file-import" type="success" text="{{'Import' | translate}}"> </dx-button>
+
+            </div>
+        </div>
+        <div class="row" *ngIf="this.importContent.length > 0" style="padding-top: 10px;">
+            <div class="col-md-12">
+                <dx-data-grid id="gridContainer" [allowColumnResizing]="true" [showColumnLines]="true" [dataSource]="this.importContent" [showBorders]="true">
+
+                    <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="productId" caption="{{'Product ID' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="variantId" caption="{{'Variant ID' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="capacityValue" caption="{{'Capacity Value' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemGroupId" caption="{{'Item Group' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="salesTaxCode" caption="{{'Sales Tax' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="purchaseTaxCode" caption="{{'Purchase Tax' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemDescription" caption="{{'Item Description' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemCategory_1" caption="{{'Item Category' | translate}} 1" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemCategory_2" caption="{{'Item Category' | translate}} 2" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemCategory_3" caption="{{'Item Category' | translate}} 3" dataType="string"> </dxi-column>
+                    <dxi-column dataField="foreignName" caption="{{'Foreign Name' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="inventoryUOM" caption="{{'UoM' | translate}}" dataType="string"> </dxi-column>
+
+                    <dxi-column dataField="mcid" caption="{'MC Id{' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="defaultPrice" caption="{{'Default Price' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="isSerial" caption="{{'Serial' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="isBOM" caption="{{'BOM' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="validFrom" caption="{{'Valid From' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="validTo" caption="{{'Valid To' | translate}}" dataType="string"> </dxi-column>
+
+
+                    <dxi-column dataField="status" caption="{{'Status' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="success" *ngIf="this.isResult" caption="{{'Success' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="message" *ngIf="this.isResult" caption="{{'Message' | translate}}" dataType="string"> </dxi-column>
+
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="item-searchbar" class="section-title"> {{'Barcode Structure Setup' | translate}}</label>
+                    </div>
+                    <div class="col-md-6 text-right">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center mt-3 mb-3">
+            <div class="col-md-6 offset-md-3">
+                <div class="row align-items-center">
+                    <div class="col-md-1">{{'Barcode' | translate}}</div>
+                    <div class="col-md-8 p-0">
+                        <dx-text-box #txtVoucher class="barcode-cl"></dx-text-box>
+                    </div>
+                    <div class="col-md-3">
+                        <dx-button style="height: 40px;" icon="search" type="success" class="btn-search-barcode" (onClick)="splitBarcode(txtVoucher.value)" text="{{'Search' | translate}}"></dx-button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 offset-md-3">
+                <div *ngIf="this.barcode?.prefix?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Prefix' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.prefix}}</div>
+                </div>
+                <div *ngIf="this.barcode?.weightStr?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Weight' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.weightStr}}</div>
+                </div>
+                <div *ngIf="this.barcode?.barCodeStr?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Barcode' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.barCodeStr}}</div>
+                </div>
+                <div *ngIf="this.barcode?.qtyStr?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Quantity' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.qtyStr}}</div>
+                </div>
+                <div *ngIf="this.barcode?.pluStr?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'PLU' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.pluStr}}</div>
+                </div>
+                <div *ngIf="this.barcode?.amountStr?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Amount' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.amountStr}}</div>
+                </div>
+                <div *ngIf="this.barcode?.checkCode?.length > 0" class="row align-items-center mt-3 mb-3">
+                    <div class="col-md-3">
+                        {{'Check Code' | translate}}:
+                    </div>
+                    <div class="col-md-7">{{this.barcode?.checkCode}}</div>
+                </div>
+            </div>
+
+            <!-- <div class="col-md-3 offset-md-1">
+               
+            </div> -->
+        </div>
+
+
+
+
+        <div class="table-wrap mt-3">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" 
+            (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.items" [showBorders]="true"  [showRowLines]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+
+                <dxi-column dataField="name" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="prefix" caption="{{'Prefix' | translate}}" dataType="string"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Barcode' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-barcode-setup-detail [isNew]="this.isNew" [model]="this.barcode" style="width: 100%" (outModel)="updateModel($event)"></app-management-barcode-setup-detail>
+
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,154 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+      <div class="maintenance-row">
+          <div class="col-md-12">
+              <div class="row mb-2">
+                  <div class="col-md-6">
+                      <a routerLink="/admin/masterdata/sales-plan" class="back-btn">
+                          <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                      </a>
+                      <label for="item-searchbar" *ngIf="this.mode!=='e'" class="section-title">{{'Create Sales Plan' | translate}}</label>
+                      <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">{{'Edit Sales Plan' | translate}}</label>
+                  </div>
+                  <div class="col-md-6 text-right">
+                      <!-- <dx-button class="mr-2" icon="search" type="success" routerLink="/admin/purchase" text="{{'Find' | translate}}"></dx-button> -->
+                      <!-- <dx-button class="mr-2" icon="add" type="default" routerLink="/admin/masterdata/sales-plan" text="{{'New' | translate}}"></dx-button> -->
+                      <dx-button *ngIf="!isSave" (onClick)="saveModel()" icon="floppy" type="success" text="{{'Save' | translate}}"></dx-button>
+                      <dx-button *ngIf="isSave" icon="floppy" type="success" text="{{'saving' | translate}}"></dx-button>
+                  </div>
+              </div>
+              <div class="item-search-nav">
+                  <div class="row  ">
+                      <div class="col-md-8">
+                          <div class="row">
+                              <div class="col-md-4" *ngIf="this.model?.id?.length > 0">
+                                  <label for="id">{{'ID' | translate}}</label>
+                                  <dx-text-box [readOnly]="true" [(value)]="this.model.id"></dx-text-box>
+                              </div>
+                              <div class="col-md-4">
+                                <label for="name">{{'Name' | translate}}</label>
+                                <dx-text-box   [(value)]="this.model.name"></dx-text-box>
+                              </div>
+                              <div class="col-md-4">
+                                <label for="description">{{'Description' | translate}}</label>
+                                <dx-text-box   [(value)]="this.model.description"></dx-text-box>
+                             </div>
+                          </div>
+                         
+                          <div class="row mt-2">
+                          
+                              <div class="col-md-4">
+                                  <label for="fromDate">{{'From Date' | translate}}</label>
+                                  <dx-date-box #fromDate id="fromDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.model.fromDate" [(value)]="this.model.fromDate"> </dx-date-box>
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="toDate">{{'To Date' | translate}}</label>
+                                  <dx-date-box #toDate id="toDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.model.toDate" [(value)]="this.model.toDate"> </dx-date-box>
+                              </div>
+                              <div class="col-md-4" *ngIf="this.model?.status?.length > 0 && this.mode ==='e'">
+                                <label for="status">{{'Status' | translate}}</label>
+                                <dx-text-box  [readOnly]="true" [(value)]="this.model.status"></dx-text-box>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                          <label for="comment">{{'Remark' | translate}}</label>
+                          <dx-text-area [height]="90" [(value)]="this.model.remark" aria-placeholder="Remark"></dx-text-area>
+                           
+                      </div>
+                  </div>
+              </div>
+              <div class="row mt-2">
+ 
+                  <div class="col-md-12">
+                      <div class="table-wrap mt-2 mb-2">
+                        <!-- keyExpr="keyId"  (onRowPrepared)="onRowPrepared($event)"  -->
+                          <dx-data-grid #dataGrid id="salesPlanGrd" [(dataSource)]="this.model.lines" [allowColumnResizing]="true" [columnResizingMode]="true" 
+                          [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true"
+                           [repaintChangesOnly]="true" >
+                           <!-- (onInitNewRow)="this.isEditGrid=true"  (onSaved)="this.isEditGrid=false" (onEditingStart)="this.isEditGrid=true"  (onEditCanceled)="this.isEditGrid=false"-->
+                              <dxo-editing mode="row" [useIcons]="true"  [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
+                              </dxo-editing>
+                              <!-- [visible]="false" [allowEditing]="false"  [allowEditing]="this.mode!=='e'"-->
+                              <dxi-column  dataField="setupType" caption="{{'Setup Type' | translate}}">
+                                <dxo-lookup [dataSource]="this.setupType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                              </dxi-column>
+                              <!-- <dxi-column alignment="center" dataField="lineType" caption="line Type" [minWidth]="120">
+                                <dxo-lookup [dataSource]="this.lineType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column> -->
+                              <dxi-column   dataField="setupValue"   caption="{{'Setup Value' | translate}}" [minWidth]="250">
+                                <dxo-lookup [dataSource]="this.setupList" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+
+                              </dxi-column>
+                             
+                              <dxi-column    alignment="right" dataField="target"   dataType="number" [format]="this.authService.numberFormat('number')" caption="{{'Target' | translate}}" [minWidth]="120"></dxi-column>
+                              <!-- <dxi-column dataField="setupValue"  caption="{{'Setup Value' | translate}}" [minWidth]="250"></dxi-column>
+                             -->
+                              <dxi-column  dataField="commissionType"  caption="{{'Commission Type' | translate}}" [minWidth]="250">
+                                <dxo-lookup [dataSource]="this.commisionType" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+
+                              </dxi-column>
+                              <dxi-column dataField="commissionValue"  caption="{{'Commission Value' | translate}}" [minWidth]="250"></dxi-column>
+                              <dxi-column dataField="remark"  caption="{{'Remark' | translate}}" [minWidth]="250"></dxi-column>
+                            
+                              <!-- <dxi-column alignment="right" dataField="quantity" [format]="this.authService.numberFormat('quantity')" [allowEditing]="false" caption="{{'Quantity' | translate}} PO" dataType="number" [minWidth]="120">
+                              </dxi-column>
+                               <dxi-column alignment="right" dataField="openQty" caption="{{'Receipt Quantity' | translate}}" [format]="this.authService.numberFormat('quantity')" dataType="number" [minWidth]="120">
+                                    <dxi-validation-rule type="pattern" [pattern]="qtyPattern" message="Quantity format invalid"></dxi-validation-rule>
+                                  [validationCallback]="asyncValidation"
+                                  <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="An even number is expected">
+                                  </dxi-validation-rule>
+                              </dxi-column>
+                              -->
+                              <!-- <dxi-column alignment="right" dataField="lineTotal" [customizeText]="customizeText" [calculateCellValue]="lineTotalCellValue" [allowEditing]="false" caption="{{'Line Total' | translate}}" [minWidth]="120"> </dxi-column>
+                              <dxi-column dataField="comment" caption="{{'Remark' | translate}}" [minWidth]="220"> </dxi-column>
+                              -->
+
+                          </dx-data-grid>
+                      </div>
+
+                  </div>
+
+
+              </div>
+
+
+          </div>
+
+      </div>
+
+
+  </div>
+
+<!-- 
+  <ng-template #template>
+      <div class="modal-header">
+          <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}}</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">  
+    <img src="../../../../assets/images/System/times.svg">
+  </button>
+      </div>
+
+      <div class="modal-body">
+          
+          <app-management-promotion-customer (customersSelected)="updateCustomerSelected($event)"></app-management-promotion-customer>
+      </div>
+  </ng-template>
+
+  <ng-template #promotemplate>
+      <div class="modal-header">
+          <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion Search' | translate}}</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../../assets/images/System/times.svg">
+  </button>
+      </div>
+
+      <div class="modal-body">
+          <app-management-promotion-search [isMulti]="false" [isCombine]="false" (dataSelected)="applyPromotion($event)"></app-management-promotion-search>
+      </div>
+  </ng-template> -->

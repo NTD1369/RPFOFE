@@ -1,0 +1,229 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+    <div class="search-wrap">
+      <label for="item-searchbar" class="section-title">{{'Place List' | translate}}</label>
+    </div>
+
+    <div class="table-wrap">
+      <dx-data-grid (onToolbarPreparing)="onToolbarPreparing($event)" id="gridContainer" [dataSource]="sourceData"
+        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true" [showBorders]="true"
+        [showRowLines]="true" class="mt-1 p-3">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+
+        <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+        <dxi-column caption="Store Id" dataField="storeId" dataType="string"></dxi-column>
+        <dxi-column caption="Place Name" dataField="placeName" dataType="string"></dxi-column>
+        <dxi-column dataField="createdBy" caption="Created By" dataType="string"></dxi-column>
+        <dxi-column dataField="createdOn" caption="Created On" dataType="date" [format]="'yyyy-MM-dd'"></dxi-column>
+
+        <dxi-column dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+        </dxi-column>
+        <div *dxTemplate="let cell of 'statusTemplate'">
+          <div [innerHtml]="cell.data.status | statusFormat"></div>
+        </div>
+
+        <dxi-column caption="Description" [width]="150" dataField="description" dataType="string"></dxi-column>
+        <dxi-column cellTemplate="cellTemplate" [width]="350"></dxi-column>
+
+        <div *dxTemplate="let cell of 'cellTemplate'">
+          <div>
+            <div class="row">
+              <div class="col-md-6">
+                <dx-button style="width:100%" icon="fas fa-eye" text="{{'Infor' | translate}}"
+                  (onClick)="createModal(template,cell.data)"></dx-button>
+              </div>
+              <div class="col-md-6">
+                <dx-button style="width:100%" type="danger" icon="trash" text="{{'Delete' | translate}}"
+                  (onClick)="this.delele(cell.data,cell.data.placeName)"></dx-button>
+              </div>
+              <div class="col-md-6 mt-1">
+                <dx-button icon="check" style="width:100%" text="{{'Assign Table' | translate}}"
+                  (onClick)="moveTable(cell.data)"> </dx-button>
+              </div>
+              <div class="col-md-6 mt-1">
+                <dx-button style="width:100%" icon="mediumiconslayout" text="{{'Table design' | translate}}"
+                  (onClick)="moveTableDesign(cell.data)"></dx-button>
+              </div>
+              <div class="col-md-6 mt-1">
+                <dx-button style="width:100%" icon="mediumiconslayout" text="{{'Table view' | translate}}"
+                  (onClick)="moveTableCashier(cell.data)"></dx-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #template>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{'Place Infor' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <img src="../../../assets/images/System/times.svg">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 row">
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Store Id ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-select-box #txtstoreId [(ngModel)]="this.place.storeId" displayExpr="storeName"
+                      valueExpr="storeId" [items]="storeList" [value]="this.place?.storeId"
+                      placeholder="{{'' | translate}}">
+                    </dx-select-box>
+                  </div>
+                </div>
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Place Name ' | translate}}<span class="text-red">(*)</span> </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtPlaceName [(ngModel)]="this.place.placeName" [value]="this.place?.placeName"
+                      placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Seat ' | translate}}<span class="text-red">(*)</span> </div>
+                  <div class="col-md-8">
+                    <dx-select-box #cbbStatus [items]="listSeat" [(ngModel)]="this.place.slot" displayExpr="name"
+                      [value]="this.place?.slot" valueExpr="value" placeholder="2">
+                    </dx-select-box>
+                  </div>
+                </div>
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Status ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-select-box #cbbStatus [items]="listStatus" [(ngModel)]="this.place.status" displayExpr="name"
+                      [value]="this.place?.status" valueExpr="value" placeholder="Active"></dx-select-box>
+                  </div>
+                </div>
+               
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Description ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtdescription [value]="this.place?.description" [(ngModel)]="this.place.description"
+                      placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Dimension ' | translate}}</div>
+                  <div class="col-md-8 ">
+                    <dx-text-box #txtwidth [value]="this.place?.width" [(ngModel)]="this.place.width"
+                      placeholder="{{'(width x long)' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+
+               
+
+                <!-- 
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' Seat ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtslot [value]="this.place?.slot" [(ngModel)]="this.place.slot"
+                      placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div> -->
+
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' Remark ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtremark [value]="this.place?.remark" [(ngModel)]="this.place.remark"
+                      placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 row">
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'Url Image ' | translate}} </div>
+                  <div class="col-md-8">
+                    <span style="color:red;" *ngIf="message">{{'Message' | translate}}</span>
+                    <dx-button class="clear-both" stylingMode="outlined" type="default" [width]="120">
+                      <label style="margin:.1rem;">
+                        <i class="fas fa-paperclip"></i>
+                        {{'Select File' | translate}}
+                        <input #txturlImage hidden type="file" accept='image/*'
+                          (change)="handleFileInput($event.target.files)" />
+                      </label>
+                    </dx-button>
+                    <br />
+                    <img style="max-width: 100%;" [src]="this.imageUrl || '../../../assets/images/System/LOGO-ABEO.png'"
+                      height="200" class="image">
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' CustomField1 ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtcustomField1 [value]="this.place?.customField1"
+                      [(ngModel)]="this.place.customField1" placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' CustomField2 ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtcustomField2 [value]="this.place?.customField2"
+                      [(ngModel)]="this.place.customField2" placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' CustomField3 ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtcustomField3 [value]="this.place?.customField3"
+                      [(ngModel)]="this.place.customField3" placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' CustomField4 ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtcustomField4 [value]="this.place?.customField4"
+                      [(ngModel)]="this.place.customField4" placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' CustomField5 ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txtcustomField5 [value]="this.place?.customField5"
+                      [(ngModel)]="this.place.customField5" placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{' Type ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-text-box #txttype [value]="this.place?.type" [(ngModel)]="this.place.type"
+                      placeholder="{{'' | translate}}">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="col-md-12 row" style="margin-top: 10px;">
+                  <div class="col-md-4">{{'IsDefault ' | translate}} </div>
+                  <div class="col-md-8">
+                    <dx-select-box #cbbisDefault [items]="statusDefault" [(ngModel)]="this.place.isDefault"
+                      displayExpr="name" [value]="this.place?.isDefault" valueExpr="value"
+                      placeholder="No"></dx-select-box>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;margin-top: 15px;">
+              <button (click)="saveInfo()" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+            </div>
+          </div>
+        </ng-template>
+
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

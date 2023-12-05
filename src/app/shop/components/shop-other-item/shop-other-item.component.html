@@ -1,0 +1,77 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <div class="row" style="width: 100%">
+            <div class="col-md-7">
+                <h4 class="modal-title pull-left" id="my-modal-title"> {{'Other Item' | translate}}</h4>
+            </div>
+
+        </div>
+
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal(true)"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div [ngClass]="{'col-md-8': this.item!==null && this.item!==undefined, 'col-md-12': this.item===null || this.item===undefined}">
+                <!--  -->
+                <dx-data-grid *ngIf="this.items?.length > 0" #dataGrid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" 
+                        id="gridContainer" [dataSource]="this.items"  [(selectedRowKeys)]="this.selectedKey" mode="single"
+                        [focusedRowEnabled]="true" keyExpr="keyId"
+                        [showBorders]="true">
+
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column dataField="customField1" caption="{{'Item Type' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemCode" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="itemName" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="uomName" caption="{{'UoM' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column dataField="priceAfterTax" caption="{{'Price' | translate}}" [customizeText]="customizeText"> </dxi-column>
+                    <dxi-column dataField="productId" caption="{{'Product Code' | translate}}" dataType="string"> </dxi-column>
+                    <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                    <div *dxTemplate="let cell of 'cellTemplate'">
+                        <dx-button icon="todo" text="{{'Select' | translate}}" (onClick)="selectItem(cell.data, $event, false)"></dx-button>
+                    </div>
+
+                </dx-data-grid>
+            </div>
+            <div [ngClass]="{'col-md-4': this.item!==null && this.item!==undefined, '': this.item===null || this.item===undefined}">
+                <ng-container *ngIf="this.item!==null && this.item!==undefined">
+                    Account No:
+                    <input class="form-control mt-2  mb-2" [(ngModel)]="this.item.custom1" #txtAccountNo
+                        [(value)]="this.item.custom1"  type="search" placeholder="{{'Account No' | translate}}" aria-label="Account No">
+                    <ng-container *ngIf="this.item?.isPriceTime">
+                        Price:
+                        <input class="form-control  mt-2 mb-2" #txtPrice *ngIf="this.item?.isPriceTime" [(ngModel)]="this.item.price" [(value)]="this.item.price" type="search" placeholder="{{'Price' | translate}}" aria-label="Price">
+            
+                    </ng-container>
+                    <ng-container>
+                        Custom Field:
+                        <input class="form-control mt-2 mb-2" #txtCustom2 [(ngModel)]="this.item.custom2" [(value)]="this.item.custom2" type="search" placeholder="{{'Custom' | translate}}" aria-label="Custom">
+                    </ng-container>
+                    
+                    
+                
+                    <input class="form-control  mt-2" *ngIf="false" [(ngModel)]="this.item.quantity" [(value)]="this.item.quantity" type="search" placeholder="{{'Quantity' | translate}}" aria-label="Quantity">
+                    <div class="row mt-2">
+                        <div class="col-md-6 mt-1">
+                            <dx-button (onClick)="this.item = null" icon="revert" type="default" text="{{'Reset' | translate}}"></dx-button>
+                        </div>
+                        <div class="col-md-6 mt-1" style="text-align: right;">
+                            <dx-button (onClick)="addToOrder(false)" icon="add" type="success" text="{{'Add to Order' | translate}}"></dx-button>
+                        </div>
+                    </div>
+
+
+
+                </ng-container>
+
+            </div>
+        </div> 
+    </div>
+
+</div>

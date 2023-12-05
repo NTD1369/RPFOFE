@@ -1,0 +1,75 @@
+<div style="  background-color: white;
+margin-top: 25px;
+padding:20px;
+height:800px;
+border: 1px solid #f0f0f0;
+border-radius: 10px;
+margin: 20px;">
+  <div class="row">
+    <div class="col-md-6">
+      <a routerLink="/admin/receiptFromProduction" class="back-btn">
+          <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+      </a>
+      <span class="">Receipt from production edit</span>
+    </div>
+    <div class="col-md-6" style="text-align: right;">
+      <dx-button class="btn-print" icon="fa fa-print" text="{{'Print' | translate}}" (onClick)="PrintDetail(this.dataReceiptEdit)" style="color: #fff;"></dx-button>
+    </div>
+  </div>
+
+
+  
+    <div class="row align-items-center">
+      <div class="col-md-1">
+          {{'ID' | translate}}
+      </div>
+      <div class="col-md-3">
+<!-- [(ngModel)]="this.dataReceiptEdit.invtid" -->
+          <dx-text-box [readOnly]="true" [value]="this.dataReceiptEdit?.invtid" >
+          </dx-text-box>
+      </div>
+      <div class="col-md-1">
+          {{'Movement' | translate}}
+      </div>
+      <div class="col-md-3">
+      
+     
+         <dx-text-box #ddlFrom [value]="this.dataReceiptEdit?.movementType" [readOnly]="true" [(ngModel)]="this.dataReceiptEdit.movementType" [dataSource]="this.dataReceiptEdit" displayExpr="name" valueExpr="code" itemTemplate="item">
+          <div *dxTemplate="let data of 'item'" class="custom-item">
+            <div class='product-name'>{{data.name}}</div>
+        </div>
+         </dx-text-box>
+      </div>
+      <ng-container>
+        <div class="col-md-1">
+            {{'Created On' | translate}}
+        </div>
+        <!-- *ngIf="this.mode!=='e'" -->
+        <div class="col-md-3">
+            <dx-text-box [readOnly]="true" [value]="this.dataReceiptEdit.createdOn | date: this.dateFormat + ' HH:mm:ss'" ></dx-text-box>
+
+        </div>
+    </ng-container>
+  </div>
+  <div class="row mt-2 align-items-center">
+    <div class="col-md-1">
+        {{'Remark' | translate}}
+    </div>
+    <div class="col-md-7">
+        <dx-text-box [value]="this.dataReceiptEdit?.remark" [readOnly]="true" [(ngModel)]="this.dataReceiptEdit.remark"></dx-text-box>
+    </div>
+    <div class="col-md-4">
+        <ng-container >
+            <div class="row">
+                <div class="col-md-2">
+                    {{'Doc Status' | translate}}
+                </div>
+                <div class="col-md-4" >
+                    <dx-select-box #ddlStatus [readOnly]="true" [style]="{'width':'100%'}" formControlName="status" name="status" placeholder="--- Select Status ---" [dataSource]="docStatus" displayExpr="name" valueExpr="value" [value]="this.dataReceiptEdit.status"></dx-select-box>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+  
+</div>

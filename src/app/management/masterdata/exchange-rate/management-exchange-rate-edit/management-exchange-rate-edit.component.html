@@ -1,0 +1,108 @@
+<!-- <form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+
+  
+  <div class="col-md-12">
+    <div class="row">
+      <ng-container *ngFor="let value of this.groupControlList">
+        <div class="col-md-12">
+          <div class="row">
+            <ng-container *ngFor="let item of value.arrayGroup">
+              <div class="col-md-6 form-group" *ngIf="checkPermission(item.controlId,'V')">
+                <label for="{{item.controlId}}"> {{item.controlName}}</label>
+                <input *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}"
+                  [attr.disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId,'E')?'disabled':null"
+                  formControlName="{{item.controlId}}" name="{{item.controlId}}" [(ngModel)]="model[item.controlId]">
+
+                <dx-date-box name="{{item.controlId}}" [value]="model[item.controlId]"
+                  displayFormat="dd/MM/yyyy HH:mm:ss" formControlName="{{item.controlId}}"
+                  [(ngModel)]="model[item.controlId]"
+                  *ngIf="value.controlType==='DateTime' && checkPermission(item.controlId,'V')" type="datetime"
+                  [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+
+                </dx-date-box>
+                <dx-date-box name="{{item.controlId}}" [value]="model[item.controlId]"
+                  displayFormat="dd/MM/yyyy" formControlName="{{item.controlId}}"
+                  [(ngModel)]="model[item.controlId]"
+                  *ngIf="value.controlType==='Date' && checkPermission(item.controlId,'V')" type="datet"
+                  [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+
+                </dx-date-box>
+                <dx-switch *ngIf="value.controlType==='CheckBox' && checkPermission(item.controlId,'V')"
+                  [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId}}"
+                  [(value)]="model[item.controlId]"
+                  [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null">
+                </dx-switch>
+
+                <dx-select-box *ngIf="value.controlType==='DropDown' && checkPermission(item.controlId,'V')"
+                  [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId}}"
+                  placeholder="--- Select {{item.controlName}} ---" [dataSource]="this[item.optionName]"
+                  displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}"
+                  [disabled]="isNew ? !checkPermission(item.controlId ,'I')?'disabled':null : !checkPermission(item.controlId ,'E')?'disabled':null"
+                  [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]" (onValueChanged)=" item.controlId ==='storeId' ? storeChange($event) : 
+                  ''"></dx-select-box>
+
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="col-md-12 text-right">
+    <button [disabled]="!editForm.dirty" *ngIf="checkPermission('btnSave' ,'V')" form="editForm"
+      class="btn-agree width-200 height-60">Save Changes</button>
+  </div>
+</form> -->
+
+
+<!--      
+<div class="center-wrap"> 
+  
+</div> -->
+<div class="maintenance-card" style="margin: auto;    width: 100%;">
+    <div class="row justify-content-center flex-row mb-3 mt-2">
+        <div class="col-md-2 mb-1">
+            <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-2 mb-1">
+            <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+        </div>
+        <div class="col-md-1 mb-1">
+            <dx-button class="mr-2" icon="search" type="success" (onClick)="view(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <!-- (onToolbarPreparing)="onToolbarPreparing($event)" -->
+        <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridCurency" [dataSource]="this.exchangeRateList" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" (onEditingStart)="mode='E'"
+            (onInitNewRow)="mode='N'" (onSaved)="save($event)" (onRowRemoved)="remove($event)">
+            <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+            </dxo-editing>
+            <!-- [allowDeleting]="true" -->
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+            <dxo-search-panel [visible]="true"></dxo-search-panel>
+            <!-- <dxi-column dataField="storeId" caption="StoreId" dataType="string">  </dxi-column> -->
+            <dxi-column dataField="date" caption="{{'Date' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+            <!-- <dxi-column dataField="currency" caption="Currency" dataType="string">  </dxi-column> -->
+            <dxi-column dataField="rate" caption="{{'Rate' | translate}}" dataType="number" [format]="this.authService.numberFormat('rate')"> </dxi-column>
+            <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'statusTemplate'">
+                <div [innerHtml]="cell.data.status | statusFormat"></div>
+            </div>
+            <!-- <dxi-column  cellTemplate="cellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'cellTemplate'">
+            <dx-button icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+        </div>
+       -->
+
+        </dx-data-grid>
+    </div>
+</div>

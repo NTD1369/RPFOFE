@@ -1,0 +1,239 @@
+/*********************SHOP ORDER GROCERY STRAT***************************/
+
+.print-main {
+    font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+}
+
+.right-grid.shop-order-grocery-grid {
+    margin-top: 22px;
+}
+
+.right-section.shop-order-grocery-section {
+    margin-top: 10px !important;
+}
+
+@media only screen and (max-width: 1429px) {
+    .search-wrap input,
+    .custom-select {
+        height: 50px !important;
+    }
+}
+
+.center-wrap {
+    margin-right: 140 px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10 px 20 px 20 px;
+    min-height: calc(100 vh - 100 px);
+}
+
+.center-wrap {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.maintenance-card {
+    height: 100%!important;
+    min-height: 80 vh !important;
+    margin: unset!important;
+}
+
+.maintenance-card {
+    background-color: var(--white, #fff);
+    border-radius: 5 px;
+    padding: 1 rem;
+    overflow-y: overlay;
+    height: 100 vh;
+    margin-bottom: 150 px;
+}
+
+.maintenance-card .maintenance-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10 px;
+    margin-left: -10 px;
+}
+
+.maintenance-card .maintenance-row {
+    display: contents!important;
+}
+
+.dx-theme-generic-typography h3 {
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.table-row {
+    /* border: 1px solid #ddd !important; */
+    border-bottom: 0;
+    margin: 0;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+.table-row:last-child {
+    border-bottom: 1 px solid #ddd;
+}
+
+.print-main-cl {
+    /* width: 11cm; */
+    /* margin: auto; */
+    font-size: 13px;
+    /* padding: 0 30px; */
+    color: #000;
+}
+
+.table-td {
+    padding: 9px 10px;
+}
+
+#maintable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#customtable {
+    font-family: arial, sans-serif;
+    border: unset;
+    width: 100%;
+}
+
+#maintable td,
+th {
+    border-bottom: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px 0px;
+}
+
+p {
+    margin-bottom: 5px !important;
+    line-height: 1;
+}
+
+.style5 {
+    display: none;
+}
+
+.p-qty {
+    width: 25mm;
+}
+
+.p-price,
+.p-total {
+    width: 50mm;
+}
+
+.dx-widget {
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+    line-height: 1.35715;
+}
+
+.app-print h3 {
+    margin-bottom: 0;
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.textTitlePrint {
+    margin-bottom: 0;
+    font-weight: 700 !important;
+    font-size: 13px;
+    color: #000;
+    font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
+}
+
+.center-wrap {
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    /* font-family: "Consolas" ; */
+    font-family: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif !important;
+    line-height: 1.35715;
+}
+
+table tr {
+    color: #000;
+}
+
+@media print {
+    .center-wrap.print-p.print-main {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* font-family: "Consolas" !important; */
+        color: #000;
+        font-size: 13px;
+        width: 9.3cm;
+        margin-left: 30px;
+    }
+    .txtVersion {
+        display: none!important;
+    }
+    .maintenance-card.print-main.cl-print-cm {
+        padding-left: 15px;
+    }
+}
+
+.print-main p {
+    margin-bottom: 0;
+}
+
+.under-line-solid::after {
+    content: "________________________________";
+}
+
+.under-line-solid {
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    padding-left: 5px;
+}
+
+.footer-bill {
+    padding-right: 0;
+    width: 70%;
+    float: left;
+}
+
+.footer-img {
+    padding: 0;
+    width: 47%;
+    float: left;
+}
+
+.header-invoice {
+    line-height: 1.4;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+hr.style1 {
+    background-color: #fff;
+    border-top: 1px dashed #000;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.print-header-bill {
+    width: 100%;
+    border-collapse: collapse;
+    border: none
+}
+
+.print-header-bill-tr {
+    border-bottom: 1px dashed #000 !important;
+}
+
+.font-size-14 {
+    font-size: 14px;
+}
+
+
+/* 
+.print-header-bill-tr {
+    border-bottom: 2px dashed #000 !important;
+} */
+
+
+/*********************SHOP ORDER GROCERY END***************************/

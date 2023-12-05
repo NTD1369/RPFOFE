@@ -1,0 +1,54 @@
+<div id='discount-modal'>
+  <div class="modal-header">
+      <div class="row" style="width: 100%">
+          <div class="col-md-7">
+              <h4 class="modal-title pull-left" id="my-modal-title"> {{'Settlement - Bank Terminal' | translate}}</h4>
+          </div>
+
+      </div> 
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+  <img src="../../../assets/images/System/times.svg">
+</button>
+  </div>
+  <div class="modal-body">
+    <!-- <div class="row">
+          
+      <div class="col-md-12">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+              {{'Key' | translate}}:
+          </div>
+          <div class="col-md-10">
+             
+              <dx-text-box  #txtKey placeholder="{{'Key' | translate}}" ></dx-text-box>
+          </div>
+         </div>
+      </div>
+      
+    </div>  -->
+      <div class="row ">
+          
+        <div class="col-md-2 mt-2">
+          {{'Bank' | translate}}:
+          
+        </div>
+        <div class="col-md-4 mt-2">
+          <!-- (onValueChanged)="onValueChanged($event)" -->
+          <dx-select-box  #ddlBank   displayExpr="fatherId"  valueExpr="fatherId"
+            [items]="fatherPayment"
+            [value]="fatherPayment[0].fatherId" 
+          ></dx-select-box>
+        </div>
+        <div class="col-md-6 mt-2">
+         
+          <!-- <input  [readOnly]="" class="form-control"  type="text"  aria-label="Prefix"> -->
+           <!-- <dx-text-box [readOnly]="ddlPrefix.value !== 'Custom'" #txtPrefix placeholder="{{'Prefix' | translate}}" ></dx-text-box> -->
+        </div>
+      </div> 
+  </div>
+  <div class="modal-footer">
+    <div class="col-md-12 text-right">
+      <button (click)="sendBankEOD(ddlBank.value)" class="btn-agree width-200 height-60">{{'Send' | translate}}</button>
+    </div>
+ </div>
+</div>

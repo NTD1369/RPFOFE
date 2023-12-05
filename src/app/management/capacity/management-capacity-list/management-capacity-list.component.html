@@ -1,0 +1,77 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Store Capacity' | translate}}</label>
+
+        </div>
+        <div class="item-search-nav">
+            <div class="row">
+                <div class="col-md-6">
+                    {{'Store' | translate}}
+                    <dx-select-box class="mt-1" #store [items]="this.storeList" [value]="this.storeSelected" [searchEnabled]="true" searchMode="contains" 
+                     [(ngModel)]="this.storeSelected" displayExpr="storeName" valueExpr="storeId"></dx-select-box>
+                    <!-- [readOnly]="true"  -->
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-9 pr-0">
+                            {{'Store Area' | translate}}
+                            <dx-text-box class="mt-1" #storeArea value="" placeholder="{{'Store Area' | translate}}..."></dx-text-box>
+                        </div>
+                        <div class="col-md-3">
+                            <dx-button class="mt-4 mr-2" (onClick)="loadCapacity(store.value, storeArea.value)" icon="search" type="default" text="{{'Search' | translate}}"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="store?.value!==null && store?.value!==undefined && store?.value?.length > 0 
+                &&  this.storeCapacityList!==null && this.storeCapacityList!==undefined && this.storeCapacityList?.length > 0 ">
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <div class="row"> 
+                            <div class="col-md-6">
+                                {{'Capacity Volume' | translate}}
+                                <dx-text-box class="mt-1" #capacityVolume value="" placeholder="{{'Capacity Volume' | translate}}..."></dx-text-box>
+                            </div>
+                            <div class="col-md-3">
+                                {{'Status' | translate}}
+                                <dx-select-box class="mt-1" #cbbStatus [value]="statusOptions[0].value" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+                            </div>
+                            <div class="col-md-3">
+                                <dx-button class="mt-4 " (onClick)="saveToAllByStore(capacityVolume.value, cbbStatus.value)" icon="check" type="success" text="Save"></dx-button>
+                            </div>
+                        </div>
+                    </div>
+                 
+                </div>
+            </ng-container>
+          
+        </div>
+        <dx-data-grid *ngIf="this.storeView!==undefined && this.storeView!==null && this.storeView!==''" [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #dataGrid id="controlList" [dataSource]="this.storeCapacityList" keyExpr="keyId" [showRowLines]="true"
+            (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="saveCapacity($event)" (onRowRemoved)="removeCapacity($event)" (onRowValidating)="checkValidatingData($event)" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true"
+            [columnAutoWidth]="true">
+            <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+            </dxo-editing>
+            <!-- <dxo-editing  mode="row" [allowUpdating]="true" [allowDeleting]="true" ></dxo-editing> -->
+            <dxi-column dataField="storeAreaId" caption="{{'Play Zone' | translate}}">
+                <dxo-lookup [dataSource]="this.storeAreaList" displayExpr="storeAreaName" valueExpr="storeAreaId"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <!-- <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"  ></dxi-column> -->
+            <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+            <dxi-column dataField="timeFrameId" caption="{{'Time Frame Code' | translate}}" [minWidth]="120">
+                <dxo-lookup [dataSource]="this.timeframeList" displayExpr="timeFrameId" valueExpr="timeFrameId"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="remarks" caption="{{'Time Frame Size' | translate}}"></dxi-column>
+            <dxi-column dataField="maxCapacity" caption="{{'Volume' | translate}}" [customizeText]="customizeText"></dxi-column>
+            <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'statusTemplate'">
+                <div [innerHtml]="cell.data.status | statusFormat"></div>
+            </div>
+        </dx-data-grid>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Promotion Details' | translate}}</h4>
+
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            {{'Promotion' | translate}}: {{this.promotion.promoId}} - {{this.promotion.promoName}}
+        </div>
+        <div class="row">
+            {{'Buy' | translate}}
+
+        </div>
+
+        <div class="row" *ngFor="let item of this.promotion.promoBuys">
+            {{item.lineCode}} - {{item.lineName}} // {{item.lineUom}} - {{item.condition1}} - {{item.value1}} - {{item.condition2}} - {{item.value2}} - {{item.valueType}}
+        </div>
+
+        <div class="row">
+            {{'Get' | translate}}
+        </div>
+
+
+        <div class="row" *ngFor="let item of this.promotion.promoGets">
+            {{item.lineCode}} - {{item.lineName}} // {{item.lineUom}} - {{item.condition1}} - {{item.value1}} - {{item.condition2}} - {{item.value2}} - {{item.valueType}}
+        </div>
+
+    </div>
+</div>

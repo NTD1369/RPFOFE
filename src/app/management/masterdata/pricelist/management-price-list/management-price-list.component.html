@@ -1,0 +1,60 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <!-- <div class="search-wrap">
+           
+
+        </div> -->
+        <!-- <div class="col-md-12">
+          
+        </div> -->
+        <div class="row">
+            <div class="col-md-6">  <label for="item-searchbar" class="section-title">{{'Price List' | translate}}</label></div>
+            <div class="col-md-6">   <dx-select-box #ddlStore style="min-width: 300px;" [items]="this.storelist" placeholder="{{'Store' | translate}}" displayExpr="storeName" valueExpr="storeId" (onValueChanged)="loadItems(ddlStore.value)"></dx-select-box> </div>
+        </div>
+      
+        <div class="table-wrap mt-3">
+            
+            <dx-data-grid *ngIf="this.list?.length > 0" [style]="{'max-height':'calc(100vh - 21vh)','overflow':'auto'}" 
+                id="gridContainer" [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" 
+                [showBorders]="true" [columnAutoWidth]="true" (onExporting)="onExporting($event)">
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <!-- <dxi-column dataField="companyCode" caption="Company Code" dataType="string">  </dxi-column> -->
+                <dxi-column  dataField="listingStatus" [groupIndex]="0" caption="{{'Listing Status' | translate}}"></dxi-column>
+                <dxi-column dataField="storeId" caption="{{'Store Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"> </dxi-column>
+                <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"> </dxi-column>
+                <dxi-column dataField="itemGroupName" caption="{{'Item Group' | translate}}"> </dxi-column>
+                <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"> </dxi-column>
+                <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}" alignment="center"> </dxi-column>
+                <!-- <dxi-column dataField="priceListId" caption="Price List Id" alignment="center"> </dxi-column> -->
+                <dxi-column dataField="priceListName" caption="{{'Price List' | translate}}"> </dxi-column>
+                <dxi-column dataField="priceBeforeTax" caption="{{'Before Tax' | translate}}" [customizeText]="customizeText"> </dxi-column>
+                <dxi-column dataField="priceAfterTax" caption="{{'After Tax' | translate}}" [customizeText]="customizeText"> </dxi-column>
+                <dxi-column dataField="validFrom" caption="{{'From' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+                <dxi-column dataField="validTo" caption="{{'To' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+              
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                
+                <!-- <dxi-column  cellTemplate="cellTemplate"></dxi-column> -->
+                <!-- <div *dxTemplate="let cell of 'cellTemplate'">
+              <dx-button icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+          </div> -->
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+
+
+            <h2 class="mt-4" *ngIf="this.message?.length > 0" style="color: red; text-align: center;">
+                {{this.message}}
+            </h2>
+        </div>
+    </div>
+</div>

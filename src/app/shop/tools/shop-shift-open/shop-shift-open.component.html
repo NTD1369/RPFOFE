@@ -1,0 +1,32 @@
+<div class="blog-slider ">
+    <div class="blog-slider__wrp swiper-wrapper">
+        <div class="blog-slider__item swiper-slide">
+            <div class="blog-slider__img">
+                <!-- <img src="../../../../assets/images/System/setup.svg" alt="New shift"> -->
+                <img src="../../../../assets/images/System/shopsShift.svg" alt="New shift">
+                <!-- <img src="https://res.cloudinary.com/muhammederdem/image/upload/v1535759872/kuldar-kalvik-799168-unsplash.jpg" alt=""> -->
+            </div>
+            <div class="blog-slider__content">
+                <div class="blog-slider__title">{{'Shift' | translate}}: {{shift.shiftId}}</div>
+                <div class="blog-slider__code">{{'Amount' | translate}}: {{shift.openAmt | number}}</div>
+                <span class="blog-slider__code mb-4">{{'Created On' | translate}}: {{shift.createdOn | date:'dd/MM/yyyy' }}</span>
+                <!-- <a style="cursor: pointer;" (click)="loadShift()" class="blog-slider__button mb-2 mr-2">Load Shift</a> -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <button style="cursor: pointer; width: 100%;" class=" submit-btn" (click)="loadShift()">{{'Load Shift' | translate}}</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button style="cursor: pointer; width: 100%; color: #ee9a3a;" class="primary-btn submit-btn warning" (click)="endAndStartShift()">{{'End' | translate}}</button>
+                    </div>
+                </div>
+
+
+                <!-- <a style="cursor: pointer;" (click)="endAndStartShift()" class="blog-slider__button">End</a> -->
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+ 

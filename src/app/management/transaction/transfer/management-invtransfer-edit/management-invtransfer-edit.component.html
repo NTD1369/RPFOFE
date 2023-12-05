@@ -1,0 +1,388 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <a routerLink="/admin/inventory/transfer" class="back-btn">
+                            <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                        </a>
+                        <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">{{'Edit Transfer' | translate}}</label>
+                        <label for="item-searchbar" *ngIf="this.mode!=='e'" class="section-title">{{'Create Transfer' | translate}}</label>
+                    </div>
+
+                    <div class="col-md-6 text-right">
+                        <dx-button class="mr-2 mb-2" *ngIf="this.mode!=='e'" icon="xlsxfile" type="default" text="{{'Template' | translate}}" (onClick)="downloadTemplate()"></dx-button>
+
+                        <dx-button *ngIf="this.mode!=='e'" class="mr-2 mb-2" stylingMode="outlined" type="default">
+                            <label style="margin:.1rem;">
+                    <i class="fas fa-paperclip"></i>
+                    {{'Select File' | translate}} 
+                    <input #myInput hidden  type="file" (change)="onFileChange($event,Template)" multiple>
+                </label>
+                        </dx-button>
+                        <!-- <span *ngIf="this.inventory.status!=='N'">
+                            <dx-button class="mr-2 mb-2" type="success" icon="floppy" *ngIf="this.inventory.status==='O' && (this.mode!=='e' || (this.inventory.refId===null || this.inventory.refId===undefined)) " text="Save" (onClick)="saveModel()"></dx-button>
+                        </span> -->
+                        <span>
+                            <dx-button *ngIf="this.mode !== 'e' && this.isSave" class="mr-2 mb-2" type="success" icon="floppy" text="Save" (onClick)="saveModel(false)"></dx-button>
+                            <dx-button *ngIf="this.mode !== 'e' && !this.isSave" class="mr-2 mb-2" type="success" icon="floppy" text="Saving"></dx-button>
+                        </span>
+                        <span *ngIf="this.mode==='e'">
+                            <dx-button class="mr-2 mb-2 btn-print" icon="fa fa-print" text="Print" (onClick)="PrintDetail(this.inventory)" style="color: #fff;"></dx-button>
+                        </span>
+                    </div>
+                    <!-- a.back-btn svg -->
+                </div>
+                <div id="tree-list-demo">
+                    <ng-container>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'Doc Date' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-date-box [max]="this.nowDate" [readOnly]="this.mode === 'e'" [value]="this.inventory.docDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.inventory.docDate" id="doc-date" width="100%"></dx-date-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label"> {{'Doc Due Date' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-date-box [readOnly]="this.mode === 'e'" [value]="this.inventory.docDueDate" [displayFormat]="this.dateFormat" [(ngModel)]="this.inventory.docDueDate" id="doc-due-date" width="100%"></dx-date-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'Store' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-select-box [readOnly]="this.mode === 'e'" #ddlFromSloc [value]="this.inventory.fromStore" [(ngModel)]="this.inventory.fromStore" (onValueChanged)="onFromStoreChanged(ddlFromSloc.selectedItem)" [dataSource]="this.storeList" displayExpr="storeName"
+                                            valueExpr="storeId" itemTemplate="item">
+
+                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data.storeId}} - {{data.storeName}} - {{data.whsCode}}</div>
+                                            </div>
+                                        </dx-select-box>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'To' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-select-box [readOnly]="this.inventory.status!=='O'" #ddlTo [value]="this.inventory.toStore" [(ngModel)]="this.inventory.toStore" (onValueChanged)="onToStoreChanged(ddlTo.selectedItem)" [dataSource]="this.toStoreList" displayExpr="storeName" valueExpr="storeId">
+                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data.storeId}} - {{data.storeName}} - {{data.whsCode}}</div>
+                                            </div>
+                                        </dx-select-box>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="col-md-4">
+                                <div class="dx-field">
+                                    <div class="dx-field-label"> {{'Remark' | translate}}</div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="this.mode === 'e'" [value]="this.inventory.name" [(ngModel)]="this.inventory.name"></dx-text-box>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- {{this.SlocFromList[0]?.slocId | json}} {{this.SlocToList[0]?.slocId | json}} -->
+                        <div class="row mt-2">
+                            <div class="col-md-4" *ngIf="this.mode !== 'e'">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'From Bins' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-select-box [readOnly]="this.mode === 'e'" #ddlFromBins [value]="this.SlocFromList[0]?.slocId" (onValueChanged)="changeFromBins(ddlFromBins.selectedItem)" [dataSource]="this.SlocFromList" displayExpr="slocName" valueExpr="slocId" itemTemplate="item">
+                                            <div *dxTemplate="let data1 of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data1.slocId}} - {{data1.slocName}}</div>
+                                            </div>
+                                        </dx-select-box>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4" *ngIf="this.mode === 'e'">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'From Bins' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="true" [value]="this.frSlocIdEdit"></dx-text-box>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" *ngIf="this.mode !== 'e'">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'To Bins' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-select-box [readOnly]="this.mode === 'e'" #ddlToBins [value]="this.SlocToList[0]?.slocId" (onValueChanged)="changeToBins(ddlToBins.selectedItem)" [dataSource]="this.SlocToList" displayExpr="slocName" valueExpr="slocId" itemTemplate="item">
+                                            <div *dxTemplate="let data2 of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data2.slocId}} - {{data2.slocName}}</div>
+                                            </div>
+                                        </dx-select-box>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" *ngIf="this.mode === 'e'">
+                                <div class="dx-field">
+                                    <div class="dx-field-label">{{'To Bins' | translate}} </div>
+                                    <div class="dx-field-value">
+                                        <dx-text-box [readOnly]="true" [value]="this.toSlocIdEdit" [(ngModel)]="this.inventory.remark"></dx-text-box>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col-md-12">
+                            <!---->
+                            <!-- {{this.inventory.status + ' x ' +this.inventory.refId}} -->
+                            <ng-container *ngIf="this.inventory.status==='N' && this.inventory.refId!==null && this.inventory.refId!==undefined">
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <div class="dx-field">
+                                            <div class="dx-field-label"> {{'Doc Status' | translate}}</div>
+                                            <div class="dx-field-value">
+                                                <dx-select-box #ddlStatus [readOnly]="true" [style]="{'width':'100%'}" name="status" placeholder="--- Select Status ---" [dataSource]="docStatus" displayExpr="name" valueExpr="value" [value]="this.inventory.status" [(ngModel)]="this.inventory.status">
+                                                </dx-select-box>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <ng-container *ngIf="this.inventory.refId!==null && this.inventory.refId!==undefined">
+                                        <div class="col-md-4">
+                                            <div class="dx-field-label"> {{'Ref ID' | translate}}</div>
+                                            <div class="dx-field-value">
+                                                <p> {{this.inventory.refId}}</p>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                </div>
+                            </ng-container>
+                            <!-- && this.inventory.refId===null -->
+                            <ng-container *ngIf="this.inventory.status!=='N'">
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <div class="dx-field" *ngIf="this.mode==='e'">
+                                            <div class="dx-field-label"> {{'Doc Status' | translate}}</div>
+                                            <div class="dx-field-value">
+                                                <dx-select-box [readOnly]="this.mode === 'e'" #ddlStatus [style]="{'width':'100%'}" name="status" placeholder="--- Select Status ---" [dataSource]="docStatus" displayExpr="name" valueExpr="value" [value]="this.inventory.status" [(ngModel)]="this.inventory.status">
+                                                </dx-select-box>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </ng-container>
+                            <!-- <dx-button *ngIf="this.mode!=='e' && this.inventory.fromStore!=='' && this.inventory.fromStore!== null &&this.inventory.fromStore!==undefined  && this.inventory.toStore!=='' && this.inventory.toStore!== null &&this.inventory.toStore!==undefined" icon="check" text="Save"  (onClick)="saveModel()"></dx-button>   -->
+                        </div>
+                    </div>
+                    <!-- *ngIf="this.inventory.fromStore!=='' && this.inventory.fromStore!== null &&this.inventory.fromStore!==undefined && this.inventory.toStore!=='' && this.inventory.toStore!== null &&this.inventory.toStore!==undefined" -->
+                    <ng-container>
+
+
+                        <dx-data-grid #dataGrid *ngIf="this.inventory.fromStore!==null && this.inventory.fromStore!==undefined" 
+                        id="invenLine" (onRowPrepared)="onRowPrepared($event)" (onToolbarPreparing)="onToolbarPreparing($event)"
+                        (onInitNewRow)="onInitNewRow($event)" (onRowInserted)="onRowInserted($event)" [(dataSource)]="this.lines"
+                            [allowColumnResizing]="true" [columnResizingMode]="true" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true" [repaintChangesOnly]="true">
+                            <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                            
+                            <dxo-editing mode="cell"  [useIcons]="true" [allowUpdating]="this.inventory.status==='O'" [allowDeleting]="this.mode !== 'e' " [confirmDelete]="false"></dxo-editing>
+                            <dxi-column dataField="itemCode" [fixed]="false" caption="{{'Item Code' | translate}}" editCellTemplate="itemDropDownBoxEditor">
+                                <!-- [allowAdding]="this.inventory.status==='O'" -->
+                                <!-- <dxo-lookup [dataSource]="this.itemList" keyExpr="keyId" displayExpr="itemCode" valueExpr="itemCode" *ngIf="!this.isLoading"></dxo-lookup> -->
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column>
+
+                            <!-- 
+                            <dxi-column dataField="itemCode" [visible]="false" [allowEditing]="false" caption="Item Code">
+                            </dxi-column> -->
+                            <dxi-column dataField="description" [allowEditing]="false" caption="{{'Description' | translate}}" [minWidth]="180">
+                            </dxi-column>
+
+                            <dxi-column dataField="frSlocId" [allowEditing]="false" caption="{{'From Bins' | translate}}" [minWidth]="180">
+                            </dxi-column>
+
+                            <dxi-column dataField="toSlocId" [allowEditing]="false" caption="{{'To Bins' | translate}}" [minWidth]="180">
+                            </dxi-column>
+
+                            <!-- <dxi-column [disabled]="true" alignment="center" dataField="frSlocId" caption="From Bins" [minWidth]="120" editCellTemplate="SlocDropDownBoxEditor">
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column>
+                            <dxi-column [disabled]="false" alignment="center" dataField="toSlocId" caption="To Bins" [minWidth]="120">
+                                <dxo-lookup [dataSource]="this.SlocToList" displayExpr="slocId" valueExpr="slocId"> </dxo-lookup>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column> -->
+                            <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}" [allowEditing]="false" [minWidth]="150"> </dxi-column>
+                            <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="{{'UoM' | translate}}" [minWidth]="120">
+                            </dxi-column>
+                            <dxi-column alignment="center" dataField="openQty" [format]="this.authService.numberFormat('quantity')" *ngIf="this.mode==='e'" [allowEditing]="false" caption="{{'Open Quantity' | translate}}" [minWidth]="120">
+                            </dxi-column>
+                            <dxi-column alignment="center" dataField="openQty" [format]="this.authService.numberFormat('quantity')" *ngIf="this.mode!=='e'" [allowEditing]="false" caption="{{'On Hand' | translate}}" [minWidth]="120">
+                            </dxi-column>
+
+                            <dxi-column alignment="right" [allowEditing]="this.mode !== 'e'" dataField="quantity" [format]="this.authService.numberFormat('quantity')" caption="{{'Quantity' | translate}}" dataType="number" [minWidth]="120">
+                                <dxi-validation-rule type="range" [min]="minnumber" message="Quantity greater than 0"></dxi-validation-rule>
+                                <dxi-validation-rule type="pattern" [pattern]="qtyPattern" message="Quantity format invalid"></dxi-validation-rule>
+                                <dxi-validation-rule type="custom" [validationCallback]="validateNumber" message="Quantity format invalid !(UOM not allow Decimal)">
+                                </dxi-validation-rule>
+                                [validationCallback]="asyncValidation"
+                            </dxi-column>
+                            <dxi-column alignment="center" dataField="allowDecimal" [visible]="false" caption="{{'Tax Rate' | translate}}" [minWidth]="80">
+                            </dxi-column>
+                            <dxi-column alignment="right" [visible]="false" [calculateCellValue]="PriceCellValue" [allowEditing]="false" dataField="price" dataType="number" [minWidth]="120"></dxi-column>
+                            <dxi-column alignment="right" [visible]="false" dataField="lineTotal" [calculateCellValue]="lineTotalCellValue" [format]="this.authService.numberFormat('amount')" [allowEditing]="false" caption="{{'Line Total' | translate}}" [minWidth]="120">
+                            </dxi-column>
+
+                            <dxo-summary [recalculateWhileEditing]="true">
+                                <dxi-total-item column="quantity" [valueFormat]="this.authService.numberFormat('quantity')" summaryType="sum" showInColumn="quantity" alignment="center">
+                                </dxi-total-item>
+                                <dxi-total-item column="lineTotal" [valueFormat]="this.authService.numberFormat('amount')" summaryType="sum">
+                                </dxi-total-item>
+                            </dxo-summary>
+                            <!-- <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                    <div *dxTemplate="let e of 'contentTemplate'">
+                                        <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() * 38/ 100 " [allowColumnResizing]="true" [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value"
+                                            [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                            <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Search..." location="before"></dxo-search-panel>
+                                            <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                            <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                            <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+                                            <dxi-column dataField="barCode" caption="Barcode"></dxi-column>
+                                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection mode="single"></dxo-selection>
+                                        </dx-data-grid>
+                                    </div>
+                                </dx-drop-down-box>
+                            </div> -->
+                            <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                                <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                    <div *dxTemplate="let e of 'contentTemplate'">
+                                        <!-- (ngSubmit)="searchItem()" -->
+                                        <form [formGroup]="itemSearchForm" id="itemSearchForm" >  
+                                                <div class="col-md-12" style="clear: both;">
+                                                    <ng-container *ngFor="let item of this.groupControlList"> 
+                                                            <div class="row"> 
+                                                                <ng-container *ngFor="let value of item.arrayGroup">  
+                                                                     
+                                                                    <div class="col-md-4 mb-2"  >
+                                                                        <div class="row">
+                                                                            <div class="col-md-4 d-flex align-items-center">
+                                                                            
+                                                                                <label *ngIf="item.controlType==='TextBox' " for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                                                                <label *ngIf="item.controlType !=='TextBox' " [ngClass]="status ? 'd-block' : 'd-none'" for="{{value.controlId}}"> {{value.controlName | translate}}</label>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <dx-switch *ngIf="item.controlType==='CheckBox'" [ngClass]="status ? 'd-block' : 'd-none'" [(ngModel)]="searchModel[value.controlId]" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(value)]="searchModel[value.controlId]"></dx-switch>
+                                
+                                                                                <input *ngIf="item.controlType==='TextBox' " class="form-control" id="{{value.controlId}}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" [(ngModel)]="searchModel[value.controlId]">
+                                        
+                                                                                <dx-date-box name="{{value.controlId | translate}}" [ngClass]="status ? 'd-block' : 'd-none'" [value]="searchModel[value.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat" formControlName="{{value.controlId}}" [(ngModel)]="searchModel[value.controlId]" *ngIf="item.controlType==='DateTime'"
+                                                                                    type="datetime">
+                                                                                </dx-date-box>
+                                        
+                                                                                <dx-select-box *ngIf="item.controlType==='DropDown'" [ngClass]="status ? 'd-block' : 'd-none'" showClearButton="true" [style]="{'width':'100%'}" formControlName="{{value.controlId}}" name="{{value.controlId | translate}}" placeholder="--- {{'Select' | translate}} {{value.controlName | translate}} ---"
+                                                                                    [dataSource]="this[value.optionName]" displayExpr="{{value.optionKey}}" valueExpr="{{value.optionValue}}" [(ngModel)]="searchModel[value.controlId]" [value]="searchModel[value.controlId]"></dx-select-box>
+                                                                        
+                                                                            </div>
+                                
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </div>
+                                                       
+                                                    </ng-container>
+                                
+                                                </div>
+                                                <div class="col-md-12 mb-2 " style="float: right; text-align: right;">
+                                                    <dx-button icon="search" style="width:200px; height: 45px;" type="default"  text="{{'Search' | translate}}" (onClick)="searchItem()"></dx-button>
+                                                </div> 
+                                        </form>
+                                        <dx-data-grid #itemGrid keyExpr="keyId" style="margin-top: 60px;" 
+                                        [disabled]="itemList?.length <= 0" [dataSource]="itemList" [remoteOperations]="true" 
+                                        [height]="(this.authService.getWindowHeight() <= 1024 ? this.authService.getWindowHeight() * 38 / 100 : 
+                                        this.authService.getWindowHeight() * 40/ 100) - 80 " [selectedRowKeys]="[cellInfo.value]"
+                                            [allowColumnResizing]="true" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                            <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Filter..." location="before"></dxo-search-panel>
+                                            <dxi-column dataField="itemCode" caption="{{'Item Code' | translate}}"></dxi-column>
+                                            <dxi-column dataField="itemName" caption="{{'Item Name' | translate}}"></dxi-column>
+                                            <dxi-column dataField="uomName" caption="{{'UoM' | translate}}"></dxi-column>
+                                            <dxi-column dataField="barCode" caption="{{'Barcode' | translate}}"></dxi-column>
+                                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection mode="single"></dxo-selection>
+                                        </dx-data-grid>
+                                    </div>
+                                </dx-drop-down-box>
+                            </div>
+                            <div *dxTemplate="let cellInfo of 'SlocDropDownBoxEditor'">
+                                <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="this.SlocFromList" [(value)]="cellInfo.value" displayExpr="slocId" valueExpr="slocId" contentTemplate="contentTemplate">
+                                    <div *dxTemplate="let e of 'contentTemplate'">
+                                        <dx-data-grid #collectionGrid keyExpr="slocId" [dataSource]="this.SlocFromList" [remoteOperations]="true" [allowColumnResizing]="true" [height]="this.authService.getWindowHeight() * 38/ 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true"
+                                            [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true" (onSelectionChanged)="onCollectionGetSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                            <dxo-search-panel [width]="this.authService.getWindowWidth() - (50 * this.authService.getWindowWidth()) / 100 " [visible]="true" placeholder="Filter..." location="before"></dxo-search-panel>
+                                            <dxi-column dataField="slocId" [caption]="'Sloc Id'"></dxi-column>
+
+                                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                            <dxo-selection mode="single"></dxo-selection>
+                                        </dx-data-grid>
+                                    </div>
+                                </dx-drop-down-box>
+
+                            </div>
+                            <div *dxTemplate="let line of 'detail'">
+                                <div class="master-detail-caption"> {{ 'Serial' | translate }}</div>
+                                <dx-data-grid [dataSource]="line.data.lines" keyExpr="serialNum" [showBorders]="true" [columnAutoWidth]="true">
+                                    <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+                                    <dxi-column dataField="frSlocId" caption="{{'From Bins' | translate}}"></dxi-column>
+                                    <dxi-column dataField="toSlocId" caption="{{'To Bins' | translate}}"></dxi-column>
+                                    <dxi-column dataField="quantity" caption="{{'Quantity' | translate}}"></dxi-column>
+                                    <dxi-column dataField="uomCode" caption="{{'UoM' | translate}}"></dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </dx-data-grid>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #Template>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Error List</h4>
+        <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+    </div>
+    <div class="modal-body">
+        <app-Import-errorlist [ErrorRepair]="ErrorRepair" [Erroreexcel]="Erroreexcel" [ListNotExitItem]="ListNotExitItem" [ListNullItem]="ListNullItem" [ListNullBarcode]="ListNullBarcode" [ListNullUom]="ListNullUom" [ListNullSlocid]="ListNullSlocid" [ListNullQuantity]="ListNullQuantity"
+            [ListToSlocIdNull]="ListToSlocIdNull" [IsTobincode]="true"></app-Import-errorlist>
+    </div>
+    <div class="modal-footer">
+        <dx-button class="mr-2" icon="xlsxfile" type="default" text="{{'Excel' | translate}}" (onClick)="exportExcel()"></dx-button>
+        <dx-button type="danger" text="Close" icon="close" (onClick)="modalRef.hide()"></dx-button>
+    </div>
+</ng-template>

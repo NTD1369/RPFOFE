@@ -1,0 +1,76 @@
+<ng-container *ngIf="editForm && this.model!==null && this.model!==undefined" > 
+    <form [formGroup]="editForm" id="editForm" (ngSubmit)="update()" [style]="{'max-height':'calc(100vh - 25vh)','overflow':'auto'}">
+        <div style="padding-bottom: 70px;" class="col-md-12">
+            <div class="row">
+                <ng-container *ngFor="let value of this.groupControlList">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <ng-container *ngFor="let item of value.arrayGroup">
+                                <div class="col-md-6 form-group" *ngIf="item.isView">
+                                    <label for="{{item.controlId}}"> {{item.controlName | translate}} <span *ngIf="item.require" class= "error"> *</span></label>
+                                    <input *ngIf="value.controlType==='TextBox'" class="form-control" id="{{item.controlId}}" [attr.disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null" formControlName="{{item.controlId}}"
+                                        name="{{item.controlId | translate}}" [(ngModel)]="model[item.controlId]">
+
+                                    <dx-date-box name="{{item.controlId | translate}}" [value]="model[item.controlId]" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'" formControlName="{{item.controlId}}" [(ngModel)]="model[item.controlId]" *ngIf="value.controlType==='DateTime'"
+                                        type="datetime" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null">
+
+                                    </dx-date-box>
+                                    <dx-switch *ngIf="value.controlType==='CheckBox'" [(ngModel)]="model[item.controlId]" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" [(value)]="model[item.controlId]" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null">
+                                    </dx-switch>
+                                    <!-- [searchExpr]="item.optionValue"  -->
+                                    <dx-select-box *ngIf="value.controlType==='DropDown'" [style]="{'width':'100%'}" formControlName="{{item.controlId}}" name="{{item.controlId | translate}}" placeholder="--- {{Select | translate}} {{item.controlName | translate}} ---"
+                                        [dataSource]="this[item.optionName]"   [searchEnabled]="true" [searchMode]="'contains'" displayExpr="{{item.optionKey}}" valueExpr="{{item.optionValue}}" [disabled]="isNew ? !item.isInsert?'disabled':null : !item.isEdit?'disabled':null"
+                                        [(ngModel)]="model[item.controlId]" [value]="model[item.controlId]" (onValueChanged)=" item.controlId ==='countryCode' ? countryChange($event) : 
+                                        item.controlId ==='regionCode' ? regionChange($event) :
+                                        item.controlId ==='areaCode' ? areaChange($event) :
+                                        item.controlId ==='provinceId' ? provinceChange($event) : 
+                                        item.controlId ==='districtId' ? districtChange($event) : ''">
+                                    </dx-select-box>
+                                    <label *ngIf="item.require && editForm.get(item.controlId).invalid" [ngClass]="'error'"> {{item.controlName | translate}} {{'is required' | translate}}. </label>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <!-- [disabled]="!editForm.dirty" -->
+        <div style="position: absolute; bottom: 0px;right: 30px; background-color: white;" class="row col-md-12">
+            <div class="col-md-9">
+                <ng-container *ngIf="this.isNew===false">
+
+                    <dx-button icon="fieldchooser" class="width-200 height-60 mr-2" type="success" text="Payment" (onClick)="getPayment()"> 
+                        
+                    </dx-button>
+                    <dx-button icon="fa fa-credit-card" class="width-200 height-60 mr-2" type="default" text="Currency" (onClick)="getCurrency()"> </dx-button>
+                    <dx-button icon="tableproperties" class="width-200 height-60 mr-2" stylingMode="outlined" type="default" text="Warehouse" (onClick)="getWhs()"> </dx-button>
+                </ng-container>
+
+            </div>
+
+            <div class="col-md-3 text-right">
+
+                <!-- <dx-button *ngIf="checkPermission('btnSave' ,'V')" icon="fa fa-credit-card" form="editForm"
+         type="default" text="Save Changes"  > </dx-button> -->
+                <button [disabled]="!editForm.valid || !editForm.dirty" [ngClass]="(!editForm.valid || !editForm.dirty) ? 'disableCustom': ''" *ngIf="checkPermission('btnSave' ,'V')" form="editForm" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+            </div>
+        </div>
+
+
+    </form>
+</ng-container>
+<!-- <ng-template #warehouse>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Store warehouse Edit' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-store-whs-edit [store]="this.model.storeId"  style="width: 100%"></app-management-store-whs-edit>
+            <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit> 
+        </div>
+    </div>
+</ng-template> -->

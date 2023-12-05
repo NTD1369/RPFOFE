@@ -1,0 +1,183 @@
+<header>
+
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg">
+            <!-- LOGO href="/shop"-->
+            <a class="navbar-brand" (click)="showSide()">
+                <!-- <a href="/shop" >  -->
+                <img src="../../../../assets/images/System/logo.svg" alt="brand logo">
+
+                <!-- </a> -->
+            </a>
+            <!--  style="margin-left: -140px;" -->
+            <ng-container *ngIf="(ShowMenu$ | async)">
+                <span class="points greeting navbar-brand toggleMenu" (click)="toggleMenu()">
+                <i class="fa fa-chevron-down fa-2x"  aria-hidden="true"></i> 
+              </span>
+                    </ng-container>
+                    <ng-container *ngIf="!(ShowMenu$ | async)">
+                        <span class="points greeting navbar-brand toggleMenu" (click)="toggleMenu()">
+                <i class="fa fa-chevron-up fa-2x"  aria-hidden="true"></i> 
+              </span>
+            </ng-container>
+
+
+
+
+            <!-- <div style="margin-left:10px" class="ml-5 manager-action-flex" *ngIf="(basket$ | async) === null && this.authService.storeSelected()!==null">
+        <div class="manager-left-action">   
+          <div class="manager-action-link">
+            <button type="button" class="btn-minimize" (click)="newOrder()">
+            
+              <i class="fa fa-plus-circle mr-2" style="color: red;" aria-hidden="true"></i> {{'NewOrder' | translate}}
+            </button>
+          </div>
+          
+        </div>
+      </div>
+      -->
+            <!-- <div class="topsidebar-wrap">  
+        <app-shop-top-menu></app-shop-top-menu>
+      </div> -->
+            <!-- USER INFO -->
+            <div class="nav-user-info d-none d-lg-flex paymentMenu" *ngIf="(basket$ | async) as basket">
+
+
+                <ng-container *ngIf="basket.customer !== null">
+                    <div class="point-div">
+                        <span class="username" style="cursor: pointer;" [routerLink]="['/shop/order/customer']"> <i class="fas fa-user-tie"></i> {{basket.customer.customerName}}</span>
+                        <span class="nav-phone greeting">
+                        <a href="tel:852-320-1400">
+                          <img src="../../../../assets/images/System/phone.svg" alt="phone">{{basket.customer.phone}}
+                        </a>
+                      </span>
+                    </div>
+
+                    <div class="nav-contact">
+                        <span class="points greeting ml-1">
+                          <img src="../../../../assets/images/System/coins.svg" alt="coins"> {{'Class' | translate}} :
+                                  <span class="red" >{{basket.customer?.customerGrpId}}</span>
+                                    </span>
+                                    <span class="nav-mail greeting ml-1">
+                          <a href="mailto:davidt@abeoinc.com">
+                            <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.joinedDate}}
+                          </a>
+                        </span>
+
+                    </div>
+                </ng-container>
+
+
+            </div>
+            <!-- <div style="margin-left:10px" class="ml-5 manager-action-flex" *ngIf="(basket$ | async) !== null">
+        <div class="manager-left-action">
+          <div class="manager-action-link">
+            <button type="button" class="btn-minimize" (click)="cancelOrder()">
+              <span class="manager-action-link-icon contain-image">
+                <img src="../../../../assets/images/System/close.svg" alt="New Order">
+              </span> Cancel Order
+            </button>
+          </div>
+          
+        </div>
+      </div> -->
+      <!---->
+           <!-- <ng-container  *ngIf="basket$ | async as basket" >  
+
+                <button type="button" class="btn-minimize btnCart"  >
+                  <label id="lblCartQuantity">{{(basketTotal$ | async)?.totalQty | currencyFormat}}</label>
+                  <span class="manager-action-link-icon contain-image">
+                    <img src="../../../../assets/images/System/cart.png" alt="New Order">
+                  </span> 
+                </button>
+               
+            </ng-container>   -->
+            
+
+            <!-- DROPDOWN -->
+            <div class="dropdown-wrap order-2 order-lg-1">
+                <div class="user-greet d-none d-lg-block">
+                    <h6> {{'Welcome' | translate}}, <span class="username">{{authService.decodeToken?.unique_name | titlecase}}</span></h6>
+                    <p class="greeting">
+
+                    </p>
+                </div>
+
+                <div class="dropdown">
+                    <a class="dropdown-toggle mr-2" href="https://staging.whiteorangesoftware.com/abeo/index.html#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <!-- <img src="../../../../assets/images/System/user.png" alt="user image"> -->
+                        <img src="../../../../assets/images/System/user_v2.png" alt="user image" style="width: 60px">
+                    </a>
+
+                    <div class="dropdown-menu  mt-3" aria-labelledby="dropdownMenuLink">
+                        <div class="user-greet dropdown-item">
+                            <h6>
+                                {{'Welcome' | translate}},
+                                <span class="username">{{authService.decodeToken?.unique_name | titlecase}}</span>
+                            </h6>
+                            <div class="dropdown-divider"></div>
+                        </div>
+
+                        <a class="dropdown-item" href="#"> <i class="fas fa-user-circle"></i> {{'MyAccount' | translate}}</a>
+                        <a class="dropdown-item"><i class="fab fa-shirtsinbulk"></i> {{'Shift' | translate}}</a>
+                        <!-- <a class="dropdown-item" [routerLink]="['/admin']"> <i class="fas fa-bug"></i> {{'Management' | translate}}</a> -->
+                        <a class="dropdown-item" style="cursor: pointer;" (click)="logout()"><i class="fas fa-sign-out-alt"></i>{{'Logout' | translate}}</a>
+
+                        <div class="nav-user-info d-lg-none" *ngIf="basket$ | async as basket">
+                            <div class="dropdown-divider"></div>
+                            <span class="username dropdown-item">{{authService.decodeToken?.unique_name | titlecase}}</span>
+                            <span class="nav-phone greeting dropdown-item" *ngIf="basket.customer !== null">
+                <a href="tel:852-320-1400">
+                  <img src="../../../../assets/images/System/phone.svg" alt="phone"> {{basket.customer.phone}}
+                </a>
+              </span>
+                            <span class="points greeting dropdown-item">
+                <img src="../../../../assets/images/System/coins.svg" alt="coins">{{'Class' | translate}} :
+                <span class="red">{{basket.customer?.customerGrpId}}</span>
+                            </span>
+                            <span class="nav-mail greeting dropdown-item">
+                <a href="mailto:davidt@abeoinc.com">
+                  <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.joinedDate}}
+                </a>
+              </span>
+                        </div>
+                    </div>
+                </div>
+                <dx-select-box [width]="135" id="custom-templates" [dataSource]="countries" displayExpr="name" valueExpr="code" #selectedLang [value]="selectedCountry.code" fieldTemplate="field" (onValueChanged)="switchLang(selectedLang)">
+                    <div *dxTemplate="let data of 'field'">
+                        <div class="custom-item">
+                            <span class="ml-2 flag-icon flag-icon-{{data && data.flag.toLowerCase()}}">
+
+                </span>
+                            <dx-text-box class="product-name" [value]="data && data.name" [readOnly]="true"></dx-text-box>
+
+                        </div>
+                    </div>
+                    <div *dxTemplate="let data of 'item'">
+                        <div class="custom-item">
+                            <span [class]="'flag-icon flag-icon-' + data.flag.toLowerCase() "></span>
+                            <div>{{data.name}}</div>
+                        </div>
+                    </div>
+                </dx-select-box>
+            </div>
+
+            <!-- <a  class="nav-info-link order-1 order-lg-2" (click)="showSide()">
+        <img src="../../../../assets/images/System/info.svg" alt="info">
+      </a> -->
+
+        </nav>
+    </div>
+</header>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Customer' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <app-shop-customer></app-shop-customer>
+    </div>
+</ng-template>

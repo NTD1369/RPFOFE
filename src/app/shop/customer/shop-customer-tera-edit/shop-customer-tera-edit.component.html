@@ -1,0 +1,43 @@
+<ng-container  >
+    <div class="row">
+        <div class="col-md-5 " >
+            <label for="customerName"> {{"Customer Name"| translate}} </label>
+            <input  class="form-control" id="customerGrpId" [(ngModel)]="customer.customerName">
+        </div>
+        <div class="col-md-5 " >
+            <label for="customerGrpId"> {{"Customer Group ID"| translate}} </label>
+            <input  class="form-control" id="customerGrpId" [(ngModel)]="customer.customerGrpId" >
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-5 " >
+            <label for="email"> {{"Email"| translate}} </label>
+            <input  class="form-control" id="email" [(ngModel)]="customer.email">
+        </div>
+        <div class="col-md-5 " >
+            <label for="mobile"> {{"Customer Phone"| translate}} </label>
+            <input  class="form-control" id="mobile" [(ngModel)]="customer.mobile" >
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-5 " >
+            <label for="joinedDate"> {{"Joined Date"| translate}} </label>
+            <dx-date-box type="date"  id="joinedDate" [(ngModel)]="customer.joinedDate" ></dx-date-box>
+        </div>
+        <div class="col-md-5 " >
+            <label for="dob"> {{"Birthdate"| translate}} </label>
+            <dx-date-box type="date"  id="dob" [(ngModel)]="customer.dob" ></dx-date-box>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-10">
+            <label for="Address"> {{"Address"| translate}} </label>
+           <input id ="Address"  class="form-control"  [(ngModel)]="customer.address">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 text-right">
+            <button  class="btn-agree width-200 height-60" (click)="update()">{{"Save Changes"|translate}}</button>
+        </div>
+    </div>
+</ng-container>

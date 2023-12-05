@@ -1,0 +1,65 @@
+<!-- 
+<div class="number-pad" > 
+  <div class="row mb-3 p3">
+ 
+    
+  
+  </div>
+ 
+</div> -->
+
+<div id='invoice-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Currency' | translate}}</h4>
+
+
+        <button type="reset" class="reset-btn mr-1 closeCustom" (click)="closeModal()" style="width: 13%;">
+        <i class="fas fa-window-close"></i>
+
+      </button>
+
+
+        <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button> -->
+    </div>
+    <div class="modal-body">
+
+        <div class="number-pad">
+            <div class="row" *ngIf="storeCurrency!==null && storeCurrency!==undefined && storeCurrency.length > 0">
+                <div *ngFor="let item of storeCurrency" class="col-md-6 mb-3 number-div pt-2 pb-2">
+                    <!-- pay-option-btn -->
+                    <button [ngClass]="item.currency == this.payment.currency ? 'number-btn' : 'number-btn'" (click)="selectCurrency(item)"> {{item.currency }}
+                    <br />
+                    {{item.currencyName }}
+                    <br />
+                    <ng-container  *ngIf="this.type!=='Change'">
+                      <!-- [format]="this.authService.numberFormat('rate')" -->
+                      {{'Exchange Rate' | translate}} :  {{item.rate | currencyFormat }}
+                      <label [value]="item.rate" format="$ #,##0.##"></label>
+                    </ng-container>
+                    <ng-container  *ngIf="this.type==='Change'">
+            
+                      {{'Amount change' | translate}}: {{this.amount / item.rate | currencyFormat}} 
+                    </ng-container>
+        
+          </button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <!-- <div class="modal-footer"  >
+    <div class="row " style="width: 100%;">
+       
+     
+      
+     
+    
+     
+    
+    </div>
+  </div> -->
+</div>

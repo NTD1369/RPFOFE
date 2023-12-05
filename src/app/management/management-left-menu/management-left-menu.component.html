@@ -1,0 +1,39 @@
+<!-- SIDEBAR NAVLINKS -->
+<main class="sidebar-manager">
+  <ul class="sidebar-link-list">
+    <li *ngFor="let item of this.menuList" class="sidebar-link-list-items"  routerLinkActive="router-link-active">
+      <a class="sidebar-link" [routerLink]="[item.Url]"  >
+        <span class="sidebar-link-icon contain-image">
+          <img src="../../../../assets/images/System/{{item.Icon || 'step-in.svg'}}" alt="sidebar-icons">
+        </span>
+      </a>
+    </li>
+
+    <li class="sidebar-link-list-items" *ngIf="this.isShowMore">
+      <a class="sidebar-link active" #btn1 (click)="showSide()"  id="manger-services-setting">
+        <span class="sidebar-link-icon contain-image">
+          <img src="../../../../assets/images/System/wrench-setting.svg" alt="sidebar-icons">
+        </span>
+      </a>
+      
+    </li>
+  <!-- 
+    <li class="sidebar-link-list-items">
+      <a class="sidebar-link" href="javascript:void">
+        <span class="sidebar-link-icon contain-image">
+          <img src="../../../../assets/images/System/speaker.svg" alt="sidebar-icons">
+        </span>
+      </a>
+    </li>
+
+    <li class="sidebar-link-list-items">
+      <a class="sidebar-link" href="javascript:void">
+        <span class="sidebar-link-icon contain-image">
+          <img src="../../../../assets/images/System/tasks.svg" alt="sidebar-icons">
+        </span>
+      </a>
+    </li> -->
+  </ul>
+</main>
+<!-- <app-management-sub-menu [isShown]="showSubMenu" [listSub]="this.subList"></app-management-sub-menu> -->
+ 

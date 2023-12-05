@@ -1,0 +1,8 @@
+@media print {
+    #cl-print {
+        display: none;
+    }
+    .cl-contain {
+        margin: 0 1cm;
+    }
+}

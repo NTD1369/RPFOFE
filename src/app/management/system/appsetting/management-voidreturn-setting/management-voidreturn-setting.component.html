@@ -1,0 +1,54 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Void Return Setting' | translate}}</label>
+
+        </div>
+
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.items" [showBorders]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column dataField="id" caption="{{'ID' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="type" caption="{{'Type' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="code" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="description" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="value" caption="{{'Value' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom1" caption="{{'Custom' | translate}} 1" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom2" caption="{{'Custom' | translate}} 2" dataType="string"> </dxi-column>
+                <dxi-column dataField="custom3" caption="{{'Custom' | translate}} 3" dataType="string"> </dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button class="mr-2" icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Void Return Setting' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <!-- <p-calendar #myCalendar [(ngModel)]="selectedDate"></p-calendar> -->
+            <!-- <app-management-voidreturn-edit [model]="this.item"  style="width: 100%" (outModel)="updateModel($event)"></app-management-voidreturn-edit>  -->
+            <app-management-voidreturn-setting-edit [model]="this.item" style="width: 100%" (outModel)="updateModel($event)"></app-management-voidreturn-setting-edit>
+        </div>
+    </div>
+</ng-template>

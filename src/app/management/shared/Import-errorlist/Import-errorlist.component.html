@@ -1,0 +1,153 @@
+
+<div *ngIf="this.ErrorRepair.length >0">
+          <h5 class="modal-title" id="modal-basic-title">item already exists :</h5>
+          <dx-data-grid  
+          id="gridContainer"
+          [allowColumnReordering]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [dataSource]="ErrorRepair"
+          keyExpr="stt"
+   
+          [showBorders]="true">
+          <dxi-column dataField="stt" [width]="150" caption="Row"></dxi-column>
+          <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+          <dxo-paging [pageSize]="10"></dxo-paging>
+      </dx-data-grid>
+</div>
+<div *ngIf="this.Erroreexcel.length >0">
+  <h5 class="modal-title" id="modal-basic-title">Item duplicate in excel :</h5>
+  <dx-data-grid 
+  id="gridContainer"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [dataSource]="Erroreexcel"
+  keyExpr="stt"
+
+  [showBorders]="true">
+  <!-- <dxi-column dataField="stt" caption="Row"></dxi-column> -->
+  <dxi-column dataField="listStt"[width]="150" alignment="right" caption="Row duplicate"></dxi-column>
+  <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+</dx-data-grid>
+</div>
+<div *ngIf="this.ListNotExitItem.length >0">
+  <h5 class="modal-title" id="modal-basic-title">Not Exists :</h5>
+  <dx-data-grid 
+  id="gridContainer"
+  [dataSource]="ListNotExitItem"
+  keyExpr="stt"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true">
+  <!-- <dxi-column dataField="stt" caption="Row"></dxi-column> -->
+  <dxi-column  dataField="stt" caption="Row"></dxi-column>
+  <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+</dx-data-grid>
+</div>
+<div *ngIf="this.ListNullTax.length >0">
+  <h5 class="modal-title" id="modal-basic-title">TaxCode Not Found :</h5>
+  <dx-data-grid  
+  id="gridContainer"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [dataSource]="ListNullTax"
+  keyExpr="stt"
+
+  [showBorders]="true">
+  <dxi-column dataField="stt" [width]="150" caption="Row"></dxi-column>
+  <dxi-column dataField="itemCode" caption="Tax Code"></dxi-column>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+</dx-data-grid>
+</div>
+<div *ngIf="this.ListFrSlocidNull.length>0">
+  <h5 class="modal-title" id="modal-basic-title">FrSlocId Not Found :</h5>
+  <dx-data-grid  
+  id="gridContainer"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [dataSource]="ListFrSlocidNull"
+  keyExpr="stt"
+
+  [showBorders]="true">
+  <dxi-column dataField="stt" [width]="150" caption="Row"></dxi-column>
+  <dxi-column dataField="itemCode" caption="From SlocId"></dxi-column>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+</dx-data-grid>
+</div>
+<div *ngIf="this.ListToSlocIdNull.length >0">
+  <h5 class="modal-title" id="modal-basic-title">ToSlocId Not Found :</h5>
+  <dx-data-grid  
+  id="gridContainer"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [dataSource]="ListToSlocIdNull"
+  keyExpr="stt"
+
+  [showBorders]="true">
+  <dxi-column dataField="stt" [width]="150" caption="Row"></dxi-column>
+  <dxi-column dataField="itemCode" caption="To SlocId"></dxi-column>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+</dx-data-grid>
+</div>
+<div *ngIf="ListNullItem.length>0">
+  <h5 class="modal-title" id="modal-basic-title">ItemCode null in row:</h5>
+ <div class="row ml-2">
+  <div *ngFor="let item of ListNullItem;let i = index">
+      {{item}} {{i==ListNullItem.length-1?'':','}}
+  </div>
+ </div>
+ 
+</div>
+<div *ngIf="ListNullBarcode.length >0">
+  <h5 class="modal-title" id="modal-basic-title">BarCode is null in row:</h5>
+  <div class="row ml-2">
+      <div *ngFor="let item of ListNullBarcode;let i = index">
+          {{item}} {{i==ListNullBarcode.length-1?'':','}}
+      </div>
+     </div>
+     
+</div>
+<div *ngIf="ListNullUom.length >0">
+  <h5 class="modal-title" id="modal-basic-title">UomCode is null in row:</h5>
+  <div class="row ml-2">
+      <div *ngFor="let item of ListNullUom;let i = index">
+          {{item}} {{i==ListNullUom.length-1?'':','}}
+      </div>
+     </div>
+     
+</div>
+
+<div *ngIf="ListNullSlocid.length >0">
+<h5 *ngIf ="!IsTobincode" class="modal-title" id="modal-basic-title">SlocId is null in row:</h5>
+<h5 *ngIf ="IsTobincode" class="modal-title" id="modal-basic-title">FrSlocId is null in row:</h5>
+<div class="row ml-2">
+<div *ngFor="let item of ListNullSlocid;let i = index">
+  {{item}} {{i==ListNullSlocid.length-1?'':','}}
+</div>
+</div>
+
+</div>
+
+<div *ngIf="this.ListNullQuantity.length>0">
+<h5 class="modal-title" id="modal-basic-title">Quantity  greater than 0 or Quantity format invalid in row :</h5>
+<div class="row ml-2">
+<div *ngFor="let item of ListNullQuantity;let i = index">
+  {{item}} {{i==ListNullQuantity.length -1?'':','}}
+</div>
+</div>
+</div>
+<div *ngIf="ListSerialError.length >0">
+  <h5  class="modal-title" id="modal-basic-title">Serial not Found in row (sheet Serial):</h5>
+  <div class="row ml-2">
+  <div *ngFor="let item of ListSerialError;let i = index">
+    {{item}} {{i==ListSerialError.length-1?'':','}}
+  </div>
+  </div>
+  </div>

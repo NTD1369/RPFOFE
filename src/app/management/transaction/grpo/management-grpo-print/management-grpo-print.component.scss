@@ -1,0 +1,39 @@
+.cl-fs {
+    font-size: 16px;
+}
+
+.table-template {
+    border-collapse: collapse;
+}
+.tblHeader, .tblLine{
+    width: 100%;
+}
+.table-template td,
+th {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+.tblLine>tr>th, .tblLine>th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font-size: 15px;
+}
+.tblLine>tr>td
+{
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font-size: 15px;
+    font-weight: 100;
+}
+
+
+@media print {
+    .bt-info {
+        display: none;
+    }
+    .table-template {
+        width: 925px !important;
+    }
+}

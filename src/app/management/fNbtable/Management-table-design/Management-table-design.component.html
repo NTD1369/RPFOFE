@@ -1,0 +1,124 @@
+<div class="center-wrap" id="endOdDay">
+  <div class="maintenance-card" style="margin: auto; width:100%;">
+    <div class="row">
+      <div class="col-md-6">
+        <div style="display: flex;" (click)="backtoList()">
+          <div><i class="col-md-3" class="fas fa-arrow-left fa-2x mr-3" style="cursor: pointer;"></i></div>
+          <div for="item-searchbar" class="section-title">{{'Table Design' | translate}} -
+            <strong *ngIf="placeInfor !== undefined && placeInfor != null"> {{placeInfor.placeName}}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-1" style="text-align: -webkit-right;">
+        <dx-button type="success" icon="save" text="{{'Save' | translate}}" (click)="saveModel()"></dx-button>
+        <dx-button type="danger" icon="clear" text="{{'Clear'| translate}}" (click)="clearDesign()"></dx-button>
+        <dx-button type="default" icon="refresh" text="{{'Reload' | translate}}" (click)="reloadModel()"></dx-button>
+      </div>
+    </div>
+    <div class="table-wrap" *ngIf="tableInforList!==null && tableInforList!==undefined && tableInforList?.length > 0">
+      <dx-diagram id="diagram" #diagram customShapeTemplate="customShapeTemplate" [simpleView]="true"
+        customShapeToolboxTemplate="customShapeToolboxTemplate" (onContentReady)="contentReadyHandler($event)"
+        (onSelectionChanged)="selectionChangedHandler($event)"
+        (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)">
+
+        <ng-container *ngFor="let table of tableInforList">
+          <ng-container *ngIf="table?.isOrdered">
+            <dxi-custom-shape category="tables" [defaultText]="table.tableName  +'-Seat:'+  table?.slot"
+              [type]="table.tableName" [allowEditText]="true"              
+              backgroundImageUrl="../../../../assets/images/System/table-iconss.png" [backgroundImageLeft]="-0.5"
+              [backgroundImageTop]="-0.5" [backgroundImageWidth]="2" [backgroundImageHeight]="2" [textLeft]="0">
+              <dxi-connection-point [x]="1" [y]="0"></dxi-connection-point>
+              <dxi-connection-point [x]="1" [y]="0.5"></dxi-connection-point>
+              <dxi-connection-point [x]="1" [y]="1"></dxi-connection-point>
+              <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+            </dxi-custom-shape>
+          </ng-container>
+          <ng-container *ngIf="!table?.isOrdered">
+            <dxi-custom-shape category="tables" [defaultText]="table.tableName  +'-Seat:'+  table?.slot"
+              [type]="table.tableName" [allowEditText]="true"
+              backgroundImageUrl="../../../../assets/images/System/table-iconss.png" [backgroundImageLeft]="-0.5"
+              [backgroundImageTop]="-0.5" [backgroundImageWidth]="2" [backgroundImageHeight]="2" [textLeft]="0">
+              <dxi-connection-point [x]="1" [y]="0"></dxi-connection-point>
+              <dxi-connection-point [x]="1" [y]="0.5"></dxi-connection-point>
+              <dxi-connection-point [x]="1" [y]="1"></dxi-connection-point>
+              <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+            </dxi-custom-shape>
+          </ng-container>
+        </ng-container>
+
+        <dxi-custom-shape category="place" type="place" title="Place" [backgroundImageUrl]="this.urlImage"
+          [allowEditText]="false">
+          <dxi-connection-point [x]="0.5" [y]="0"></dxi-connection-point>
+          <dxi-connection-point [x]="0.9" [y]="0.5"></dxi-connection-point>
+          <dxi-connection-point [x]="0.5" [y]="1"></dxi-connection-point>
+          <dxi-connection-point [x]="0.1" [y]="0.5"></dxi-connection-point>
+        </dxi-custom-shape>
+
+        <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
+          <foreignObject x="1" y="12" width="100%" height="73%"
+            *ngIf="item.dataItem?.text?.length > 0 && !item?.dataItem.isOrdered">
+            <div class="geeks">
+              <div class="table__NoOrder"> {{item.dataItem?.text}}</div>
+            </div>
+          </foreignObject>
+          <foreignObject x="1" y="12" width="100%" height="73%"
+            *ngIf="item.dataItem?.text?.length > 0 && item?.dataItem.isOrdered">
+            <div class="geeks"
+              [ngStyle]="{'background-color': item?.dataItem?.orderCustomF3?.length > 0  ? item?.dataItem?.orderCustomF3 : 'red' }">
+              <div class="table__Order"> {{item.dataItem?.text}}</div>
+            </div>
+          </foreignObject>
+        </svg>
+
+        <svg *dxTemplate="let item of 'customShapeToolboxTemplate'" class="template">
+          <text x="50%" y="70%">Place</text>
+        </svg>
+
+        <dxo-nodes [dataSource]="dataSource" keyExpr="tableId" [typeExpr]="itemTypeExpr" [(styleExpr)]="itemStyleExpr"
+          imageUrlExpr="urlImage" [customDataExpr]="itemCustomDataExpr">
+        </dxo-nodes>
+
+        <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="1">
+        </dxo-context-toolbox>
+
+        <dxo-toolbox [showSearch]="false" [shapeIconsPerRow]="1">
+          <dxi-group category="tables" title="Tables" displayMode="texts"></dxi-group>
+          <dxi-group category="place" title="Place" [expanded]="true"></dxi-group>
+          <!-- <dxi-group category="place" title="Place"></dxi-group> -->
+
+          <!-- <dxi-group
+      category="orgChart"
+      title="Organizational Chart"
+      [expanded]="true"
+    ></dxi-group> -->
+          <!-- <dxi-group category="general" title="General"></dxi-group> -->
+        </dxo-toolbox>
+
+      </dx-diagram>
+
+      <dx-popup [width]="400" [height]="480" [showTitle]="true" title="Edit Table" [dragEnabled]="false"
+        [(visible)]="popupVisible">
+        <div *dxTemplate="let data of 'content'">
+          <button>
+            Select
+          </button>
+          <button>
+            Merge
+          </button>
+          <button>
+            Split
+          </button>
+          <button>
+            Close
+          </button>
+          <button>
+            PrePrint
+          </button>
+          <button>
+            Print Bill
+          </button>
+        </div>
+      </dx-popup>
+    </div>
+  </div>
+</div>

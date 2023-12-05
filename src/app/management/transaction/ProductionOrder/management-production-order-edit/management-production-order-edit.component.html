@@ -1,0 +1,119 @@
+
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;padding:30px;">
+      <div class="row">
+        <div class="col-md-9">
+          <a routerLink="/admin/productionOrder" class="back-btn">
+              <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+          </a>
+          <span class="">Production order</span>
+        </div>
+        <div class="col-md-2" style="text-align: right;">
+          <dx-button class="btn-print" type="success" icon="find" text="{{'RelationShip' | translate}}" (onClick)="openModal( this.dataItemProduct.docEntry,template)" style="color: #fff;"></dx-button>
+      
+        </div>
+        <div class="col-md-1" style="text-align: right;">
+          <dx-button class="btn-print" icon="fa fa-print" text="{{'Print' | translate}}" (onClick)="PrintDetail(this.dataItemProduct)" style="color: #fff;"></dx-button>
+      
+        </div>
+      
+      
+        </div>
+        
+      <div class="row" style="margin-top: 10px;">
+       
+          <div class="row">
+             
+            <div class="col-md-3">
+                <label for="itemDetailId">{{'PurchaseId' | translate}}</label>
+                <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.purchaseId"></dx-text-box>
+            </div>
+            <div class="col-md-3">
+              <label >{{'Store' | translate}}</label>
+              <dx-text-box [readOnly]="true" #cbbStore [(value)]="this.dataItemProduct.storeId"> </dx-text-box>
+            </div>
+            <div class="col-md-3">
+              <label for="customer">{{'StoreName' | translate}}</label>
+              <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.storeName"></dx-text-box>
+            
+            </div>
+            <div class="col-md-3">
+              <label >{{'Uom code' | translate}}</label>
+              <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.uomCode"></dx-text-box>
+            </div>
+          
+            <div class="col-md-3">
+              <label >{{'Doc date' | translate}}</label>
+              <dx-date-box [readOnly]="true" [(value)]="this.dataItemProduct.docDate"> </dx-date-box>
+          </div>
+          <div class="col-md-3">
+              <label >{{'Doc due date' | translate}}</label>
+              <dx-date-box [readOnly]="true" [(value)]="this.dataItemProduct.docDueDate"> </dx-date-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Sap no' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.sapNo"></dx-text-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Type' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.type"></dx-text-box>
+          </div>
+          <div class="col-md-3" >
+            <label >{{'Product no' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.productNo" > </dx-text-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Doc entry' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.docEntry"></dx-text-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Description' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.description"></dx-text-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Sap status' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.sapStatus"></dx-text-box>
+          </div>
+          <div class="col-md-3">
+            <label >{{'Quantity' | translate}}</label>
+            <dx-text-box [readOnly]="true" [(value)]="this.dataItemProduct.quantity" [format]="this.authService.numberFormat('quantity')"></dx-text-box>
+          </div>
+         
+        </div>
+    </div>
+    <div>
+      <div style="margin-top: 15px;">
+        <dx-data-grid
+        id="gridContainer"
+        [dataSource]="this.listProduct"
+        [showBorders]="true"
+      [columnAutoWidth]="true" 
+
+      >
+      <dxi-column dataField="itemCode" caption="{{'item code' | translate}}"></dxi-column>
+      <dxi-column dataField="slocId" caption="{{'SlocId'| translate}}"></dxi-column>
+      <dxi-column dataField="description" [width]="400" caption="{{'Description' | translate}}"></dxi-column>
+      <dxi-column dataField="baseQty" caption="{{'Base Qty' | translate}}" [format]="this.authService.numberFormat('quantity')"></dxi-column>
+      <dxi-column dataField="plannedQty" caption="{{'Planned Qty'| translate}}" [format]="this.authService.numberFormat('quantity')"></dxi-column>
+      <dxi-column dataField="issueId" caption="{{'Issued quantity'| translate}}" [format]="this.authService.numberFormat('quantity')"></dxi-column>
+      <dxi-column dataField="uomCode" caption="{{'Uom code'| translate}}"></dxi-column>
+    </dx-data-grid>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Relation ship' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-relationShip   [goodIssueList]="this.goodIssueList"   [goodReceiptList]="this.goodReceiptList" style="width: 100%" (outModel)="updateModel($event)"></app-relationShip>
+      </div>
+  </div>
+</ng-template>

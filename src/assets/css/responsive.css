@@ -1,0 +1,1338 @@
+/**
+* [Table of contents]
+  1 1290px css
+  2 1440px css
+  3 1630px css
+  4 1599px css
+  5 1429px css
+  6 1199px css
+  7 991px css
+  8 767px css
+  9 575px css
+  10 480px css
+  11 350px css
+**/
+/* 1290px css */
+@media only screen and (min-width: 1430px) {
+  .container {
+    max-width: 1290px;
+  }
+}
+
+/* 1440px css */
+@media only screen and (min-width: 1600px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+/* 1630px css */
+@media only screen and (min-width: 1800px) {
+  .container {
+    max-width: 1630px;
+  }
+}
+
+@media only screen and (max-width: 1799px) {
+  .right-section .bill-info-wrap .bill-info p {
+    font-size: 15px;
+  }
+  .right-section .total-bill .discount-div {
+    font-size: 14px;
+  }
+  .right-section .total-bill .payable-div {
+    font-size: 16px;
+  }
+  .right-section .total-bill .primary-btn {
+    padding: 14px 0;
+    height: 60px;
+  }
+  .bill-wrapper .table-wrap {
+    overflow: hidden;
+  }
+  .bill-table .t-cell p {
+    font-size: 14px;
+  }
+  .bill-table .t-cell.cell-desc {
+    min-width: 170px;
+  }
+  .bill-table .t-cell.cell-desc p {
+    -webkit-line-clamp: 1;
+  }
+  .custom-table .t-cell {
+    font-size: 16px;
+  }
+  .slick-dotted.slick-slider {
+    margin-bottom: 20px;
+    padding: 0 5px 5px;
+  }
+  .item-search-page a.back-btn {
+    margin-top: 0;
+  }
+  .item-search-page .item-search-nav {
+    margin-top: 0;
+    margin: 1rem 0;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap {
+    overflow-x: auto;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table {
+    /* min-width: 1200px; */
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-cell.cell-desc {
+    max-width: 150px;
+    min-width: 150px;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-cell p {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .bill-info p {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .primary-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div label {
+    font-size: 16px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div p {
+    font-size: 16px;
+  }
+  /* SJJ-2020-11-10 - Maintenace ----------------- MANAGER PAGE */
+  .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box {
+    padding: 20px 16px;
+    min-height: 120px;
+  }
+  .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box label {
+    font-size: 14px;
+    line-height: 14px;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper .maintenance-service-box {
+    padding: 20px 16px;
+    min-height: 120px;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper .maintenance-service-box label {
+    font-size: 14px;
+    line-height: 14px;
+  }
+  /*  MANAGER PAGE END --->  */
+}
+
+/* 1599px css */
+@media only screen and (max-width: 1599px) {
+  .main-section .sidebar-wrap {
+    width: 130px;
+    /* width: 160px; */
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card {
+    font-size: 16px;
+  }
+  .nav-user-info {
+    margin-left: 70px;
+  }
+  .center-wrap {
+    /* margin-left: 160px; */
+    margin-right: 160px;
+  }
+  .right-section .total-bill {
+    margin-top: auto;
+  }
+  .right-section .total-bill .primary-btn {
+    height: 60px;
+    padding: 12px 0;
+  }
+  .main-content .item-wrap .item-card .item-name {
+    font-size: 16px;
+  }
+  .main-content .item-wrap .item-card .item-price {
+    font-size: 18px;
+  }
+  .custom-table .t-cell {
+    font-size: 16px;
+  }
+  .bill-table .t-cell p {
+    font-size: 14px;
+  }
+  .bill-table .t-cell.cell-desc {
+    min-width: 130px;
+  }
+  .item-search-page .wrap {
+    margin-top: 0;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-name {
+    min-width: 420px;
+    max-width: 450px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-item {
+    min-width: 120px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-action {
+    min-width: 200px;
+    max-width: 200px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell p {
+    font-size: 16px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-head {
+    padding: 10px 15px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-body {
+    padding: 0px 15px;
+  }
+  .item-search-page .table-wrap .item-search-table .secondary-btn {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+  /* SJJ-2020-11-10 - Maintenace ------------ MANAGER PAGE */
+  .maintenance-wrapper .center-wrap {
+    padding: 0 1rem;
+  }
+  .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box {
+    padding: 20px 10px 16px;
+  }
+  .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box .service-icon {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    max-height: 34px;
+    padding: 2px;
+  }
+  .maintenance-card .maintenance-access-wrapper .maintenance-service-box {
+    padding: 20px 10px 16px;
+  }
+  .maintenance-card .maintenance-access-wrapper .maintenance-service-box .service-icon {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    max-height: 34px;
+    padding: 2px;
+  }
+  /* MANAGER PAGE ENDS --->  */
+}
+
+/* 1429px css */
+@media only screen and (max-width: 1429px) {
+  nav .dropdown-wrap .user-greet h6 {
+    font-size: 16px;
+  }
+  nav .dropdown-wrap .user-greet h6 .username {
+    font-size: 18px;
+  }
+  .search-wrap input,
+  .custom-select {
+    height: 40px;
+    font-size: 14px;
+  }
+  .main-section .sidebar-wrap {
+    width: 130px;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card {
+    font-size: 15px;
+  }
+  .center-wrap {
+    /* margin-left: 140px; */
+    margin-right: 140px;
+  }
+  .bill-info {
+    font-size: 14px;
+  }
+  .bill-table .t-cell.cell-desc {
+    min-width: 100px;
+  }
+  .right-section .total-bill .primary-btn {
+    font-size: 16px;
+    padding: 16px 0;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .bill-info p {
+    font-size: 12px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .primary-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div label {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div p {
+    font-size: 14px;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box {
+    padding: 14px 10px;
+    min-height: 100px;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box .service-icon {
+    margin-bottom: 0.5rem;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-row .maintenance-service-wrapper .maintenance-service-box label {
+    font-size: 12px;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-access-wrapper .maintenance-service-box {
+    padding: 14px 10px;
+    min-height: 100px;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-access-wrapper .maintenance-service-box .service-icon {
+    margin-bottom: 0.5rem;
+  }
+  .maintenance-wrapper .maintenance-card .maintenance-access-wrapper .maintenance-service-box label {
+    font-size: 12px;
+  }
+  .modal .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-head {
+    padding: 0 10px;
+  }
+  .modal .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-body {
+    padding: 0 10px;
+  }
+  #discount-modal .modal-content .modal-header .close {
+    right: -40px;
+    top: -90px;
+    display: block;
+    position: relative;
+  }
+  #discount-modal .modal-content .modal-body .left-modal-section .table-wrap {
+    overflow-x: auto;
+  }
+  #discount-modal .modal-content .modal-body .left-modal-section .table-wrap .discount-modal-table {
+    width: 1000px;
+  }
+  #discount-modal .modal-content .modal-body .right-modal-section .voucher-section .search-wrap input {
+    height: 50px;
+  }
+}
+
+/* 1199px css */
+@media only screen and (max-width: 1199px) {
+  .custom-table .t-cell {
+    min-width: 75px;
+  }
+  .item-card-slick__image>img {
+      /* width: 100%; */
+      height: auto;
+      width: auto;
+      max-width: 120px;
+      max-height: 120px;
+      display: initial!important;
+  }
+  nav .nav-user-info {
+    margin-left: 0;
+  }
+  .search-wrap.main-search {
+    width: 300px;
+  }
+  .wrap {
+    margin-top: 190px;
+  }
+  .main-section .sidebar-wrap {
+    width: 100%;
+    height: 100px;
+    z-index: 98;
+    border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+  }
+  .main-section .sidebar-wrap .sidebar {
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    align-items: center;
+  }
+  .main-section .sidebar-wrap .sidebar li {
+    margin-bottom: 0;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card {
+    width: 160px;
+    height: 100px;
+    font-size: 15px;
+  }
+  .main-content {
+    height: auto;
+    margin-top: 0;
+  }
+  .main-content .item-wrap .item-card .item-name {
+    font-size: 16px;
+  }
+  .main-content .item-wrap .item-card .item-price {
+    font-size: 16px;
+  }
+  .center-wrap {
+    margin-right: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .center-wrap .left-grid {
+    margin-right: 0;
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  .center-wrap .left-grid .main-search {
+    width: 100%;
+    max-width: unset;
+  }
+  .center-wrap .left-grid .main-search input {
+    margin-right: 0;
+  }
+  .center-wrap .right-grid {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0;
+    height: auto;
+  }
+  .center-wrap .filter-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 20px 0;
+  }
+  .center-wrap .filter-nav .scroll-btn {
+    height: 60px;
+    width: 50px;
+  }
+  .center-wrap .filter-nav ul li a {
+    width: 130px;
+    height: 60px;
+  }
+  .custom-table.bill-table .t-cell.cell-desc {
+    max-width: 450px;
+    min-width: 400px;
+  }
+  .custom-table.bill-table .t-body {
+    max-height: 450px;
+  }
+  .custom-table.bill-table .t-body .t-row .t-cell a {
+    text-align: left;
+  }
+  .right-section {
+    width: 100%;
+    height: 100%;
+    /* margin-top: 20px; */
+    min-height: inherit;
+  }
+
+  .right-section .bill-wrapper {
+    /* height: auto; */
+    height: calc(100% - 50px);
+  }
+  .right-section .bill-wrapper .table-wrap {
+    height: auto;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table {
+    font-size: 16px;
+    height: auto;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-row {
+    justify-content: space-between;
+  }
+  .right-section .total-bill .discount-div {
+    font-size: 16px;
+  }
+  .right-section .total-bill .payable-div {
+    font-size: 20px;
+  }
+  .slick-dotted.slick-slider {
+    margin-bottom: 0;
+  }
+  .item-search-page .item-search-nav .search-wrap select,
+  .item-search-page .item-search-nav .search-wrap input {
+    padding: 5px 10px;
+    height: 50px;
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-name {
+    min-width: 250px;
+    max-width: 250px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-item {
+    min-width: 120px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-action {
+    min-width: 100px;
+    max-width: 150px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell p {
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap .item-search-table .secondary-btn {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+  .grocery-cashier-page > .container-fluid {
+    padding-right: 15px;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap {
+    overflow-x: auto;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table {
+    /* min-width: 1200px; */
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-body {
+    height: 300px;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-cell.cell-desc {
+    max-width: 150px;
+    min-width: 150px;
+  }
+  .grocery-cashier-page .center-wrap .main-content .table-wrap .warehouse-table .t-cell p {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .left-grid {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav {
+    margin-bottom: 20px;
+    justify-content: space-between;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav .search-wrap {
+    width: 50%;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav select {
+    margin-bottom: 0;
+    margin-left: 20px;
+    display: block;
+  }
+  .grocery-cashier-page .center-wrap .right-grid {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-top: 20px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .custom-select {
+    display: none;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section {
+    height: auto;
+    margin-top: 0;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .bill-info p {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .primary-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div label {
+    font-size: 16px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div p {
+    font-size: 16px;
+  }
+  /* SJJ-2020-11-10 - Maintenace --------------- MANAGER PAGE  */
+  .manager-action-flex .manager-left-action button {
+    font-size: 14px;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  /* MANAGER PAGE ENDS --->  */
+  .modal .modal-content {
+    width: 892px;
+  }
+  .modal .modal-content .modal-header .close img {
+    height: 25px;
+    width: 25px;
+  }
+  .modal .modal-content .modal-body .grey-wrapper {
+    padding: 18px;
+  }
+  .modal .modal-content .modal-body .left-modal-section .modal-payment-info {
+    flex-wrap: wrap;
+  }
+  .modal .modal-content .modal-body .left-modal-section .modal-payment-info div {
+    margin-bottom: 10px;
+  }
+  .modal .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-head .t-cell {
+    font-size: 12px;
+  }
+  .modal .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-body .t-cell {
+    font-size: 12px;
+  }
+  .modal .modal-content .modal-body .right-modal-section .typing-section .submit-div button {
+    height: 60px;
+  }
+  .modal .modal-content .modal-body .right-modal-section .typing-section .number-div .pay-option-btn {
+    font-size: 16px;
+  }
+  .modal .modal-content .modal-body .modal-discount-btn-wrap {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .modal .modal-content .modal-body .modal-discount-btn-wrap button {
+    font-size: 16px;
+    padding: 10px 24px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+  }
+  #discount-modal .modal-body .right-modal-section .typing-section .reset-div button,
+  #discount-modal .modal-body .right-modal-section .typing-section .submit-div button {
+    font-size: 16px;
+  }
+
+  /* Custom table */
+  .right-section .bill-wrapper .table-wrap {
+    overflow-x: auto;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table {
+    font-size: 10px;
+    /* min-width: 800px; */
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell {
+    width: 100%;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-action {
+    max-width: 100px;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-action a {
+    text-align: left;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-quantity {
+    max-width: 100px;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-body {
+    overflow-x: hidden;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-body .t-row .t-cell p a img {
+    height: 18px;
+  }
+}
+
+/* 991px css */
+@media only screen and (max-width: 991px) {
+  .cdk-overlay-container {
+    display: none!important;
+    
+  }
+  nav .nav-user-info {
+    display: none;
+  }
+  nav .dropdown-wrap {
+    margin-left: 0;
+  }
+  nav .dropdown-wrap .dropdown .dropdown-menu .user-greet {
+    display: block;
+    text-align: left;
+  }
+  nav .dropdown-wrap .dropdown .dropdown-menu .user-greet .username {
+    display: block;
+    widows: 100%;
+  }
+  nav .dropdown-wrap .dropdown .dropdown-menu .nav-user-info {
+    display: block;
+    margin-left: 0;
+  }
+  nav .dropdown-wrap .user-greet {
+    display: none;
+  }
+  nav .nav-info-link {
+    margin-left: auto;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card {
+    width: 128px;
+    font-size: 14px;
+  }
+  .item-search-page .item-search-nav .search-wrap select,
+  .item-search-page .item-search-nav .search-wrap input {
+    padding: 5px 10px;
+    height: 50px;
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-name {
+    min-width: 200px;
+    max-width: 200px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-item {
+    min-width: 100px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-action {
+    min-width: 100px;
+    max-width: 100px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell p {
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap .item-search-table .secondary-btn {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+  .toggle-services-display {
+    max-width: 620px;
+  }
+  .modal-dialog {
+    margin: 3.75rem auto;
+  }
+  .modal-dialog .modal-content {
+    width: 550px;
+  }
+  .modal-dialog .modal-content .modal-header .close img {
+    height: 25px;
+    width: 25px;
+  }
+  .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap {
+    overflow-x: auto;
+  }
+  .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .custom-table {
+    min-width: 700px;
+  }
+  .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .custom-table .t-head {
+    height: 50px;
+  }
+  .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .custom-table .t-body {
+    overflow-x: hidden;
+  }
+  .modal-dialog .modal-content .modal-body .modal-discount-btn-wrap {
+    margin: 20px auto;
+  }
+  .modal-dialog .modal-content .modal-body .modal-discount-btn-wrap button {
+    margin: 0 auto;
+    padding: 10px 24px;
+    font-size: 16px;
+  }
+  #discount-modal .modal-body .right-modal-section {
+    margin-top: 20px;
+  }
+}
+
+/* 767px css */
+@media only screen and (max-width: 767px) {
+  nav .navbar-brand,
+  nav .nav-user-info,
+  nav .dropdown-wrap,
+  nav .nav-info-link {
+    margin-left: 0;
+  }
+  nav .nav-info-link {
+    margin-left: auto;
+  }
+  .main-section .sidebar-wrap {
+    height: 105px;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card {
+    width: 100px;
+    height: 100px;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card .nav-card-img svg {
+    max-width: 28px;
+    max-height: 28px;
+  }
+  .main-section .sidebar-wrap .sidebar .nav-card .nav-card-text {
+    font-size: 14px;
+  }
+  .wrap {
+    margin-top: 195px;
+  }
+  .center-wrap .filter-nav {
+    padding: 20px 0;
+  }
+  #btnAll{
+    margin-top: 0px;
+  }
+  .center-wrap .filter-nav .scroll-btn {
+    height: 40px;
+    width: 35px;
+    margin-top: 8px;
+  }
+  .center-wrap .filter-nav ul li a {
+    width: 120px;
+    height: 40px;
+  }
+  .center-wrap .filter-nav ul li a p {
+    font-size: 14px;
+  }
+  .custom-table.bill-table .t-cell.cell-desc {
+    max-width: 450px;
+    min-width: 250px;
+  }
+  .item-search-page .item-search-nav .search-wrap .section-title {
+    font-size: 20px;
+  }
+  .item-search-page .item-search-nav .search-wrap label {
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap {
+    overflow-x: auto;
+  }
+  .item-search-page .table-wrap .item-search-table {
+    min-width: 1000px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-body {
+    overflow-x: hidden;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell {
+    padding: 10px 5px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-name {
+    min-width: 235px;
+    max-width: 300px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-item {
+    min-width: 100px;
+    max-width: 100px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell.cell-action {
+    min-width: 80px;
+    max-width: 80px;
+  }
+  .item-search-page .table-wrap .item-search-table .t-cell p {
+    font-size: 14px;
+  }
+  .item-search-page .table-wrap .item-search-table .secondary-btn {
+    padding: 5px 6px;
+    font-size: 12px;
+  }
+  .grocery-cashier-page > .container-fluid {
+    padding-right: 15px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .bill-info p {
+    font-size: 16px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .primary-btn {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div label {
+    font-size: 16px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div p {
+    font-size: 16px;
+  }
+  /* SJJ-2020-11-10 - Maintenace ---------- MANAGER PAGE */
+  .maintenance-wrapper .manager-main-section .sidebar-manager {
+    background-color: #fff;
+    min-width: auto;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    position: fixed;
+    top: 110px;
+    left: 1rem;
+    right: 1rem;
+    height: 100px;
+    overflow-x: auto;
+    z-index: 1;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-link-list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-link-list .sidebar-link-list-items {
+    padding: 0 10px;
+    width: 100%;
+    max-width: 80px;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-link-list .sidebar-link-list-items .sidebar-link {
+    border: 1px solid #dcdcdc;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    min-width: 65px;
+    max-width: 65px;
+    height: 65px;
+    max-height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+  .maintenance-wrapper .manager-main-section .data-display-area {
+    padding: 0 1rem 1rem 1rem;
+    width: 100%;
+    display: block;
+    overflow-y: auto;
+    max-height: calc(100vh - 230px);
+    margin-top: 120px;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .manager-action-flex .manager-left-action button {
+    font-size: 13px;
+  }
+  .manager-action-flex .manager-left-action button .manager-action-link-icon {
+    min-width: 15px;
+    width: 15px;
+    max-width: 15px;
+    height: 15px;
+    max-height: 15px;
+  }
+  .manager-action-flex .manager-left-action .border-btn {
+    padding-left: 20px;
+  }
+  .manager-action-flex .manager-left-action .btn-minimize {
+    margin-right: 20px;
+  }
+  .toggle-services-display {
+    position: fixed;
+    bottom: 0;
+    top: 230px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+  }
+  /* MANAGER PAGE ENDS --->  */
+  #discount-modal .modal-content .modal-header {
+    flex-direction: column;
+  }
+  #discount-modal .modal-content .modal-header .close {
+    right: -0px;
+    top: -50px;
+    position: absolute;
+  }
+  #discount-modal .modal-content .modal-header .modal-title {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  #discount-modal .modal-content .modal-header .nav-user-info {
+    width: 100%;
+    justify-content: center;
+  }
+  #discount-modal .modal-content .modal-header .nav-user-info .point-div .username,
+  #discount-modal .modal-content .modal-header .nav-user-info .point-div .nav-phone {
+    font-size: 14px;
+  }
+  #discount-modal .modal-content .modal-header .nav-user-info .nav-contact .points,
+  #discount-modal .modal-content .modal-header .nav-user-info .nav-contact .nav-mail {
+    font-size: 14px;
+  }
+  #payment-modal .modal-content .modal-header .close {
+    right: 0px;
+    top: -50px;
+  }
+}
+
+/* 575px css */
+@media only screen and (max-width: 575px) {
+  nav .search-wrap {
+    display: none;
+  }
+  nav .nav-user-info {
+    display: none;
+  }
+  nav .nav-user-info .username,
+  nav .nav-user-info .nav-phone,
+  nav .nav-user-info .points,
+  nav .nav-user-info .nav-mail {
+    font-size: 12px;
+  }
+  nav .nav-info-link img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+  nav .navbar-brand img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+  }
+  nav .dropdown .dropdown-toggle img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+  nav .dropdown .dropdown-item {
+    font-size: 12px;
+  }
+  nav .dropdown .nav-user-info {
+    display: block;
+  }
+  .main-section .sidebar-wrap {
+    height: 50px;
+  }
+  .main-section .sidebar-wrap .sidebar li {
+    padding: 0 20px;
+  }
+  .main-section .sidebar-wrap .sidebar li .nav-card {
+    flex-direction: row;
+    width: auto;
+    white-space: nowrap;
+  }
+  .main-section .sidebar-wrap .sidebar li .nav-card .nav-card-img {
+    align-items: center;
+  }
+  .main-section .sidebar-wrap .sidebar li .nav-card .nav-card-img svg {
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
+  }
+  .main-section .sidebar-wrap .sidebar li .nav-card .nav-card-text {
+    margin-top: 0;
+    font-size: 12px;
+  }
+  .wrap {
+    width: 100%;
+    height: calc(100% - 140px);
+    margin-top: 140px;
+  }
+  .center-wrap .main-content {
+    margin-top: 0;
+  }
+  .center-wrap .main-content .item-wrap .item-card .item-name {
+    font-size: 14px;
+  }
+  .center-wrap .main-content .item-wrap .item-card .item-price {
+    font-size: 16px;
+  }
+  .center-wrap .main-content .item-wrap .item-card .img-wrap {
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .center-wrap .search-wrap {
+    max-width: 100%;
+  }
+  .center-wrap .filter-nav .scroll-btn {
+    height: 40px;
+    width: 40px;
+  }
+  .center-wrap .filter-nav ul li a {
+    width: 100px;
+    height: 40px;
+  }
+  .center-wrap .filter-nav ul li a p {
+    font-size: 12px;
+  }
+  .center-wrap .left-grid {
+    margin-bottom: 0;
+  }
+  .center-wrap .left-grid .main-search {
+    width: 100%;
+    max-width: 100%;
+  }
+  .right-section .bill-table .t-cell p {
+    font-size: 12px;
+  }
+  .right-section .bill-table .t-cell.cell-desc {
+    min-width: 180px;
+    max-width: 200px;
+  }
+  .right-section .total-bill .discount-div {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .right-section .total-bill .payable-div {
+    font-size: 16px;
+  }
+  .slick-dotted.slick-slider {
+    padding: 0px 3px 20px;
+  }
+  .grocery-cashier-page > .container-fluid {
+    padding-right: 15px;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav .search-wrap {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  .grocery-cashier-page .center-wrap .left-grid .search-nav select {
+    margin-left: 0;
+  }
+  .grocery-cashier-page .center-wrap .right-grid {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-right: 0;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .bill-info p {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-info-wrap .primary-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div label {
+    font-size: 14px;
+  }
+  .grocery-cashier-page .center-wrap .right-grid .right-section .bill-details .detail div p {
+    font-size: 14px;
+  }
+  .modal {
+    padding: 0 1rem !important;
+  }
+  .modal .modal-dialog .modal-content {
+    width: 100%;
+    padding: 0;
+  }
+  .modal .modal-dialog .modal-content .modal-header {
+    flex-direction: column;
+  }
+  .modal .modal-dialog .modal-content .modal-header .modal-title {
+    margin-bottom: 20px;
+  }
+  .modal .modal-dialog .modal-content .modal-header .nav-user-info {
+    width: 100%;
+    justify-content: center;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .modal-payment-info {
+    justify-content: flex-start;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .modal-payment-info div:last-child {
+    margin-right: 20px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .modal-payment-info div p {
+    font-size: 14px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .modal-discount-btn-wrap {
+    margin: 20px auto;
+    justify-content: flex-start;
+  }
+  .modal .modal-dialog .modal-content .modal-body .modal-discount-btn-wrap button {
+    font-size: 14px;
+  }
+  /* SJJ-2020-11-10 - Maintenace */
+  .maintenance-card .maintenance-row .maintenance-service-wrapper {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  /* ENDS --->  */
+}
+
+/* 480px css */
+@media only screen and (max-width: 480px) {
+  header {
+    display: flex;
+    align-items: center;
+    height: 70px;
+  }
+  .custom-shop-house-icon
+  {
+    min-width: unset;  
+    width: unset;  
+    max-width: unset;
+     height: unset;
+  }
+  header nav {
+    height: 70px;
+  }
+  nav .dropdown-wrap .user-greet h6 {
+    margin-bottom: 0;
+  }
+  nav .navbar-brand img {
+    width: 50px;
+    height: 100%;
+    object-fit: contain;
+  }
+  nav .dropdown-toggle img {
+    object-fit: contain;
+    width: 100%;
+    height: 50px;
+  }
+  .wrap {
+    width: 100%;
+    height: calc(100% - 120px);
+    margin-top: 10px;
+    /* margin-top: 120px; */
+  }
+  .main-section .sidebar-wrap {
+    top: 70px;
+  }
+  .container-fluid {
+    padding: 0 7px;
+  }
+  .slick-dots {
+    margin-bottom: 10px;
+  }
+  .slick-dots li {
+    width: 15px;
+    height: 15px;
+  }
+  .slick-dots li button {
+    padding: 3px;
+    width: 10px;
+    height: 10px;
+  }
+  .center-wrap {
+    max-width: 100%;
+    margin-right: 0;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .center-wrap .main-content .item-wrap .item-card .item-name {
+    font-size: 12px;
+  }
+  .center-wrap .main-content .item-wrap .item-card .item-price {
+    font-size: 14px;
+  }
+  .center-wrap .filter-nav button {
+    border: 1px solid;
+  }
+  .center-wrap .filter-nav button svg {
+    height: 10px;
+    width: 100%;
+  }
+  .center-wrap .left-grid {
+    padding-right: 0;
+  }
+  .right-section .bill-wrapper .table-wrap {
+    overflow-x: auto;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table {
+    font-size: 10px;
+    min-width: 600px;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell {
+    width: 100%;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-action {
+    max-width: 100px;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-action a {
+    text-align: left;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-cell.cell-quantity {
+    max-width: 100px;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-body {
+    overflow-x: hidden;
+  }
+  .right-section .bill-wrapper .table-wrap .bill-table .t-body .t-row .t-cell p a img {
+    height: 18px;
+  }
+  .right-section .total-bill .payable-div {
+    font-size: 14px;
+  }
+  .right-section .total-bill .discount-div {
+    font-size: 14px;
+  }
+  .right-section .total-bill .primary-btn {
+    font-weight: 700;
+  }
+  .slick-dotted.slick-slider {
+    padding: 0px 3px 10px;
+  }
+  .item-search-page.wrap {
+    margin-top: 90px;
+  }
+  .maintenance-card .maintenance-row .maintenance-service-wrapper {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .maintenance-card .maintenance-row .maintenance-access-wrapper {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-manager {
+    top: 90px;
+    height: 90px;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-manager .sidebar-link-list-items {
+    padding: 0 4px;
+  }
+  .maintenance-wrapper .manager-main-section .sidebar-manager .sidebar-link-list-items .sidebar-link {
+    min-width: 55px;
+    max-width: 55px;
+    height: 55px;
+    max-height: 55px;
+  }
+  .maintenance-wrapper .manager-main-section .data-display-area {
+    max-height: calc(100vh - 200px);
+    margin-top: 90px;
+  }
+  .manager-action-flex .manager-left-action button {
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+  .manager-action-flex .manager-left-action button .manager-action-link-icon {
+    min-width: 14px;
+    width: 14px;
+    max-width: 14px;
+    height: 14px;
+    max-height: 14px;
+    margin-right: 5px;
+  }
+  .toggle-services-display {
+    top: 200px;
+  }
+  #payment-modal
+.modal-dialog
+.modal-content
+.modal-body
+.modal-discount-btn-wrap
+button {
+    margin-bottom: 10px;
+  }
+  #discount-modal .modal-body .right-modal-section h5 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  #discount-modal .modal-body .right-modal-section .voucher-section {
+    margin: 15px 0;
+  }
+  #discount-modal .modal-body .right-modal-section .action-section .reset-btn,
+  #discount-modal .modal-body .right-modal-section .action-section .submit-btn {
+    font-size: 16px;
+    height: 50px;
+  }
+}
+
+/* 350px css */
+@media only screen and (max-width: 350px) {
+  .slick-dots li {
+    width: 10px;
+    height: 10px;
+  }
+  .right-section .total-bill .payable-div {
+    font-size: 14px;
+  }
+  .modal .modal-dialog .modal-content .modal-header .modal-title {
+    margin-bottom: 10px;
+  }
+  .modal .modal-dialog .modal-content .modal-header .nav-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .modal .modal-dialog .modal-content .modal-header .nav-user-info .point-div {
+    align-items: center;
+  }
+  .modal .modal-dialog .modal-content .modal-header .nav-user-info .nav-contact {
+    align-items: center;
+    margin-left: 0;
+  }
+  .modal .modal-dialog .modal-content .modal-body .grey-wrapper {
+    padding: 10px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table {
+    min-width: 550px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-cell.cell-discount {
+    max-width: 60px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-cell.cell-amount {
+    max-width: 100px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-cell.cell-charged {
+    max-width: 80px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-cell.cell-ref {
+    max-width: 100px;
+  }
+  .modal .modal-dialog .modal-content .modal-body .left-modal-section .table-wrap .payment-modal-table .t-cell.cell-payment {
+    max-width: 100px;
+  }
+  .modal .modal-dialog .modal-content .right-modal-section .typing-section .number-div .number-btn {
+    font-size: 28px;
+  }
+  .modal .modal-dialog .modal-content .right-modal-section .typing-section .number-div .pay-option-btn {
+    font-size: 10px;
+  }
+  #discount-modal .modal-body .right-modal-section {
+    padding: 10px;
+  }
+  #discount-modal .modal-body .right-modal-section .typing-section .number-div button {
+    min-height: 52px;
+  }
+}
+/*# sourceMappingURL=responsive.css.map */

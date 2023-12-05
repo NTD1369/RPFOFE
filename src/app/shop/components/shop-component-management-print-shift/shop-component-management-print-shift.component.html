@@ -1,0 +1,585 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+</style>
+
+<ng-container>
+    <div class="col-md-6 col-sm-6  offset-md-6 text-right" id="dropdownWidth">
+        <dx-toolbar>
+            <dxi-item location="before" widget="dxDropDownButton" [options]="{
+					stylingMode: 'text',
+					displayExpr: 'name',
+					keyExpr: 'value',
+					useSelectMode: true,
+					items: widths,
+					selectedItemKey: width,
+					onSelectionChanged: onWidthChanged,
+					itemTemplate: 'widthsItem'
+				}">
+            </dxi-item>
+            <!-- selectedItemKey: 11.5, Giá trị cũ -->
+
+            <div *dxTemplate="let data of 'widthsItem'">
+                {{data.name}}
+            </div>
+
+        </dx-toolbar>
+    </div>
+
+    <div #pdfShift_1 *ngIf="this.PrintTemplate === 'Template1'">
+        <div class="center-wrap print-p print-main">
+
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0;">
+                <div class="maintenance-row">
+                    <div>
+                        <div class="print-main-cl">
+                            <div class="app-print" printWindow="false" directPrint="true" divID="print-section">
+                                <h3 class="text-center"><b #idName>{{this.header?.storeName}}</b></h3>
+
+                                <div class="text-center mb-2" style="font-size:15px; margin-bottom: 0 !important;">
+                                    {{'End of Shift' | translate}}
+                                </div>
+                                <ng-container>
+                                    <div>
+                                        <div class="text-center">
+                                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-width]="1.2" [bc-height]="50" [bc-font-size]="13" [bc-value]="this.header?.shiftId" [bc-display-value]="true" [bc-text-align]="center">
+                                            </ngx-barcode6>
+                                        </div>
+                                        <p> <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.header?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</p>
+                                        <p> <label class="textTitlePrint">{{'Create By' | translate}}: </label> {{this.header?.createdBy }}</p>
+                                        <p> <label class="textTitlePrint">{{'Counter' | translate}} / {{'TerminalId' | translate}}: </label> {{this.header?.counterId}} </p>
+                                        <p> <label class="textTitlePrint">{{'Open Amount' | translate}}: </label> {{this.header?.openAmt | currencyFormat}}</p>
+                                        <p *ngIf="this.header?.payments.length > 0">
+                                            <label class="textTitlePrint">{{'End Amount' | translate}}: </label>
+                                            <span *ngFor="let item of this.currencyGroup">
+                                                
+                                                <span style="margin-right: 10px"  >
+                                                    <b> {{item.currency}}: </b> {{item.totalAmt | currencyFormat}}
+                                                </span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <ng-container>
+                                        <ng-container *ngIf="this.showSalesDepartment!=='None'">
+                                            <ng-container  *ngIf="this.showSalesDepartment==='Normal' || (this.showSalesDepartment === 'Group' && this.showSalesDepartmentGroup === 'GroupHeader'  )">
+                                                <table *ngIf=" salesDepartment?.length > 0" class="table-customer w-100 col-print-12 mt-3 mb-2">
+                                                    <tr style="font-weight: 700; border: 1px solid #dddddd;">
+                                                    
+                                                        <!-- <td class="cl-bold">Department</td>
+                                                        <td class="cl-bold">POS Sales</td>
+                                                        <td class="cl-bold">Online Sales</td>
+                                                        <td class="cl-bold">Total SaLes</td> -->
+                                                        <td style="border: 1px solid #dddddd;" class="cl-bold"> {{ 'Department' | translate }}</td>
+                                                        <td style="border: 1px solid #dddddd;" class="cl-bold"> {{ 'Sales' | translate }}</td>
+                                                        <!-- <td class="cl-bold"> {{ 'Online Sales' | translate }}</td>   -->
+                                                        <td style="border: 1px solid #dddddd;" class="cl-bold"> {{ 'Total' | translate }}</td>
+                                                    </tr>
+                                                    <tr *ngFor="let item of this.salesDepartment" style="border: 1px solid #dddddd;">
+                                                        <td style="border: 1px solid #dddddd;" >{{item.Department}}</td>
+                                                        
+                                                        <td  style="border: 1px solid #dddddd;" >
+                                                            <div class="row">
+                                                                <div class="col-md-4 col-print-4">
+                                                                    {{ 'POS' | translate }}:
+                                                                </div>
+                                                                <div class="col-md-8 col-print-8 text-right">
+                                                                    {{item.NetSalesAmount  | currencyFormat}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4 col-print-4">
+                                                                    {{ 'Online' | translate }}:
+                                                                </div>
+                                                                <div class="col-md-8 col-print-8 text-right">
+                                                                    {{item.EcomNetSalesAmount  | currencyFormat}}
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        </td>
+                                                        <!-- <td class="text-right">
+                                                            
+                                                              
+                                                            
+                                                        </td> -->
+                                                        
+                                                        <td class="text-right"  style="border: 1px solid #dddddd;">
+                                                        
+                                                                {{item.TotalNetSalesAmount  | currencyFormat}}
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    <tr   style="font-weight: 700; border: 1px solid #dddddd;" >
+                                                    
+                                                        <td class="cl-bold"  style="border: 1px solid #dddddd;">{{ 'Total' | translate }}</td>
+                                                        <td class="cl-bold text-right"  style="border: 1px solid #dddddd;">{{(totalPOSNetSales + totalEcomNetSales) | currencyFormat}}</td>
+                                                        <!-- <td class="cl-bold text-right">{{totalEcomNetSales  | currencyFormat}} </td> -->
+                                                        <td class="cl-bold text-right"  style="border: 1px solid #dddddd;">{{totalNetSales  | currencyFormat}}</td>
+                                                    
+                                                    </tr>
+                                                </table> 
+                                            </ng-container>
+                                            <ng-container *ngIf="this.showSalesDepartment === 'Group' && showSalesDepartmentGroup==='All'" >
+                                                <table *ngIf=" salesDepartmentGroup?.length > 0" class="table-customer w-100 col-print-12 mt-3  mb-2">
+                                                    <tr> 
+                                                        <td class="cl-bold"> {{ 'Department' | translate }}</td>
+                                                        <td class="cl-bold"> {{ 'POS Sales' | translate }}</td>
+                                                        <td class="cl-bold"> {{ 'Online Sales' | translate }}</td>
+                                                        <td class="cl-bold"> {{ 'Total SaLes' | translate }}</td>
+                                                    
+                                                    </tr>
+                                                    <ng-container *ngFor="let group of this.salesDepartmentGroup">
+                                                        <tr >
+                                                            <td class="cl-bold">{{group.Department}}</td>
+                                                            
+                                                            <td class="text-right">
+                                                                
+                                                                    {{group.NetSalesAmount  | currencyFormat}}
+                                                                
+                                                            </td>
+                                                            <td class="text-right">
+                                                                
+                                                                    {{group.EcomNetSalesAmount  | currencyFormat}}
+                                                                
+                                                            </td>
+                                                            
+                                                            <td class="text-right">
+                                                            
+                                                                    {{group.TotalNetSalesAmount  | currencyFormat}}
+                                                                
+                                                            </td>
+                                                        </tr>
+                                                        <ng-container *ngIf="group.lines?.length > 0">
+                                                            <ng-container *ngFor="let groupLine of group.lines">
+            
+                                                                <tr >
+                                                                    <td style="padding-left: 20px;" >{{groupLine.Department}}</td>
+                                                                    
+                                                                    <td class="text-right">
+                                                                        
+                                                                            {{groupLine.NetSalesAmount  | currencyFormat}}
+                                                                        
+                                                                    </td>
+                                                                    <td class="text-right">
+                                                                        
+                                                                            {{groupLine.EcomNetSalesAmount  | currencyFormat}}
+                                                                        
+                                                                    </td>
+                                                                    
+                                                                    <td class="text-right">
+                                                                    
+                                                                            {{groupLine.TotalNetSalesAmount  | currencyFormat}}
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        
+                                                    </ng-container>
+                                                    
+                                                    <tr>
+                                                        <!-- <td class="cl-bold">Code</td> -->
+                                                        <td class="cl-bold">{{ 'Total' | translate }}</td>
+                                                        <td class="cl-bold text-right">{{totalPOSNetSales  | currencyFormat}}</td>
+                                                        <td class="cl-bold text-right">{{totalEcomNetSales  | currencyFormat}}
+                                                            </td>
+                                                        <td class="cl-bold text-right">{{totalNetSales  | currencyFormat}}</td>
+                                                    
+                                                    </tr>
+                                                </table>
+                                            </ng-container>
+                                                  
+                                            <br >
+                                                   
+                                        </ng-container>
+                                        
+                                        <ng-container *ngIf="this.groupByCashier === 'true'">
+                                            <div *ngIf="this?.paymentsGroup?.length > 0">
+                                                <hr class="style5">
+                                                <div class="row table-row">
+                                                    <table style="width: 100%; border-collapse: collapse;" class="shift-cls">
+                                                        <tr>
+                                                            <th> {{'Payment' | translate}} </th>
+                                                            <th style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"> {{'Fc' | translate}} </th>
+                                                            <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                                            <th style="text-align: right;"> {{'Collected' | translate}} </th>
+                                                        </tr>
+                                                      
+                                                        <ng-container *ngFor="let group of this?.paymentsGroup">
+                                                            <tr >
+                                                                <td style="font-size: 16px; font-weight: 700;">
+                                                                    {{group.cashier}}
+                                                                </td>
+                                                               
+                                                            </tr>
+                                                            <tr *ngFor="let item of group">
+                                                                <td>
+                                                                    <label *ngIf="item.shortName!==null && item.shortName!== undefined && item.shortName!==''">
+                                                                            {{item.shortName}}
+                                                                        </label>
+                                                                    <label *ngIf="item.shortName===null || item.shortName=== undefined || item.shortName===''">{{item.paymentCode}} </label>
+                                                                    <!-- <label class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">({{item.currency}})</label> -->
+                                                                </td>
+                                                                <td style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">{{item.fcAmount | number}}</td>
+                                                                <td style="text-align: right;"><label>{{ item.totalAmt | currencyFormat}}</label></td>
+                                                                <td style="text-align: right;"><label>{{ item.collectedAmount | currencyFormat}}</label></td>
+                                                            </tr>
+                                                        </ng-container>
+                                                        
+                                                       
+                                                        <tr style="border-top: 1px solid;">
+                                                            <td> <b>{{'Total' | translate}}</b></td>
+                                                            <td class="text-right" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"><b>{{this.header?.totalFCAmount | currencyFormat}}</b></td>
+                                                            <td class="text-right"><b>{{this.header?.totalPrice | currencyFormat}}</b></td>
+                                                            <td class="text-right"><b>{{this.header?.totalCollected | currencyFormat}}</b></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="this.groupByCashier !== 'true'">
+                                            <div *ngIf="this.header?.payments.length > 0">
+                                                <hr class="style5">
+                                                <div class="row table-row">
+                                                    <table style="width: 100%; border-collapse: collapse;" class="shift-cls">
+                                                        <tr>
+                                                            <th> {{'Payment' | translate}} </th>
+                                                            <th style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"> {{'Fc' | translate}} </th>
+                                                            <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                                            <th style="text-align: right;"> {{'Collected' | translate}} </th>
+                                                        </tr>
+                                                        <!-- [ngStyle]="{'color': item.shortName?.toLowerCase()?.includes('cash') ? 'red' : ''}" -->
+                                                        <tr *ngFor="let item of this.header?.payments" >
+                                                            <td  > 
+                                                                
+                                                                <label *ngIf="item.shortName!==null && item.shortName!== undefined && item.shortName!==''">
+                                                                        {{item.shortName}}
+                                                                    </label>
+                                                                <label *ngIf="item.shortName===null || item.shortName=== undefined || item.shortName===''">{{item.paymentCode}} </label>
+                                                                <!-- <label class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">({{item.currency}})</label> -->
+                                                            </td>
+                                                            <td style="text-align: right;"   *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">{{item.fcAmount | number}}</td>
+                                                            <td style="text-align: right;"  ><label>{{ item.totalAmt | currencyFormat}}</label></td>
+                                                            <td style="text-align: right;"  ><label>{{ item.collectedAmount | currencyFormat}}</label></td>
+                                                        </tr>
+                                                        <tr style="border-top: 1px solid;">
+                                                            <td> <b>{{'Total' | translate}}</b></td>
+                                                            <td class="text-right" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"><b>{{this.header?.totalFCAmount | currencyFormat}}</b></td>
+                                                            <td class="text-right"><b>{{this.header?.totalPrice | currencyFormat}}</b></td>
+                                                            <td class="text-right"><b>{{this.header?.totalCollected | currencyFormat}}</b></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                      
+                                        <div *ngIf="this.header?.itemSumary?.length > 0 && showItemSummary === 'true'">
+                                            <hr class="style5">
+                                            <h5 class="mb-3 mt-2">{{'Sales Category' | translate}}</h5>
+                                            <!-- class="tblLine table-main w-100" -->
+                                            <div class="row table-row">
+                                                <table style="width: 100%; border-collapse: collapse;" class="shift-cls" >
+                                                    <tr>
+                                                        <th> {{'Description' | translate}} </th>
+                                                        <th> {{'Quantity' | translate}} </th>
+                                                        <th class="text-right"> {{'Line Total' | translate}} </th>
+                                                    </tr>
+                                                    <tr *ngFor="let item of this.header?.itemSumary">
+                                                        <td>
+                                                            <label>
+                                                                {{item.itemCode}} - {{item.description}}
+                                                            </label>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <label>
+                                                                {{item.totalQty| number}}
+                                                            </label>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <label>
+                                                                {{item.lineTotal | currencyFormat}}
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border-top: 1px solid;">
+                                                        <td><b>{{'Total' | translate}}</b></td>
+                                                        <td class="text-center"><b>{{this.header?.totalQuantity | number}}</b></td>
+                                                        <td class="text-right"><b>{{this.header?.totalLine | currencyFormat}}</b></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="this.pickColection?.length > 0"> 
+                                            <h5 class="mb-1 mt-3">* {{'Pick up' | translate}}</h5>
+                                            <!-- class="tblLine table-main w-100" -->
+                                            <div class="row table-row">
+                                                <table style="width: 100%; border-collapse: collapse;" class="shift-cls" >
+                                                    <tr>
+                                                        <th> {{'Collection' | translate}} </th> 
+                                                        <th class="text-right"> {{'Amount' | translate}} </th>
+                                                    </tr>
+                                                    <tr *ngFor="let item of this.pickColection">
+                                                        <td>
+                                                            <label style="margin-bottom: 0px;">
+                                                                {{item.collection}} 
+                                                            </label>
+                                                        </td> 
+                                                        <td class="text-right">
+                                                            <label style="margin-bottom: 0px;">
+                                                                {{item.amount | currencyFormat}}
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="border-top: 1px solid;">
+                                                        <td><b>{{'Total' | translate}}</b></td> 
+                                                        <td class="text-right"><b>{{this.pickTotal | currencyFormat}}</b></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="this.itemInventorySumaryGroup?.length > 0">
+                                            <hr class="style5">
+                                            <h5 class="mb-3 mt-3">{{'Inventory Summary' | translate}}</h5>
+                                            <div class="row table-row">
+                                                <table  style="width: 100%; border-collapse: collapse;" class="shift-cls">
+                                                    <tr>
+                                                        <!-- <th>{{'Type' | translate}}</th>  -->
+                                                        <th>{{'Description' | translate}}</th>
+                                                        <th class="text-right">{{'Quantity' | translate}}</th>
+                                                        <!-- <th class="text-right">{{'Price' | translate}}</th>
+                                                        <th class="text-right">{{'Line Total' | translate}}</th> -->
+                                                    </tr>
+                                                    <ng-container *ngFor="let group of this?.itemInventorySumaryGroup">
+                                                        <tr >
+                                                            <td style="font-size: 16px; font-weight: 700;">
+                                                                {{group.type}}
+                                                            </td>
+                                                           
+                                                        </tr>
+                                                        <tr *ngFor="let item of group">
+                                                            <td>
+                                                                {{item.itemCode}}
+                                                                -
+                                                                {{item.description}}
+                                                            </td>
+                                                       
+                                                            <td style="text-align: right;"><label>{{item.totalQty | number}}</label></td>
+                                                        </tr>
+                                                    </ng-container>
+                                                    
+                                                    <!-- <tr *ngFor="let group of this?.itemInventorySumaryGroup">
+                                                        <td>{{item.type}}</td>
+                                                     
+                                                        <td>
+                                                            {{item.itemCode}}
+                                                            <br />
+                                                            {{item.description}}
+                                                        </td>
+                                                        <td style="text-align: right;">{{item.totalQty | number}}</td>
+                                                      
+                                                    </tr> -->
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row mt-4 printPageShopCheck" *ngIf="this.PrintTemplate === 'Template1'">
+        <div class="col-md-12 w-100">
+            <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                            class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+        </div>
+    </div>
+    <div #pdfShift_2 *ngIf="this.PrintTemplate === 'Template2'">
+        <div class="center-wrap print-p" style="font-family: Roboto; color: #000; font-size: 13px;">
+            <div class="maintenance-card print-main print-p" [style.width]="width + 'cm'" style="overflow: hidden; padding: 0px; width: 11.5cm;">
+                <div class="maintenance-row">
+                    <div class="col-md-12">
+                        <!-- <page size="A4">ewefwfewf</page> -->
+                        <div id="print-section" class="w-100" printWindow="false" directPrint="true" divID="print-section">
+                            <h3 class="text-center"><b>{{this.header?.storeName}}</b></h3>
+                            <div class="text-center mb-2" style="font-size:15px">{{'End of Shift' | translate}}</div>
+
+                            <div class="text-center">
+                                <ngx-barcode6 [bc-format]="'CODE39'" [bc-width]="1.2" [bc-height]="50" [bc-font-size]="13" [bc-value]="this.header?.shiftId" [bc-display-value]="true">
+                                </ngx-barcode6>
+                            </div>
+
+                            <div>
+                                <!-- <p> <label class="textTitlePrint">{{'Shift ID' | translate}}: </label> {{this.header?.shiftId}}</p> -->
+                                <!-- <p> <label class="textTitlePrint">{{'Store' | translate}}: </label> {{this.header?.storeName}} </p> -->
+
+                                <!-- + ' HH:mm:ss' -->
+                                <p> <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.header?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</p>
+                                <p> <label class="textTitlePrint">{{'Create By' | translate}}: </label> {{this.header?.createdBy }}</p>
+                                <p> <label class="textTitlePrint">{{'Counter' | translate}} / {{'TerminalId' | translate}}: </label> {{this.header?.counterId}} </p>
+                                <p> <label class="textTitlePrint">{{'Open Amount' | translate}}: </label> {{this.header?.openAmt | currencyFormat}}</p>
+                                <p *ngIf="this.header?.payments.length > 0">
+                                    <label class="textTitlePrint">{{'End Amount' | translate}}: </label>
+                                    <span *ngFor="let item of this.currencyGroup">
+                                        
+                                        <span style="margin-right: 10px"  >
+                                            <b> {{item.currency}}: </b> {{item.totalAmt | currencyFormat}}
+                                        </span>
+                                    </span>
+                                </p>
+                            </div>
+                            <div *ngIf="this.header?.payments.length > 0">
+                                <hr class="style5">
+                                <!-- <h3 class="mb-2">{{'Sales Summary' | translate}}</h3> -->
+                                <table class="tblLine table-main w-100" style="font-size: 14px;width: 10cm !important;">
+                                    <tr>
+                                        <th> {{'Payment' | translate}} </th>
+                                        <th style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"> {{'Fc' | translate}} </th>
+                                        <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                        <th style="text-align: right;"> {{'Collected Amount' | translate}} </th>
+                                        <th style="text-align: right;"> {{'Change Amt' | translate}} </th>
+                                    </tr>
+                                    <!-- [ngStyle]="{'color': item.shortName?.toLowerCase()?.includes('cash') ? 'red' : ''}" -->
+                                    <tr *ngFor="let item of this.header?.payments" >
+                                        <td>
+                                            
+                                            <label *ngIf="item.shortName!==null && item.shortName!== undefined && item.shortName!==''">
+                                                    {{item.shortName}}
+                                                </label>
+                                            <label *ngIf="item.shortName===null || item.shortName=== undefined || item.shortName===''">{{item.paymentCode}} </label>
+                                            <label class="ml-2" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">({{item.currency}})</label>
+                                        </td>
+                                        <td style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">{{item.fcAmount | number}}</td>
+                                        <td style="text-align: right;"><label>{{ item.totalAmt | currencyFormat}}</label></td>
+                                        <td style="text-align: right;"><label>{{ item.collectedAmount | currencyFormat}}</label></td>
+                                        <td style="text-align: right;"><label>{{ item.changeAmt | currencyFormat}}</label></td>
+                                    </tr>
+                                    <!-- <tr style="border-top: 1px solid;">
+                                        <td> <b>{{'Total' | translate}}</b></td>
+                                        <td class="text-right"><b>{{this.header?.totalFCAmount | currencyFormat}}</b></td>
+                                        <td class="text-right"><b>{{this.header?.totalPrice | currencyFormat}}</b></td>
+    
+                                    </tr> -->
+                                </table>
+                            </div>
+                            <!-- <div *ngIf="this.header?.itemSumary.length > 0 && showItemSummary === 'true'">
+                                <hr class="style5">
+                                <h3 class="mb-3">{{'Sales Category' | translate}}</h3>
+                                <table class="tblLine table-main w-100">
+                                    <tr>
+                                        <th> {{'Description' | translate}} </th>
+                                        <th> {{'Quantity' | translate}} </th>
+                                        <th class="text-right"> {{'Line Total' | translate}} </th>
+                                    </tr>
+                                    <tr *ngFor="let item of this.header?.itemSumary">
+                                        <td>
+                                            <label>
+                                                {{item.itemCode}} - {{item.description}}
+                                            </label>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <label>
+                                                {{item.totalQty| currencyFormat}}
+                                            </label>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <label>
+                                                {{item.lineTotal | currencyFormat}}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>{{'Total' | translate}}</b></td>
+                                        <td class="text-center"><b>{{this.header?.totalQuantity | currencyFormat}}</b></td>
+                                        <td class="text-right"><b>{{this.header?.totalLine | currencyFormat}}</b></td>
+                                    </tr>
+                                </table>
+                            </div> -->
+                            <div *ngIf="this.itemInventorySumaryGroup?.length > 0">
+                                <hr class="style5">
+                                <h5 class="mb-3 mt-3">{{'Inventory Summary' | translate}}</h5>
+                                <div class="row table-row">
+                                    <table  style="width: 100%; border-collapse: collapse;" class="shift-cls">
+                                        <tr>
+                                            <!-- <th>{{'Type' | translate}}</th>  -->
+                                            <th>{{'Description' | translate}}</th>
+                                            <th class="text-right">{{'Quantity' | translate}}</th>
+                                            <!-- <th class="text-right">{{'Price' | translate}}</th>
+                                            <th class="text-right">{{'Line Total' | translate}}</th> -->
+                                        </tr>
+                                        <ng-container *ngFor="let group of this.itemInventorySumaryGroup">
+                                            <tr >
+                                                <td style="font-size: 16px; font-weight: 700;">
+                                                    {{group.type}}
+                                                </td>
+                                               
+                                            </tr>
+                                            <tr *ngFor="let item of group">
+                                                <td>
+                                                    {{item.itemCode}}
+                                                    -
+                                                    {{item.description}}
+                                                </td>
+                                           
+                                                <td style="text-align: right;"><label>{{item.totalQty | number}}</label></td>
+                                            </tr>
+                                        </ng-container>
+                                        
+                                        <!-- <tr *ngFor="let group of this?.itemInventorySumaryGroup">
+                                            <td>{{item.type}}</td>
+                                         
+                                            <td>
+                                                {{item.itemCode}}
+                                                <br />
+                                                {{item.description}}
+                                            </td>
+                                            <td style="text-align: right;">{{item.totalQty | number}}</td>
+                                          
+                                        </tr> -->
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- <div *ngIf="this.header?.itemInventorySumary?.length > 0">
+                                <hr class="style5">
+                                <h3 class="mb-3">{{'Inventory Summary' | translate}}</h3>
+                                <table class="table-customer  table-main w-100">
+                                    <tr>
+                                        <th>{{'Type' | translate}}</th>
+                                        
+                                        <th>{{'Description' | translate}}</th>
+                                        <th class="text-center">{{'Quantity' | translate}}</th>
+                                        
+                                    </tr>
+                                    <tr *ngFor="let item of this.header?.itemInventorySumary">
+                                        <td>{{item.type}}</td>
+                                         
+                                        <td>{{item.itemCode}}
+                                            <br />
+                                            {{item.description}}</td>
+                                        <td  style="text-align: right;">{{item.totalQty | number}}</td>
+                                       
+                                    </tr>
+                                </table>
+                            </div> -->
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 printPageShopCheck" *ngIf="this.PrintTemplate === 'Template2'">
+        <div class="col-md-12 w-100">
+            <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                            class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,40 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Version' | translate}}</label>
+
+      </div>
+
+      <div class="table-wrap">
+          <dx-data-grid [style]="{'max-height':'calc(100vh - 25vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.list" [showBorders]="true">
+
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+              <dxi-column dataField="createdOn" caption="{{'Created On' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="version" caption="{{'Version' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="description" caption="Description" dataType="string"> </dxi-column> 
+              <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+              <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | statusFormat"></div>
+              </div>
+              <!-- *ngIf="this.canView" -->
+              <dxi-column  cellTemplate="cellTemplate"></dxi-column>
+              <div *dxTemplate="let cell of 'cellTemplate'">
+                  <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+              </div>
+
+
+          </dx-data-grid>
+      </div>
+  </div>
+</div>
+
+<ng-template #template>
+ 
+          <app-management-version-edit [isNew]="this.isNew" [modalRef]="this.modalRef"  [model]="this.model" style="width: 100%" (outModel)="updateModel($event)"></app-management-version-edit>
+          <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+     
+</ng-template>

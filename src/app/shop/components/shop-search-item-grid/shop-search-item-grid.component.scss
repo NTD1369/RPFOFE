@@ -1,0 +1,21 @@
+.button-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-end{
+    display: flex; 
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.bor-apply{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.dx-switch {
+    width: 20% !important;
+    height: 24px;
+}

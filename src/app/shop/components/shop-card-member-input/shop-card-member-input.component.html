@@ -1,0 +1,36 @@
+<div class="row" style="padding: 20px;">
+
+    <div class="col-md-8">
+        <div class="row">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [dataSource]="this.cardList" [showBorders]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="prepaidCardNo" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="startDate" caption="{{'Start Date' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <!-- (onClick)="openModal(false, cell.data, template)" -->
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'Select' | translate}}" (onClick)="selectCard(cell.data)"></dx-button>
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+        <input class="form-control" [(ngModel)]="this.card.prepaidCardNo" [(value)]="this.card.prepaidCardNo" type="search" placeholder="{{'PrepaidCard' | translate}}" aria-label="Quantity">
+
+        <dx-button class=" mt-2" (onClick)="addNewCard()" icon="add" type="success" text="{{'Add New Prepaid Card' | translate}}"></dx-button>
+    </div>
+
+</div>

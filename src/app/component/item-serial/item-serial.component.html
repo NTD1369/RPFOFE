@@ -1,0 +1,65 @@
+<div id='discount-modal'>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title"> {{'Item Serial' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="width: 100%;">
+
+            <div class="col-md-5">
+                <div class="search-wrap main-search">
+                    <img src="../../../../../assets/images/System/search.svg" alt="search" class="img-fluid">
+
+                    <input class="form-control" type="search" #filter placeholder="{{'Search' | translate}}..." aria-label="Search">
+                    <!-- (change)="filterBy(filter.value)" (keyup)="filterBy(filter.value)" -->
+                </div>
+            </div>
+            <div class="col-md-5">
+                <!-- <div class="search-wrap main-search">
+              <i class="fas fa-list-ol"></i>
+                <input class="form-control" type="text" [(ngModel)]="this.item.quantity" placeholder="Quantity" aria-label="Quantity">
+              
+            </div> -->
+            </div>
+
+            <div class="col-md-2 text-center">
+                <!--  -->
+                <dx-button style="width: 100%;" (onClick)="saveSelection()" icon="check" type="success" text="{{'Select' | translate}}">
+                </dx-button>
+
+            </div>
+
+            <div class="col-md-12">
+                <div id="grid">
+                    <div class="row mt-2 mb-2">
+                        <div class="col-md-2">
+                            <!-- <dx-button style="width: 100%;" icon="sortdown" type="warning" text="Top" (onClick)="selectFromTop()"> </dx-button> -->
+                        </div>
+                        <div class="col-md-2">
+                            <!-- <dx-button style="width: 100%;" icon="indent" type="warning" text="Random" (onClick)="selectRandom()"> </dx-button> -->
+                        </div>
+                        <div class="col-md-8">
+                            <label *ngIf="this.selectedKey.length > 0">{{'Serial Selected' | translate}}: </label> {{this.selectedKey}} </div>
+                    </div>
+                    <dx-data-grid id="grid-container" [dataSource]="this.itemSerials" keyExpr="serialNum" [(selectedRowKeys)]="this.selectedKey" [showBorders]="true">
+                        <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple"></dxo-selection>
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <!-- <dxo-filter-row
+                    [visible]="true"
+                ></dxo-filter-row> -->
+                        <dxi-column dataField="serialNum" caption="{{'Serial Num' | translate}}"></dxi-column>
+
+                        <dxi-column dataField="expDate" dataType="Exp Date" caption="{{'EXP Date' | translate}}" alignment="right" dataType="datetime" format="d/M/yyyy"></dxi-column>
+
+                    </dx-data-grid>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

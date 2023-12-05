@@ -1,0 +1,155 @@
+<!-- <p>
+  setup-new-store works!
+</p> -->
+<img loading="lazy" class="wave" data-src="../../../../assets/images/geo_background.png?w=753&q=80" />
+<!-- wave -->
+<div class="loginContainer" style="width: 100%;">
+  
+    <div class="login-content" style="width: 100%;">
+      <form #setupForm="ngForm" style="    margin: auto;" (ngSubmit)="setup()">
+        <div class="row mb-3 mt-3">
+          <div class="col-md-6">
+           
+            <img loading="lazy" data-src="../../../../assets/images/System/LOGO-ABEO.png?w=753&q=80">
+          </div>
+          <div class="col-md-6" style="text-align: center;">
+            <img loading="lazy" data-src="../../../../assets/images/geo_logo.png?w=753&q=80">
+          </div>
+          
+         
+      </div>
+    
+      <h2 class="title">{{'Setup Store' | translate}} </h2>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="input-div one" [ngClass]="this.idFocus==='txtServerName' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-server"></i>
+  
+            </div>
+            <div class="div">
+                <h5>{{'Server Name' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.serverName" name="serverName" id="txtServerName" #txtServerName (focus)="onFocus(txtServerName)" (focusout)="onFocus(txtServerName)">
+              
+            </div>
+          </div>
+          <div class="input-div one" [ngClass]="this.idFocus==='txtDatabaseName' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-database"></i> 
+            </div>
+            <div class="div">
+                <h5>{{'Database Name' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.databaseName" name="databaseName" id="txtDatabaseName" #txtDatabaseName (focus)="onFocus(txtDatabaseName)" (focusout)="onFocus(txtDatabaseName)">
+              
+            </div>
+          </div>
+          <div class="input-div one" [ngClass]="this.idFocus==='txtDBUser' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fas fa-user"></i>
+      
+            </div>
+            <div class="div">
+                <h5>{{'Database User' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.dbUser" name="dbUser" id="txtDBUser" #txtDBUser (focus)="onFocus(txtDBUser)" (focusout)="onFocus(txtDBUser)">
+              
+            </div>
+          </div>
+          <div class="input-div one" [ngClass]="this.idFocus==='txtDBPass' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-key"></i>
+    
+            </div>
+            <div class="div">
+                <h5>{{'Database Password' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="password" class="input" required [(ngModel)]="model.dbPassword" name="dbPassword" id="txtDBPass" #txtDBPass (focus)="onFocus(txtDBPass)" (focusout)="onFocus(txtDBPass)">
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+
+          <div class="input-div one" [ngClass]="this.idFocus==='txtStoreId' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-address-card"></i>
+    
+            </div>
+            <div class="div">
+                <h5>{{'Store Id' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.storeId" name="storeId" id="txtStoreId" #txtStoreId (focus)="onFocus(txtStoreId)" (focusout)="onFocus(txtStoreId)">
+              
+            </div>
+          </div>
+          <div class="input-div one" [ngClass]="this.idFocus==='txtStoreName' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-info"></i>
+    
+            </div>
+            <div class="div">
+                <h5>{{'Store Name' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.storeName" name="storeName" id="txtStoreName" #txtStoreName (focus)="onFocus(txtStoreName)" (focusout)="onFocus(txtStoreName)">
+              
+            </div>
+          </div>
+          <div class="input-div one" [ngClass]="this.idFocus==='txtStoreAddress' ? 'focus' : 'focus'"> 
+            <div class="i">
+                <i class="fa fa-map-marker"></i>
+    
+            </div>
+            <div class="div">
+                <h5>{{'Store Address' | translate}} <span style="color:red">(*)</span></h5>
+                <input type="text" class="input" required [(ngModel)]="model.storeAddress" name="storeAddress" id="txtStoreAddress" #txtStoreAddress (focus)="onFocus(txtStoreAddress)" (focusout)="onFocus(txtStoreAddress)">
+            </div>
+          </div>
+          <div class="input-div one" style="    border-bottom: none;" > 
+            <div class="i">
+                <i class="fa fa-cog"></i>
+    
+            </div>
+            <div class="div" style="text-align: left;">
+                <!-- <h5>{{'Is Server' | translate}}</h5> -->
+                <dx-switch class="mt-2"  [(ngModel)]="model.isServer"  name="isServer" [(value)]="model.isServer" switchedOnText="{{'On Server' | translate }}" switchedOffText="{{'On Client' | translate }}">
+                </dx-switch>
+                
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    
+    
+
+       <!-- <div class="input-div pass" [ngClass]="isPassFocus ? 'focus' : 'blur'">
+          <div class="i">
+              <i class="fas fa-lock"></i>
+
+          </div>
+          <div class="div">
+              <h5>{{'Password' | translate}}</h5>
+              <input type="password" class="input" id="txtPassword" name="password" required [(ngModel)]="model.password" #txtPassword (focus)="onFocus(txtPassword)" (focusout)="onFocus(txtPassword)">
+          </div>
+      </div> -->
+      <container *ngIf="this.loading === true">
+          <h2>{{'The installation will take some time please wait' | translate}}</h2>
+      </container>
+      <container *ngIf="this.loading === false">
+        <div class="row">
+          <div class="col-md-10">
+            <input type="submit" class="btn" value="Save Changes">
+          </div>
+          <div class="col-md-2" style="text-align: end;">
+            <button type="reset" class="reset-btn mt-3 mr-1 closeCustom closeCustomX" (click)="backtoLogin()" style="height: 55px">
+              <i class="fas fa-window-close"></i>
+         
+              </button>
+          </div>
+        
+        </div>
+       
+      </container>
+     
+      </form>
+     
+    
+    </div>
+   
+</div>

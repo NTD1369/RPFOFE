@@ -1,0 +1,253 @@
+<div class="center-wrap" >
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+    <div class="maintenance-row">
+        <div class="col-md-12">
+        <div class="row ">
+          <!-- pt-4 style="    width: 100%;" box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px; -->
+          <div class="col-md-6" >
+            <div class="col-md-12" style="padding: 30px; box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;">
+              <h2 class="maintenance-heading  pt-4  pb-4">{{'Counter Id Setting' | translate}} </h2>
+              <div class="bill-details"> 
+                  <div class="detail">
+                      <div>
+                          <label class="detail-title ">{{'Finger Id' | translate}}</label>
+                      </div>
+                      <div>
+                          <dx-text-box [disabled]='this.lockFingerId' [(value)]="this.currentCounter.localIP" #txtFingerId></dx-text-box>
+                      </div>
+                  </div> 
+                  <!-- <div class="detail">
+                    <div>
+                        <label class="detail-title">{{'Store' | translate}}</label>
+                    </div>
+                    <div>
+                      {{this.currentCounter.storeId}}
+                      <dx-select-box #cbbStore  [searchEnabled]="true" [value]="this.currentCounter.storeId" [items]="storeOptions" 
+                      displayExpr="name" valueExpr="value" placeholder="Store"></dx-select-box>
+                    </div>
+  
+  
+                </div> -->
+                  <div class="detail">
+                    <div>
+                        <label class="detail-title">{{'Counter Id' | translate}}</label>
+                    </div>
+                    <div >
+                   
+                      <div class="row" style="width: 100%;">
+                        <!-- <div class="col-md-12"> -->
+                          <div class="col-md-10">
+                            <dx-text-box [(value)]="this.currentCounter.publicIP"  #txtCounterId></dx-text-box>
+                          </div>
+                          <div class="col-md-2" style="text-align: right;">
+                            <button class="btn btn-back mr-2 fs-14 border-radius-5 default " 
+                               style="background-color: #26c6da; border: 2px solid #26c6da"
+                                (click)="openModal(template)">
+                                <!-- <i class="fas fa-external-link"></i> -->
+                                <i class="fas fa-external-link-square-alt"></i>
+                            </button>
+  <!-- 
+                            <dx-button class="button-info" stylingMode="outlined" type="default" (onClick)="openModal(template)">
+                            </dx-button> -->
+    
+                          <!-- </div> -->
+                        </div>
+                      </div>
+                      
+                      <!-- <ng-container *ngIf="this.currentCounter.publicIP?.length > 0">
+                       
+                      </ng-container>
+                      <ng-container *ngIf="this.currentCounter.publicIP===null || this.currentCounter.publicIP===undefined || this.currentCounter.publicIP?.length <= 0"> -->
+                        <!-- [value]="this.currentCounter.publicIP" -->
+                        <!-- <dx-tag-box  #tagPublicIP [items]="editableCounters" [acceptCustomValue]="true"  
+                        [multiline]="false" [(ngModel)]="this.currentCounter.publicIP" [value]="this.currentCounter.publicIP"
+                          (onCustomItemCreating)="onCustomItemCreating($event)" ></dx-tag-box> -->
+                      <!-- </ng-container> -->
+                     
+                      <!-- [(value)]="this.currentCounter.publicIP"  #txtCounterId -->
+                    
+                    </div>
+
+
+                </div>
+              
+  
+              </div>
+              <div class="bill-wrapper" >
+                
+                <div class="row">
+                  <div class="col-md-3">
+            
+                  </div>
+                  <div class="col-md-3">
+            
+                  </div>
+                  <div class="col-md-3">
+                  
+                  </div>
+                  <div class="col-md-3">
+                    <a class="primary-btn payment-btn" (click)="setDevice()"> {{'Set Device' | translate}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>  
+         
+        </div> 
+        <div class="col-md-6" >
+          <div class="col-md-12" style="padding: 30px; box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;">
+          <h2 class="maintenance-heading  pt-4  pb-4">{{'Output Setting' | translate}} </h2>
+            <div class="bill-details"> 
+                <div class="detail">
+                    <div>
+                        <label class="detail-title ">{{'Name' | translate}}</label>
+                    </div>
+                    <div>
+
+                      <!-- displayExpr="employeeName" valueExpr="employeeId" itemTemplate="item" -->
+                      <dx-select-box id="ddlPoleName" #employee [items]="this.poleNames" placeholder="Comp Name" name="client-select" [(ngModel)]="this.currentCounter.poleName" id="client-select" class="custom-select" 
+                          [searchEnabled]="true" searchMode="contains"  >
+        <!-- 
+                          <div *dxTemplate="let data of 'item'" class="custom-item">
+                              <div class='product-name'>{{data.employeeId}} - {{data.employeeName}}</div>
+                          </div> -->
+                      </dx-select-box>
+                        <!-- <dx-text-box  [(value)]="this.currentCounter.poleName" #txtPoleName></dx-text-box> -->
+                    </div>
+                </div> 
+                <div class="detail">
+                  <div>
+                      <label class="detail-title">{{'Baud Rate' | translate}}</label>
+                  </div>
+                  <div>
+                    <dx-number-box  [(value)]="this.currentCounter.poleBaudRate"  #txtPoleBaudRate></dx-number-box>
+                  
+                  </div>
+              </div>
+              <div class="detail">
+                <div>
+                    <label class="detail-title">{{'Baud Parity' | translate}}</label>
+                </div>
+                <div>
+                  <!-- <dx-text-box [(value)]="this.currentCounter.poleParity"  #txtPoleParity></dx-text-box> -->
+                  <dx-select-box id="ddlPoleParities" #txtPoleParity [items]="this.poleParities" placeholder="Pole Parity" name="client-select" 
+                  [(ngModel)]="this.currentCounter.poleParity" id="client-select" class="custom-select" 
+                  [searchEnabled]="true" searchMode="contains"  >
+        <!-- 
+                  <div *dxTemplate="let data of 'item'" class="custom-item">
+                      <div class='product-name'>{{data.employeeId}} - {{data.employeeName}}</div>
+                  </div> -->
+              </dx-select-box>
+                </div>
+            </div>
+            <div class="detail">
+                <div>
+                    <label class="detail-title">{{'Test Message' | translate}}</label>
+                </div>
+                <div>
+                  <dx-text-box   #txtMessage></dx-text-box>
+                </div>
+          
+          
+            </div>
+            <div class="detail">
+              <div>
+                  <label class="detail-title">{{'Test Message' | translate}} 2</label>
+              </div>
+              <div>
+                <dx-text-box   #txtMessage2></dx-text-box>
+              </div>
+
+        
+            </div>
+            <div class="detail">
+              <div>
+                  <label class="detail-title ">{{'Print Size' | translate}}</label>
+              </div>
+              <div>
+
+              
+                <dx-select-box id="ddlPrintSize" #ddlPrintSize [items]="this.printSizes" placeholder="Print Size" name="client-select" [(ngModel)]="this.currentCounter.printSize" id="client-select" class="custom-select" 
+                    [searchEnabled]="true" searchMode="contains"  >
+
+                </dx-select-box>
+                
+              </div>
+          </div> 
+          <div class="detail">
+            <div>
+                <label class="detail-title ">{{'Print Name' | translate}}</label>
+            </div>
+            <div>
+              <dx-text-box  [(value)]="this.currentCounter.printName"    #txtPrintName></dx-text-box>
+            
+              <!-- <dx-select-box id="ddlPrintName" #ddlPrintSize [items]="this.printSizes" placeholder="Print Size" name="client-select" [(ngModel)]="this.currentCounter.printSize" id="client-select" class="custom-select" 
+                  [searchEnabled]="true" searchMode="contains"  >
+
+              </dx-select-box> -->
+              
+            </div>
+          </div> 
+            </div>
+          
+            <div class="bill-wrapper" >
+              
+              <div class="row">
+                <div class="col-md-3">
+          
+                </div>
+                <div class="col-md-3">
+          
+                </div>
+                <div class="col-md-3">
+                  <a class="primary-btn payment-btn" (click)="checkPoleConnect()"> {{'Check Connect' | translate}}</a>
+                </div>
+                <div class="col-md-3">
+                  <a class="primary-btn payment-btn" (click)="setPoleSetting()"> {{'Save Changes' | translate}}</a>
+                </div>
+              </div>
+            </div>
+          </div>  
+      </div> 
+       
+        </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Counter List' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+  </div>
+
+  <div class="modal-body">
+      <dx-data-grid #dataGrid id="goodsreceipt" [(dataSource)]="this.editableCounters" keyExpr="publicIP" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [showBorders]="true">
+
+<!-- 
+        <dxo-editing mode="cell" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+
+        </dxo-editing> -->
+        <!-- <dxi-column dataField="storeId" [allowEditing]="true" caption="{{'Store ID' | translate}}">
+            <dxo-lookup [dataSource]="this.storelist" valueExpr="storeId" displayExpr="storeName">
+            </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="fromDate" [allowEditing]="true" caption="{{'From Date' | translate}}" dataType="date" [displayFormat]="this.dateFormat" [minWidth]="150"> </dxi-column> -->
+
+        <dxi-column dataField="publicIP" [allowEditing]="true" caption="{{'Public IP' | translate}}"   [minWidth]="120"> </dxi-column>
+        <dxi-column dataField="localIP" [allowEditing]="true" caption="{{'Local IP' | translate}}"   [minWidth]="120"> </dxi-column>
+
+        <dxi-column cellTemplate="cellTemplate" [width]="150"></dxi-column>
+        <div *dxTemplate="let cell of 'cellTemplate'"> 
+            <dx-button icon="fas fa-check" text="Select" (onClick)="selectCounter(cell.data)"></dx-button>
+        </div>
+
+
+    </dx-data-grid>
+  </div>
+</ng-template>

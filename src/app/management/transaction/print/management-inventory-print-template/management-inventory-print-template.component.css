@@ -1,0 +1,16 @@
+
+
+.table-inventory-template td, .table-inventory-template th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .table-inventory-template tr:nth-child(even){background-color: #f2f2f2;}
+  
+  .table-inventory-template tr:hover {background-color: #ddd;}
+  
+  .table-inventory-template th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+  }

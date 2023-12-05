@@ -1,0 +1,593 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="maintenance-row">
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <ng-container *ngIf="this.invoice?.invoiceType==='CheckOut'">
+                            <a routerLink="/shop/invoices/checkout" class="back-btn">
+                                <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                            </a>
+                        </ng-container>
+                        <ng-container *ngIf="this.invoice?.invoiceType!=='CheckOut'">
+                            <a routerLink="/shop/invoices/checkin" class="back-btn">
+                                <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                            </a>
+                        </ng-container>
+                        
+                      
+                        <label for="item-searchbar" class="section-title">{{'Invoice' | translate}}</label>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <a *ngIf="this.invoice?.refTransId?.length > 0" class="btn button-filter border-radius-5 mr-2 font-size-14" href="/shop/bills/{{this.invoice?.refTransId}}/{{this.invoice?.companyCode}}/{{this.invoice?.storeId}}">
+                         {{'View SO' | translate}}
+                        </a>
+                        <a class="btn button-dis border-radius-5 mr-2 font-size-14" (click)="openPromotionModal(ManualPromotion)">
+                         {{'Discount' | translate}}
+                        </a>
+                        <a *ngIf="this.invoice.status === 'C' || this.invoice.status === 'Closed'" class="btn button-dis border-radius-5 mr-2 font-size-14" (click)="cancelInvoice()">
+                            {{'Cancel' | translate}}
+                           </a>
+                        <a class="btn button-return border-radius-5 font-size-14" (click)="openModal(template)">{{'Payment' | translate}}</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="right-section p-0">
+                            <div class="row bill-info-wrap">
+                                <div class="col-md-4 bill-info">
+                                    <p class="bill-number"> {{'Bill No' | translate}}: {{this.invoice?.transId}}</p>
+                                    <p class="bill-date">{{'Date' | translate}}: {{this.invoice?.createdOn | date:'yyyy-MM-dd'}}</p>
+                                    <p class="bill-time">{{'Type' | translate}}: {{this.invoice?.invoiceType}}</p>
+                                    <p class="bill-number" *ngIf="this.invoice?.contractNo!==null && this.invoice?.contractNo!==undefined && this.invoice?.contractNo!==''"> Contract No: {{this.invoice?.contractNo}}</p>
+
+                                </div>
+                                <div class="col-md-4 bill-info">
+                                    <p class="bill-number" *ngIf="this.invoice?.cusName !==null && this.invoice?.cusName !== undefined && this.invoice?.cusName !== ''"> {{'' | translate}}Customer: {{this.invoice?.cusName }}</p>
+                                    <p class="bill-date" *ngIf="this.invoice?.phone !==null && this.invoice?.phone !== undefined && this.invoice?.phone !== ''"> {{'' | translate}}Phone: {{this.invoice?.phone }}</p>
+                                    <p class="bill-date" *ngIf="this.invoice?.cusAddress !==null && this.invoice?.cusAddress !== undefined && this.invoice?.cusAddress !== ''"> {{'' | translate}}Address: {{ this.invoice?.cusAddress}}</p>
+
+                                </div>
+                                <div class="col-md-4 bill-info" *ngIf="this.invoice?.refTransId!==null && this.invoice?.refTransId!==undefined">
+                                    <p class="bill-number"> {{'Ref' | translate}}: {{this.invoice?.refTransId}}</p>
+
+                                    <!-- <p class="bill-date"> Class: {{this.invoice?.customer.customerGrpId}}</p> -->
+
+                                    <!-- <p class="bill-time">Time: {{this.invoice?.createdOn | date:'HH:mm:ss'}}</p> -->
+                                </div>
+                                <!-- <a class="primary-btn "  (click)="createBasket()" style="margin-left: -10%;" >
+                  <i class="fas fa-cart-arrow-down mr-2"></i>   Basket
+                </a> -->
+                                <!--  -->
+
+                            </div>
+                            <div class="bill-wrapper">
+                                <div class="table-wrap mb-4">
+                                    <div class="bill-table custom-table">
+                                        <div class="t-head">
+                                            <div class="t-row">
+                                              
+                                                <div class="t-cell cell-desc">
+                                                    <p>{{'Description' | translate}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                                                    <p>{{'UoM' | translate}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity" style="max-width: 150px!important;" *ngIf="this.invoice?.invoiceType!=='CheckIn'">
+                                                    <p>{{'Open Quantity' | translate}}</p>
+                                                </div>
+                                                <div class="t-cell cell-quantity" style="max-width: 100px!important;">
+                                                    <p>{{'Quantity' | translate}}</p>
+                                                </div>
+                                                <div class="t-cell cell-action" style="max-width: 200px!important;">
+                                                    <p>{{'Remark' | translate}}</p>
+                                                </div>
+                                                <!-- <div class="t-cell cell-quantity" style="max-width: 60px!important;"
+                          *ngIf="this.invoice?.invoiceType!=='CheckIn'">
+                          <p>Price</p>
+                        </div>
+                        <div class="t-cell cell-total" style="max-width: 60px!important;"
+                          *ngIf="this.invoice?.invoiceType!=='CheckIn'">
+                          <p>Total</p>
+                        </div> -->
+                                                <div class="mr-2" style="min-width: 40px!important;">
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- *ngIf="basket$ | async as basket" *ngIf="item.lineTotal==0 " -->
+                                        <div class="t-body mb-2" style="min-height: 300px;">
+                                            <ng-container *ngFor="let item of filterNotBOM(this.invoice?.lines)">
+
+                                                <!-- <div class="t-row" >
+                          <div class="t-cell cell-action" style="max-width: 60px!important;">
+                            <p>
+                              <i style="    color: orangered; font-size:20px" class="fas fa-gift"></i>
+                            </p>
+                          </div>
+                          <div class="t-cell cell-desc">
+                            <p> {{item.itemName}}</p>
+                            <a (click)="ele.class = ele.class == 'showChildren' ? 'hideChildren' :  'showChildren'">
+                              
+                              <i class="fas fa-angle-down fa-2x" *ngIf="filterSerial(invoice.serialLines, item.itemCode, item.uomCode).length > 0" ></i>
+                              <i class="fas fa-angle-down fa-2x" *ngIf="filterBOM(invoice.lines, item.itemCode, '').length > 0" ></i>
+                            
+                           </a>
+       
+                          </div>
+                          <div class="t-cell cell-total" style="max-width: 60px!important;">
+                            <p>{{item.uomCode}}</p>
+                          </div>
+                          <div class="t-cell cell-quantity" style="max-width: 150px!important;" >
+                            <p>{{item.openQty | number}}</p>  
+                            
+                          </div>
+                          <div class="t-cell cell-quantity" style="max-width: 100px!important;" >
+                            
+                             
+                            <ng-container *ngIf="item.openQty > 0">
+                              <input type="text"   inputmode="numeric" pattern="[0-9]*"  
+                              class="form-control rounded" placeholder="Search" [(ngModel)]="item.quantity" [(value)]="item.quantity" />
+        
+                            </ng-container>
+                            <ng-container  *ngIf="item.openQty <=0">
+                              <p>{{item.quantity | number}}</p>  
+                            </ng-container>
+                          </div>
+                         
+                          <div class="t-cell cell-total" style="max-width: 60px!important;">
+                          
+                            <ng-container  *ngIf="item?.promoPrice!==null && item?.promoPrice!==item.price">
+                              <p class="mr-2 textOrigionalX"> {{item.price | number}}</p> 
+                              <p class="mr-2 textPromotion"> {{item?.promoPrice | number}}</p>
+                             
+                            </ng-container>
+                            <ng-container  *ngIf="item?.promoPrice===null || item?.promoPrice===item.price">
+                              <p  class="mr-2 textPromotion">  {{item.price | number}}</p>
+                            </ng-container>
+                          </div>
+                          <div class="t-cell cell-total" style="max-width: 60px!important;">
+                            <ng-container  *ngIf="item?.promoLineTotal!==null && item?.promoLineTotal!==item.lineTotal">
+                              <p class="mr-2 textOrigionalX"> {{item.lineTotal | number}}</p> 
+                              <p class="mr-2 textPromotion"> {{item?.promoLineTotal | number}}</p>
+                             
+                            </ng-container>
+                            <ng-container  *ngIf="item?.promoLineTotal===null || item?.promoLineTotal===item.lineTotal">
+                              <p  class="mr-2 textPromotion">  {{item.lineTotal | number}}</p>
+                            </ng-container>
+         
+                          </div>
+                          <div class="mr-2" style="min-width: 40px!important;">
+                           
+                          </div>
+                        </div> -->
+                                                <div class="t-row" *ngIf="item.lineTotal>0 || this.invoice?.invoiceType==='CheckIn'">
+                                                   
+                                                    <div class="t-cell cell-desc">
+                                                        <p (click)="ele.class = ele.class == 'showChildren' ? 'hideChildren' :  'showChildren'"> {{item.itemCode}} - {{item.itemName}}
+                                                            <i class="fas fa-angle-down fa-2x"
+                                                            *ngIf="filterSerial(invoice.serialLines, item.itemCode, item.uomCode).length > 0"></i>
+                                                          <i class="fas fa-angle-down fa-2x"
+                                                            *ngIf="filterBOM(invoice.lines, item.itemCode, '', item?.lineNum, item?.remark).length > 0"></i>
+                                                        </p>
+                                                        <!-- <a >
+
+                             
+
+                            </a> -->
+
+
+                                                    </div>
+                                                    <div class="t-cell cell-total" style="max-width: 60px!important;">
+                                                        <p>{{item.uomCode}}</p>
+                                                    </div>
+                                                    <div class="t-cell cell-quantity" style="max-width: 150px!important;" *ngIf="this.invoice?.invoiceType!=='CheckIn'">
+                                                        <p>{{item.openQty | number}}</p>
+
+                                                    </div>
+                                                    <div class="t-cell cell-quantity" style="max-width: 100px!important;">
+                                                        <p>{{item.quantity | number}}</p>
+                                                        <!-- <ng-container *ngIf="item.isSerial">
+                              <p>{{item.quantity | number}}</p>
+                            </ng-container>
+                            <ng-container *ngIf="!item.isSerial">
+                              <ng-container *ngIf="item.openQty > 0">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control rounded"
+                                  placeholder="Search" [(ngModel)]="item.quantity" [(value)]="item.quantity" />
+
+                              </ng-container>
+                              <ng-container *ngIf="item.openQty <=0">
+                              
+                              </ng-container>
+                            </ng-container> -->
+
+                                                    </div>
+                                                    <div class="t-cell cell-action" style="max-width: 200px!important;">
+                                                        <!-- <p> -->
+                                                            <div innerHTML="{{item.remark}}"></div>
+                                                            <!-- {{item.remark}} -->
+                                                        <!-- </p> -->
+                                                    </div>
+                                                  
+                                                    <div class="mr-2" style="min-width: 40px!important;">
+
+                                                    </div>
+                                                </div>
+                                                <div [ngClass]="{ hideChildren : ele.class !== 'showChildren' }" #ele>
+                                                    <div class="t-row" *ngFor="let itemBOM of filterBOM(invoice.lines, item.itemCode, '', item?.lineNum, item?.remark)">
+                                                      
+                                                        <div class="t-cell cell-desc">
+                                                            <p style="widows: 100%;"> + {{itemBOM.itemCode}} - {{itemBOM.itemName}}</p>
+                                                        </div>
+                                                        <div class="t-cell cell-total" style="max-width: 60px!important; cursor: pointer;">
+                                                            <p>{{itemBOM.uomCode}} </p>
+                                                        </div>
+                                                        <div class="t-cell cell-quantity" style="max-width: 100px!important;">
+                                                            <p>{{itemBOM.quantity | number}} </p>
+                                                        </div>
+                                                        <!-- <div class="t-cell cell-total" style="max-width: 100px!important;">
+                                                            <p>{{itemBOM.price | number}} </p>
+
+                                                        </div> -->
+                                                        <!-- <div class="t-cell cell-total" style="max-width: 60px!important;">
+
+                                                            <p>{{itemBOM.price * itemBOM.quantity | number}} </p>
+                                                        </div>
+                                                          <div class="t-cell cell-action" style="max-width: 200px!important;">
+
+                                                        </div>-->
+
+                                                        <div class="mr-2" style="min-width: 200px!important;">
+
+
+                                                        </div> 
+                                                        <div class="mr-2" style="min-width: 40px!important;">
+
+
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                <div [ngClass]="{ hideChildren : ele.class !== 'showChildren' }" #ele>
+                                                    <!-- | filter : 'itemCode' : item.itemCode"   -->
+                                                    <div class="t-row" *ngFor="let itemSerial of item.serialLines">
+                                                    
+                                                        <div class="t-cell cell-desc">
+                                                            <p style="widows: 100%;"> {{itemSerial.serialNum}} </p>
+                                                        </div>
+                                                        <div class="t-cell cell-total" style="max-width: 60px!important;">
+                                                            <p>{{itemSerial.uomCode}}</p>
+                                                        </div>
+                                                        <div class="t-cell cell-quantity" style="max-width: 150px!important;">
+                                                            <p>{{itemSerial.openQty | number}}</p>
+
+                                                        </div>
+                                                            <div class="t-cell cell-action" style="max-width: 200px!important;">
+
+                                                        </div>
+
+                                                        <!-- <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                              <ng-container *ngIf="item.isSerial">
+                                <ng-container  >
+                                  <input type="text" #txtNumOfSerial  inputmode="numeric" pattern="[0-9]*" (keyup)="onSerialBlurMethod(item,itemSerial, txtNumOfSerial.value)"   (blur)="onSerialBlurMethod(item, itemSerial, txtNumOfSerial.value)" 
+                                  class="form-control rounded" placeholder="0" [(ngModel)]="itemSerial.quantity" [(value)]="itemSerial.quantity" /> 
+                                </ng-container>
+                                <ng-container   >
+                                 
+                                </ng-container>
+                              </ng-container>
+                              <p>{{itemSerial.quantity | number}}</p>
+                            </div> -->
+                                                        <!-- <div class="t-cell cell-total" style="max-width: 60px!important;">
+      
+                            </div> -->
+                                                        <!-- <div *ngIf="this.invoice?.invoiceType!=='CheckIn'" class="t-cell cell-total"
+                              style="max-width: 60px!important;">
+                              <p>{{itemSerial.lineTotal | number}} A</p>
+                            </div> -->
+
+                                                        <div class="mr-2" style="min-width: 40px!important;">
+
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+
+                                            <!-- <div class="t-row promotionLine" *ngFor="let item of this.invoice?.promoLines">
+                        <div class="t-cell cell-action" style="max-width: 60px!important;">
+                          <p>
+                            <i style="    color: orangered; font-size:20px" class="fas fa-gift"></i>
+                          </p>
+                        </div>
+                        <div class="t-cell cell-desc">
+                          <p> {{item.itemName}}</p>
+                          <br />
+                          <p>{{item.promoId}} </p>
+                        </div>
+                        <div class="t-cell cell-total" style="max-width: 60px!important;">
+                          <p>{{item.uomCode}}</p>
+                        </div>
+                        <div class="t-cell cell-quantity" style="max-width: 70px!important;" >
+                          <p>{{item.value | number}}</p>  
+                        </div>
+                        <div class="t-cell cell-quantity" style="max-width: 70px!important;" >
+                        
+                          <input type="text"   inputmode="numeric" pattern="[0-9]*"  (blur)="onBlurMethod(item)" class="form-control rounded" placeholder="Search" [(ngModel)] = "item.openQty" value="{{item.openQty}}" />
+                         
+               
+                        </div>
+                        <div class="t-cell cell-total" style="max-width: 60px!important;">
+                          <p>{{0 | number}}</p>
+                        </div>
+                        <div class="t-cell cell-total" style="max-width: 60px!important;">
+                        
+                          <p>{{0 | number}}</p>
+                        </div>
+                        <div class="mr-2" style="min-width: 40px!important;">
+                         
+                        </div>
+                      </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-bill" *ngIf="this.invoice?.invoiceType!=='CheckIn'">
+                                    <div class="row">
+
+                                        <div class="col-md-4 offset-md-8">
+                                            <div class="discount-div">
+                                                <p>{{'Bill Total' | translate}}</p>
+                                                <p>{{ this.invoice?.totalAmount | number}}</p>
+                                            </div>
+
+                                            <div class="discount-div">
+                                                <p>{{'Total Discount' | translate}}</p>
+                                                <p>{{this.invoice?.totalDiscountAmt | number}}</p>
+                                            </div>
+
+                                            <div class="payable-div">
+                                                <p>{{'Total Payable' | translate}}</p>
+                                                <p>{{this.invoice?.totalReceipt| number}}</p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-6">
+                      <a  class="primary-btn" (click)="saveEntity()" >Check out</a>
+                    </div> -->
+                                    </div>
+
+                                    <!--  -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Payment' | translate}}</h4>
+        <!-- (click)="()" -->
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <!-- <span aria-hidden="true">
+        
+        &times;
+       
+      
+      </span> -->
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body" *ngIf="showModal">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-action"></div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{'Payment Discount' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Amount Due' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected Amount' | translate}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll">
+
+                                <div class="t-row" *ngFor="let payment of invoice.payments">
+                                    <div class="t-cell cell-action">
+                                        <!-- <a href="javascript:void" class="delete-btn"  >
+                      <img src="../../../../assets/images/System/close.svg" alt="close">
+                    </a> -->
+                                        <!-- <button (click)="enableEditMethod($event, i)">Set Focus</button> -->
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+                                    <div class="t-cell cell-discount">
+                                        <p>{{payment.paymentDiscount | number}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <!-- <div class="search-wrap typing-section-input-wrap " >
+                      <input type="text"  #focus  type="text"  (change)="changeValuePayment(focus.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)"
+                       value="{{payment.paymentCharged | number}}" (focus)="setClickedRow(i, payment)" (focusout)="removeselect(i, payment)"
+                        placeholder="Amount"   class="typing-section-input txtAmount">
+                    </div>  -->
+                                        <p>{{payment.chargableAmount | number}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{payment.collectedAmount | number}}</p>
+
+                                    </div>
+                                    <!-- (change)="changeValuePayment(focus{{i}}.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)" -->
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-payment-info">
+                        <div>
+                            <label>{{'Bill Amount' | translate}}</label>
+                            <p>{{this.invoice?.totalAmount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Discount' | translate}}</label>
+                            <p>{{this.invoice?.paymentDiscount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Chargable' | translate}}</label>
+                            <p> {{this.invoice?.totalPayable - this.invoice?.paymentDiscount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Collected' | translate}}</label>
+                            <p>{{this.invoice?.totalReceipt | number}}</p>
+                        </div>
+
+                        <div>
+                            <label>{{'Balance Due' | translate}}</label>
+                            <p>0</p>
+                        </div>
+                        <div>
+                            <label>{{'Change' | translate}}</label>
+                            <p>{{this.invoice?.amountChange | number}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #ManualPromotion>
+    <div id='discount-modal'>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{'Promotion' | translate}} / {{'Discount' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <img src="../../../assets/images/System/times.svg">
+      </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="grey-wrapper left-modal-section">
+                        <div class="table-wrap horizontal-scrol">
+                            <div class="discount-modal-table custom-table l">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-item">
+                                            <p>{{'Item Code' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>{{'Description' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p>{{'UoM' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{'Price' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{'Quantity' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-discount">
+                      <p>Discount Type</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{'Discount' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{'SubTotal' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="t-body vertical-scroll">
+
+                                    <div class="t-row" *ngFor="let item of this.invoice?.lines; let i = index">
+                                        <div class="t-cell cell-item">
+                                            <p>{{item?.itemCode}}</p>
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>
+                                                {{item?.itemName}}
+                                            </p>
+                                        </div>
+                                        <div class="t-cell cell-uom">
+                                            <p> {{item?.uomCode }}</p>
+                                        </div>
+                                        <div class="t-cell cell-price">
+                                            <p>{{item?.price | number}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity">
+                                            <p>{{item?.quantity | number}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-quantity">
+                      <p>{{item.discountType}}</p>
+                    </div> -->
+                                        <div class="t-cell cell-discount">
+                                            <p>{{item?.discountAmt | number}}</p>
+                                        </div>
+                                        <div class="t-cell cell-subsotal">
+                                            <p>{{item?.quantity * item?.price - item?.discountAmt | number}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-payment-info">
+                            <div>
+                                <label>{{'Bill Discount' | translate}}</label>
+
+                            </div>
+                            <p>{{this.invoice?.discountRate == null ? 0 : this.invoice?.discountRate | number}}</p>
+                            <div>
+                                <label>{{'Bill Amount' | translate}}</label>
+                                <p>{{this.order?.totalAmount | number}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Discount' | translate}}</label>
+                                <p>{{this.invoice?.totalDiscountAmt == null ? 0 : this.invoice?.totalDiscountAmt | number}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Amount' | translate}}</label>
+                                <p>{{ this.order?.totalReceipt | number}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-template>

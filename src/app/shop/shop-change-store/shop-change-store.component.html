@@ -1,0 +1,94 @@
+<!-- <main class="wrap"> -->
+    <ng-container *ngIf="this.waiting">
+        <div  style="margin-top: 10%; text-align: center;">
+          <h2 style="color:red; font-weight: 600;">
+            <!-- System Checking... -->
+          </h2>
+        
+          <img src="../../../../assets/images/System/loading2.gif" style="    width: 15%;">
+      
+          <h2>{{'Loading data' | translate}}.</h2>
+          <h2>{{'Please wait a minute' | translate}}.</h2>
+          <h2>{{'Thank you' | translate}}!!.</h2>
+        </div>
+      
+      </ng-container>
+   
+    
+   
+    <ng-container *ngIf="this.authService.storeSelected()===null || this.authService.storeSelected()===undefined  ">
+       
+        <div class="center-wrap" >
+            <div  class="row"  style="width: 100%; text-align: center;" *ngIf="this.defaultStore?.storeId !== null && this.defaultStore?.storeId !== undefined && this.defaultStore?.storeId !== ''">
+                <div class="col-md-4 mb-2">
+                 
+                </div>
+                <div class="col-md-4 mb-2">
+                    <div class="row" style=" text-align: center; padding-bottom: 15px;" >
+                       <h2 style=" width: 100%; font-weight: 500;">{{'Last Login' | translate}} </h2>  
+                    </div>
+                    <app-shop-store-select  [ngClass]="{ kselected : i === this.hoverStore}" [(hoverStore)]='this.hoverStore'  (storeSelected)="changeStore($event)" [store]="this.defaultStore">
+                    </app-shop-store-select>
+                </div>
+              
+                <hr class="style18">
+            <br>
+            </div>
+            
+
+            <div class="row" style="width: 100%; padding-left: 5px;">
+               
+                <ng-container *ngFor="let item of this.storeList; index as i">
+               
+                    <app-shop-store-select class="col-md-4 mb-2" [ngClass]="{ kselected : i === this.hoverStore}" [(hoverStore)]='this.hoverStore'  (storeSelected)="changeStore($event)" [store]="item" [index]="i">
+                    </app-shop-store-select>
+                </ng-container>
+
+            </div>
+          
+           
+        </div>
+    </ng-container>
+    <ng-container *ngIf="(this.authService.storeSelected()!==null || this.authService.storeSelected()!==undefined ) && this.inProgress && this.loadingProgressModel.loadCompleted===false">
+      
+      <div class="center-wrap loadingComponent" *ngIf="this.authService.storeSelected()!==null && this.authService.storeSelected()!==undefined " style=" background: rgb(30, 30, 30, 0.8);">
+
+          <div class="col-md-12 " *ngIf="this.loadingProgressModel.message!==undefined && this.loadingProgressModel.message!==null && this.loadingProgressModel.message!==''">
+              <div class="row rowMessageSum mb-2" style="    margin-top: 100px; ">
+                  <div class="col-md-8">
+                      <div class="card-counter danger">
+                          <i class="iconX far fa-times-circle"></i>
+                          <span class="count-numbers messageSum"> {{this.loadingProgressModel.message}}</span>
+                          <span class="count-name">
+                            {{this.loadingProgressModel.data.description}}
+                          </span>
+
+                      </div>
+                  </div>
+                  <div class="col-md-4 p-1">
+                      <button class="submit-btn" *ngIf="this.loadingProgressModel.data.code==='defaultCustomer'" style="width:100%;" (click)="useLocaUser()">Use Local User</button>
+
+                      <button class="primary-btn submit-btn warning mt-2" style="width:100%;" (click)="logOut()">Logout</button>
+                  </div>
+              </div> 
+          </div>
+
+          
+
+          <ng-container *ngIf="this.loadingProgressModel?.message?.length <= 0 && this.authService.storeSelected()!==undefined && this.authService.storeSelected()!==null">
+
+            <app-shop-loading [(inputText)]="this.stepMessage" ></app-shop-loading>
+          </ng-container>
+
+
+ 
+      </div>
+  </ng-container>
+  <ng-container *ngIf="this.shortcuts?.length > 0" >
+
+    <ng-keyboard-shortcuts  [shortcuts]="this.shortcuts"></ng-keyboard-shortcuts>
+    <ng-keyboard-shortcuts-help [key]="'`'"  [closeKey]="'escape'" [title]="'Help '"></ng-keyboard-shortcuts-help>   
+    
+ </ng-container>
+ 
+ 

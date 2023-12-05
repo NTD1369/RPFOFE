@@ -1,0 +1,28 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Promotion Schema' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #dataGrid id="schemaList" [dataSource]="this.schemaList" keyExpr="schemaId" [showRowLines]="true" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+                (onToolbarPreparing)="onToolbarPreparing($event)">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <dxi-column dataField="schemaId" caption="{{'Schema Code' | translate}}"></dxi-column>
+                <dxi-column dataField="schemaName" caption="{{'Schema Name' | translate}}"></dxi-column>
+                <dxi-column dataField="status" caption="{{'Status' | translate}}"></dxi-column>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="viewDetail(cell.data)"></dx-button>
+                    <!-- <dx-button icon="fas fa-trash-alt" class="mr-2" text="Delete" (onClick)="deleteScheme(cell.data)"></dx-button> -->
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

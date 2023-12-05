@@ -1,0 +1,63 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Shipping' | translate}}</label>
+
+      </div>
+
+      <div class="table-wrap">
+
+          <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.list" [showBorders]="true">
+
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+            
+              <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+              <dxi-column dataField="shippingCode" caption="{{'Code' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="shippingName" caption="{{'Name' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="description" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="remark" caption="{{'Remark' | translate}}" dataType="string"> </dxi-column>
+
+              <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+              
+              <dxi-column dataField="createdBy" caption="{{'Created By' | translate}}" dataType="string"> </dxi-column>
+              <dxi-column dataField="createdOn" caption="{{'Created On' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"> </dxi-column>
+              
+              <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | statusFormat"></div>
+              </div>
+              <dxi-column cellTemplate="cellTemplate"></dxi-column>
+              <div *dxTemplate="let cell of 'cellTemplate'">
+                <div class="row">
+                    <div class="col-1"></div>
+                        <dx-button type="default" icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                      <div class="col-1"></div>
+                        <dx-button type="danger"   icon="trash" text="{{'Delete' | translate}}" (onClick)="this.delete(cell.data)"></dx-button>
+                </div>
+               
+                  
+                </div>
+
+
+          </dx-data-grid>
+      </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left" id="my-modal-title">{{'Shipping' | translate}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+  </div>
+
+  <div class="modal-body">
+      <div class="row">
+          <app-management-shipping-detail  [isNew]="this.isNew"  [model]="this.model" style="width: 100%" (outModel)="updateModel($event)">
+          </app-management-shipping-detail>
+        
+      </div>
+  </div>
+</ng-template>

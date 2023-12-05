@@ -1,0 +1,12 @@
+
+  <dx-popover  target="#{{this.target}}"  
+    position="top"
+    [width]="300"
+    [shading]="true"
+    shadingColor="rgba(0, 0, 0, 0.5)"
+    [(visible)]="withShowDetailVisible">
+    <div *dxTemplate="let data of 'content'">
+
+        Test
+    </div>
+  </dx-popover>

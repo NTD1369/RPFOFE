@@ -1,0 +1,67 @@
+
+.g-overlay {
+    min-width: 320px;
+  }
+ 
+  gallery {
+    font-size: 16px;
+  }
+  
+  img {
+    width: 150px;
+  }
+  
+  .lightbox-example, .gallerize-example {
+    margin: unset;
+  }
+  .webcam-wrapper, video.mirrored {
+    width: 100%;
+  }
+  .right-section > .bill-wrapper {
+    min-height: calc(100vh - 300px);
+    max-height: calc(100% - 10px);
+}
+.right-section > .bill-info-wrap {
+  min-height: calc(100vh - 200px);
+  max-height: calc(100% - 10px);
+}
+// .right-section .bill-wrapper {
+//   height: calc(100% - 110px);
+// }
+
+.custom-table .t-head .t-row .t-cell{
+  border-right: 1px solid #ddd;
+  height: 50px;
+}
+
+.custom-table .t-body .t-row .t-cell{
+  border-right: 1px solid #ddd;
+  height: 71px;
+}
+
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.hideChildren {
+  display: none;
+}
+
+.showChildren {
+  display: block;
+}

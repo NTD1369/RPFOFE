@@ -1,0 +1,145 @@
+<div class="row" style="padding: 20px;">
+
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-3">
+                <ng-container *ngIf="this.typeOfDate==='Normal'">
+                    <dx-date-box [disabled]="true" [disabledDates]="isDateDisabled" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(value)]="currentValue"> </dx-date-box>
+                </ng-container>
+                <ng-container *ngIf="this.typeOfDate==='Weekend'">
+                    <dx-date-box [disabled]="true" [disabledDates]="isDateDisabledWorking" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(value)]="currentValue"> </dx-date-box>
+                </ng-container>
+                <ng-container *ngIf="this.typeOfDate==='Holiday'">
+                    <dx-date-box [disabled]="true" [disabledDates]="isDateDisabledNotHoliday" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(value)]="currentValue"> </dx-date-box>
+                </ng-container>
+
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" [(ngModel)]="this.quantity" type="search" #filter placeholder="{{'Quantity' | translate}}" aria-label="Quantity">
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <dx-button (onClick)="loadCapacityNew()" icon="search" type="success" text="{{'Filter' | translate}}"></dx-button>
+
+            </div>
+
+        </div>
+        <div style="padding-top: 10px;">
+            <div class="row" *ngIf="showCalendar" style="width:100%">
+                <!-- [dataSource]="data"   timeZone="America/Los_Angeles"-->
+                <dx-scheduler style="width:100% ; height: 500px; overflow: auto;" id="scheduler" [views]="['day', 'timelineDay']" currentView="day" [dataSource]="this.capaList" [firstDayOfWeek]="0" [startDayHour]="this.startTimeX" [endDayHour]="24" [showAllDayPanel]="false" [groups]="['storeAreaId']"
+                    [currentDate]="currentDate" [crossScrollingEnabled]="true" [cellDuration]="30" [height]="500" appointmentTemplate="appointment-template" (onAppointmentFormOpening)="onAppointmentFormOpening($event)">
+                    <!-- appointmentTooltipTemplate="tooltip-template" -->
+                    <!--  -->
+                    <dxo-editing [allowAdding]="false" [allowDeleting]="false" [allowUpdating]="false"></dxo-editing>
+                    <!--           
+                <dxi-resource
+                    fieldExpr="movieId"
+                    [useColorAsDefault]="true"
+                    [dataSource]="moviesData">
+                </dxi-resource> -->
+
+                    <dxi-resource fieldExpr="storeAreaId" [(dataSource)]="this.theatreData">
+                    </dxi-resource>
+
+                    <div *dxTemplate="let model of 'appointment-template'">
+                        <div class='showtime-preview ' (click)="openModal(model.appointmentData, model.appointmentData.storeAreaId)" [ngClass]="{  'orange': model.appointmentData.maxCapacity - model.appointmentData.currentCapacity < 10 , 'green': model.appointmentData.maxCapacity - model.appointmentData.currentCapacity > 50, 'redTime': model.appointmentData.maxCapacity - model.appointmentData.currentCapacity <= 0}">
+                            <div>{{'Capacity' | translate}}:
+                                <strong>{{ model.appointmentData.currentCapacity}} / {{ model.appointmentData.maxCapacity}}</strong>
+                            </div>
+                            <div class='dropdown-appointment-dates'>
+                                {{(model.appointmentData.startDate | date:'shortTime') + ' - ' + (model.appointmentData.endDate | date:'shortTime')}}
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--   
+                <div *dxTemplate="let model of 'tooltip-template'">
+                    <div class='movie-tooltip'>
+                        <img [src]="getMovieById(model.appointmentData.movieId).image" />
+                        <div class='movie-info'>
+                            <div class='movie-title'>
+                                {{getMovieById(model.appointmentData.movieId).text + ' (' + getMovieById(model.appointmentData.movieId).year + ')'}}
+                            </div>
+                            <div>
+                                {{'Director: ' + getMovieById(model.appointmentData.movieId).director}}
+                            </div>
+                            <div>
+                                {{'Duration: ' + getMovieById(model.appointmentData.movieId).duration + ' minutes'}}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                </dx-scheduler>
+            </div>
+            <!-- <dx-data-grid id="gridContainer"  [columns]="this.capaHeaderList" style=" text-align: center!important;"
+              [dataSource]="this.capaList" [showBorders]="true" rowTemplate="rowTemplateName">
+          
+             
+                <tbody class="employee dx-row" [ngClass]="{'dx-row-alt': item.rowIndex % 2}" 
+                *dxTemplate="let item of 'rowTemplateName'" >
+                  <tr class="main-row" >
+                      <td *ngFor="let itemHeader of this.capaHeaderList; let i = index" 
+                      style="text-align: center;  vertical-align: middle; ">
+                        <p *ngIf="i===0" style="font-size: 20px; font-weight: 700; color: cadetblue;">  {{item.data.StartTime | timeSpanFormat}} ~ {{item.data.EndTime | timeSpanFormat}}</p>
+                        <dx-button *ngIf="i!==0 && item.data[itemHeader.dataField] > 0" 
+                            [width]="150"
+                            [height]="80"
+                            icon="fieldchooser" 
+                            text="Order"
+                            (onClick)="openModal(item.data, itemHeader.dataField, template)">
+                        </dx-button>
+                       
+                      </td>
+        
+                  </tr>
+                
+              </tbody>
+            
+            </dx-data-grid> -->
+        </div>
+    </div>
+    <div class="col-md-4">
+
+        <form #editForm="ngForm" id="editForm" style="width: 100%;">
+            <div class="form-group">
+                <label for="productName">{{'Item description' | translate}} </label>
+                <input disabled class="form-control" id="productName" name="productName" rows="6" [(ngModel)]="this.basketModel.productName">
+            </div>
+            <div class="form-group">
+                <label for="storeAreaId">{{'Store Area' | translate}} </label>
+                <input disabled class="form-control" id="storeAreaId" name="storeAreaId" rows="6" [(ngModel)]="this.basketModel.storeAreaId">
+            </div>
+            <div class="form-group">
+                <label for="timeFrameId">{{'Time Frame' | translate}} </label>
+                <input disabled class="form-control" id="timeFrameId" name="timeFrameId" rows="3" [(ngModel)]="this.basketModel.timeFrameId">
+
+            </div>
+            <div class="form-group">
+                <label for="timeFrameId">{{'Time' | translate}} </label>
+                <input disabled class="form-control" id="note" name="note" rows="3" [(ngModel)]="this.basketModel.note">
+            </div>
+            <div class="form-group">
+                <label for="appointmentDate">{{'Appointment Date' | translate}} </label>
+                <dx-date-box [disabled]="true" [disabledDates]="isDateDisabled" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(ngModel)]="this.basketModel.appointmentDate" [(value)]="this.basketModel.appointmentDate"> </dx-date-box>
+                <!-- <input disabled class="form-control"  name="appointmentDate" rows="6"  [(ngModel)]="this.basketModel.appointmentDate "> -->
+            </div>
+            <div class="form-group">
+                <label for="quantity">{{'Quantity' | translate}} </label>
+                <input class="form-control" id="quantity" name="quantity" rows="6" [(ngModel)]="this.basketModel.quantity">
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <button style="padding: 15px; width: 100%;" class="primary-btn" (click)="updateModel(this.basketModel)">{{'Select' | translate}}</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<!-- </div>
+ </div> -->

@@ -1,0 +1,263 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left" id="my-modal-title"> {{'Payment' | translate}}</h4>
+    <!-- <div *ngFor="let x of [0, 1, 2, 3, 4]">
+    <b>Input {{x}}</b>: <input #input> <button (click)="onClick(x)">Set Focus</button><br/>
+  </div> -->
+    <!-- (click)="()" -->
+    <div class="nav-user-info d-none d-lg-flex" *ngIf="basket$ | async as basket">
+        <div class="point-div" *ngIf="basket.customer !== null">
+            <span class="username" style="cursor: pointer;" [routerLink]="['/shop/order/customer']"> {{basket.customer.customerName}}</span>
+            <span class="nav-phone greeting">
+        <a href="tel:852-320-1400">
+          <img src="../../../../assets/images/System/phone.svg" alt="phone">{{basket.customer.phone}}
+        </a>
+      </span>
+        </div>
+
+        <div class="nav-contact">
+            <span class="points greeting ml-1">
+        <img src="../../../../assets/images/System/coins.svg" alt="coins">{{'Class' | translate}} :
+        <span class="red" >{{basket.customer?.customerGrpId}}</span>
+            </span>
+            <span class="nav-mail greeting ml-1">
+        <a href="mailto:davidt@abeoinc.com">
+          <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.joinedDate}}
+        </a>
+      </span>
+
+        </div>
+    </div>
+
+
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()"> 
+    <img src="../../../assets/images/System/times.svg">
+  </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-12 col-lg-7">
+            <div class="grey-wrapper left-modal-section">
+                <div class="table-wrap">
+                    <div class="payment-modal-table custom-table horizontal-scroll">
+                        <div class="t-head">
+                            <div class="t-row">
+                                <div class="t-cell cell-action"></div>
+                                <div class="t-cell cell-action">
+                                    <p>{{'No.' | translate}}</p>
+                                </div>
+                                <div class="t-cell cell-payment">
+                                    <p>{{'PaymentType' | translate}}</p>
+                                </div>
+                                <div class="t-cell cell-discount">
+                                    <p>{{'PaymentDiscount' | translate}}</p>
+                                </div>
+                                <div class="t-cell cell-charged">
+                                    <!-- <p>Chargable</p> -->
+                                    <p>{{'Amount' | translate}}</p>
+                                </div>
+                                <div class="t-cell cell-amount">
+                                    <p>{{'Collected' | translate}}</p>
+                                </div>
+
+                                <div class="t-cell cell-ref">
+                                    <p>{{'Ref. Number' | translate}}</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="t-body vertical-scroll" *ngIf="basket$ | async as basket">
+                            <!--  -->
+                            <div (click)="changeValuePayment(input.value, i, payment)" class="t-row" *ngFor="let payment of basket.payments; let i = index" [class.selectRow]="i==this.selectedRow">
+                                <div class="t-cell cell-action" (click)="removePayment(payment)">
+                                    <a class="delete-btn">
+                                        <img src="../../../../assets/images/System/close.svg" alt="close">
+                                    </a>
+                                    <!-- <button (click)="enableEditMethod($event, i)">Set Focus</button> -->
+
+
+                                </div>
+                                <div class="t-cell cell-action">
+                                    <p>{{payment.lineNum}}</p>
+                                </div>
+                                <div class="t-cell cell-payment">
+                                    <p>{{payment.id}}</p>
+
+                                </div>
+                                <div class="t-cell cell-discount">
+                                    <p>{{payment.paymentDiscount | currencyFormat}}</p>
+                                </div>
+                                <div class="t-cell cell-charged">
+
+                                    <p *ngIf="i==0">{{(basketTotal$ | async).total | currencyFormat }}</p>
+                                    <p *ngIf="i!=0">{{payment.paymentCharged | currencyFormat}}</p>
+                                </div>
+                                <div class="t-cell cell-amount">
+
+                                    <div class="search-wrap typing-section-input-wrap inputAmount">
+                                        <input type="text" #input type="text" (change)="changeValuePayment(input.value, i, payment, 'amountInput')" (keyup)="changeValuePayment(input.value, i, payment, 'amountInput')" value="{{payment.paymentTotal | currencyFormat}}" (focus)="setClickedRow(i, payment, 'amountInput')"
+                                            (focusout)="removeselect(i, payment)" placeholder="Amount" class="typing-section-input txtAmount">
+                                        <a *ngIf="i==this.selectedRow" (click)="clearAmountPayment(payment)"><i class="fas fa-eraser"></i></a>
+
+                                    </div>
+                                </div>
+
+                                <div class="t-cell cell-ref">
+
+                                    <div class="search-wrap typing-section-input-wrap inputAmount">
+
+                                        <label *ngIf="payment.isRequireRefNum">
+                      {{payment.refNum }} XX
+                      <p *ngIf="payment.id==='PrepaidCard'">{{payment.mainBalance}}/{{payment.subBalance}}</p>
+                    </label>
+                                        <ng-container *ngIf="!payment.isRequireRefNum">
+                                            <input type="text" #input2 type="text" value="{{payment.refNum }}" (change)="changeValuePayment(input.value, i, payment, 'refNum')" (keyup)="changeValuePayment(input.value, i, payment, 'refNum')" placeholder="Ref Number" (focus)="setClickedRow(i, payment, 'refNum')"
+                                                class="typing-section-input txtAmount">
+                                            <a *ngIf="i==this.selectedRow" (click)="clearRefNumPayment(payment)"><i class="fas fa-eraser"></i></a>
+                                        </ng-container>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="modal-payment-info">
+          <div>
+            <label>Bill Amount</label>
+            <p>{{(basketTotal$ | async).total | number}}</p>
+          </div>
+          <div>
+            <label>Total Discount</label>
+            <p>{{(basketTotal$ | async).discountTotal | number}}</p>
+          </div>
+          <div> 
+            <label>Total Amount</label>
+            <p> {{(basketTotal$ | async).charged | number}}</p>
+          </div>
+          <div>
+            <label>Total Collected</label>
+            <p>{{(basketTotal$ | async).totalAmount | number}}</p>
+          </div>
+         
+          <div>
+            <label>Amount Left</label>
+            <p>{{(basketTotal$ | async).amountLeft | number}}</p>
+          </div>
+          <div>
+            <label>Amount Change</label>
+            <p>{{(basketTotal$ | async).changeAmount | number}}</p>
+          </div>
+        </div> -->
+            </div>
+            <div class="modal-discount-btn-wrap">
+                <button class="discount-btn" (click)="inputNum('20000')">20,000</button>
+                <button class="discount-btn" (click)="inputNum('50000')">50,000</button>
+                <button class="discount-btn" (click)="inputNum('100000')">100,000</button>
+                <button class="discount-btn" (click)="inputNum('200000')">200,000</button>
+                <button class="discount-btn" (click)="inputNum('500000')">500,000</button>
+            </div>
+        </div>
+        <div class="col-12 col-lg-5">
+            <div class="grey-wrapper right-modal-section">
+                <div class="typing-section">
+                    <div class="number-pad" *ngIf="isShowOtherPayment">
+                        <div class="row" style="    min-height: 50vh;">
+                            <div class="number-div" *ngFor="let payment of this.paymentMethodOtherList">
+                                <button class="pay-option-btn" (click)="addPayment(payment, true, payment.isRequireRefnum)">{{payment.paymentDesc}}</button>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="padding: 0px 5px;">
+                                <div class="action-section">
+
+
+                                    <button type="reset" class="reset-btn mr-1" (click)="closeOtherPad()" style="    width: 23%;"> 
+                    <i class="fas fa-window-close"></i>
+                
+                  </button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="number-pad" *ngIf="!isShowOtherPayment">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4 number-div">
+
+                                        <button class="number-btn" (click)="pressKey('1')">1</button>
+
+                                    </div>
+                                    <div class="col-md-4 number-div">
+
+                                        <button class="number-btn" (click)="pressKey('2')">2</button>
+
+                                    </div>
+                                    <div class="col-md-4 number-div">
+
+                                        <button class="number-btn" (click)="pressKey('3')">3</button>
+
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('4')">4</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('5')">5</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('6')">6</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('7')">7</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('8')">8</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('9')">9</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('0')">0</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('.')">.</button>
+                                    </div>
+                                    <div class="col-md-4 number-div">
+                                        <button class="number-btn" (click)="pressKey('000')"><i class="fas fa-arrow-right"></i></button>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3 ">
+                                <div class="row">
+                                    <div class="col-md-12 number-div" *ngFor="let payment of this.paymentMethodShowList">
+                                        <button class="pay-option-btn" (click)="addPayment(payment , null , payment.isRequireRefnum)">{{payment.paymentDesc}}</button>
+                                    </div>
+
+                                    <div class="col-md-12 number-div">
+                                        <button class="pay-option-btn" (click)="showOtherPayment()"> {{'Other' | translate}}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="number-div submit-div">
+                                <button class="submit-btn" (click)="addOrder()"> {{'Submit' | translate}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

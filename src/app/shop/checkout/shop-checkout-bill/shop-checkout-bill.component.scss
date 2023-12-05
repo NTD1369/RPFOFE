@@ -1,0 +1,29 @@
+@media only screen and (min-width: 1199px)
+{
+    .right-section > .bill-wrapper {
+        height: calc(100% - 70px) !important;
+        max-height: calc(100% - 120px) !important;
+    }
+    
+}
+
+.cell-uom{
+    max-width: 70px!important;
+    text-align: center;;
+}
+.cell-custom-quantity{
+    max-width: 170px!important;
+    text-align: right;;
+}
+.cell-custom-price{
+    max-width: 160px!important;
+    text-align: right;;
+}
+
+.hideChildren {
+    display: none;
+}
+
+.showChildren {
+    display: block;
+}

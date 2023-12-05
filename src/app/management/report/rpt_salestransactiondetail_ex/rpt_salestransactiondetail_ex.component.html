@@ -1,0 +1,226 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6">
+              <label for="item-searchbar" class="section-title">{{this.title | translate}}</label>
+          </div>
+          <div class="col-md-6 text-right">
+              <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/report" text="{{'Report List' | translate}}">
+              </dx-button>
+          </div>
+
+      </div>
+
+      <div class="row justify-content-center flex-row mb-3 mt-2">
+          <!-- <div class="col-md-2 mb-1">
+              <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-2 mb-1">
+              <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+          </div>
+          <div class="col-md-2 mb-1">
+              <ng-container *ngIf="this.isLoadingData===false">  
+                  <dx-button class="mr-2" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value)" text="{{'Search' | translate}}"></dx-button>
+                </ng-container>
+                <ng-container *ngIf="this.isLoadingData===true">
+                    <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+                </ng-container> 
+              
+          </div> -->
+          <div class="col-md-2 mb-1">
+              {{'From Date' | translate}}
+                <dx-date-box #fromCalendar [value]='this.fromDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2 mb-1">
+              {{'To Date' | translate}}
+                <dx-date-box #toCalendar [value]='this.toDate' id="fromCalendar" [displayFormat]="this.authService.loadFormat().dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2 mb-1">
+              {{'Store' | translate}}
+              <dx-select-box #cbbStore  [searchEnabled]="true" [value]="storeOptions[0].value" [items]="storeOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box>
+          </div>
+            <div class="col-md-3 mt-3">
+              <ng-container *ngIf="this.isLoadingData===false">  
+                <dx-button class="mr-2 pt-1" icon="search" type="success" (onClick)="viewReport(fromCalendar.value, toCalendar.value,cbbStore.selectedItem)" text="{{'Search' | translate}}"></dx-button>
+                <dx-button class="mr-2 pt-1" icon="xlsxfile" type="default" text="{{'Excel' | translate}}" (onClick)="downloadExcel(fromCalendar.value, toCalendar.value,cbbStore.selectedItem)"></dx-button>
+              </ng-container>
+              <ng-container *ngIf="this.isLoadingData===true">
+                  <dx-button class="mr-2" icon="search" type="success" text="{{'Loading data' | translate}}"></dx-button>
+              </ng-container> 
+               
+            </div>
+      </div>
+      <!-- (onEditorPrepared)="onEditorPrepared($event)" (onEditorPreparing)="onEditorPreparing($event)"  -->
+      <!-- <dx-data-grid class="mt-2" [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt  
+id="controlList" [dataSource]="this.list" keyExpr="itemCode" [allowColumnResizing]="true"    
+[showBorders]="true" [columnAutoWidth]="true" [allowColumnReordering]="true"  [columnResizingMode]="true"  > 
+
+<dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+<dxo-search-panel [visible]="true"  [width]="540"  placeholder="Search..." location="before"></dxo-search-panel>
+<dxo-scrolling mode="virtual"></dxo-scrolling>
+<dxo-group-panel [visible]="true"></dxo-group-panel>
+<dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+<dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>  
+<dxi-column dataField="storeId"  [allowEditing]="false" caption="Store Id"  ></dxi-column> 
+<dxi-column dataField="storeName"  [allowEditing]="false" caption="Store Name"  ></dxi-column> 
+<dxi-column dataField="slocId"  [allowEditing]="false" caption="Sloc"  ></dxi-column> 
+<dxi-column dataField="contractNo"  [allowEditing]="false" caption="Contract No"  ></dxi-column> 
+<dxi-column dataField="cusIdentifier"  [allowEditing]="false" caption="Cus Identifier"  ></dxi-column> 
+<dxi-column dataField="shiftId"  [allowEditing]="false" caption="Shift Id"  ></dxi-column> 
+<dxi-column dataField="cusId"  [allowEditing]="false" caption="Cus Id"  ></dxi-column> 
+<dxi-column dataField="headerStatus"  [allowEditing]="false" caption="Header Status"  ></dxi-column> 
+<dxi-column dataField="isCanceled"  [allowEditing]="false" caption="Is Canceled"  ></dxi-column> 
+<dxi-column dataField="remarks"  [allowEditing]="false" caption="Remarks"  ></dxi-column> 
+<dxi-column dataField="salesPerson"  [allowEditing]="false" caption="Sales Person"  ></dxi-column> 
+<dxi-column dataField="headerSalesMode"  [allowEditing]="false" caption="Header Sales Mode"  ></dxi-column> 
+<dxi-column dataField="refTransId"  [allowEditing]="false" caption="Ref Trans Id "  ></dxi-column> 
+<dxi-column dataField="transId"  [allowEditing]="false" caption="Trans Id"  ></dxi-column> 
+<dxi-column dataField="lineId"  [allowEditing]="false" caption="Line Id"  ></dxi-column> 
+<dxi-column dataField="itemCode"  [allowEditing]="false" caption="Item Code"  ></dxi-column> 
+<dxi-column dataField="barCode"  [allowEditing]="false" caption="Barcode"  ></dxi-column> 
+<dxi-column dataField="uomCode"  [allowEditing]="false" caption="UoM"  ></dxi-column> 
+<dxi-column dataField="quantity"  [allowEditing]="false" caption="Quantity"  ></dxi-column> 
+<dxi-column dataField="price" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Price"  ></dxi-column> 
+<dxi-column dataField="lineTotal" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="LineTotal"  ></dxi-column> 
+<dxi-column dataField="discountType" [allowEditing]="false" caption="Discount Type"  ></dxi-column> 
+<dxi-column dataField="discountAmt" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Discount Amt"  ></dxi-column> 
+<dxi-column dataField="discountRate" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Discount Rate"  ></dxi-column> 
+<dxi-column dataField="createdBy" [allowEditing]="false" caption="Created By"  ></dxi-column> 
+<dxi-column dataField="createdOn" [allowEditing]="false" caption="Created On"  ></dxi-column> 
+<dxi-column dataField="modifiedBy" [allowEditing]="false" caption="Modified By"  ></dxi-column> 
+<dxi-column dataField="modifiedOn" [allowEditing]="false" caption="Modified On"  ></dxi-column> 
+<dxi-column dataField="status" [allowEditing]="false" caption="Status"  ></dxi-column> 
+<dxi-column dataField="remark" [allowEditing]="false" caption="Remark"  ></dxi-column> 
+<dxi-column dataField="promoId" [allowEditing]="false" caption="Promo Id"  ></dxi-column> 
+<dxi-column dataField="promoType" [allowEditing]="false" caption="Promo Type"  ></dxi-column> 
+<dxi-column dataField="promoPercent" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Promo Percent"  ></dxi-column> 
+<dxi-column dataField="promoBaseItem" [allowEditing]="false" caption="Promo Base Item"  ></dxi-column> 
+<dxi-column dataField="salesMode" [allowEditing]="false" caption="Sales Mode"  ></dxi-column> 
+<dxi-column dataField="taxRate"  [allowEditing]="false" caption="Tax Rate"  ></dxi-column> 
+<dxi-column dataField="taxAmt" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Tax Amt"  ></dxi-column> 
+<dxi-column dataField="taxCode" [allowEditing]="false" caption="Tax Code"  ></dxi-column> 
+<dxi-column dataField="minDepositAmt" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Min Deposit Amt"  ></dxi-column>  
+<dxi-column dataField="minDepositPercent" alignment="right"  [customizeText]="customizeText"  [allowEditing]="false" caption="Min Deposit Percent"  ></dxi-column>  
+<dxi-column dataField="deliveryType" [allowEditing]="false" caption="Delivery Type"  ></dxi-column>  
+<dxi-column dataField="posService" [allowEditing]="false" caption="POS Service"  ></dxi-column>  
+<dxi-column dataField="storeAreaId" [allowEditing]="false" caption="Store Area Id"  ></dxi-column>  
+<dxi-column dataField="timeFrameId" [allowEditing]="false" caption="Time Frame Id"  ></dxi-column>  
+<dxi-column dataField="appointmentDate" [allowEditing]="false" caption="Appointment Date"  ></dxi-column>  
+<dxi-column dataField="bomID" [allowEditing]="false" caption="BOM ID"  ></dxi-column>  
+<dxi-column dataField="promoPrice" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Promo Price"  ></dxi-column>  
+<dxi-column dataField="promoLineTotal" alignment="right"  [customizeText]="customizeText"   [allowEditing]="false" caption="Promo Line Total"  ></dxi-column>  
+</dx-data-grid> -->
+<ng-container *ngIf="this.exportPDF">
+  <h2 style="width: 100%; text-align: center;"> {{'Exporting' | translate }} </h2>
+</ng-container>
+<ng-container *ngIf="!this.exportPDF">
+  <dx-data-grid #dataGrid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" 
+      [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+      (onToolbarPreparing)="onToolbarPreparing($event)"
+       [dataSource]="this.list" [showBorders]="true" (onExporting)="onExporting($event)">
+
+          <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+          <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before"></dxo-search-panel>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+          <dxo-export *ngIf="this.list!==null && this.list.length>0" [enabled]="true"></dxo-export>
+
+          <!-- <dxo-toolbar>
+              <dxi-item name="groupPanel"></dxi-item>
+              <dxi-item location="after">
+                <dx-button
+                  icon="exportpdf"
+                  text="Export to PDF"
+                  (onClick)="exportGrid()"
+                >
+                </dx-button>
+              </dxi-item>
+              <dxi-item name="searchPanel"></dxi-item>
+            </dxo-toolbar> -->
+
+        
+          <ng-container *ngFor="let col of this.controlList; let i = index">
+              <dxi-column [dataField]="col.controlId"  [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+              </dxi-column>
+              <!-- <dxi-column [dataField]="col.controlId" [caption]="col.controlName"   *ngIf="col.custom2==='string'  && checkPermission(col.controlId,'V') && col.optionName!==null && col.optionName!==undefined && col.optionName!==''"   dataType="string" > 
+</dxi-column> -->
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+              </dxi-column>
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+              </dxi-column>
+              <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                  [format]='this.authService.numberFormat(col.custom2)'>
+              </dxi-column>
+          </ng-container>
+          <dxo-summary [recalculateWhileEditing]="true" >
+              <!-- <dxi-total-item column="lineTotal" summaryType="{{'' | translate}}sum" [customizeText]="customizeText">
+
+              </dxi-total-item> -->
+              <!-- <dxi-total-item column="quantity" summaryType="sum" [customizeText]="customizeText"></dxi-total-item> -->
+              <ng-container *ngFor="let col of this.controlList; let i = index">
+                  <!-- <dxi-group-item *ngIf="(col.controlId!=='price' ) && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number" [valueFormat]="this.authService.numberFormat(col.custom2)" [alignByColumn]="true"  [column]="col.controlId" summaryType="sum">
+                  </dxi-group-item> -->
+                  <dxi-group-item [valueFormat]="this.authService.numberFormat(col.custom2)" [alignByColumn]="true" [column]="col?.controlId" *ngIf="col?.groupItem?.length > 0 && col?.groupItem.includes('sum')" summaryType="sum">
+                  </dxi-group-item>
+                  <dxi-total-item [column]="col.controlId" summaryType="sum" *ngIf="(col.controlId!=='price' ) && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number"
+                  [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+          </ng-container>
+              <!-- <dxi-total-item [column]="col.sum" summaryType="sum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+              [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+              <dxi-total-item [column]="col.sum" summaryType="sum"  [visible]="checkPermission(col.controlId,'V')" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+              [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item> -->
+          </dxo-summary>
+
+          <!-- <dxi-column  cellTemplate="cellTemplate"[minWidth]="this.minWidthAction" *ngIf="this.buttonList!==null&& this.buttonList!==undefined&& this.buttonList.length > 0"></dxi-column>
+
+
+<div *dxTemplate="let cell of 'cellTemplate'">
+  <ng-container *ngIf="this.innerWidth > 1024">
+    <ng-container  *ngFor="let col of this.buttonList; let i = index"  > 
+     
+      <dx-button [icon]="col.optionName" class="mr-2" [text]="col.controlName"  *ngIf="checkBtnShow(col.controlId, cell.data, col.require)"
+        (onClick)="col.controlId ==='btnView' ? OpenOrder(cell.data) : 
+        col.controlId ==='btnReturn' ? ReturnOrder(cell.data) : 
+        col.controlId ==='btnExchange' ? ExchangeOrder(cell.data) :  
+        col.controlId ==='btnPrint' ? PrintOrder(cell.data) : null">
+      </dx-button> 
+    </ng-container> 
+   
+  </ng-container>
+  <ng-container *ngIf="this.innerWidth <= 1024">
+    <dx-button
+      class="button-info"
+     
+      stylingMode= "outlined"
+      text="More"
+      type= "default"
+      (onClick)="showInfo(cell.data)">
+  </dx-button>
+   
+  </ng-container>
+ 
+</div> -->
+          <div *dxTemplate="let cell of 'statusTemplate'">
+              <div [innerHtml]="cell.data.status | statusFormat"></div>
+          </div>
+          <div *dxTemplate="let data of 'exportoPDF'">
+            <!-- <i class=""></i> -->
+             <dx-button icon="fas fa-file-pdf" text="{{'PDF' | translate}}" (onClick)="exportToPDF()"></dx-button>
+          </div>
+      </dx-data-grid>
+</ng-container>
+
+      
+  </div>
+
+</div>
+
+
+<ng-container *ngIf="this.pdfModel!==undefined && this.pdfModel!==null && this.pdfModel?.lines.length > 0">
+  <div #contentPDF  style="width:21cm">
+      <app-pdf_rpt_salestransactiondetail_return  [(rptModel)]="this.pdfModel" ></app-pdf_rpt_salestransactiondetail_return>
+  </div>
+</ng-container>
+

@@ -1,0 +1,67 @@
+// .custom-table .t-body {
+//     min-height: 300px;
+// }
+.modal .modal-body .left-modal-section .table-wrap .payment-modal-table .t-body {
+    min-height: unset !important;
+}
+
+.hideChildren {
+    display: none;
+}
+
+.showChildren {
+    display: block;
+}
+
+.total-bill {
+    border-top: unset !important;
+    border-bottom: 3px solid #1a1616;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+}
+
+.titleText {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.app-print-shop {
+    display: none;
+}
+
+@media print {
+    .app-print-shop {
+        // position: relative;
+        display: block;
+    }
+    #printAfter {
+        // display: none;
+    }
+    #titleRow
+    {
+        display: none;
+    }
+}
+
+.table-shop-bill-detail {
+    width: 100%;
+}
+
+.table-shop-bill-detail tr {
+    font-size: 16px;
+}
+
+.table-shop-bill-detail tr td,
+.table-shop-bill-detail tr th {
+    padding: 7px;
+    border: 1px solid #ddd;
+}
+
+.table-shop-bill-detail tr th {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.table-shop-bill-detail tr td {
+    font-size: 16px;
+}

@@ -1,0 +1,183 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="row">
+          <div class="col-md-6">
+              <label for="item-searchbar" class="section-title">{{this.title | translate}}</label>
+          </div>
+          <div class="col-md-6 text-right">
+              <dx-button class="mr-2" icon="rowproperties" type="danger" routerLink="/admin/division-list" text="{{'Division List' | translate}}">
+              </dx-button>
+          </div>
+
+      </div>
+      <ng-container *ngIf="this.isLoadingData===true">
+        <h2>
+          {{'Loading data' | translate}} 
+        </h2>  
+      </ng-container> 
+      <ng-container *ngIf="this.isLoadingData===false">
+        <div class="row ">
+          <div class="col-md-1 mt-2">
+            {{'ID' | translate}}
+        </div>
+        <div class="col-md-3 mt-2">
+
+            <dx-text-box [readOnly]="true" [value]="this.model?.id">
+            </dx-text-box>
+        </div>
+        <div class="col-md-1 mt-2">
+          {{'Remarks' | translate}}
+        </div>
+      
+        <div class="col-md-3 mt-2">
+            <!-- <label>{{this.model?.Remarks  }}</label> -->
+            <dx-text-box [readOnly]="true" [value]="this.model?.remarks">
+            </dx-text-box>
+        </div>
+        <!-- <div class="col-md-1 mt-2">
+          {{'Custom F1' | translate}}
+        </div>
+      
+        <div class="col-md-3 mt-2">
+            <label>{{this.model?.CustomF1 }}</label>
+
+        </div>
+         -->
+        <!-- <div class="col-md-1">
+            {{'Movement' | translate}}
+        </div>
+        <div class="col-md-3">
+             
+            <dx-select-box #ddlFrom [value]="this.goodreceipt?.movementType" [readOnly]="this.goodreceipt.status==='C'" [(ngModel)]="this.goodreceipt.movementType" [dataSource]="this.movementTypes" displayExpr="name" valueExpr="code" itemTemplate="item">
+
+                <div *dxTemplate="let data of 'item'" class="custom-item">
+                    <div class='product-name'>{{data.name}}</div>
+                </div>
+            </dx-select-box>
+        </div>
+         -->
+           
+        
+            <!-- <div class="col-md-2 mt-3" *ngIf="this.listData!==null && this.listData!==undefined && this.listData?.length>0">
+              <dx-button class="mr-2" icon="add" type="success"  (onClick)="saveData()" text="{{'Save changes' | translate}}"></dx-button>
+             </div> -->
+            
+      </div>
+      <div class="row">
+        <div class="col-md-1 mt-2">
+          {{'Created On' | translate}}
+        </div>
+      
+        <div class="col-md-3 mt-2">
+            <!-- <label>{{this.model?.createdOn | date: this.dateFormat + ' HH:mm:ss'}}</label> -->
+            <dx-date-box  [(value)]='this.model.createdOn' [readOnly]="true" [displayFormat]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"> </dx-date-box>
+        </div>
+        <div class="col-md-1 mt-2">
+          {{'Created By' | translate}}
+        </div>
+      
+        <div class="col-md-3 mt-2">
+
+            <!-- <label>{{this.model?.createdBy}}</label> -->
+            <dx-text-box [readOnly]="true" [value]="this.model?.createdBy">
+            </dx-text-box>
+        </div>
+      </div>
+      <div class="mt-2">
+        <dx-data-grid #dataGrid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" 
+        [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" 
+         [dataSource]="this.listData" [showBorders]="true"  dataRowTemplate="dataRowTemplateName">
+  
+            <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before"></dxo-search-panel>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+            <dxo-export *ngIf="this.listData!==null && this.listData!==undefined && this.listData.length>0" [enabled]="true"></dxo-export>
+  
+            <!-- <dxo-toolbar>
+                <dxi-item name="groupPanel"></dxi-item>
+                <dxi-item location="after">
+                  <dx-button
+                    icon="exportpdf"
+                    text="Export to PDF"
+                    (onClick)="exportGrid()"
+                  >
+                  </dx-button>
+                </dxi-item>
+                <dxi-item name="searchPanel"></dxi-item>
+              </dxo-toolbar> -->
+  
+          
+            <ng-container *ngFor="let col of this.listHeaderShow; let i = index">
+                <dxi-column [dataField]="col.Id"  [caption]="col.Title | translate" [groupIndex]="col?.GroupNum"  *ngIf="col.ControlType==='string'"  dataType="string">
+                </dxi-column>
+                
+                <dxi-column [dataField]="col.Id" [caption]="col.Title | translate" [groupIndex]="col?.GroupNum"   *ngIf="col.ControlType==='date' " dataType="date" [format]="this.dateFormat">
+                </dxi-column>
+                <dxi-column [dataField]="col.Id" [caption]="col.Title | translate" [groupIndex]="col?.GroupNum"  *ngIf="col.ControlType==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+                </dxi-column>
+                <!-- [cellTemplate]="'columnTemplate'" -->
+                <dxi-column [dataField]="col.Id" [caption]="col.Title | translate"   [groupIndex]="col?.GroupNum"    
+                 *ngIf="col.ControlType==='rate' || col.ControlType==='quantity' || col.ControlType==='number' || col.ControlType==='amount'" 
+                 dataType="number" [format]='this.authService.numberFormat(col.ControlType)'>
+                     <!-- <ng-container *ngIf="cell.data[col.Id]!==null && cell.data[col.Id]!==undefined && cell.data[col.Id]?.toString()?.length > 0" >
+              
+                     
+                    </ng-container> -->
+  
+                    
+                </dxi-column>
+           
+            
+            </ng-container>
+            <ng-container *dxTemplate="let row of 'dataRowTemplateName'">
+            
+              <tr class="main-row">
+                <ng-container *ngFor="let col of this.listHeaderShow; let i = index">
+                 
+                  <td *ngIf=" col.ControlType==='string'"> {{ row.data[col.Id] }}
+                
+                  </td>
+                  <td *ngIf=" col.ControlType==='quantity' || col.ControlType==='number' || col.ControlType==='amount'" > 
+                    {{row.data[col.Id]}}
+                    <!-- <ng-container *ngIf="col.IsAutoColumn!==true" >
+                      <h4 > 
+                       
+                      </h4> 
+                    </ng-container> -->
+                    <!-- <ng-container *ngIf="col.IsAutoColumn===true" >
+                      <h4 *ngIf="(row.data[col.Id+'Division']!==null && row.data[col.Id+'Division']!==undefined && row.data[col.Id+'Division'] != 0 )">
+                        {{'Order' | translate}} :
+                        {{row.data[col.Id+'Division']}}
+                      </h4> 
+    
+                       
+                         <ng-container *ngIf="(row.data[col.Id+'Division']!==null && row.data[col.Id+'Division']!==undefined && row.data[col.Id+'Division'] != 0 )
+                              && (row.data[col.Id+'Flag']===false)" >
+                             
+                             <dx-number-box class="mt-2" [format]="this.authService.formatNumberByPatternAllowNull()"   [(value)]="row.data[col.Id]" ></dx-number-box> 
+                         
+                         </ng-container>
+                    </ng-container>
+                   -->
+                       
+                       
+                  </td>
+                </ng-container>
+             
+              </tr>
+             
+            </ng-container>
+           
+        </dx-data-grid>
+      </div>
+     
+      </ng-container>
+     
+  </div>
+
+</div>
+ 
+ 

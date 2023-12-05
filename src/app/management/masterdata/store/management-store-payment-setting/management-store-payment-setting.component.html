@@ -1,0 +1,155 @@
+<!-- <div class="item-search-nav">
+        <div class="row align-items-end">
+          <div class="col-lg-4 col-12">
+            <div class="search-wrap">
+              <label for="item-searchbar" class="section-title">Search</label>
+              <input type="search" id="item-searchbar" #filter   (change)="filterBy(filter.value)" (keyup)="filterBy(filter.value)"  placeholder="Type Keywords">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            
+          </div>
+        
+          <div class="col-lg-4 col-12 right">
+            <button class="btn btn-success btn-block col-md-4 " (click)="openModal(true,null, template)"><i class="fas fa-plus-square"></i> Add New</button> 
+          </div>
+        
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="item-search-table custom-table">
+          <div class="t-head">
+            <div class="t-row">
+              <div class="t-cell cell-action">
+                <p></p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>Code</p>
+              </div>
+             
+              <div class="t-cell cell-name">
+                <p>Description</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>AccountCode</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>Show</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>Order Num</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>Status</p>
+              </div>
+              
+           
+            </div>
+          </div>
+          <div class="t-body vertical-scroll">
+            <div class="t-row" *ngFor="let item of this.payments">
+              <div class="t-cell cell-action">
+                <dx-button class="mr-2" icon="edit" type="success" text="Select"  (onClick)="openModal(false, item, template)">
+                </dx-button>
+            
+              </div>
+              <div class="t-cell cell-item">
+                <p>{{item.paymentCode}}</p>
+              </div>
+          
+              <div class="t-cell cell-name">
+                <p>{{item.paymentDesc}}</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>{{item.isShow}}</p>
+              </div> 
+              <div class="t-cell cell-item">
+                <p>{{item.orderNum}}</p>
+              </div>
+              <div class="t-cell cell-item">
+                <p>{{item.status}}</p>
+              </div>
+             
+            </div>
+           
+          </div>
+          <div id="dvPaging" class="col-md-12">
+            <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+            [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" 
+            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+      
+            </pagination>
+          </div>
+        </div>
+      </div> -->
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Store Payment' | translate}}: {{this.storeId}}</label>
+
+        </div>
+
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.payments" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="paymentCode" caption="{{'Payment Method' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="paymentDesc" caption="{{'Description' | translate}}" dataType="string"> </dxi-column>
+                <!-- <dxi-column dataField="isShow" caption="{{'Show' | translate}}" dataType="string"> </dxi-column> -->
+                <dxi-column alignment="center" cellTemplate="cellShowTemplate" caption="{{'Show' | translate}}"></dxi-column>
+                <div style="text-align: center;" *dxTemplate="let cell of 'cellShowTemplate'">
+                
+                  <ng-container *ngIf="cell.data.isShow === true">
+                    <i class="fas fa-check-circle" style="font-size: 25px;color: green;"></i>
+                  </ng-container>
+                  <ng-container *ngIf="cell.data.isShow !== true">
+                    <i class="fas fa-times-circle" style="font-size: 25px;color: #CE312C;"></i>
+                  </ng-container>
+                 
+                </div>
+                <dxi-column dataField="orderNum" caption="{{'Order Num' | translate}}" dataType="string"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate" [fixed]="true" fixedPosition="right"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                  <!-- {{cell.data | json}} -->
+                  <ng-container *ngIf="cell.data.status === 'Y' || cell.data.status === 'A'">
+                    <dx-button class="mr-2" icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button class="mr-2" icon="far fa-times-circle" type="danger" text="Remove" (onClick)="deleteData( cell.data )"></dx-button>
+                  </ng-container>
+                  <ng-container *ngIf="cell.data.status !== 'Y' && cell.data.status !== 'A'">
+                    <dx-button class="mr-2" icon="fas fa-check-circle" type="success" text="Add" (onClick)="applyData( cell.data )"></dx-button>
+                  </ng-container>
+                 
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Store Payment Edit' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-store-payment-edit [model]="this.payment" [isNew]="this.isNew" style="width: 100%" (outModel)="updateModel($event)"></app-management-store-payment-edit>
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,401 @@
+<div class="center-wrap">
+    <!-- <div class="row">
+        <div class="col-md-4"> 
+            <a class="primary-btn" style="width:100%;" (click)="this.commonService.connectSerial()">{{'Test Pole' | translate}}</a>
+        </div>
+        <div class="col-md-4"> 
+            <a class="primary-btn" style="width:100%;" (click)="this.commonService.WritePoleSerial('test X','XBX ALO', false)">{{'Send To Pole' | translate}}</a>
+        </div>
+    </div> -->
+
+    <ng-container *ngIf="this.showShift">
+        <ng-container *ngIf="this.isNewShift!==true">
+            <div class="row" style="width: 100%;">
+                <ng-container *ngFor="let item of this.shiftList">
+                    <app-shop-shift-open style="  margin: 0px auto;"
+                        class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12" (shiftSelected)="changeShift($event)"
+                        [shift]="item"></app-shop-shift-open>
+
+                </ng-container>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="this.isNewShift">
+
+            <div class="row" style="width: 100%;">
+                <app-shop-tool-shift style="margin:auto;" [isShowCreate]="true"></app-shop-tool-shift>
+            </div>
+        </ng-container>
+    </ng-container>
+    <div class="row ml-0" style="width: 100%;" *ngIf="!this.showShift && exchangeRateNull?.length <= 0">
+        
+        <ng-container *ngIf="this.checkCustomerInfor === false">
+            <h2 style="text-align: center;
+            margin-top: 50px;
+            color: red; width: 100%;">Loading Customer Information from CRM System. Please wait a minute.</h2>
+               <h2 style="text-align: center;
+               margin-top: 30px;
+               color: red;">{{ timerDisplay }}</h2>
+        </ng-container>
+        <ng-container *ngIf="this.checkCustomerInfor !== false">
+            <div class="col-md-12 col-lg-8 col-xl-7" id="billPrint">
+                <div class="row">
+                    <!-- <div class="left-grid">  -->
+                    <div class="col-md-1 col-lg-2 mb-1">
+                        <ng-container *ngIf="this.displayMode==='list'">
+                            <dx-drop-down-button
+                            class="dropMore" id="ddlSwMode1"
+                            [dropDownOptions]="{ width: 300 }"
+                            [useSelectMode]="false" 
+                            icon="fas fa-list"
+                            [items]="dropSettings"
+                            displayExpr="name"
+                            keyExpr="value" 
+                            dropDownContentTemplate="list"
+                           
+                          >
+                         <!-- (onItemClick)="onItemClick($event)" -->
+                         <div class="FixedHeightContainer" *dxTemplate="let data of 'list'">
+                            <!-- <h2>Title</h2> -->
+                            <!-- {{data | json}} -->
+                           
+                            <ng-container *ngFor="let item of data" >
+                                <div class="p-2 settingItem" (click)="onItemClickNew(item.value)" > 
+                                    <h3 class="m-2">
+                                        <i class="{{item.faicon}}" aria-hidden="true"></i>
+                                        {{item.name}}
+                                    </h3>
+                                    <!-- xx
+                                    <i class="fas fa-list"></i> -->
+                                   
+                                </div>
+                            </ng-container>
+                           
+                           
+                           </div>
+                        </dx-drop-down-button>
+                        </ng-container>
+                        <ng-container *ngIf="this.displayMode==='slick'">
+                            <dx-drop-down-button id="ddlSwMode2"
+                            class="dropMore"
+                            [dropDownOptions]="{ width: 300 }"
+                            [useSelectMode]="false" 
+                            icon="fas fa-th-large"
+                            [items]="dropSettings"
+                            displayExpr="name"
+                            keyExpr="value"  
+                            dropDownContentTemplate="list"
+                          >   
+                          <!-- (onItemClick)="onItemClick($event)" -->
+                          <div class="FixedHeightContainer" *dxTemplate="let data of 'list'">
+                            <!-- <h2>Title</h2> -->
+                            <!-- {{data | json}} -->
+                           
+                            <ng-container *ngFor="let item of data" >
+                                <div class="p-2 settingItem" (click)="onItemClickNew(item.value)" > 
+                                    <h3 class="m-2">
+                                        <i class="{{item.faicon}}" aria-hidden="true"></i>
+                                        {{item.name}}
+                                    </h3>
+                                    <!-- xx
+                                    <i class="fas fa-list"></i> -->
+                                   
+                                </div>
+                            </ng-container>
+                           
+                           
+                           </div>
+                        </dx-drop-down-button>
+                        </ng-container>
+                       
+<!--                         
+                        <button class="primary-btn mr-2 " *ngIf="this.displayMode==='list'"
+                            style="height: 50px; width: 100%;" (click)="this.changeDisplayMode()">
+                            <i class="fas fa-list"></i>
+    
+                        </button>
+                        <button class="primary-btn mr-2 " *ngIf="this.displayMode==='slick'"
+                            style="height: 50px; width: 100%;" (click)="this.changeDisplayMode()">
+                            <i class="fas fa-th-large"></i>
+    
+                        </button> -->
+    
+                    </div>
+                    <div class="col-md-2 col-lg-2 mb-1">
+                        <a class="custom-filter" [class.custom-filter-selected]="this.selectedCateFilter===''" id="btnAll"
+                            style="height: 50px; width: 100%; margin: 0px 0px;" (click)="this.fetchAllData()"> {{'All' |
+                            translate}}
+                        </a>
+    
+                    </div>
+                    <div class="col-md-9 col-lg-8">
+                        <ng-container *ngIf="VirtualKey$ | async">
+    
+                            <div class="row">
+                                <div class="col-md-10 col-lg-10">
+                                    <div class="search-wrap main-search" style="width:  100%;max-width: 100%;">
+                                        <img src="../../../../../assets/images/System/search.svg" alt="search"
+                                            class="img-fluid">
+    
+                                        <input class="form-control" matKeyboard type="search" #filter
+                                            (enterClick)="filterBy(filter.value)" placeholder="{{'Search' | translate}}"
+                                            aria-label="Search" style="height: 50px;">
+    
+                                    </div>
+    
+                                </div>
+    
+                                <div class="col-md-2 col-lg-2">
+                                    <a class="custom-filter" style="height: 100%; width: 100%; margin: 0px 0px;"
+                                        (click)="filterBy(filter.value)"> {{'Search' | translate}}
+                                    </a>
+    
+                                </div>
+                            </div>
+    
+                        </ng-container>
+                        <ng-container *ngIf="!(VirtualKey$ | async)">
+                            <!-- (change)="filterBy(filter.value)" (keyup)="filterBy(filter.value)" -->
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="search-wrap main-search" style="width:  100%;max-width: 100%;">
+                                        <img src="../../../../../assets/images/System/search.svg" alt="search"
+                                            class="img-fluid">
+    
+                                        <input class="form-control" type="search" #filter
+                                            (enterClick)="filterBy(filter.value)" placeholder="{{'Search' | translate}}"
+                                            aria-label="Search" style="height: 50px;">
+    
+                                    </div>
+    
+                                </div>
+    
+                                <div class="col-md-2 " style="padding:1px">
+                                    <a class="custom-filter" style="height: 50px; width: 100%; margin: 0px 0px;"
+                                        (click)="filterBy(filter.value)"> {{'Search' | translate}}
+                                    </a>
+    
+                                </div>
+                            </div>
+    
+                        </ng-container>
+                    </div>
+    
+                    <!-- </div> -->
+    
+                </div>
+                <!-- FILTER BAR -->
+                <ng-container *ngIf="this.merchandiseList!==null && this.merchandiseList!== undefined && this.merchandiseList?.length > 0">
+                    <div class="filter-nav" style="width:100%" >
+    
+                        <a id="scrollLeft" class="scroll-btn ml-1" (click)="slickFilterModal.slickPrev()">
+                            <i class='far fa-arrow-alt-circle-left fa-3x'></i>
+        
+                        </a>
+                        <div style="display: flex; align-items: center; overflow: hidden; width: 100%;">
+                            <div style="    margin: 0 6px; transition: 0.3s all; border-radius: 10px; max-width: 100%; ">
+                                <ngx-slick-carousel class="filtercarousel" #slickFilterModal="slick-carousel"
+                                    [config]="slideFilterConfig">
+        
+                                    <a ngxSlickItem *ngFor="let cate of this.merchandiseList"
+                                        [class.custom-filter-selected]="cate.mcid===this.selectedCateFilter"
+                                        class="custom-filter" (click)="getItemByCate(cate)">
+                                        {{cate.mcname}}
+                                    </a>
+                                </ngx-slick-carousel>
+        
+                            </div>
+        
+                        </div>
+                        <a id="scrollRight" class="scroll-btn" (click)="slickFilterModal.slickNext()">
+                            <i class='far fa-arrow-alt-circle-right fa-3x'></i>
+                        </a>
+        
+                    </div>
+                </ng-container>
+               
+                <div class="main-content"
+                    [appIsLoading]="this.loadingService.isLoading(this, this.LoadingIndicator.MANUAL)">
+                    <ng-container *ngIf="isShowSlickSlider">
+                        <!-- itemTemplate="list-item" -->
+                        <!-- [height]="390"
+                          [baseItemHeight]="120"
+                          [baseItemWidth]="185" -->
+    
+    
+    
+                        <ng-container *ngIf="displayMode==='slick' ">
+                            <!-- <dx-sortable filter=".dx-tab" [data]="this.items"
+                                  itemOrientation="horizontal"  dragDirection="horizontal"
+                                  (onDragStart)="onTabDragStart($event)"
+                                  (onReorder)="onTabDrop($event)">
+                                  <dx-tab-panel  [dataSource]="this.items"  [height]="890"  itemTitleTemplate="title"
+                                      itemTemplate="item" [deferRendering]="false"  [showNavButtons]="true"
+                                      [repaintChangesOnly]="true" [selectedIndex]="selectedIndex">
+                                      
+                                      <div *dxTemplate="let item of 'item'"> 
+                                        
+                                         <ngx-slick-carousel  
+                                                  #slickModal="slick-carousel" 
+                                                  [config]="slideConfig" 
+                                                  (init)="slickInit($event)"
+                                                  (breakpoint)="breakpoint($event)"
+                                                  (afterChange)="afterChange($event)"
+                                                  (beforeChange)="beforeChange($event)">
+                                              <div ngxSlickItem *ngFor="let item of this.items" class="item-wrap"  >
+                                                <app-shop-item-single [item]="item"  [mode]="'slick'" (itemModel)="itemDisplay($event)"></app-shop-item-single>
+                                              </div>
+                                          </ngx-slick-carousel>
+                                         
+                                      </div>
+                                  </dx-tab-panel>
+                              </dx-sortable> -->
+                            <app-shop-slick-item  [settingDisplay]="this.previewModel"  [poleDisplay]="this.poleDisplay" [poleDisplayType]="this.poleDisplayType"  [items]="this.items" (finishedLoading)="hasLoaded = $event">
+                            </app-shop-slick-item>
+                        </ng-container>
+                        <ng-container *ngIf="displayMode==='list' " >
+                            <dx-list  class="item-list-content"
+                                #list
+                                [dataSource]="items" 
+                                [searchEnabled]="true"
+                                [searchExpr]="['itemCode', 'itemName']" 
+                                searchMode="contains"
+                            >
+                                <dxo-search-editor-options
+                                    placeholder="{{'Filter' | translate}}..."
+                                   [height]="45">
+                                </dxo-search-editor-options>
+                                <div *dxTemplate="let data of 'item'">
+                                    <app-shop-item-single [item]="data" [poleDisplay]="this.poleDisplay" [poleDisplayType]="this.poleDisplayType" [mode]="'list'" (itemModel)="itemDisplay($event)">
+                                    </app-shop-item-single>
+                                <!-- <div>{{ data.itemName }}</div> -->
+                                </div>
+                            </dx-list>
+                           
+                        </ng-container>
+                        <!-- <dx-list *ngIf="displayMode==='list' " [items]="this.items"  [searchEnabled]="true"  searchExpr="itemName"
+                        searchMode="contains" class="item-list-content">
+                            <div *dxTemplate="let item of 'item'"> 
+                                <app-shop-item-single [item]="item" [mode]="'list'" (itemModel)="itemDisplay($event)">
+                                </app-shop-item-single>
+    
+                            </div>
+                        </dx-list> -->
+                    </ng-container>
+    
+    
+    
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-4 col-xl-5">
+                <ng-container *ngIf="isMarkupDesign">
+                    <div class="right-section" style="height: 100%"  >
+                        <div class="row">
+                            <div class="col-md-12">  
+                                <h2>{{'Design & Preview' | translate}}</h2>
+                                
+                             </div>
+                       
+                          
+                        </div>
+                             <div class="row  mt-2">
+                                <div class="col-md-6">  
+                                     <input class="form-control"  type="text" #txtSlidesPerView   [value]="this.detectModel.slidesPerView"
+                                    placeholder="{{'Slides Per View' | translate}}"
+                                     style="height: 50px;">
+                                 </div>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" #txtSlidesPerColumn  [value]="this.detectModel.slidesPerColumn"
+                                    placeholder="{{'Slides Per Column' | translate}}"
+                                   style="height: 50px;">
+                                </div>
+
+                             
+                              
+                            </div>
+                             <div class="row mt-3">
+                                 <div class="col-md-4"> 
+                                     <button class="custom-filter" style="height: 50px; width: 100%; margin: 0px 0px;" 
+                                     (click)="preview(txtSlidesPerView.value, txtSlidesPerColumn.value)"> {{'Preview' | translate}}
+                                 </button>
+         
+                                 </div>
+         
+                                 <div class="col-md-4">
+                                     <button class="custom-filter" type="default" style="height: 50px; width: 100%; margin: 0px 0px;" (click)="savePreview()"
+                                         > {{'Save' | translate}}
+                                     </button>
+         
+                                 </div>
+                                 <div class="col-md-4">
+                                     <button class="custom-filter" type="danger" style="height: 50px; width: 100%; margin: 0px 0px;" (click)="reloadPage()"> 
+                                         {{'Dispose' | translate}}
+                                     </button>
+         
+                                 </div>
+                             </div>
+                        
+                    </div>
+                   
+                </ng-container>
+                <ng-container *ngIf="isMarkupDesign === false">
+                    <app-shop-bill-infor (ItemType)="filterByType($event)" (fetchItemData)="fetchAllData()"
+                    [IsEvent]="this.isEvent"></app-shop-bill-infor>
+                </ng-container>
+              
+    
+            </div>
+        </ng-container>
+       
+    </div>
+    <ng-template #template >
+        <div class="modal-header">
+            <h5 class="modal-title pull-left" id="my-modal-title">{{'Notification' | translate}}</h5>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+                <img src="../../../assets/images/System/times.svg">
+              </button>
+            </div>
+        <!-- <app-shop-bill-payment (Modal)="modalRef.hide()"></app-shop-bill-payment> -->
+        <app-component-notification (closeMoreMenu)="modalRef.hide()" [(inventoryListTS)]="inventoryListTS" [(inventoryListTR)]="inventoryListTR"></app-component-notification>
+
+    </ng-template>
+</div>
+
+
+
+<!-- (Height: ' + {{this.heightScreen?.toString()}} +'- Width: ' + {{this.widthScreen?.toString()}} +')' -->
+<dx-popup [showTitle]="true" title='Setting Display' [(visible)]="isPopupVisible" [hideOnOutsideClick]="true">
+    <dx-data-grid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" id="gridContainer" 
+     [(dataSource)]="this.settingFnBList" [allowColumnResizing]="true" (onToolbarPreparing)="onToolbarPreparing($event)" 
+    [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+        <!-- <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping> -->
+        <dxo-editing mode="cell" [allowUpdating]="true"  [useIcons]="true">
+        </dxo-editing>
+ 
+        <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+        <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+    
+        <dxi-column alignment="center" cellTemplate="statusTemplate" caption="{{'Break Point' | translate}}"></dxi-column>
+        <div *dxTemplate="let cell of 'statusTemplate'">
+          
+           <ng-container *ngIf="cell.data.breakpoint===1" > {{ 'Default' | translate }}</ng-container>
+           <ng-container *ngIf="cell.data.breakpoint!==1" > {{cell.data.breakpoint}}  </ng-container>
+           <ng-container *ngIf="cell.data.detected === true" > 
+            <br />
+            <i class="fa fa-flag-checkered" aria-hidden="true"></i> ({{ 'Current Screen' | translate }})
+           </ng-container>
+         
+        </div>
+        <dxi-column dataField="slidesPerView" caption="{{'Slides Per View' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')"> </dxi-column>
+        <dxi-column dataField="slidesPerGroup" caption="{{'Slides Per Group' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')"> </dxi-column>
+        <dxi-column dataField="slidesPerColumn" caption="{{'Slides Per Column' | translate}}" dataType="number" [format]="this.authService.numberFormat('number')"> </dxi-column>
+        
+ 
+    </dx-data-grid>
+    
+</dx-popup>
+
+<!-- <div class="left-grid"> 
+</div> -->

@@ -1,0 +1,346 @@
+<div class="col-md-12" *ngIf="this.customer!==null && this.customer!==undefined">
+    <div>
+        <!-- <div class="row">
+      <div class="col-md-6">
+        <webcam [height]="400" 
+          [width]="1000" 
+          [trigger]="triggerObservable"
+              (imageCapture)="handleImage($event)">
+        </webcam>
+        <br />
+      <button class="btn btn-primary" (click)="triggerSnapshot();"> Take the Shot</button>
+      </div>
+      <div class="col-md-6">
+        <div class="snapshot" *ngIf="webcamImage">
+          <h2>Here is your image!</h2>
+            <img [src]="webcamImage.imageAsDataUrl" [height]="400"  />
+            <br />
+            <button class="btn btn-primary" (click)="removeSnapshot();"> Remove</button>
+          </div>
+      </div>
+      
+    
+    </div> -->
+        <div class="tab-panel col-md-12">
+           
+            <tabset class="member-tabset"   #customerTabs (onItemClick)="selectTab($event)">
+                <tab class=" mt-3" heading="Information">
+                    <div class="row">
+                        <!-- <div class="col-md-6 mb-2">
+              <div class="dx-field">
+                <div class="dx-field-label">Code</div>
+                <div class="dx-field-value">
+                  <dx-text-box #txtCustomerCode [readOnly]="true" [(value)]="this.customer.id"  ></dx-text-box> 
+                </div>
+              </div>
+              
+            </div>  -->
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'First Name' | translate}} <label class="red" style="font-size: 20px; margin-bottom: unset;">*</label></div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerFirstName [(value)]="this.customer.first_name"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Last Name' | translate}} <label class="red" style="font-size: 20px; margin-bottom: unset;">*</label></div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerFirstName [(value)]="this.customer.last_name"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Gender' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-select-box #txtCustomerGender [(value)]="this.customer.gender" [dataSource]="this.genderOptions" displayExpr="name" valueExpr="value">
+                                        <!--             
+                  <div *dxTemplate="let data of 'item'" class="custom-item"> 
+                      <div class='product-name'>{{data.storeId}} - {{data.storeName}}</div>
+                  </div> -->
+                                    </dx-select-box>
+                                    <!-- <dx-text-box #txtCustomerGender [(value)]="this.customer.gender" ></dx-text-box> 
+                  genderOptions -->
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Mobile' | translate}} <label class="red" style="font-size: 20px; margin-bottom: unset;">*</label></div>
+                                <div class="dx-field-value">
+                                    <!-- <dx-text-box mask="+84 X000-000-000" [maskRules]="rules" #txtCustomerMobile [readOnly]="!this.isNew" [(value)]="this.customer.mobile" ></dx-text-box>  -->
+                                    <input class="input-phone" #txtCustomerMobile [readOnly]="!this.isNew" [(ngModel)]="this.customer.mobile" [(value)]="this.customer.mobile" type="number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Email' | translate}}
+                                    <!-- <label class="red" style="font-size: 20px; margin-bottom: unset;">*</label> -->
+                                </div>
+                                <div class="dx-field-value">
+                                    <!--  [readOnly]="!this.isNew || ( !this.isNew && this.customer.email!==null && this.customer.email!==undefined && this.customer.email!=='')" -->
+                                    <dx-text-box #txtCustomerEmail [(value)]="this.customer.email">
+                                        <!-- <dxi-validation-rule type="required" message="Email is required"></dxi-validation-rule> -->
+                                        <dxi-validation-rule type="email" message="Email is invalid"></dxi-validation-rule>
+                                    </dx-text-box>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Group' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerGroup [(value)]="this.customer.group"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Date Of Birth' | translate}}<label class="red" style="font-size: 20px; margin-bottom: unset;">*</label></div>
+                                <div class="dx-field-value">
+                                    <!-- [readOnly]="!this.isNew"  [displayFormat]="this.dateFormat" -->
+                                    <dx-date-box [(value)]="this.customer.dob" id="dob" width="100%" type="date" placeholder="{{'Date Of Birth' | translate}}" [displayFormat]="this.dateFormat" [useMaskBehavior]="true">
+                                    </dx-date-box>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Address' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomeraddress [(value)]="this.customer.address"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'City' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomercity [(value)]="this.customer.city"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'District' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerdistrict [(value)]="this.customer.district"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- <div class="col-md-6 mb-2">
+              <div class="dx-field">
+                <div class="dx-field-label">Member type</div>
+                <div class="dx-field-value">
+                  <dx-text-box #txtCustomermember_type [(value)]="this.customer.member_type"  ></dx-text-box>  
+                </div>
+              </div>
+              
+            </div>   -->
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Description' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerdescription [(value)]="this.customer.description"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Residental Type' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerresidental_type [(value)]="this.customer.residental_type"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Acquisition Channel' | translate}} </div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomeracquisition_channel [readOnly]="!this.isNew" [(value)]="this.customer.acquisition_channel"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Source Of Customers' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomersource_of_customers [readOnly]="!this.isNew" [(value)]="this.customer.source_of_customers"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <div class="col-md-6 mb-2">
+              <div class="dx-field">
+                <div class="dx-field-label">Promotion tracker</div>
+                <div class="dx-field-value">
+                  <dx-text-box #txtCustomerpromotion_tracker [readOnly]="!this.isNew" [(value)]="this.customer.promotion_tracker"  ></dx-text-box>  
+                </div>
+              </div>
+              
+            </div>   -->
+
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Reference Email' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerreference_email [(value)]="this.customer.reference_email"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Reference Name' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerreference_name [(value)]="this.customer.reference_name"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Reference Mobile' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerreference_mobile [(value)]="this.customer.reference_mobile"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Waiver Skill' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomerwaiver_skill [readOnly]="!this.isNew" [(value)]="this.customer.waiver_skill">
+                                    </dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="dx-field">
+                                <div class="dx-field-label">{{'Social Account' | translate}}</div>
+                                <div class="dx-field-value">
+                                    <dx-text-box #txtCustomersocial_account [(value)]="this.customer.social_account"></dx-text-box>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+                    <dx-data-grid #dataGrid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" *ngIf="this.customer.family_member!==null && this.customer.family_member!==undefined" [(dataSource)]="this.customer.family_member" keyExpr="lineNum" [showRowLines]="true"
+                        [showBorders]="true" [columnAutoWidth]="true">
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before">
+                        </dxo-search-panel>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxo-editing mode="cell" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                        <!-- <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="Line Num"  ></dxi-column> -->
+                        <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+                        <!-- name : string;
+          email: string;
+          mobile: string;
+          gender: string;
+          dob: string;
+          waiver_relationship: string; -->
+                        <dxi-column dataField="mobile" caption="Mobile"></dxi-column>
+                        <dxi-column dataField="name" caption="Name"></dxi-column>
+                        <dxi-column dataField="email" caption="Email"></dxi-column>
+                        <dxi-column dataField="gender" caption="Gender">
+                            <dxo-lookup [dataSource]="this.genderOptions" displayExpr="name" valueExpr="value"></dxo-lookup>
+                        </dxi-column>
+                        <dxi-column dataField="dob" caption="Date of Birth" dataType="date" [format]="this.dateFormat"></dxi-column>
+                        <dxi-column dataField="waiver_relationship" caption="Waiver Relationship"></dxi-column>
+                        <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+
+                    </dx-data-grid>
+                  
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <dx-button class="col-md-3" icon="fas fa-download" (onClick)="loadVoucherList()" type="default" text="Get Voucher">
+                            </dx-button>
+                        </div>
+                        <div class="col-md-6"  style=" text-align: right;">
+                            <dx-button class="col-md-3" icon="save" (onClick)="saveCustomer()" type="success" text="Save Change">
+                            </dx-button>
+                        </div>
+                    </div>
+                    <!-- <div class="mt-3">
+                      
+                    </div> -->
+                </tab>
+                <tab class=" mt-3" heading="Vouchers" [active]="showVoucher" *ngIf="showVoucher">
+
+                    <dx-data-grid #dataGridVoucher 
+                        [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" 
+                        [(dataSource)]="this.customer.vouchers" keyExpr="code" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before"></dxo-search-panel>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <!-- <dxo-editing mode="cell" [allowAdding]="true" [useIcons]="true"  [allowUpdating]="true" [allowDeleting]="true"></dxo-editing> -->
+
+                        <dxi-column dataField="code" caption="Code"></dxi-column>
+                        <dxi-column dataField="valid_till" caption="Expiration date" dataType="date" [format]="this.dateFormat">
+                        </dxi-column>
+
+                        <dxi-column dataField="discount_type" caption="Discounted type"></dxi-column>
+                        <dxi-column dataField="discount_value" caption="Discounted value"></dxi-column>
+                        <dxi-column dataField="discount_upto" caption="Discount up to"></dxi-column>
+                        <dxi-column dataField="discount_code" caption="Discount Code"></dxi-column>
+                        <dxi-column dataField="is_ecom" caption="Ecom"></dxi-column>
+                        <dxi-column dataField="max_redemption" caption="Max redemption"></dxi-column>
+                        <dxi-column dataField="min_bill_amount" caption="Min bill amount"></dxi-column>
+                        <dxi-column dataField="redemption_count" caption="Redemption count"></dxi-column>
+                        <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+
+                    </dx-data-grid>
+                </tab>
+            </tabset>
+        </div>
+
+        <!-- (onToolbarPreparing)="onToolbarPreparing($event)  -->
+
+
+    </div>
+    <!-- 
+: string;
+: string;
+code: string;
+image: string;
+: string;
+: string;
+issued_date: string;
+intouch_point: string;
+   //IntouchSeriesId: string;
+status: string;
+: string;
+tc: string;
+: string;
+: string;
+: string;
+: string;
+: string;
+ : string;
+: string; 
+: string; -->

@@ -1,0 +1,45 @@
+<div id="food-carousel">
+ 
+  <!-- <ngx-slick-carousel  
+            #slickModal="slick-carousel" 
+            [config]="slideConfig" 
+            (init)="slickInit($event)"
+            (breakpoint)="breakpoint($event)"
+            (afterChange)="afterChange($event)"
+            (beforeChange)="beforeChange($event)">
+        <div ngxSlickItem *ngFor="let item of this.items" class="item-wrap"  >
+          <app-shop-item-single [item]="item"  [mode]="'slick'" (itemModel)="itemDisplay($event)"></app-shop-item-single>
+        </div>
+    </ngx-slick-carousel> -->
+    
+ </div>
+ 
+
+ <swiper #usefulSwiper [config]="config">
+  <div class="swiper-wrapper" *ngIf="this.itemShow?.length > 0">
+   
+    <!-- <div  *ngFor="let num of numbers; let i = index" > -->
+      <!-- <ng-container *ngIf="num===this.selectedIndex"> -->
+        <div  *ngFor="let item of this.itemShow"  class="swiper-slide " > 
+          <!-- {{item.itemName}} -->
+          <app-shop-item-single class="item-wrap"  [poleDisplay]="this.poleDisplay" [poleDisplayType]="this.poleDisplayType"  [item]="item"  [mode]="'slick'" (itemModel)="itemDisplay($event)"></app-shop-item-single>
+        </div>
+      <!-- </ng-container> -->
+      
+   
+    <!-- </div> -->
+    <!-- <div  *ngFor="let item of this.items" class="swiper-slide " >
+   
+      <app-shop-item-single class="item-wrap swiper-lazy" [item]="item"  [mode]="'slick'" (itemModel)="itemDisplay($event)"></app-shop-item-single>
+   
+    </div> -->
+    
+  </div>
+  <ng-container *ngIf="this.itemShow?.length > this.pageSize">
+
+    <div class="swiper-pagination" ></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </ng-container>
+  
+</swiper>

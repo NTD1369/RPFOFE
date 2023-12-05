@@ -1,0 +1,10 @@
+.center-wrap, #customtable, #maintable  {
+    
+    font-family: "Consolas" !important;
+   
+}
+.barcode{
+    width: 100%!important;
+    zoom: 100%!important;
+    /* zoom: 150%; */
+}

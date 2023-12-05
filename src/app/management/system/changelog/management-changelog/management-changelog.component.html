@@ -1,0 +1,180 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+       
+        <div class="row" >
+            <div class="col-md-4">
+                <label   class="section-title"> <i class="fas fa-book"></i>  {{'Changelog' | translate}}</label>
+            </div>
+           
+           
+        </div>
+        <div class="row mt-2" [style]="{'height':'calc(100vh - 20vh)','overflow':'auto'}">
+            <div class="col-md-3 left"  [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}">
+                <!--  -->
+                <dx-list class="list" [dataSource]="this.versionList" (onSelectionChanged)="listSelectionChanged($event)" [grouped]="false" [searchEnabled]="true" [searchExpr]="['version', 'version']" selectionMode="single" [selectedItemKeys]="[selectedVersion]" >
+                    <div  [ngClass]="item?.version === this.selectedVersion ? ' rowSelected' : '' " *dxTemplate="let item of 'item'">
+                        <div >
+                            <div class="hotel">
+                                <div class="name" >{{item?.version}}
+                                    <span *ngIf="item?.releaseTime!== null && item?.releaseTime!==undefined" >
+                                        ({{item?.releaseTime | date: this.authService.loadFormat().dateFormat }}) 
+                                        <!-- :this.authService.loadFormat().dateFormat -->
+                                    </span> 
+                                </div> 
+                            </div>
+
+                        </div>
+                    </div>
+
+                </dx-list>
+            </div>
+            
+            <div class="col-md-9 right"  [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" >
+                <div class="t-row" [ngClass]="version?.version === this.selectedVersion ? ' versionSelected' : '' " style="margin-bottom: 30px;" *ngFor="let version of this.versionList">
+                    <h2 class="pb-2" >
+                        {{version.version}}
+                        {{version.description }}
+                        <span *ngIf="version?.releaseTime!== null && version?.releaseTime!==undefined" >
+                            ({{version?.releaseTime | date: this.authService.loadFormat().dateFormat   }}) 
+                        </span> 
+                    </h2>
+                 
+                    <div class="pl-3"  style="border-left: #BE2C2C 2px solid; "  >
+                        <div class="t-row  pb-2" *ngFor="let statusX of version.statusGrp">
+                            <!-- case "I": { 
+                                //statements; 
+                                let str = " <span style='color: red; font-weight: 700;'><i class='fas fa-times-circle'></i> Inactive</span>";
+                                text1 = str;
+                                break; 
+                             } 
+                             case "N": { 
+                                //statements; 
+                                let str = "<span style='color: green; font-weight: 700; '> <i class='fas fa-layer-plus'></i> New & Feature</span>";
+                                text1 = str;
+                                break; 
+                             } 
+                             case "F": { 
+                                 //statements; 
+                                 let str = "<span style='color: #FDA66E; font-weight: 700; '> <i class='fas fa-debug'></i> Fixed</span>";
+                                 text1 = str;
+                                 break; 
+                              } 
+                              case "IM": { 
+                                 //statements; 
+                                 let str = "<span style='color: #50A9FF; font-weight: 700; '><i class='fad fa-star'></i> Improved</span>";
+                                 text1 = str;
+                                 break; 
+                              } 
+                              case "M": { 
+                                 //statements; 
+                                 let str = "<span style='color: #50A9FF; font-weight: 700; '><i class='fad fa-star'></i> Maintainance</span>";
+                                 text1 = str;
+                                 break; 
+                              } 
+                              case "E": { 
+                                 //statements; 
+                                 let str = "<span style='color: #53BB56; font-weight: 700; '><i class='fas fa-engine-warning'></i> Enhance</span>";
+                                 text1 = str;
+                                 break; 
+                              } 
+                               
+                             default: { 
+                                //statements; 
+                                let str = "<span style='color: green;font-weight: 700; '><i class='far fa-question-circle'></i>" + value + "</span>";
+                                text1 = str;
+                                break; 
+                             }  -->
+                            <div style=" font-size: 16px;" [ngSwitch]="statusX.status ">
+                                <div *ngSwitchDefault>{{statusX.status}}</div>
+                                <div *ngSwitchCase="'I'">
+                                    <span style='color: red; font-weight: 700;'><i class='fas fa-times-circle'></i> {{ 'Inactive' | translate}}</span>
+                                </div>
+                                <div *ngSwitchCase="'N'">
+                                    <span style='color: green; font-weight: 700;'><i class='fa fa-plus'></i> {{ 'New Features' | translate}}</span>
+                                </div>
+                                <div *ngSwitchCase="'E'">
+                                    <span style='color: #53BB56; font-weight: 700;'><i class='fa fa-check-circle'></i> {{ 'Enhances' | translate}}</span>
+                                </div>
+                                <div *ngSwitchCase="'F'">
+                                    <span style='color: #FDA66E; font-weight: 700;'><i class='fa fa-bug'></i> {{ 'Bug Fixes' | translate}}</span>
+                                </div>
+                                <div *ngSwitchCase="'IM'">
+                                    <span style='color: #50A9FF; font-weight: 700;'><i class='fa fa-hashtag'></i> {{ 'Improvements' | translate}}</span>
+                                </div>
+                                <div *ngSwitchCase="'M'">
+                                    <span style='color: #50A9FF; font-weight: 700;'><i class='fa fa-wrench'></i> {{ 'Maintainance' | translate}}</span>
+                                </div>
+                              </div>
+
+                            <!-- <div class="t-cell cell-name"> 
+                                <div style=" font-size: 20px;" [innerHtml]="statusX.status | changelogStatusFormat"></div>
+                            </div> -->
+                            <ul>
+                                <li  style="font-size: 15px ;padding-left: 5px; margin-top: 10px; cursor: pointer; list-style: inside;" *ngFor="let item of statusX" (click)="openModal(item, template)">
+                                    [ <a style='color: #50A9FF; width: 100px;' >{{item.id.substr(0, 5)}}</a> ]
+                                    - {{item.description}}
+                                </li> 
+                            </ul>
+                            <!-- <div class="t-row"  style="padding-left: 35px; margin-top: 10px; cursor: pointer;" *ngFor="let item of statusX"> 
+                                <div class="callout callout-info pl-3" (click)="openModal(item, template)">
+                                    <h4><i class="fas fa-hand-point-right"></i> {{item.description}}</h4> 
+                                  </div> 
+                            </div>  -->
+                        </div> 
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <!-- <div id="dvPaging" class="col-md-12"  *ngIf="this.versionList?.length > 0">
+            <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+                [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" 
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+
+                </pagination>
+        </div> -->
+    </div>
+</div>
+
+<ng-template #template>
+    <ng-container *ngIf="this.releaseNote?.description?.length > 0">
+
+        <div class="modal-header">
+            <h4 class="modal-title pull-left" id="my-modal-title">{{ 'Version' | translate }}: {{this.releaseNote?.version}} - {{this.releaseNote?.description}}
+                <br />
+               
+            </h4>
+            
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">  <img src="../../../assets/images/System/times.svg">  </button>
+        </div>
+    
+        <div class="modal-body" [style]="{'height':'calc(100vh - 40vh)','overflow':'auto'}">
+            <!-- <div class="row"> -->
+                <!-- <div innerHTML="{{this.releaseNote?.releaseContent}}"></div>  -->
+            <!-- </div> -->
+            <!-- <span *ngIf="this.releaseNote?.releaseTime?.length > 0 && this.releaseNote?.releaseTime !==null && this.releaseNote?.releaseTime !== undefined">
+                {{this.releaseNote?.releaseTime | date : this.authService.loadFormat().dateFormat}}
+            </span> -->
+            <ng-container *ngIf="this.lgu === 'vi' || this.releaseNote?.releaseContentForeign?.length <=0 ">
+                <dx-html-editor  [disabled]="true" [value]="this.releaseNote?.releaseContent"> 
+                    <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+                </dx-html-editor>
+            </ng-container>
+            <ng-container *ngIf="this.lgu !== 'vi' && this.releaseNote?.releaseContentForeign?.length > 0 ">
+                <dx-html-editor  [disabled]="true" [value]="this.releaseNote?.releaseContentForeign"> 
+                    <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+                </dx-html-editor>
+            </ng-container>
+            
+       
+
+
+        </div>
+        <div class="modal-footer">
+           <span *ngIf="this.releaseNote?.createdBy?.length > 0">
+             {{'Created By'| translate}}: {{this.releaseNote?.createdBy }} -
+           </span>   {{this.releaseNote?.releaseTime | date: this.authService.loadFormat().dateFormat }}
+        </div>
+    </ng-container>
+    
+</ng-template>

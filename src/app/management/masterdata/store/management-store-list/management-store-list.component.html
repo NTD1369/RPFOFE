@@ -1,0 +1,99 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="search-wrap">
+                    <label for="item-searchbar" class="section-title">{{'Store' | translate}}</label>
+
+                </div>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <dx-button icon="add" class="mr-2" type="default" text="{{'Add' | translate}}" (onClick)="addNew()"> </dx-button>
+            </div>
+        </div>
+
+
+        <div class="row mt-2" >
+            <div class="col-md-3 left">
+                <dx-list  [style]="{'max-height':'calc(100vh - 25vh)','overflow':'auto'}" class="list" [dataSource]="this.items" [grouped]="false" [searchEnabled]="true" [searchExpr]="['storeId', 'storeName']" selectionMode="single" [selectedItemKeys]="[currentStore?.storeId]" (onSelectionChanged)="listSelectionChanged($event)">
+                    <div *dxTemplate="let item of 'item'">
+                        <div>
+                            <div class="hotel">
+                                <div class="name">{{item?.storeId}}</div>
+                                <div class="name">{{item?.storeName}}</div>
+                                <div class="address">{{item?.address}}</div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </dx-list>
+            </div>
+            <div class="col-md-9 right" *ngIf="this.isShowContent">
+                <div class="header">
+                    <div class="name-container">
+                        <div class="name">{{currentStore?.storeId}} | {{currentStore?.storeName}}</div> 
+                    </div>
+                    <div class="price-container">
+
+                    </div>
+                </div>
+                <app-management-store-edit [model]="this.currentStore" [(isNew)]="this.isNew" style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>
+
+
+            </div>
+        </div>
+        <!-- <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.items" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling> 
+                <dxi-column dataField="storeId" caption="Code" dataType="string"> </dxi-column>
+                <dxi-column dataField="storeName" caption="Name" dataType="string"> </dxi-column>
+                <dxi-column dataField="address" caption="Address" dataType="string"> </dxi-column>
+                <dxi-column dataField="storeDescription" caption="Description" dataType="string"> </dxi-column>
+                <dxi-column dataField="storeType" caption="Type" dataType="string"> </dxi-column>
+
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="Status"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button class="mr-2" icon="fas fa-eye" text="View" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button icon="detailslayout" class="mr-2" type="success" text="Payment" (onClick)="getPayment(cell.data)"> </dx-button>
+                    <dx-button icon="fa fa-credit-card" type="default" text="Currency" (onClick)="getCurrency(cell.data)"> </dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div> -->
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Store' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+
+            <app-management-store-edit [model]="this.store" style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>
+        </div>
+    </div>
+</ng-template>
+
+<!-- <p-dialog header="Title" [(visible)]="display"  >
+  <div class="row" style="height:300px;">
+      Select a date
+      <p-calendar #myCalendar [(ngModel)]="selectedDate"></p-calendar>
+  </div>
+</p-dialog>
+
+<button type="text" (click)="showDialog()" pButton icon="fa-external-link-square" label="Choose date"></button> -->

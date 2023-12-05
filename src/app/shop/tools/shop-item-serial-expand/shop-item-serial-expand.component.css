@@ -1,0 +1,9 @@
+.col-icon-search svg {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+}
+
+.col-icon-search input {
+    padding-left: 40px;
+}

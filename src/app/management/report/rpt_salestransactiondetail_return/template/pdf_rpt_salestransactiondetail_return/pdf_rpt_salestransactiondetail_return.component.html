@@ -1,0 +1,157 @@
+ 
+<div class="center-wrap cl-print-eod" style="font-family: Roboto; color: #000; font-size: 13px;" >
+  <div class="maintenance-card print-main cl-print-cm" style="overflow: hidden;  width: 100%;" >
+      <div class="maintenance-row">
+          <div class="col-md-12">
+            <div #pdfContainer_1 >
+            <!-- *ngIf="name === 'A4'" -->
+                <div class="cl-pad-eod-A4" style="font-size: 10px;" >
+                  <h2 class="mb-2" style="    font-weight: 600; font-size: 15px;"> {{this.rptModel?.storeId}}</h2>
+                  <h2 class="mb-2"  style="    font-weight: 600; font-size: 15px;"> {{this.rptModel?.title}}</h2>
+                  
+                <div class="row mb-2 col-print-12">
+                      <div class="col-md-6 col-print-6">
+                        
+                          <p  class="mb-1"><b>{{'Date' | translate}}: {{this.rptModel?.dateFr | date : this.authService.loadFormat().dateFormat }} ~ {{this.rptModel?.dateTo | date : this.authService.loadFormat().dateFormat }}</b></p>
+                      </div>
+                      <div class="col-md-6 col-print-6 text right">
+                        <p class="mb-1" *ngIf="this.rptModel?.printBy?.length > 0" ><b>{{'Print By' | translate}}: {{this.rptModel?.printBy}}</b></p>
+                        <p class="mb-1"><b>{{'Print Date' | translate}}: {{this.rptModel?.printDate | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</b></p>
+                          <p class="mb-1" *ngIf="this.rptModel?.terminalId?.length > 0" ><b>{{'Location' | translate}}: {{this.rptModel?.terminalId}}</b></p>
+                      </div>
+                  </div>
+
+                  <div *ngIf="this?.terminalGrp?.length > 0">
+                    <hr class="style5">
+                    <div class="row table-row">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 10px;" class="shift-cls">
+                            <tr>
+                                <th style="width: 100px ;"> {{'RECEIPT#' | translate}} </th>
+                                <!-- <th style="width: 100px ;"> {{'RECEIPT TIME' | translate}} </th> -->
+                                <th style="min-width: 50px ;"> {{'CREATED BY' | translate}} </th>
+                                <th style="min-width: 50px ;"> {{'AUTH CODE' | translate}} </th>
+                                <th style="width: 30px ;"> {{'ROW#' | translate}} </th>
+                                <th> {{'SKU CODE' | translate}} </th>
+                                <th> {{'DESCRIPTION' | translate}} </th> 
+                                <th> {{'QTY' | translate}} </th>
+                                <th> {{'UNIT PRICE' | translate}} </th>
+                                <th> {{'TOTAL AMT' | translate}} </th>
+                                <!-- <th style="width: 100px ;"> {{'DURATION (SECOND)' | translate}} </th>  -->
+                                <th> {{'REMARK' | translate}} </th>
+                                <!-- <th style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"> {{'Fc' | translate}} </th>
+                                <th style="text-align: right;"> {{'Total' | translate}} </th>
+                                <th style="text-align: right;"> {{'Collected' | translate}} </th> -->
+                            </tr>
+                          
+                            <ng-container *ngFor="let group of this?.terminalGrp">
+                                <tr >
+                                    <td  colspan="10"  style="font-size: 10px; font-weight: 700;">
+                                      {{'Date' | translate}}:
+                                      <ng-container *ngIf="group.name?.length > 0" >
+                                        {{ group.name | date: this.authService.loadFormat().dateFormat }}
+                                      </ng-container>
+                                       <ng-container *ngIf="group.name?.length <= 0" >
+                                        {{ group?.name  }}
+                                      </ng-container>
+                                    
+                                    </td> 
+                                </tr>
+                                <ng-container *ngFor="let itemGrp of group.lines">
+                                  <tr  >
+                                    <td colspan="10" style="font-size: 10px; font-weight: 700;">
+                                        - {{'Counter' | translate}}: {{itemGrp.counterId}}
+                                    </td> 
+                                  </tr>
+                                  <tr *ngFor="let item of itemGrp">
+                                    <td>
+                                        {{item?.transId}}
+                                        <br />
+                                        <!-- this.authService.loadFormat().dateFormat +  -->
+                                        {{item?.createdOn | date:' HH:mm:ss' }}
+                                    </td>
+                                    <td>
+                                      {{item?.createdBy }}
+                                    </td>
+                                    <!-- <td>
+                                    
+                                    </td> -->
+                                    <td>
+                                      {{item?.approvalId }}
+                                    </td>
+                                    <td style="text-align:center">
+                                      {{item?.lineId }}
+                                    </td>
+                                    <td>
+                                      {{item?.barCode }}
+                                    </td>
+                                    <td>
+                                      {{item?.description }}
+                                    </td>
+                                    <td style="text-align:right">
+                                      {{item?.quantity }}
+                                    </td>
+                                    <td style="text-align:right">
+                                      {{item?.price }}
+                                    </td>
+                                    <td style="text-align:right">
+                                      {{item?.lineTotal }}
+                                    </td>
+                                    <!-- <td style="text-align:right">
+                                      {{item?.duration }}
+                                    </td> -->
+                                    <td>
+                                      {{item?.remark }}
+                                    </td>
+                                    <!-- 
+                                    <td>
+                                      {{item?.Time}}
+                                    </td>
+                                    <td>
+                                      {{item?.TransId}}
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF1}}  
+                                    
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF2}}
+                                    
+                                    </td>
+                                  
+                                    <td>
+                                      {{item?.CustomF6}}
+                                      
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF3}}
+                                      
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF4}}
+                                      
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF5}}
+                                    
+                                    </td>
+                                    <td>
+                                      {{item?.CustomF7}}
+                                    
+                                    </td>  -->
+                                  </tr>
+                                </ng-container>
+                                
+                              
+                              
+                            </ng-container>
+                        
+                        </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+ 

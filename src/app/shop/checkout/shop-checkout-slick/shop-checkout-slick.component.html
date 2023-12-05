@@ -1,0 +1,14 @@
+<div id="food-carousel">
+  <ngx-slick-carousel  
+            #slickModal="slick-carousel" 
+            [config]="slideConfig" 
+            (init)="slickInit($event)"
+            (breakpoint)="breakpoint($event)"
+            (afterChange)="afterChange($event)"
+            (beforeChange)="beforeChange($event)">
+        <div ngxSlickItem *ngFor="let item of this.items" class="item-wrap"  >
+          <app-shop-item-single [item]="item" (itemModel)="itemDisplay($event)"></app-shop-item-single>
+        </div>
+    </ngx-slick-carousel>
+ </div>
+ 

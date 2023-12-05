@@ -1,0 +1,31 @@
+.search-wrap.mar-ser {
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.scan-zxing {
+    position: absolute;
+    z-index: 9;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // top: 56%;
+}
+
+.ml-15 {
+    margin-left: 20px;
+}
+
+@media only screen and (max-width: 767px) {
+    .respon {
+        position: absolute;
+    }
+    .respon-mar {
+        margin-top: 10px;
+        text-align: center !important;
+    }
+    .scan-zxing {
+        width: 80%;
+    }
+}

@@ -1,0 +1,498 @@
+<div class="center-wrap" id="printAfter">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="row">
+            <div class="col-md-12 pt-2 pb-3" style="border-bottom: 1px solid #ddd; padding-left: 30px">
+                <label for="item-searchbar" class="section-title">{{'Return' | translate}} {{this.order.transId}} <span class="red mt-2" style="font-size: 12px;"> (*) {{'The system only allows return and exchange of retail items' | translate}}</span></label>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+
+            <ng-container *ngIf="this.checkCustomerInfor === false">
+                <h2 style="text-align: center;
+                margin-top: 50px;
+                color: red;"> {{ 'Loading Customer Information from CRM System. Please wait a minute.' | translate }}</h2>
+                 <h2 style="text-align: center;
+                 margin-top: 30px;
+                 color: red;">{{ display }}</h2>
+                
+            </ng-container>
+            <ng-container *ngIf="this.checkCustomerInfor !== false">
+                <div class="right-section" *ngIf="this.order!==null && this.order!==undefined ">
+                    <ng-container *ngIf="basket$ | async as basket">
+                        <!-- <ng-container> 
+                              <div class="col-md-12 mb-2" style="padding-bottom: 8px; border-bottom: 3px solid #1a1616; ">
+                                <div class="row" >
+                                  <div class="col-md-3">
+                                    <h3> Sales Type: </h3>
+                                  </div>
+                                  <div class="col-md-9" style="text-align: end;">
+                                    <ng-container  *ngIf="basket.salesType==='Retail'">
+                                      <div class="row">
+                                        <div class="col-md-7" >
+                                          <h3><a id="link4" (click)="toggleWithShadingOptions()">{{basket.salesType}} 
+                                          
+                                          </a> </h3>
+                                        </div>
+                                        <div class="col-md-5" >
+                                          <dx-select-box #ddlType (onValueChanged)="onTypeChanged(ddlType.value)" [value]="typeOptions[0].value"   [dataSource]="this.typeOptions" displayExpr="name" valueExpr="value" >
+                                          </dx-select-box>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                    <ng-container  *ngIf="basket.salesType!=='Retail'">
+                                      <h3><a id="link4" (click)="toggleWithShadingOptions()">{{basket.salesType}}  </a> </h3>
+                                    </ng-container>
+                                    <dx-popover
+                                        target="#link4" 
+                                        position="top"
+                                        [width]="300"
+                                        [shading]="true"
+                                        shadingColor="rgba(0, 0, 0, 0.5)"
+                                        [(visible)]="withShadingOptionsVisible">
+                                        <div *dxTemplate="let data of 'content'">
+                                          <app-shop-salestype-change></app-shop-salestype-change>
+                                        </div>
+                                    </dx-popover>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>  -->
+                        <ng-container *ngIf="basket.customer !== null">
+                            <div style="border-bottom: 3px solid #1a1616;">
+                                <div class="row">
+                                    <!-- <div class="col-md-1" style="    padding: 5px 3px;">
+                                    <span id="voucherDetail" class="username ml-2" style="cursor: pointer; " (click)="toggleVoucherVisible()"> <i class="fas fa-info-circle fa-2x" style="color: #4C6EF5;"></i></span>
+                                    <dx-popover
+                                        target="#voucherDetail" 
+                                        position="top"
+                                        [width]="300"
+                                        [shading]="true"
+                                        shadingColor="rgba(0, 0, 0, 0.5)"
+                                        [(visible)]="voucherVisible">
+                                        <div *dxTemplate="let data of 'content'">
+                                            <app-shop-customer-detail></app-shop-customer-detail>
+                                        </div>
+                                    </dx-popover>
+                                
+                                  </div> -->
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                
+                              <ng-container *ngIf="!basket.customer?.customerName">
+                                <span class="username" style="cursor: pointer;" [routerLink]="['/shop/customer/']"> <i
+                                    class="fas fa-user-tie"></i> {{basket.customer.customerId}} </span>
+                               
+                              </ng-container>
+                              <ng-container *ngIf="basket.customer?.customerName">
+                                <span class="username" style="cursor: pointer;" [routerLink]="['/shop/customer/']"> <i
+                                    class="fas fa-user-tie"></i> {{basket.customer.customerName}} </span>
+                              </ng-container>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- <div class="col-md-6">
+                                        <span class="points greeting ml-1" style="    font-size: 18px;">
+                                          <img src="../../../../assets/images/System/coins.svg" alt="coins"> {{'Class' | translate}} :
+                                          <span class="red" >{{basket.customer?.customerGrpId}}</span>
+                                        </span>
+                                      
+                                      </div> -->
+                                            <div class="col-md-6">
+                                                <a href="tel:{{basket.customer.phone || basket.customer.mobile}}" style="    font-size: 18px;">
+                                                    <img class="mr-2" src="../../../../assets/images/System/phone.svg" alt="phone"> {{basket.customer.phone || basket.customer.mobile}}
+                                                </a>
+                                            </div>
+                                            <!-- <div class="col-md-4"> 
+                                        <span class="nav-mail greeting ml-1" style="    font-size: 18px;">
+                                          <a href="mailto:davidt@abeoinc.com">
+                                            <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.joinedDate}}
+                                          </a>
+                                        </span>
+                                        </div> -->
+    
+                                        </div>
+    
+                                    </div>
+                                    <div class="col-md-2">
+                                        <dx-select-box id="employee" #employee [items]="this.employees" placeholder="Employee" name="client-select" [(ngModel)]="this.order.salesPerson" id="client-select" class="custom-select" displayExpr="employeeName" valueExpr="employeeId" itemTemplate="item"
+                                            [searchEnabled]="true" searchMode="contains" (onValueChanged)="onValueChanged($event)" [searchExpr]="['employeeId', 'employeeName']">
+    
+                                            <div *dxTemplate="let data of 'item'" class="custom-item">
+                                                <div class='product-name'>{{data.employeeId}} - {{data.employeeName}}</div>
+                                            </div>
+                                        </dx-select-box>
+                                    </div>
+    
+                                    <div class="col-md-2">
+                                        <button class="submit-btn w-100 border-radius-5" style="height:50px;" (click)="cancelOrder()">{{'New' | translate}}</button>
+                                        <!-- <span class="username" style="cursor: pointer;"  [routerLink]="['/shop/order/customer']"> <i class="fas fa-user-tie"></i> {{basket.customer.customerName}}</span> -->
+                                    </div>
+                                    <div class="col-md-2"> <a *ngIf="this.canReturn" (click)="openModal(template)" class="primary-btn submit-btn payment-custom border-radius-5">{{'Payment' | translate}}</a></div>
+                                </div>
+    
+    
+                            </div>
+    
+                        </ng-container>
+                    </ng-container>
+                    <div class="bill-info-wrap mar-top-20">
+                        <div class="bill-info">
+                            <p class="bill-number">{{'BillNo' | translate}}: {{this.orderNo}}</p>
+                        </div>
+                        <p class="bill-date">{{'Date' | translate}}: {{myDate | dateFormat }}</p>
+                        <p class="bill-time">{{'Time' | translate}}: {{myDate | date:'HH:mm:ss'}}</p>
+                    </div>
+                    <div class="bill-wrapper">
+                        <div class="table-wrap pb-3">
+                            <div class="bill-table custom-table">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-action" style="max-width: 60px!important;">
+                                            <p></p>
+                                            <!-- {{'Remark' | translate}} -->
+                                        </div>
+                                        <div class="t-cell cell-desc">
+                                            <p>{{'Description' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity" style="max-width: 40px!important;">
+                                            <p>{{'Quantity' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity text-right" style="max-width: 170px!important;">
+                                            <p>{{'Open Quantity' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-quantity text-right" style="max-width: 170px!important;">
+                                            <p>{{'Quantity' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-quantity" style="max-width: 60px!important;">
+                                      <p>{{'Price' | translate}}</p>
+                                    </div> -->
+                                        <div class="t-cell cell-total text-right" style="max-width: 220px!important;">
+                                            <p>{{'Total' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="mr-2" style="min-width: 40px!important;"> 
+                                    </div> -->
+                                    </div>
+                                </div>
+                                <div class="t-body" *ngIf="basket$ | async as basket">
+                                    <ng-container *ngFor="let item of basket.items">
+                                        <!-- {{this.itemSelectedRow}} -->
+                                        <!-- || (item?.promotionIsPromo==='1' && item?.promotionType!=='Fixed Quantity')  -->
+                                        <div class="t-row" [ngClass]="{promotionLine: item.promotionIsPromo==='1' && item?.promotionType==='Fixed Quantity'}">
+                                            <div class="row actionrow" [ngClass]="{  hideChildren : this.itemSelectedRow !== item.id + item.uom+item.promotionPromoCode && action.class !== 'showChildren' }" #action id="rowAction" style="width:100%;">
+    
+                                                <ng-container *ngIf="item?.promotionIsPromo==='1' && item?.promotionType==='Fixed Quantity' ">
+                                                    <div class="col-md-3">
+    
+                                                        <a class="nav-card active" (click)="this.itemSelectedRow = '' && action.class = action.class == 'showChildren' ? 'hideChildren' :  'showChildren'">
+                                                            <!-- <img class="custom-shop-house-icon mr-2" src="../../../../assets/images/System/setup.svg" alt="exit"> -->
+                                                            <i class="fas fa-chevron-circle-left fa-2x"></i>
+                                                            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Back' | translate}}
+                                </span>
+                                                        </a>
+    
+                                                    </div>
+                                                    <div class="col-md-9" style="    border-left: 1px solid;">
+                                                        <h5>{{item?.promotionPromoCode?.toString().slice(0,-1)}}</h5> {{item?.promotionPromoName}}
+                                                    </div>
+    
+                                                </ng-container>
+                                                <ng-container *ngIf="item?.promotionIsPromo!=='1'  || (item?.promotionIsPromo==='1' && item?.promotionType!=='Fixed Quantity')">
+                                                    <div class="col-md-2">
+    
+                                                        <a class="nav-card active" (click)="this.itemSelectedRow = '' && action.class = action.class == 'showChildren' ? 'hideChildren' :  'showChildren'">
+                                                            <!-- <img class="custom-shop-house-icon mr-2" src="../../../../assets/images/System/setup.svg" alt="exit"> -->
+                                                            <i class="fas fa-chevron-circle-left fa-2x"></i>
+                                                            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Back' | translate}}
+                                </span>
+                                                        </a>
+    
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a class="nav-card active" (click)="remove(item)">
+                                                            <!-- <img class="custom-shop-house-icon mr-2" src="../../../../assets/images/System/setup.svg" alt="exit"> -->
+                                                            <!-- <a > <img src="../../../../assets/images/System/cancel.svg"> </a> -->
+                                                            <i class="fas fa-trash-alt fa-2x"></i>
+                                                            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Remove' | translate}}
+                                </span>
+                                                        </a>
+    
+    
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a class="nav-card active" *ngIf="item.isSerial" (click)="selectSerial(item)">
+                                                            <!-- <img class="custom-shop-house-icon mr-2" src="../../../../assets/images/System/setup.svg" alt="exit"> -->
+                                                            <i class="fas fa-info fa-2x"></i>
+                                                            <span class="nav-card-text" style="text-transform: uppercase;"> {{'Serial' | translate}}
+                                </span>
+                                                        </a>
+                                                        <!-- <a  (click)="selectSerial(item)"><i class="fas fa-info" *ngIf="item.isSerial" ></i></a> -->
+    
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <dx-text-box [(ngModel)]="item.note" value="{{item.note}}" [showClearButton]="true" placeholder="Note" valueChangeEvent="keyup"></dx-text-box>
+    
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <dx-button class="send" icon="check" (onClick)="updateNote(item)"> </dx-button>
+                                                    </div>
+    
+                                                </ng-container>
+                                            </div>
+    
+                                            <div class="t-cell cell-action" style="max-width: 60px!important;">
+                                                <a>
+                                                    <dx-button (click)="selectRow(item) && action.class = action.class == 'showChildren' ? 'hideChildren' :  'showChildren'" id="moreButton" icon="overflow"  > </dx-button>
+                                                    <!-- <img src="../../../../assets/images/System/file.svg"> -->
+                                                    <!-- <i class="dx-icon-overflow" style="font-size: 25px;"></i> -->
+                                                </a>
+                                            </div>
+    
+                                            <div class="t-cell cell-desc">
+    
+                                                <p style="widows: 100%;">
+                                                    <ng-container *ngIf="item.isSerial || item.isBOM">
+                                                        <i (click)="selectSerial(item)" class="fas fa-info" *ngIf="item.isSerial"></i>
+                                                        <i class="fas fa-archive" *ngIf="item.isBOM"></i> -
+                                                    </ng-container>
+    
+                                                    {{item.productName}}
+                                                </p>
+                                                <br />
+    
+                                                <!-- <p style="widows: 100%;" *ngIf="item.isCapacity">
+                                          <i class="fas fa-ticket-alt" aria-hidden="true"></i>
+                                          {{item.storeAreaId}} {{item.appointmentDate}} {{item.timeFrameId}} 
+                                          </p> -->
+                                                <p>
+                                                    <label class="mr-2">{{item.uom}}</label>
+                                                    <label class="mr-2 textPromotion" style="float: right;" *ngIf="item?.promotionIsPromo==='1' && item?.promotionType==='Fixed Quantity'">Promotion
+                              Item</label>
+                                                    <!-- | {{item.price | number}} -->
+                                                    <!-- {{item?.promotionPriceAfDis}} -->
+                                                    <ng-container *ngIf="item?.promotionPriceAfDis!==null && item?.promotionPriceAfDis!==item.price">
+                                                        <label class="mr-2 textOrigionalX"> {{item.price | number}}</label>
+                                                        <label class="mr-2 textPromotion"> {{item?.promotionPriceAfDis | number}}</label>
+    
+    
+    
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item?.promotionPriceAfDis===null || item?.promotionPriceAfDis===item.price">
+                                                        <label class="mr-2 textPromotion"> {{item.price | number}}</label>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.customField1 === 'Card' && item?.promotionDisAmt!==null && item?.promotionDisAmt!==undefined">
+                                                        <label class="mr-2 textPromotion">+ {{item?.promotionDisAmt | number}}</label>
+                                                    </ng-container>
+    
+                                                </p>
+    
+                                            </div>
+                                            <div class="t-cell cell-quantity" style="max-width: 40px!important; cursor: pointer;">
+                                                <!-- <a  (click)="selectSerial(item)"><i class="fas fa-info" *ngIf="item.isSerial" ></i></a>    -->
+                                                <!-- <i class="fas fa-archive" ></i>  -->
+                                                <a class="text-center" (click)="ele.class = ele.class == 'showChildren' ? 'hideChildren' :  'showChildren'">
+                            <i class="fas fa-angle-down fa-2x" *ngIf="item.lineItems?.length > 0 || item.isBOM"></i>
+                          </a>
+                                                <!-- <a *ngIf="item.isCapacity">
+                                          <i class="fa fa-ticket" aria-hidden="true"></i>
+                                        </a> -->
+                                            </div>
+                                            <div class="t-cell cell-action text-right" style="max-width: 170px!important;">
+                                                {{item.openQty}}
+                                            </div>
+    
+    
+                                            <div class="t-cell cell-quantity text-right" style="max-width: 170px!important;">
+                                                <label class="mr-2 textPromotion" *ngIf="item?.promotionIsPromo==='1'">{{item.quantity}}</label>
+                                                <!-- *ngIf="item?.promotionIsPromo!=='1' || (item?.promotionIsPromo==='1' && item?.promotionType!=='Fixed Quantity')" -->
+                                                <ng-container *ngIf="item?.promotionIsPromo!=='1'">
+                                                    <ng-container *ngIf="item.isSerial || item.isCapacity || item.customField1 === 'Member' || item.customField1 === 'Class' || item.customField1 === 'Card'">
+                                                        <p class="ml-1">{{item.quantity}}</p>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item.isSerial!==true && item.isCapacity!==true &&  item.customField1 !== 'Class' &&  item.customField1 !== 'Member' && item.customField1 !== 'Card'">
+                                                        <ng-container *ngIf="VirtualKey$ | async">
+                                                            <input type="text" [matKeyboard]="'NumberLayout'" inputmode="numeric" pattern="[0-9]*" (blur)="onBlurMethod(item)" class="form-control rounded text-right" placeholder="Search" [(ngModel)]="item.quantity" value="{{item.quantity}}" />
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!(VirtualKey$ | async)">
+                                                            <input type="text" inputmode="numeric" pattern="[0-9]*" (blur)="onBlurMethod(item)" class="form-control rounded text-right" placeholder="0" [(ngModel)]="item.quantity" value="{{item.quantity}}" />
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+    
+    
+    
+                                            </div>
+    
+                                            <div class="t-cell cell-total text-right" style="max-width: 220px!important;">
+                                                <p>
+    
+                                                    <ng-container *ngIf="item?.promotionLineTotal!==null && item?.promotionLineTotal!==item.lineTotal">
+                                                        <label class="mr-2 textOrigionalX"> {{item.lineTotal | number}}</label>
+                                                        <br />
+                                                        <label class="mr-2 textPromotion"> {{item?.promotionLineTotal | number}}</label>
+    
+                                                    </ng-container>
+                                                    <ng-container *ngIf="item?.promotionLineTotal===null || item?.promotionLineTotal===item.lineTotal">
+                                                        <label class="mr-2 textPromotion"> {{item?.lineTotal | number}}</label>
+                                                    </ng-container>
+    
+                                                </p>
+                                            </div>
+                                            <!-- <div class="mr-2" style="min-width: 40px!important;">
+                                        <p>
+                                          <a   (click)="remove(item)">
+                                            <img src="../../../../assets/images/System/cancel.svg">
+                                          </a>
+                                        </p>
+                                    
+                                      </div>  -->
+    
+                                        </div>
+    
+    
+                                        <div [ngClass]="{ hideChildren : ele.class !== 'showChildren' }" #ele>
+                                            <div class="t-row" *ngFor="let lineitem of item.lineItems">
+                                                <div class="t-cell cell-action" style="max-width: 60px!important;">
+                                                    <p style="widows: 100%;" *ngIf="item.customField1 === 'Member' || item.customField1 === 'Class'"> {{'Date' | translate}}:
+                                                        <!-- <p style="widows: 100%;" *ngIf="item.isCapacity || item.customField1 === 'Member' || item.customField1 === 'Card'"> -->
+                                                        <a class="nav-card active" (click)="removeCapacityLine(lineitem)">
+                                                            <i style="font-size: 20px;" class="ml-2 fas fa-trash-alt"></i>
+                                                            <!-- <span class="nav-card-text" style="text-transform: uppercase;"> {{'Remove' | translate}} </span> -->
+                                                        </a>
+                                                    </p>
+                                                </div>
+    
+                                                <div class="t-cell cell-desc">
+    
+                                                    <p style="widows: 100%;" *ngIf="item.isBOM"> {{lineitem.productName}} </p>
+                                                    <p style="widows: 100%;" *ngIf="item.isSerial"> {{lineitem.serialNum}} </p>
+                                                    <p style="widows: 100%;" *ngIf="item.isCapacity"> {{'Date' | translate}}: {{lineitem.appointmentDate | dateFormat }}, {{'Area' | translate}}: {{lineitem.storeAreaId}}
+                                                        <br /> {{'Time' | translate}}: {{lineitem.timeFrameId}} - {{lineitem.note}}
+                                                    </p>
+                                                    <p style="widows: 100%;" *ngIf="item.customField1 === 'Member' || item.customField1 === 'Class'"> {{'Date' | translate}}: {{lineitem.startDate | dateFormat }} ~ {{lineitem.endDate | dateFormat }}</p>
+                                                    <p style="widows: 100%;" *ngIf="item.customField1 === 'Card' && item?.promotionDisAmt===null && item?.promotionDisAmt===undefined">
+                                                        {{'Card No' | translate}}: {{lineitem.prepaidCardNo}} </p>
+                                                    <ng-container *ngIf="item.customField1 === 'Card' && item?.promotionDisAmt!==null && item?.promotionDisAmt!==undefined">
+                                                        {{'Card No' | translate}}: {{lineitem.prepaidCardNo}} <label class="mr-2 textPromotion"> +
+                                {{lineitem.promotionDisAmt}}</label>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="t-cell cell-quantity" style="max-width: 40px!important; cursor: pointer;">
+    
+                                                    <!-- <i class="fas fa-info" *ngIf="item.isSerial" ></i>
+                                          <i class="fas fa-archive" *ngIf="item.lineItems?.length > 0"></i>  -->
+                                                </div>
+                                                <div class="t-cell cell-quantity" style=" text-align: right; max-width: 170px!important;">
+                                                    <!-- <p>{{itemBOM.quantity | number}}</p> -->
+                                                </div>
+                                                <div class="t-cell cell-total" s style=" text-align: right; max-width: 170px!important;">
+                                                    <!-- <p>{{itemBOM.price | number}}</p> -->
+                                                    <p *ngIf="item.isCapacity ">{{lineitem.quantity | number}} </p>
+                                                    <p *ngIf="item.customField1 === 'Member' || item.customField1 === 'Class'">{{lineitem.quantity | number}} </p>
+                                                    <p *ngIf="item.customField1 === 'Card' ">{{lineitem.memberValue | number}} </p>
+                                                    <p *ngIf="item.isBOM">{{lineitem.lineTotal | number}} </p>
+                                                    <p *ngIf="item.isSerial">{{lineitem.quantity | number}} </p>
+                                                </div>
+                                                <div class="t-cell cell-total" style=" max-width: 220px!important;">
+    
+    
+                                                </div>
+                                                <!-- <div class="mr-2" style="min-width: 40px!important;">
+                                                    <a class="nav-card active" *ngIf="item.isCapacity " (click)="editCapacityLine(lineitem)">
+    
+                              <i style="font-size: 20px;" class="ml-2 far fa-edit"></i>
+                            </a>
+                            <a class="nav-card active" *ngIf=" item.customField1 === 'Member' "
+                              (click)="editMemberLine(lineitem)">
+    
+                              <i style="font-size: 20px;" class="ml-2 far fa-edit"></i>
+                            </a>
+                            <a class="nav-card active" *ngIf=" item.customField1 === 'Card' "
+                              (click)="editCardLine(lineitem)">
+    
+                              <i style="font-size: 20px;" class="ml-2 far fa-edit"></i>
+                            </a>  
+                                                </div> -->
+    
+                                            </div>
+                                        </div>
+                                    </ng-container>
+    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="total-bill">
+                            <div class="row">
+                                <div class="col-md-4 offset-md-8">
+                                    <div class="discount-div">
+                                        <p>{{'BillTotal' | translate}}</p>
+                                        <p>{{(basketTotal$ | async)?.billTotal | number}}</p>
+                                    </div>
+    
+                                    <div class="discount-div mt-1">
+                                        <p (click)="toggleTotalDiscountOptions()">{{'TotalDiscount' | translate}} <i class="fas fa-info-circle" *ngIf="(basketTotal$ | async)?.discountBillValue > 0" id="TotalDiscount"></i></p>
+    
+                                        <p>{{(basketTotal$ | async)?.discountBillValue | number}}</p>
+                                    </div>
+    
+                                    <div class="payable-div" *ngIf="basketTotal$ | async">
+                                        <p>{{'Total Return' | translate}}</p>
+                                        <p>{{(basketTotal$ | async)?.total | number}}</p>
+                                    </div>
+                                    <dx-popover target="#TotalDiscount" position="top" [width]="500" [shading]="true" [showTitle]="true" shadingColor="rgba(0, 0, 0, 0.5)" title="{{'Promotion Details' | translate}}:" [(visible)]="withTotalDiscountVisible">
+                                        <div *dxTemplate="let data = model of 'content'">
+                                            <div class="row" *ngFor="let promotion of (basket$ | async)?.promotionApply">
+                                                <label><i class="fas fa-check-circle" style="color: olivedrab;"></i> <span
+                              style="font-weight: bolder;"> {{promotion.promoId}}:</span> {{promotion.promoName}} </label>
+    
+                                            </div>
+                                        </div>
+                                    </dx-popover>
+    
+                                    <div class="row">
+                                        <!-- <div class="col-md-4">  <a  (click)="cancelOrder()" class="primary-btn">{{'New' | translate}}</a></div> -->
+                                        <!-- <ng-container *ngIf="!IsEvent">
+                                        <div class="col-md-4">  <a class="primary-btn" style="width:100%;" (click)="openInvoiceModal()"  >Invoice</a>  </div>
+                                      </ng-container>
+                                      <ng-container *ngIf="IsEvent">
+                                        <div class="col-md-4">  <a class="primary-btn" style="width:100%;" (click)="addOrder(true)"  >Add to event</a>  </div>
+                                      </ng-container> -->
+    
+                                        <ng-container *ngIf="(basket$ | async)?.salesType==='Exchange' && (basketTotal$ | async)?.total <= 0">
+                                            <div class="col-md-8"> <a class="primary-btn" style="width:100%;" (click)="addOrder(true)">{{'Add Order' | translate}}</a>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="(basket$ | async)?.salesType!=='Exchange' || (basket$ | async)?.salesType==='Exchange' && (basketTotal$ | async)?.total > 0">
+    
+                                        </ng-container>
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+           
+        </div>
+    </div>
+</div>
+<!-- <button type="button" class="btn btn-primary" >Create template modal</button> -->
+<!-- 
+                      <app-shop-item-serial [item]="this.selectedItem" (SerialSelected)="SetSerialItem($event)"></app-shop-item-serial> -->
+<!-- <div class="app-print-shop">
+    <app-print-shop></app-print-shop>
+</div> -->
+
+<div class="content-center app-print-shop ">
+    <app-shop-component-order-print [(order)]="this.outPutModel" [poleValue]="this.poleValue"></app-shop-component-order-print>
+</div>
+
+<ng-template #invoiceTemplate>
+    <app-shop-invoice-input></app-shop-invoice-input>
+</ng-template>
+<ng-template #template>
+
+    <app-shop-bill-payment (Modal)="addOrder($event)"></app-shop-bill-payment>
+</ng-template>

@@ -1,0 +1,340 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="col-md-1">
+            <a routerLink="/shop/returnlist" class="back-btn">
+                <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
+
+            </a>
+        </div>
+        <div class="col-md-11">
+            <!-- <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">Edit Goods Issue</label>  -->
+            <label for="item-searchbar" class="section-title">{{'Return' | translate}}</label>
+        </div>
+
+        <div class="center-wrap">
+
+            <div class="row" style="width: 100%;">
+                <div class="col-md-12">
+                    <div class="right-section">
+                        <div class="bill-info-wrap">
+                            <div class="row" style="width: 100%;">
+                                <div class="bill-info col-md-4">
+                                    <p class="bill-number"> {{'Bill No' | translate}}: {{this.order.transId}}</p>
+                                    <p class="bill-date">{{'Date' | translate}}: {{this.order.createdOn | date: this.authService.loadFormat().dateFormat }}</p>
+                                    <p class="bill-time">{{'Time' | translate}}: {{this.order.createdOn | date:'HH:mm:ss'}}</p>
+                                </div>
+                                <div class="bill-info col-md-4">
+                                    <p class="bill-number"> {{'Customer' | translate}}: {{this.order.customer.customerName}}</p>
+                                    <p class="bill-date"> {{'Class' | translate}}: {{this.order.customer.customerGrpId}}</p>
+                                    <p></p>
+                                    <!-- <p class="bill-time">Time: {{this.order.createdOn | date:'HH:mm:ss'}}</p> -->
+                                </div>
+                                <div class="payable-div col-md-4" *ngIf="(returnTotal$ | async).LeftAmount > 0">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <p>{{'Total Payable' | translate}}</p>
+                                            <p>{{(returnTotal$ | async).totalAmount | number}}</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a class="primary-btn" (click)="openModal(template)">{{'Payment' | translate}}</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="bill-wrapper">
+                            <div class="table-wrap">
+                                <div class="bill-table custom-table">
+                                    <div class="t-head">
+                                        <div class="t-row">
+                                            <div class="t-cell cell-action" style="max-width: 60px!important;">
+                                                <p>{{'Remark' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-desc" style="min-width: 170px!important;">
+                                                <p>{{'Description' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                                                <p>{{'Quantity' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity">
+                                                <p>{{'Return Qty' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity">
+                                                <p>{{'Price' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-total">
+                                                <p>{{'Total' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount Type' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Discount' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Subtotal' | translate}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{'Return Amt' | translate}}</p>
+                                            </div>
+                                            <div class="mr-2" style="min-width: 40px!important;">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- *ngIf="basket$ | async as basket" -->
+                                    <div class="t-body">
+
+                                        <div class="t-row" *ngFor="let item of this.order.lines">
+                                            <div class="t-cell cell-action" style="max-width: 60px!important;">
+                                                <p>
+                                                    <a href="javascript:void">
+                                                        <img src="../../../../assets/images/System/file.svg">
+
+                                                    </a>
+                                                </p>
+                                            </div>
+                                            <div class="t-cell cell-desc" style="min-width: 170px!important;">
+                                                <p> {{item.itemName}}</p>
+                                            </div>
+                                            <div class="t-cell cell-quantity" style="max-width: 70px!important;">
+                                                <p>{{item.openQty | number}}</p>
+                                                <!-- <input type="number"   class="form-control rounded" placeholder="Search" [(ngModel)] = "item.quantity" value="{{item.quantity}}" /> -->
+
+                                            </div>
+                                            <div class="t-cell cell-quantity" style="min-width: 120px!important;">
+                                                <div class="row" *ngIf="item.openQty <= 0">
+                                                    <input type="number" (keyup)="inputReturnQty()" [value]='0' disabled class="form-control rounded col-md-8 pl-1 pr-1 " placeholder="0" [(ngModel)]="item.returnQty" value="{{item.returnQty}}" />
+                                                </div>
+                                                <!-- <p>{{item.quantity | number}}</p> -->
+                                                <div class="row" *ngIf="item.openQty > 0">
+                                                    <button (click)="increment(item)" class="btn btn-primary float-right col-md-2">+</button>
+                                                    <input type="number" (keyup)="inputReturnQty()" class="form-control rounded col-md-8 pl-1 pr-1 " placeholder="0" [(ngModel)]="item.returnQty" value="{{item.returnQty}}" />
+                                                    <button (click)="decrement(item)" class="btn btn-primary float-right col-md-2">-</button>
+                                                </div>
+
+                                            </div>
+                                            <div class="t-cell cell-total">
+                                                <p>{{item.price | number}}</p>
+                                            </div>
+                                            <div class="t-cell cell-total">
+                                                <p>{{item.price * item.quantity | number}} </p>
+                                            </div>
+                                            <div class="t-cell cell-quantity">
+                                                <p>{{item.discountType}}</p>
+                                            </div>
+                                            <div class="t-cell cell-discount">
+                                                <p>{{item?.discountAmt | number}}</p>
+                                            </div>
+                                            <div class="t-cell cell-subsotal">
+                                                <p>{{item?.quantity * item?.price - item?.discountAmt | number}}</p>
+                                            </div>
+                                            <div class="t-cell cell-subsotal">
+                                                <p [(ngModel)]="item.returnQty">{{item?.returnQty * (item?.quantity * item?.price - item?.discountAmt)/item?.quantity | number}}</p>
+                                            </div>
+                                            <div class="mr-2" style="min-width: 40px!important;">
+                                                <!-- <p>
+                            <a   (click)="remove(item)">
+                              <img src="../../../../assets/images/System/cancel.svg">
+                            </a>
+                          </p> -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="total-bill">
+                
+                  <div class="row">
+                    <div class="payable-div" style="width: 100%;">
+                    
+                        <div class="col-md-8">
+                          <p>Total Payable</p> 
+                          <p>{{(returnTotal$ | async).totalAmount | number}}</p>
+                        </div>
+                        <div class="col-md-4">
+                          <a  class="primary-btn" (click)="openModal(template)">Payment</a>
+                        </div>
+                      </div>
+                  
+                  </div>
+              
+                </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <!-- <app-shop-bill-payment (Modal)="addOrder($event)"></app-shop-bill-payment> -->
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Payment' | translate}}</h4>
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+       
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body" *ngIf="showModal">
+
+        <div class="row">
+            <div class="col-12 col-lg-7">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-action"></div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="t-body vertical-scroll">
+
+                                <div class="t-row" *ngFor="let payment of this.order.payments; let i = index" [class.selectRow]="i==this.selectedRow">
+                                    <div class="t-cell cell-action">
+                                        <a href="javascript:void" class="delete-btn" (click)="removePayment(payment)">
+                                            <img src="../../../../assets/images/System/close.svg" alt="close">
+                                        </a>
+
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.paymentCode}}</p>
+                                    </div>
+
+                                    <div class="t-cell cell-charged">
+
+                                        <p>{{payment.chargableAmount | number}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+
+                                        <div class="search-wrap typing-section-input-wrap inputAmount">
+                                            <input type="text" #focus type="text" value="{{payment.collectedAmount | number}}" (focus)="setClickedRow(i, payment)" placeholder="Amount" class="typing-section-input txtAmount">
+                                            <img class="clear-input" style="right: 5%;" *ngIf="i==this.selectedRow" #txtInput src="../../../../assets/images/System/close.svg" (click)="addPayment(payment.paymentCode)" alt="clear">
+                                        </div>
+                                    </div>
+
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-payment-info">
+                        <div>
+                            <label>{{'Bill Amount' | translate}}</label>
+
+                            <p>{{(returnTotal$ | async).totalAmount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Total Amount' | translate}}</label>
+
+                            <p>{{(returnTotal$ | async).totalCollected | number}}</p>
+                        </div>
+
+                        <div>
+                            <label>{{'Amount Left' | translate}}</label>
+                            <p>{{(returnTotal$ | async).LeftAmount | number}}</p>
+                        </div>
+                        <div>
+                            <label>{{'Amount Change' | translate}}</label>
+                            <p>{{(returnTotal$ | async).ChangeAmount | number}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-discount-btn-wrap">
+                    <button class="discount-btn" (click)="inputNum('20000')">20,000</button>
+                    <button class="discount-btn" (click)="inputNum('50000')">50,000</button>
+                    <button class="discount-btn" (click)="inputNum('100000')">100,000</button>
+                    <button class="discount-btn" (click)="inputNum('200000')">200,000</button>
+                    <button class="discount-btn" (click)="inputNum('500000')">500,000</button>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="grey-wrapper right-modal-section">
+                    <div class="typing-section">
+
+                        <div class="number-pad">
+                            <div class="row">
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('1')">1</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('2')">2</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('3')">3</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="pay-option-btn" (click)=" addPayment('Cash') ">{{'Cash' | translate}}</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('4')">4</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('5')">5</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('6')">6</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="pay-option-btn" (click)="addPayment('Credit')  ">{{'Credit' | translate}}</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('7')">7</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('8')">8</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('9')">9</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="pay-option-btn" (click)="addPayment('NAPAS') ">{{'NAPAS' | translate}}</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('0')">0</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('.')">.</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="number-btn" (click)="pressKey('00')">00</button>
+                                </div>
+                                <div class="number-div">
+                                    <button class="pay-option-btn" (click)="addPayment('Other')  ">{{'Other' | translate}}</button>
+                                </div>
+                                <div class="number-div submit-div">
+                                    <button class="submit-btn" (click)="addOrder()">{{'Submit' | translate}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

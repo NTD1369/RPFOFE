@@ -1,0 +1,59 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <!-- <div class="search-wrap">
+            
+           
+        </div> -->
+        <div class='row mb-3'>
+            <div class='col-md-9'>
+                <label for="item-searchbar" class="section-title">{{'End of Shift' | translate}} </label>
+            </div>
+            <div class='col-md-3'>
+                 
+               <div class="row">
+                <div class='col-md-3'>
+                    <label for="item-searchbar" class="section-title" style="    font-weight: 400;
+                    font-size: 16px;">{{'Top' | translate}} </label>
+                </div>
+                <div class='col-md-9'> 
+                    <dx-select-box #cbbTop  (onValueChanged)="onTopChanged($event)"  [searchEnabled]="true" [value]="topList[0].topId" 
+                    [items]="topList" displayExpr="topName" valueExpr="topId" placeholder="Top"></dx-select-box>
+                </div>
+               </div>
+               
+                
+            </div>
+        </div>
+       
+
+        <div class="table-wrap">
+            <dx-data-grid (onToolbarPreparing)="onToolbarPreparing($event)" id="gridContainer" [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" [dataSource]="this.list" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+                [showBorders]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <!-- createdOn: Date | string | null;
+            createdBy: string; -->
+                <dxi-column dataField="deviceId" dataType="string" caption="{{'Counter ID' | translate}}"> </dxi-column>
+                <dxi-column dataField="shiftId" dataType="string" caption="{{'Shift ID' | translate}}"> </dxi-column>
+                <dxi-column dataField="storeId" dataType="string" caption="{{'Store ID' | translate}}"> </dxi-column>
+
+                <dxi-column dataField="openAmt" dataType="number" [customizeText]="customizeText" caption="{{'Open Amount' | translate}}"> </dxi-column>
+                <dxi-column dataField="endAmt" dataType="number" [customizeText]="customizeText" caption="{{'End Amount' | translate}}"> </dxi-column>
+                <dxi-column dataField="shiftTotal" dataType="number" [customizeText]="customizeText" caption="{{'Shift Total' | translate}}"> </dxi-column>
+                <dxi-column dataField="createdOn" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'" caption="{{'Created On' | translate}}"> </dxi-column>
+                <dxi-column dataField="createdBy" dataType="string" caption="{{'Created By' | translate}}"> </dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="viewDetail(cell.data)"></dx-button>
+                    <dx-button icon="print" *ngIf="cell.data.status==='C'" text="{{'Print' | translate}}" (onClick)="print(cell.data)"></dx-button>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>

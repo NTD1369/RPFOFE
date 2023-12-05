@@ -1,0 +1,41 @@
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 10mm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+.contect-endOfDay-print{
+    width: 100%;
+    margin-top: 15px;
+}
+
+.table-endOD tr th, .table-endOD tr td{
+    border: 1px solid;
+    padding: 5px;
+}
+
+#endOdDay{
+display: block;
+}
+#endOfDayPrint{
+    display: none;
+}
+
+@media print {
+    #endOdDay{
+        display: none;
+        }
+        #endOfDayPrint{
+            display: block;
+        }
+}

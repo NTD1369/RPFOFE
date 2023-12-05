@@ -1,0 +1,50 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <!-- <div class="search-wrap">
+        <label for="item-searchbar" class="section-title">User Infor</label>
+      
+      </div> -->
+
+        <div class="table-wrap">
+            <dx-tab-panel #tabPanel [height]="260" [dataSource]="companies" [selectedIndex]="0" [loop]="false" [animationEnabled]="true" [swipeEnabled]="true">
+                <div *dxTemplate="let company of 'title'">
+                    <span>{{company.companyName}}</span>
+
+                </div>
+                <div *dxTemplate="let company of 'item'">
+                    <div class="tabpanel-item">
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="col-md-12 mt-2 mb-2" style="text-align: center;">
+                                        <img style="padding: 10px; box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;" [src]="company.logo || '../../../assets/images/System/LOGO-ABEO.png'" height="200">
+                                    </div>
+
+                                </div>
+                                <div class="col-md-9">
+                                    <h3>{{company.companyName}}</h3>
+                                    (<span>{{company.companyCode}}</span>)
+
+                                    <span>{{company.address}}</span>
+                                    <p>
+                                        {{'Phone' | translate}}: <b>{{company.phone}}</b>
+                                    </p>
+                                    <p>
+                                        {{'Tax Code' | translate}}: <b>{{company.taxCode}}</b>
+                                    </p>
+                                    <p>
+                                        {{'Website' | translate}}:
+                                        <!-- <a href="{{company.Website}}" target="_blank">
+                        {{company.Website}}
+                    </a> -->
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </dx-tab-panel>
+        </div>
+    </div>
+</div>

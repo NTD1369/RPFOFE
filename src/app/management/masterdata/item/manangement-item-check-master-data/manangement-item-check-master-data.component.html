@@ -1,0 +1,144 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Check Item Master Data' | translate}}</label>
+
+        </div>
+        <div class="row  mt-2">
+            <div class="col-md-6 mt-2">
+                <div class="row">
+                    <div class="col-md-4">{{'Store' | translate}}</div>
+                    <div class="col-md-8">
+                        <div class="col-icon-search"> 
+                    
+                            <i class="fab fa-adn" aria-hidden="true"></i> 
+                            <dx-select-box [value]="storeIdPar" placeholder="--- {{'Store' | translate}} ---"
+                             id="defaultScreen" #storeId [items]="this.storeList" 
+                                id="storeId" displayExpr="storeName" valueExpr="storeId" itemTemplate="item" 
+                                [searchEnabled]="true" searchMode="contains" [searchExpr]="['storeId', 'storeName']"
+                                style="line-height: 1;">
+        
+                                <div *dxTemplate="let data of 'item'" class="custom-item">
+                                    <!-- {{data.employeeId}} -  -->
+                                    <div class='product-name'> {{data.storeId}} - {{data.storeName}}</div>
+                                </div>
+                            </dx-select-box>
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="row">
+                    <div class="col-md-4">{{'Keyword' | translate}}</div>
+                    <div class="col-md-8">
+                        <div class="col-icon-search">
+                            <i class="fas fa-list-ol" aria-hidden="true"></i>
+                            <input class="form-control" type="text" #keyword placeholder="{{'Keyword' | translate}}">
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="row">
+                    <div class="col-md-4">{{'Customer Group' | translate}}</div>
+                    <div class="col-md-8">
+                        <div class="col-icon-search">
+                            <i class="fas fa-list-ol" aria-hidden="true"></i>
+                            <input class="form-control" type="text" #customerid placeholder="{{'Customer Group ID' | translate}}">
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+
+            <div class="col-md-6 mt-2">
+ 
+            </div>
+        </div>
+        <div class="row  mt-2"> 
+            <div class="col-md-9">
+ 
+            </div>
+
+            <div class="col-md-3">
+
+                <dx-button style="width: 100%;" icon="fas fa-random" type="success" text="{{'Check' | translate}}" (onClick)="checkMaster(storeId.value, keyword.value, customerid.value)">
+                </dx-button>
+            </div>
+        </div>
+        <!-- <div class=" row">
+            <h3> {{this.message}}</h3>
+        </div> -->
+        <div class="table-wrap mt-3">
+            <ng-container *ngIf="this.controlList === null || this.controlList=== undefined || this.controlList?.length <= 0">
+                <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.result"  keyExpr="Type" [allowColumnResizing]="true" [showRowLines]="true"
+                [showBorders]="true" [columnAutoWidth]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+              
+                <dxi-column dataField="Type" caption="{{'Type' | translate}}"></dxi-column>
+                <dxi-column dataField="Message" caption="{{'Message' | translate}}"></dxi-column>
+                <dxi-column alignment="center" dataField="Result" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <dxi-column dataField="Remarks" caption="{{'Remark' | translate}}"></dxi-column>
+                <dxi-column dataField="ModifiedBy" caption="{{'Idoc' | translate}}"></dxi-column>
+                <dxi-column dataField="ModifiedOn" caption="{{'Modified On' | translate}}" dataType="datetime" [format]="this.authService.loadFormat().dateFormat + ' HH:mm:ss'"></dxi-column>
+              
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.Result | statusFormat"></div>
+                </div>
+                
+
+            </dx-data-grid>  
+            </ng-container>
+            
+            <ng-container *ngIf="this.controlList?.length > 0">
+                <dx-data-grid class="mt-2" [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" 
+                    id="gridContainer" [allowColumnResizing]="true" [showRowLines]="true" 
+                    [showBorders]="true" [columnAutoWidth]="true" [dataSource]="this.result"
+                    [showBorders]="true">
+        
+                
+                    <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search List' | translate}}..." location="before"></dxo-search-panel>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <dxo-group-panel [visible]="true"></dxo-group-panel>
+                    <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                    <dxo-export *ngIf="this.result!==null && this.result?.length>0" [enabled]="true"></dxo-export>
+        
+                    <ng-container *ngFor="let col of this.controlList; let i = index">
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="col?.isView" *ngIf="col.custom2==='string'" [cellTemplate]="col.optionName" dataType="string">
+                        </dxi-column>
+                    
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="col?.isView" *ngIf="col.custom2==='date' " dataType="date" [format]="this.dateFormat">
+                        </dxi-column>
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="col?.isView" *ngIf="col.custom2==='datetime'" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'">
+                        </dxi-column>
+                        <dxi-column [dataField]="col.controlId" [caption]="col.controlName | translate" [groupIndex]="col?.groupNum"  [visible]="col?.isView" *ngIf="col.custom2==='rate' || col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount'" dataType="number"
+                            [format]='this.authService.numberFormat(col.custom2)'>
+                        </dxi-column>
+                    </ng-container>
+                    <dxo-summary [recalculateWhileEditing]="true">
+                    
+                        <ng-container *ngFor="let col of this.controlList; let i = index">
+                        
+                            <dxi-group-item [valueFormat]="this.authService.numberFormat(col.custom2)" [alignByColumn]="true" [column]="col?.controlId" *ngIf="col?.groupItem?.length > 0 && col?.groupItem.includes('sum')" summaryType="sum">
+                            </dxi-group-item>
+                            <dxi-total-item [column]="col.controlId" summaryType="sum" *ngIf="(col.controlId!=='price' ) && (col.custom2==='quantity' || col.custom2==='number' || col.custom2==='amount')" dataType="number"
+                            [valueFormat]="this.authService.numberFormat(col.custom2)"></dxi-total-item>
+                        </ng-container>
+                    
+                    </dxo-summary>
+        
+                    <div *dxTemplate="let cell of 'statusTemplate'">
+                        <div [innerHtml]="cell.data.status | statusFormat"></div>
+                    </div>
+        
+                </dx-data-grid>
+            </ng-container>
+           
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+::ng-deep #chartOrder {
+    height: 440px;
+    width: 100%;
+}
+
+.button-period{
+    border: 1px solid #ddd;
+    border-radius: 0;
+    padding: 10px 20px;
+}
+.button-period:first-child{
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+}
+.button-period:last-child{
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+}
+.button-period:hover, .button-period:active, .button-period:focus{
+    background-color: #ddd;
+}

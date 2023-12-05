@@ -1,0 +1,104 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Capacity' | translate}}</label>
+
+        </div>
+        <div class="row">
+
+
+            <!-- <ng-container *ngIf="this.typeOfDate==='Weekend'">
+              <dx-date-box [disabled]="true" [disabledDates]="isDateDisabledWorking" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%"  [(value)]="currentValue"> </dx-date-box>
+            </ng-container>
+            <ng-container *ngIf="this.typeOfDate==='Holiday'">
+              <dx-date-box [disabled]="true" [disabledDates]="isDateDisabledNotHoliday" [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%"  [(value)]="currentValue"> </dx-date-box>
+            </ng-container>
+              -->
+
+            <div class="col-md-3">
+                <dx-date-box [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(value)]="this.currentDate"> </dx-date-box>
+
+            </div>
+            <div class="col-md-3">
+                <dx-date-box [displayFormat]="this.authService.loadFormat().dateFormat" id="selected-date" width="100%" [(value)]="this.toDate"> </dx-date-box>
+
+            </div>
+            <div class="col-md-3">
+                <!-- <input class="form-control" [(ngModel)]="this.quantity" type="search" #filter  placeholder="{{'Quantity' | translate}}" aria-label="Quantity"> -->
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <dx-button (onClick)="loadCapacityNew()" icon="search" type="success" text="{{'Search' | translate}}"></dx-button>
+
+            </div>
+
+
+        </div>
+        <div class="row mt-2 p-2">
+            <!-- [dataSource]="data"   [height]="500" timeZone="America/Los_Angeles"-->
+            <dx-scheduler style="width:100%;     height: 100%;" id="schedulerX" [views]="['day', 'timelineDay', 'week', 'month']" currentView="day" [dataSource]="this.capaList" [firstDayOfWeek]="0" [startDayHour]="5" [endDayHour]="24" [showAllDayPanel]="false" [groups]="['storeAreaId']"
+                [currentDate]="currentDate" [crossScrollingEnabled]="true" [cellDuration]="30" appointmentTooltipTemplate="tooltip-template" appointmentTemplate="appointment-template" (onAppointmentFormOpening)="onAppointmentFormOpening($event)">
+                <!-- -->
+                <dxo-editing [allowAdding]="false" [allowDeleting]="false" [allowUpdating]="false"></dxo-editing>
+                <!--           
+          <dxi-resource
+              fieldExpr="movieId"
+              [useColorAsDefault]="true"
+              [dataSource]="moviesData">
+          </dxi-resource> -->
+
+                <dxi-resource fieldExpr="storeAreaId" [(dataSource)]="this.theatreData">
+                </dxi-resource>
+                <div *dxTemplate="let model of 'tooltip-template'">
+                    <div class='showtime-preview ' (click)="openModal(model.appointmentData, model.appointmentData.storeAreaId)" [ngClass]="(model.appointmentData.maxCapacity - model.appointmentData.currentCapacity) > 100 ? 'green' : 'red'">
+                        <div>{{'Capacity' | translate}}:
+                            <strong>{{ model.appointmentData.currentCapacity}} / {{ model.appointmentData.maxCapacity}}</strong>
+                        </div>
+                        <!-- <div>Current Capacity:
+                <strong></strong>
+            </div> -->
+
+                        <div class='dropdown-appointment-dates'>
+                            {{(model.appointmentData.startDate | date:'shortTime') + ' - ' + (model.appointmentData.endDate | date:'shortTime') }}
+                        </div>
+
+                    </div>
+                </div>
+
+                <div *dxTemplate="let model of 'appointment-template'">
+                    <div class='showtime-preview ' (click)="openModal(model.appointmentData, model.appointmentData.storeAreaId)" [ngClass]=" (model.appointmentData.maxCapacity - model.appointmentData.currentCapacity) > 100 ? 'green' : 'red'">
+                        <div>{{'Capacity' | translate}}:
+                            <strong>{{ model.appointmentData.currentCapacity}} / {{ model.appointmentData.maxCapacity}}</strong>
+                        </div>
+                        <!-- <div>Current Capacity:
+                    <strong></strong>
+                </div> -->
+
+                        <div class='dropdown-appointment-dates'>
+                            {{(model.appointmentData.startDate | date:'shortTime') + ' - ' + (model.appointmentData.endDate | date:'shortTime') }}
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--   
+          <div *dxTemplate="let model of 'tooltip-template'">
+              <div class='movie-tooltip'>
+                  <img [src]="getMovieById(model.appointmentData.movieId).image" />
+                  <div class='movie-info'>
+                      <div class='movie-title'>
+                          {{getMovieById(model.appointmentData.movieId).text + ' (' + getMovieById(model.appointmentData.movieId).year + ')'}}
+                      </div>
+                      <div>
+                          {{'Director: ' + getMovieById(model.appointmentData.movieId).director}}
+                      </div>
+                      <div>
+                          {{'Duration: ' + getMovieById(model.appointmentData.movieId).duration + ' minutes'}}
+                      </div>
+                  </div>
+              </div>
+          </div> -->
+            </dx-scheduler>
+        </div>
+
+    </div>
+</div>

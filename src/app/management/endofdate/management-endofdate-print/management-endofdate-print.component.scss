@@ -1,0 +1,193 @@
+.table-customer tr th,
+.table-customer tr td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+hr.style5 {
+    background-color: #fff;
+    border-top: 2px dashed #8c8b8b;
+}
+
+#print-section {
+    width: 13cm;
+    height: 100%;
+}
+
+.cl-bold {
+    font-weight: 700;
+}
+
+.center-wrap.cl-print-eod {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cl-pad-eod-A4 {
+    padding: 1cm;
+}
+
+@media print {
+    #txtTitlePayment,
+    #dropdownWidth {
+        display: none !important;
+    }
+    .center-wrap.cl-print-eod {
+        display: unset !important;
+        padding-left: 15px;
+    }
+}
+
+#customtable {
+    font-family: arial, sans-serif;
+    border: unset;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.maintenance-card,
+.center-wrap {
+    min-height: unset!important;
+}
+
+#underLine {
+    display: inline-block!important;
+    position: relative!important;
+    width: 100%!important;
+}
+
+#underLine:after {
+    position: absolute!important;
+    content: ''!important;
+    border-bottom: 1px solid #8c8b8b!important;
+    width: 90%!important;
+    transform: translateX(-50%)!important;
+    bottom: -2px!important;
+    left: 55%!important;
+    z-index: 10!important;
+}
+
+#customtable>td,
+th {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+}
+
+#customtable>tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+#maintable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#maintable td,
+#maintable th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px 0px;
+}
+
+#maintable tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+hr.style5 {
+    background-color: #fff;
+    border-top: 2px dashed #8c8b8b;
+}
+
+#dropdownWidth {
+    display: block;
+}
+
+@media print {
+    /* .print-main {
+        width: 29.7cm;
+        padding: 0;
+        font-size: 30px;
+        overflow: unset;
+    } */
+    .printPageShopCheck {
+        display: none !important;
+    }
+    #printPageShopCheck {
+        display: none !important;
+    }
+    .center-wrap,
+    .maintenance-card,
+    .maintenance-row {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .textTitlePrint {
+        font-size: 13px;
+        margin-bottom: 0;
+    }
+    .table-td {
+        padding: 2px 10px;
+    }
+    .style5 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: none;
+    }
+    #dropdownWidth {
+        display: none;
+    }
+    .cl-company {
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 1;
+    }
+}
+
+.table-row {
+    border: 1px solid #ddd;
+    border-bottom: 0;
+    margin: 0;
+}
+
+.table-row:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-td {
+    padding: 9px 10px;
+}
+
+.table-td:last-child {
+    border-right: 0;
+}
+
+.cl-company {
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-right: 25px;
+    width: 40%;
+    line-height: 1;
+}
+
+.under-line-solid::after {
+    content: "________________________________________________";
+}
+
+.under-line-solid {
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    padding-left: 5px;
+}
+
+.shift-cls tr th {
+    border-bottom: 1px solid #ddd !important;
+}
+
+.shift-cls tr td {
+    padding: 5px;
+}

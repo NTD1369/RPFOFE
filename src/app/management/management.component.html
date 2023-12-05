@@ -1,0 +1,291 @@
+<app-shop-header (sideRightShow)="toggleSideBar($event)">
+</app-shop-header>
+<app-printX></app-printX>
+
+
+<main class="wrap">
+    <div class="main-section">
+        <!-- || (this.currentShift===null ||  this.currentShift===undefined) -->
+        <ng-container *ngIf="this.authService.storeSelected()===null || this.authService.storeSelected()===undefined ">
+            <div class="center-wrap" style="margin-top: 140px;">
+                <ng-container *ngIf="this.authService.storeSelected()===null || this.authService.storeSelected()===undefined ">
+                    <div class="row" style="width: 100%;">
+
+                        <ng-container *ngFor="let item of this.storeList">
+                          
+                            <app-shop-store-select class="col-md-4 mb-4" (storeSelected)="changeStore($event)" [store]="item">
+
+                            </app-shop-store-select>
+                        </ng-container>
+
+                    </div>
+                </ng-container>
+                <!-- && (this.currentShift===null ||  this.currentShift===undefined) -->
+
+                <ng-container *ngIf="(this.authService.storeSelected()!==null || this.authService.storeSelected()!==undefined) ">
+
+                    <div class="row" *ngIf="this.isNewShift!==true" style="width: 100%;">
+                        <ng-container *ngFor="let item of this.shiftList">
+                            <app-shop-shift-open style="  margin: 0px auto;" class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-xs-12" (shiftSelected)="changeShift($event)" [shift]="item"></app-shop-shift-open>
+
+                        </ng-container>
+
+                    </div>
+                    <div class="row" *ngIf="this.isNewShift" style="width: 100%;">
+                        <app-shop-tool-shift style="margin:auto;" [endOfShift]="this.currentShift" [isShowCreate]="true"></app-shop-tool-shift>
+                    </div>
+                    <!-- <ng-container *ngIf="this.isNewShift">
+           
+          </ng-container> -->
+
+                </ng-container>
+            </div>
+        </ng-container>
+        
+        <ng-container *ngIf="this.authService.storeSelected()!==null ">
+            <div class="sidebar-wrap" *ngIf="!(ShowMenu$ | async)">
+                <app-shop-left-menu (sideRightShow)="toggleSideBar($event)" (maintainanceShow)="togleSubmenu($event)"></app-shop-left-menu>
+            </div>
+            <dx-drawer [openedStateMode]="selectedOpenMode" [position]="selectedPosition" [revealMode]="selectedRevealMode" template="template" [(opened)]="isDrawerOpen" [closeOnOutsideClick]="true">
+                <div *dxTemplate="let data of 'template'" style="background: #ffffff; color: #495057;  padding: 1rem; border: 0 none; box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);" [style]="{width:'35em' }">
+
+                    <div *ngIf="this.isMore===true">
+
+                        <div class="maintenance-card">
+
+                            <ng-container *ngFor="let group of this.subListGroup">
+                                <div class="row">
+                                    <h2 class="maintenance-heading">{{group}}</h2>
+                                </div>
+                                <div class="maintenance-row">
+                                    <div class="row" style="width: 100%;">
+
+                                        <div *ngFor="let item of filter(this.subListItemGroup, [group])" class="col-md-4  maintenance-service-wrapper" routerLinkActive="router-link-active">
+                                            <div class="maintenance-service-box" [routerLink]="[item.Url]">
+                                                <span class="service-icon contain-image"> 
+                          <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+                        </span>
+                                                <label>{{item.Name}}</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </ng-container>
+                            <div class="row">
+                                <h2 class="maintenance-heading">{{'More' | translate}}</h2>
+                            </div>
+
+                            <div class="maintenance-row">
+                                <div class="row" style="width: 100%; margin-bottom: 150px;">
+                                    <div *ngFor="let item of this.subList" class="maintenance-service-wrapper col-md-4" routerLinkActive="router-link-active">
+                                        <div class="maintenance-service-box" [routerLink]="[item.Url]">
+                                            <span class="service-icon contain-image"> 
+                        <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+                      </span>
+                                            <label>{{item.Name}}</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div *ngIf="this.isMore!==true">
+                       
+                          <div style="min-height: 500px;">
+                              <div class="modal-header">
+                                <h3 class="modal-title pull-left" style="font-weight: 700;" id="my-modal-title"> {{this.companyInfor?.companyName}} </h3>
+
+
+                                <button type="reset" class="reset-btn mr-1 closeCustom" (click)="closeDraw()" style="width: 13%;">
+                                <i class="fas fa-window-close"></i>
+                        
+                              </button>
+
+                            </div>
+                            <ng-container *ngIf="!showDissallowanceList">
+                              <app-shop-tool-user (outEvvent)="closeDraw()"></app-shop-tool-user>
+
+
+                              <div class="col-md-12 mb-3">
+                                  <div class="row">
+
+                                      <div class="col-md-4"> {{'Keyboard' | translate}} </div>
+                                      <div class="col-md-7" style="text-align: right;">
+                                          <dx-switch width="50%" #swVirtualKey [value]="VirtualKey$ | async" (onValueChanged)="switchVirtualKey(swVirtualKey.value)"></dx-switch>
+                                      </div>
+
+                                  </div>
+                              </div>
+                              <app-shop-tool-shift (outEvvent)="closeDraw()"></app-shop-tool-shift>
+
+                              <div class="col-md-12 mt-2 pt-3" style="border-top: 1px solid #495057;"> 
+                                <div class="row mb-2">
+                                  <div class="col-md-8">
+                                      <h4>
+                                          <i class="fa fa-info" aria-hidden="true"></i> {{'Counter Information' | translate}} 
+                                      </h4>
+                                  </div>
+                                  <div class="col-md-4" style="text-align:center" (click)="dissallowanceView()">
+                                      <h4 > <i class="fas fa-wrench"></i> {{'View' | translate}} </h4>
+                                  </div>
+                                </div> 
+                                <ng-container *ngIf="this.terminalRequire.toLowerCase()!=='fingerid'">
+                                  {{'Counter ID' | translate}}: {{this.authService?.getStoreClient()?.publicIP === null || this.authService?.getStoreClient()?.publicIP === undefined 
+                                      || this.authService?.getStoreClient()?.publicIP === ''  ? '' : this.authService?.getStoreClient()?.publicIP }}
+                              </ng-container>
+                              <ng-container *ngIf="this.terminalRequire.toLowerCase()==='fingerid'">
+                                  {{'Counter ID' | translate}}: {{this.authService?.getStoreClient()?.publicIP === null || this.authService?.getStoreClient()?.publicIP === undefined 
+                                      || this.authService?.getStoreClient()?.publicIP === ''  ? this.authService?.getLocalIP()?.toString() : this.authService?.getStoreClient()?.publicIP }}
+                              </ng-container>
+                                <!-- {{'Counter ID' | translate}}: {{this.authService?.getStoreClient()?.publicIP === null || this.authService?.getStoreClient()?.publicIP === undefined 
+                                    || this.authService?.getStoreClient()?.publicIP === ''  ? this.authService?.getLocalIP()?.toString() : this.authService?.getStoreClient()?.publicIP }} -->
+                                  <br> {{'Finger ID' | translate}}: {{this.authService?.getLocalIP()?.toString()}}
+                              </div>
+
+                            </ng-container>
+                            <ng-container *ngIf="showDissallowanceList">
+                              <div class="col-md-12 mb-3 mt-3" > 
+                                  <div class="row">
+                                      <div class="col-md-8">
+                                          <h3><i class="fas fa-ban" style="color:red"></i> {{'Dissallowance' | translate}} </h3>
+                                      </div>
+                                      <div class="col-md-4">
+                                          <h3 (click)="dissallowanceView()"><i class="fas fa-chevron-left"></i> {{'Back' | translate}}</h3>
+                                      </div>
+                                  </div> 
+                              </div>
+                              <ng-container *ngIf="disallowanceList?.length > 0">
+                                <div class="col-md-12" *ngFor="let role of disallowanceList"> 
+                                    <ng-container *ngIf="role?.permission?.toLowerCase() === 'v'">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </ng-container>
+                                    <ng-container *ngIf="role?.permission?.toLowerCase() === 'e'">
+                                        <i class="fas fa-edit"></i>
+                                    </ng-container>
+                                    <ng-container *ngIf="role?.permission?.toLowerCase() === 'i'">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </ng-container>
+                                    <ng-container *ngIf="role?.permission?.toLowerCase() === 'a'">
+                                        <i class="fas fa-check-circle"></i>
+                                    </ng-container> 
+                                    <ng-container *ngIf="role?.permission?.toLowerCase() !== 'v' && role?.permission?.toLowerCase() !== 'e'
+                                    && role?.permission?.toLowerCase() !== 'i' && role?.permission?.toLowerCase() !== 'a'">
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    </ng-container>
+                                    <span *ngIf="role?.functionId?.length > 0">
+                                      {{role?.function}}[{{role?.functionId}}] 
+                                    </span>
+                                  
+                                    <span *ngIf="role?.controlId?.length > 0">
+                                      - {{role?.control}} [{{role?.controlId}}] 
+                                    </span>
+                                  
+                                </div>
+                              </ng-container>
+                            </ng-container>
+                          </div>
+                       
+                       
+                    </div>
+                  
+                </div>
+                <router-outlet></router-outlet>
+               
+            </dx-drawer>
+        </ng-container>
+    </div>
+</main>
+  <!-- <app-changepassword></app-changepassword> -->
+
+
+
+<!-- print -->
+<!--  -->
+
+<!-- 
+<app-management-header (sideRightShow)="toggleSideBar($event)"></app-management-header>
+ 
+       <div class="after-header maintenance-wrapper">
+          <div class="main-section manager-main-section">
+           <app-management-left-menu (sideRightShow)="toggleSideBar($event)"></app-management-left-menu>
+          
+        <dx-drawer  [openedStateMode]="selectedOpenMode"  [position]="selectedPosition" [revealMode]="selectedRevealMode"
+          template="template" [(opened)]="isDrawerOpen"  [closeOnOutsideClick]="true">
+          <div *dxTemplate="let data of 'template'"  style="background: #ffffff; color: #495057;  padding: 1rem; border: 0 none; box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);"  
+          [style]="{width:'35em' }" >
+           
+            <div *ngIf="this.isMore===true">
+            
+              <div class="maintenance-card" >
+                
+                  <ng-container *ngFor="let group of this.subListGroup">
+                    <div class="row">
+                      <h2 class="maintenance-heading">{{group}}</h2> 
+                    </div>
+                    <div class="maintenance-row">
+                      <div class="row" style="width: 100%;"> 
+                        <div *ngFor="let item of filter(this.subListItemGroup, [group])"  class="maintenance-service-wrapper col-md-4" routerLinkActive="router-link-active">
+                          <div class="maintenance-service-box" [routerLink]="[item.Url]">
+                            <span class="service-icon contain-image"> 
+                              <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+                            </span>
+                            <label>{{item.Name}}</label>
+                          </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </ng-container>
+                  <div class="row">
+                    <h2 class="maintenance-heading">More</h2> 
+                  </div>
+                  <div class="maintenance-row">
+                    <div class="row" style="width: 100%; margin-bottom: 150px;"> 
+                      <div *ngFor="let item of this.subList"  class="maintenance-service-wrapper col-md-4" routerLinkActive="router-link-active">
+                        <div class="maintenance-service-box" [routerLink]="[item.Url]">
+                          <span class="service-icon contain-image"> 
+                            <img src="../../../../assets/images/System/{{item.Icon || 'item-master.svg'}}" alt="{{item.Name}}">
+                          </span>
+                          <label>{{item.Name}}</label>
+                        </div>
+                      </div>
+                  
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div  *ngIf="this.isMore!==true">
+              <app-shop-tool-user></app-shop-tool-user>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-4"> Keyboard </div>
+                  <div class="col-md-7" style="text-align: right;">
+                    <dx-switch #swVirtualKey [value]="VirtualKey$ | async" (onValueChanged)="switchVirtualKey(swVirtualKey.value)"></dx-switch>
+                  </div>
+              
+              </div> 
+              </div> 
+             
+            </div>
+
+          </div>
+          <div class="data-display-area">
+            <main class="wrap item-search-page">
+              <div class="container-fluid">
+                <div class="main-section"> 
+                  <router-outlet></router-outlet>
+                </div>
+              </div>
+            </main>
+          </div>
+        </dx-drawer>
+      </div>
+  </div>
+      -->

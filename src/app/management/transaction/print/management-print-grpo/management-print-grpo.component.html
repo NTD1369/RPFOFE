@@ -1,0 +1,170 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+    
+    .textRightPrint {}
+</style>
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;">
+        <h2 class="maintenance-heading">{{'Printing' | translate}}</h2>
+        <div class="maintenance-row">
+            <div class="col-md-12">
+
+                <!-- <dx-funnel #funnel> -->
+                <div #funnel id="print-section">
+                    <dx-data-grid #dataGrid id="goodsreceipt" [(dataSource)]="this.lines" [allowColumnResizing]="true" [columnResizingMode]="true" (onRowPrepared)="onRowPrepared($event)" keyExpr="lineId" [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true">
+
+
+                        <dxi-column dataField="keyId" [minWidth]="250" [fixed]="false" caption="Item Code" editCellTemplate="itemDropDownBoxEditor">
+                            <dxo-lookup [dataSource]="this.itemList" displayExpr="itemCode" valueExpr="keyId"></dxo-lookup>
+                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                        </dxi-column>
+                        <dxi-column dataField="itemCode" [visible]="false" [allowEditing]="false" caption="Item Code"></dxi-column>
+                        <dxi-column dataField="description" [allowEditing]="false" caption="Description" [minWidth]="180"></dxi-column>
+                        <!-- <dxi-column dataField="itemCode"  [fixed]="true" caption="Item Code" [minWidth]="250" [allowEditing]="true"   editCellTemplate="itemDropDownBoxEditor">
+              <dxo-lookup [dataSource]="this.itemList" displayExpr="itemName" valueExpr="itemCode"> </dxo-lookup>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>   -->
+
+                        <dxi-column alignment="center" [allowEditing]="false" dataField="barCode" caption="Barcode" [minWidth]="150"> </dxi-column>
+                        <dxi-column alignment="center" dataField="slocId" caption="SLoc" [minWidth]="120">
+                            <dxo-lookup [dataSource]="this.storageList" displayExpr="slocId" valueExpr="slocId"> </dxo-lookup>
+                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                        </dxi-column>
+                        <!--  -->
+                        <dxi-column alignment="center" dataField="uomCode" [allowEditing]="false" caption="UoM" [minWidth]="120">
+                            <!-- <dxo-lookup  [dataSource]="this.uomList" displayExpr="uomName" valueExpr="uomCode"> </dxo-lookup>
+              <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                        </dxi-column>
+                        <!-- <dxi-column alignment="center" dataField="currencyCode" [allowEditing]="false" caption="Currency" [minWidth]="80"> </dxi-column> -->
+                        <dxi-column alignment="right" [allowEditing]="false" dataField="price" [customizeText]="customizeText" [minWidth]="120"></dxi-column>
+                        <dxi-column alignment="right" dataField="quantity" caption="Quantity" dataType="number" [minWidth]="120">
+
+                        </dxi-column>
+
+                        <dxi-column alignment="right" dataField="lineTotal" [customizeText]="customizeText" [calculateCellValue]="lineTotalCellValue" [allowEditing]="false" caption="Line Total" [minWidth]="120"> </dxi-column>
+                        <dxi-column dataField="remark" caption="Remark" [minWidth]="220"> </dxi-column>
+                        <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+                        <dxo-summary [recalculateWhileEditing]="true">
+                            <dxi-total-item column="lineTotal" summaryType="sum" [customizeText]="customizeText">
+
+                            </dxi-total-item>
+                            <dxi-total-item column="quantity" summaryType="sum"></dxi-total-item>
+                        </dxo-summary>
+                        <!--  -->
+                        <div *dxTemplate="let cellInfo of 'itemDropDownBoxEditor'">
+                            <dx-drop-down-box [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="itemList" [(value)]="cellInfo.value" displayExpr="itemCode" valueExpr="keyId" contentTemplate="contentTemplate">
+                                <div *dxTemplate="let e of 'contentTemplate'">
+                                    <dx-data-grid #itemGrid keyExpr="keyId" [dataSource]="itemList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() * 55/ 100 " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true"
+                                        (onSelectionChanged)="onItemSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                        <dxi-column dataField="itemCode" caption="Item Code"></dxi-column>
+                                        <dxi-column dataField="itemName" caption="Item Name"></dxi-column>
+                                        <dxi-column dataField="uomName" caption="UoM"></dxi-column>
+                                        <dxi-column dataField="barCode" caption="Barcode"></dxi-column>
+                                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                        <dxo-selection mode="single"></dxo-selection>
+                                    </dx-data-grid>
+                                </div>
+                            </dx-drop-down-box>
+                        </div>
+
+                        <div *dxTemplate="let cellInfo of 'changeTaxCodeEditor'">
+                            <dx-drop-down-box #gridTaxBox [dropDownOptions]="{ width: this.authService.getWindowWidth() - (10 * this.authService.getWindowWidth()) / 100 }" [dataSource]="taxList" [(value)]="cellInfo.value" displayExpr="taxName" valueExpr="taxCode" contentTemplate="contentTemplate">
+                                <div *dxTemplate="let e of 'contentTemplate'">
+                                    <dx-data-grid #itemGrid keyExpr="taxCode" [dataSource]="taxList" [remoteOperations]="true" [height]="this.authService.getWindowHeight() * 55/ 100  " [selectedRowKeys]="[cellInfo.value]" [focusedRowEnabled]="true" [focusedRowKey]="cellInfo.value" [hoverStateEnabled]="true"
+                                        (onSelectionChanged)="onTaxSelectionChanged( $event.selectedRowKeys, cellInfo, $event,e, e.component)">
+                                        <dxi-column dataField="taxCode"></dxi-column>
+                                        <dxi-column dataField="taxName"></dxi-column>
+
+                                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                        <dxo-selection mode="single"></dxo-selection>
+                                    </dx-data-grid>
+                                </div>
+                            </dx-drop-down-box>
+
+                        </div>
+
+                        <div *dxTemplate="let cell of 'changeUoMCodeEditor'">
+                            <dx-drop-down-box #dropDownUoM [(value)]="cell.data.uomCode" valueExpr="uomCode" displayExpr="uomName" placeholder="Select UoM..." [showClearButton]="true" [dataSource]="this.uomList">
+                                <div *dxTemplate="let data of 'content'">
+                                    <dx-data-grid #gridUoMBox keyExpr="uomCode" [dataSource]="this.uomList" [columns]="['uomCode', 'uomName']" [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }" [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }"
+                                        [height]="345" [(selectedRowKeys)]="cell.data.uomCode" (onSelectionChanged)="onUoMSelectionChanged($event, cell)">
+                                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                                        <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..." location="before"></dxo-search-panel>
+                                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    </dx-data-grid>
+                                </div>
+                            </dx-drop-down-box>
+                        </div>
+                        <div *dxTemplate="let line of 'detail'">
+                            <!-- <ng-container *ngIf="line.data.lines!==null"> -->
+                            <div class="master-detail-caption">Serial:</div>
+                            <dx-data-grid [dataSource]="line.data.lines" keyExpr="serialNum" [showBorders]="true" [columnAutoWidth]="true">
+                                <dxi-column type="buttons" [width]="110">
+                                    <dxi-button name="edit"></dxi-button>
+                                    <dxi-button name="delete"></dxi-button>
+
+                                </dxi-column>
+                                <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true"></dxo-editing>
+
+                                <dxi-column dataField="serialNum" caption="Serial Num"></dxi-column>
+                                <dxi-column dataField="frSlocId" caption="From Bins"></dxi-column>
+                                <dxi-column dataField="toSlocId" caption="To Bins"></dxi-column>
+                                <dxi-column dataField="quantity" caption="Quantity"></dxi-column>
+                                <dxi-column dataField="uomCode" caption="UoM"></dxi-column>
+                            </dx-data-grid>
+                            <!-- </ng-container> -->
+
+                        </div>
+
+                    </dx-data-grid>
+
+                    <!-- <div class="row">
+                <div class="col-md-6"> 
+                  <p> <label class="textTitlePrint" >ID: </label>  {{this.purchase.purchaseId}}</p>
+                </div>
+                <div class="col-md-6"> 
+                  <p> <label class="textTitlePrint">Date: </label> {{this.purchase.createdOn | date : "yyyy-MM-dd HH:mm:ss"}}</p>
+                </div>
+                <div class="col-md-6"> 
+                  <p> <label class="textTitlePrint" >Supp: </label>  {{this.purchase.purchaseId}}</p>
+                </div>
+                <div class="col-md-6"> 
+                  <p> <label class="textTitlePrint" >Warehouse: </label>  {{this.purchase.purchaseId}}</p>
+                  <p> <label class="textTitlePrint" >Posted: </label>  {{this.purchase.purchaseId}}</p>
+                  <p> <label class="textTitlePrint" >Reference No: </label>  {{this.purchase.purchaseId}}</p>
+                </div>
+               
+              </div> -->
+                    <div class="row">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Create By 
+                  Modified By 
+                  Print By -->
+                        </div>
+                        <div class="col-md-6">
+                            <ngx-qrcode [elementType]="'url'" [value]="this.grpo.purchaseId" cssClass="aclass" errorCorrectionLevel="L"></ngx-qrcode>
+                            <ngx-barcode6 [bc-format]="'CODE128'" [bc-value]="this.grpo.purchaseId" [bc-display-value]="false">
+                            </ngx-barcode6>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <!-- </dx-funnel> -->
+                <!-- <button class="submit-btn" style="min-width:150px; width: 100%;"   >Print</button>  -->
+                <button class="submit-btn" [useExistingCss]="true" style="min-width:150px; width: 100%;" printSectionId="print-section" ngxPrint>{{'Print' | translate}}</button>
+            </div>
+
+        </div>
+    </div>
+</div>

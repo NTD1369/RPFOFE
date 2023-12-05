@@ -1,0 +1,18 @@
+<!-- <h3>Angular 7 Image Preview before Upload:</h3> -->
+<div class="col-md-12" style="text-align: center;">
+    <span style="color:red;" *ngIf="message">{{'Message' | translate}}</span>
+    <dx-button *ngIf="!this.isEdit" stylingMode="outlined" type="default" [width]="120">
+        <label style="margin:.1rem;">
+      <i class="fas fa-paperclip"></i>
+       {{'Select File' | translate}}
+      <!-- <input hidden type="file" (change)="preview(file.files)" multiple="false"> -->
+      <input #file hidden type="file" accept='image/*' (change)="preview(file.files)" /> 
+    </label>
+    </dx-button>
+
+    <dx-button *ngIf="this.isEdit" class="mr-2" (onClick)="saveChange()" icon="check" type="success" text="Save"></dx-button>
+    <dx-button *ngIf="this.isEdit" (onClick)="cancelChange()" icon="close" type="danger" text="cancel"></dx-button>
+</div>
+<div class="col-md-12 mt-2 mb-2" style="text-align: center;">
+    <img style="padding: 10px; box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;" [src]="this.imgURL || '../../../assets/images/System/LOGO-ABEO.png'" height="200">
+</div>

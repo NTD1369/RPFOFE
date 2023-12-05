@@ -1,0 +1,86 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+      <div class="search-wrap">
+          <label for="item-searchbar" class="section-title">{{'Variant' | translate}}</label>
+
+      </div>
+      <div class="table-wrap">
+          <div class="item-search-nav">
+              <div class="row">
+                 
+                  <div class="col-md-6">
+                      <span> {{'Description' | translate}}</span> 
+                      <dx-text-box class="mt-1" placeholder="{{'Description' | translate}}" #description></dx-text-box>
+                  </div>
+                
+                  <div class="col-md-2">
+                      <span> {{'Status' | translate}}</span> 
+                      <dx-select-box class="mt-1" [items]="statusOptions" [value]="statusOptions[0].value" #chkActive displayExpr="name" valueExpr="value" placeholder="{{'Status' | translate}}"></dx-select-box>
+                     
+                  </div>
+
+                  <div class="col-md-2">
+                    <span >  {{'Start Date' | translate}}</span> 
+                    <dx-date-box class="mt-1"  #fromCalendar [displayFormat]="this.authService.loadFormat().dateFormat" placeholder="{{'Start Date' | translate}}" id="fromCalendar"> </dx-date-box>
+                </div>
+                <div class="col-md-2">
+                    <span >  {{'End Date' | translate}}</span> 
+                    <dx-date-box  class="mt-1" #toCalendar [displayFormat]="this.authService.loadFormat().dateFormat" placeholder="{{'End Date' | translate}}" id="toCalendar"> </dx-date-box>
+                </div>
+              </div>
+          </div>
+         
+          <div class="row mt-2" >
+              <div class="col-md-12" style="text-align: right;">
+                   
+                  <dx-button class="mr-2" (onClick)="loadList(fromCalendar.value, toCalendar.value, chkActive.value, description.value )" 
+                  icon="search" type="success" text="{{'Search' | translate}}"></dx-button>
+              </div>
+            
+
+          </div>
+      
+          
+       
+      </div>
+      <div class="table-wrap mt-3">
+          <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" 
+              [dataSource]="this.list" (onToolbarPreparing)="onToolbarPreparing($event)" 
+              keyExpr="variantId" [allowColumnResizing]="true" [showRowLines]="true"
+              [showBorders]="true" [columnAutoWidth]="true">
+              <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+              <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+              <dxo-scrolling mode="virtual"></dxo-scrolling> 
+              <dxo-paging [pageSize]="10"> </dxo-paging>
+              <dxo-pager
+                [visible]="true"
+                [allowedPageSizes]="allowedPageSizes"
+                [displayMode]="displayMode"
+                [showPageSizeSelector]="true"
+                [showInfo]="true"
+                [showNavigationButtons]="true"
+              >
+              </dxo-pager>
+  
+              <dxi-column dataField="variantId" caption="{{'Code' | translate}}"></dxi-column>
+              <dxi-column dataField="description" caption="{{'Description' | translate}}"></dxi-column>
+              
+              <dxi-column dataField="validFrom" caption="{{'From' | translate}}" dataType="date" [format]="this.dateFormat"> </dxi-column>
+              <dxi-column dataField="validTo" caption="{{'To' | translate}}" dataType="date" [format]="this.dateFormat "> </dxi-column>
+              
+              <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+              <div *dxTemplate="let cell of 'statusTemplate'">
+                  <div [innerHtml]="cell.data.status | statusFormat"></div>
+              </div>
+               
+              <dxi-column cellTemplate="cellTemplate"  [fixed]="true" fixedPosition="right"></dxi-column>
+              <div *dxTemplate="let data of 'cellTemplate'">
+                  <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="viewDetail(data)"></dx-button>
+                  
+              </div>
+
+
+          </dx-data-grid>
+      </div>
+  </div>
+</div>

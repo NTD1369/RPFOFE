@@ -1,0 +1,72 @@
+.cl-fs {
+    font-size: 16px;
+}
+
+.table-template {
+    border-collapse: collapse;
+}
+
+.table-template td,
+th {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+@media print {
+    .bt-info {
+        display: none;
+    }
+    .table-template {
+        width: 925px !important;
+    }
+}
+
+.delivery__print{
+    color: #fff;
+    font-size: 17px;
+}
+
+.delivery__font_sw{
+    font-size:17px;
+    font-weight: 700;
+}
+
+.delivery__fonts{
+    font-size: 17px;
+}
+.delivery__align{
+    font-size: 17px;
+    text-align: center;
+}
+
+
+
+
+.deliveryPrint_background{
+    background: white;
+    padding:20px;
+    margin:20px;
+    border:1px solid #f0f0f0;
+    border-radius: 10px;
+}
+
+.deliveryPrint_fsw-1{
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.deliveryPrint_fsw-2{
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.deliveryPrint__sum{
+    padding-right: 50px;
+    font-size:17px;
+    text-align: right
+}
+.deliveryPrint__footer{
+    height: 100px;
+    font-size:17px
+}

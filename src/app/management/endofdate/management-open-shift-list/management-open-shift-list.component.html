@@ -1,0 +1,103 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto; width: 100%; height: 100%;">
+        <ng-container *ngFor="let item of this.openShiftList">
+            <h2 class="maintenance-heading mt-3">{{'Summary Shift' | translate}}: {{item.shiftId}} </h2>
+            <div class="maintenance-row mt-2">
+                <ng-container>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <!-- <p> <label class="textTitlePrint" >ID: </label>  {{this.header?.shiftId}}</p> -->
+                            <p> <label class="textTitlePrint">{{'Date' | translate}}: </label> {{item?.createdOn | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</p>
+                            <p> <label class="textTitlePrint">{{'Store' | translate}}: </label> {{item?.storeId}} </p>
+                            <p> <label class="textTitlePrint">{{'Created By' | translate}}: </label> {{item?.createdBy }}</p>
+                            <p> <label class="textTitlePrint">{{'Open Amount' | translate}}: </label> {{item?.openAmt | number}}</p>
+                            <p> <label class="textTitlePrint">{{'Total Order' | translate}}: </label> {{titem?.transTotalQty | number}}</p>
+                            <p> <label class="textTitlePrint">{{'Completed Order' | translate}}: </label> {{item?.completedTotalQty | number}} </p>
+                            <p> <label class="textTitlePrint">{{'Canceled Order' | translate}}: </label> {{item?.canceledTotalQty | number}} </p>
+
+                        </div>
+                        <div class="col-md-3"> </div>
+                        <div class="col-md-3">
+                            <a class="primary-btn payment-btn" style="height: 50px; padding: 10px;" (click)="endShift(item)"> {{'End Shift' | translate}}</a>
+                        </div>
+
+
+                    </div>
+                    <hr class="style5">
+                    <h3>{{'Sales Summary' | translate}}</h3>
+                    <!-- <hr class="style5"> -->
+                    <dx-data-grid id="gridContainer" [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" [dataSource]="item?.payments" [showBorders]="true" (onEditorPreparing)="editorPreparing($event)">
+                        <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                        <dxo-editing mode="cell" [allowUpdating]="item?.status==='O'"></dxo-editing>
+                        <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                        <dxo-scrolling mode="normal"></dxo-scrolling>
+
+                        <ng-container *ngIf="this.authService.getStoreCurrency() !==null && this.authService.getStoreCurrency()!==undefined && this.authService.getStoreCurrency().length > 0">
+                            <dxi-column dataField="counterId" [visible]='false' [groupIndex]="0" caption="{{'Counter Id' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                            <dxi-column dataField="paymentCode" [visible]='false' [groupIndex]="1" caption="{{'Payment Method' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                            <dxi-column dataField="shortName" caption="{{'Payment Method' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                            <dxi-column dataField="currency" [groupIndex]="2" caption="{{'Currency' | translate}}" [allowEditing]='false' dataType="string">
+                            </dxi-column>
+                            <ng-container *ngIf="this.showOption==='false'">
+                                <!-- -->
+                                <dxi-column dataField="fcAmount"  [customizeText]="customizeText"  caption="{{'FC Amount' | translate}}" [allowEditing]='false'> </dxi-column>
+                                <dxi-column dataField="totalAmt" caption="{{'LC Amount' | translate}}" dataType="number" [allowEditing]='false'  [customizeText]="customizeText" >
+                                </dxi-column> 
+                            </ng-container>
+                            <ng-container *ngIf="this.showOption!=='false'">
+                                <!-- [customizeText]="customizeText" -->
+                                <dxi-column dataField="fcAmount" [format]="this.authService.numberFormat('amount')" caption="{{'FC Amount' | translate}}" [allowEditing]='false'> </dxi-column>
+                                <dxi-column dataField="totalAmt" caption="{{'LC Amount' | translate}}" dataType="number" [allowEditing]='false' [format]="this.authService.numberFormat('amount')">
+                                </dxi-column> 
+                            </ng-container>
+                            <!-- <dxi-column dataField="fcAmount" [format]="this.authService.numberFormat('amount')" caption="{{'FC Amount' | translate}}" [allowEditing]='false'> </dxi-column>
+                            <dxi-column dataField="totalAmt" caption="{{'LC Amount' | translate}}" dataType="number" [allowEditing]='false' [format]="this.authService.numberFormat('amount')">
+                            </dxi-column> -->
+                        </ng-container>
+                        <ng-container *ngIf="this.authService.getStoreCurrency() === null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length <= 0">
+                            <dxi-column dataField="paymentCode" [visible]='false' caption="{{'Payment Method' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                            <dxi-column dataField="shortName" caption="{{'Payment Method' | translate}}" [allowEditing]='false' dataType="string"> </dxi-column>
+                            <!-- <dxi-column dataField="totalAmt" caption="{{'Total Amount' | translate}}" dataType="number" [allowEditing]='false' [format]="this.authService.numberFormat('amount')">
+                            </dxi-column> -->
+                            <ng-container *ngIf="this.showOption==='false'">
+                                <dxi-column dataField="totalAmt" caption="{{'Total Amount' | translate}}" dataType="number" [allowEditing]='false'  [customizeText]="customizeText" >
+                                </dxi-column>
+                            </ng-container>
+                            <ng-container *ngIf="this.showOption!=='false'">
+                                <dxi-column dataField="totalAmt" caption="{{'Total Amount' | translate}}" dataType="number" [allowEditing]='false' [format]="this.authService.numberFormat('amount')">
+                                </dxi-column>
+                            </ng-container>
+                         
+                        </ng-container>
+                    
+
+                        <dxi-column dataField="collectedAmount" caption="{{'Collected Amount (Input)' | translate}}" dataType="number" [allowEditing]='true' [format]="this.authService.numberFormat('amount')"> </dxi-column>
+                        <dxi-column *ngIf="this.header?.status==='C'" dataField="changeAmt" caption="{{'Diff Amount' | translate}}" dataType="number" [allowEditing]='true' [format]="this.authService.numberFormat('amount')"> </dxi-column>
+                        <dxi-column dataField="bankInAmt" caption='Bank In Amount (Input)' dataType="number" [allowEditing]='true' [format]="this.authService.numberFormat('amount')"> </dxi-column>
+                       
+                      
+                        <dxo-summary [recalculateWhileEditing]="true">
+                            <ng-container *ngIf="this.authService.getStoreCurrency() !== null && this.authService.getStoreCurrency()!==undefined && this.authService.getStoreCurrency().length > 0">
+                                <dxi-group-item [valueFormat]="this.authService.numberFormat('amount')" [alignByColumn]="true" column="totalAmt" summaryType="{{'count' | translate}}">
+                                </dxi-group-item>
+                                <dxi-group-item [valueFormat]="this.authService.numberFormat('amount')" [alignByColumn]="true" column="collectedAmount" summaryType="{{'sum' | translate}}">
+                                </dxi-group-item>
+                            </ng-container>
+
+                            <dxi-total-item column="totalAmt" summaryType="{{'sum' | translate}}" [valueFormat]="this.authService.numberFormat('amount')">
+                            </dxi-total-item>
+                            <dxi-total-item column="collectedAmount" summaryType="{{'sum' | translate}}" [valueFormat]="this.authService.numberFormat('amount')">
+                            </dxi-total-item>
+                        </dxo-summary>
+                      
+                    </dx-data-grid>
+
+
+                </ng-container>
+
+            </div>
+        </ng-container>
+
+
+    </div>
+</div>

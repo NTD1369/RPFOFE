@@ -1,0 +1,113 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <!-- <div class="col-md-12"> -->
+            <div class="row mb-2">
+                <div class="col-md-8"> <label for="item-searchbar" class="section-title">{{'Menu Setting' | translate}}</label></div>
+                <div class="col-md-4" style="text-align: right;">
+                    <!-- <div class="dx-field">
+                        <div class="dx-field-label">{{'Exchange Order' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-switch  [value]="true">
+                            </dx-switch>
+                        </div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Cancel Order' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-switch   [value]="true">
+                            </dx-switch>
+                        </div>
+                    </div>
+                    <div class="dx-field">
+                        <div class="dx-field-label">{{'Return Order' | translate}}</div>
+                        <div class="dx-field-value">
+                            <dx-switch   [value]="true">
+                            </dx-switch>
+                        </div>
+                    </div> -->
+                   
+                   
+                    <dx-button icon="floppy" type="success" text="{{'Save' | translate}}" (onClick)="updateFunction()"></dx-button>
+                </div>
+            <!-- </div> -->
+        </div>
+        <!-- <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">Menu Setting</label>
+            <div class="col-md-6" style="text-align: right;"><dx-button icon="check"  text="Save" (onClick)="saveModel()"></dx-button></div>
+          </div> -->
+        <!-- [width]="340" -->
+        <div class="row">
+            <div class="col-md-6">
+                <dx-tree-view [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" id="treeview" [searchEnabled]="true" searchMode="contains" keyExpr="functionId" [items]="this.files5" selectedExpr="isShowMenu" [expandAllEnabled]="true" [searchExpr]="['functionId', 'name']"
+                    [showCheckBoxesMode]="'normal'" expandedExpr="isParent" [selectionMode]="'multiple'" [selectNodesRecursive]="false" [selectByClick]="true" (onContentReady)="treeViewContentReady($event)" (onSelectionChanged)="treeViewSelectionChanged($event)">
+                    <div *dxTemplate="let item of 'item'">
+                        <!-- {{item.functionId}} -->
+                        {{ item.name | translate}} ({{item.functionId }})
+                    </div>
+                </dx-tree-view>
+            </div>
+            <div class="col-md-6">
+                <!-- -->
+                <dx-list [searchEnabled]="true" searchMode="contains" [searchExpr]="['functionId', 'name']" [items]="this.selectedEmployees" [repaintChangesOnly]="true" keyExpr="functionId">
+                    <div *dxTemplate="let item of 'item'">
+                        <div class="product">
+                            <div>{{item.name | translate}}</div>
+                            <div class="price">{{item.functionId}}</div>
+                            <div class="price">{{item.url}}</div>
+                        </div>
+                    </div>
+                    <dxo-item-dragging [data]="this.selectedEmployees" [allowReordering]="true" [onDragStart]="onDragStart" [onAdd]="onAdd" [onRemove]="onRemove">
+                    </dxo-item-dragging>
+                </dx-list>
+            </div>
+        </div>
+        <!-- (onSelectionChanged)="treeViewSelectionChanged($event)"        
+          (onContentReady)="treeViewContentReady($event)"  [height]="320"-->
+
+        <!-- <div class="selected-container">
+          Selected employees
+          <dx-list 
+              id="selected-employees" 
+              [width]="400" 
+              [height]="200" 
+              [items]="selectedEmployees"
+              showScrollbar="always"
+          >
+              <dxi-item *ngFor="let item of selectedEmployees">
+                  {{ item.prefix + " " + item.fullName  + " (" + item.position + ")" }}
+              </dxi-item>
+          </dx-list>
+      </div> -->
+
+        <!-- <div class="table-wrap">
+        <dx-tree-list
+          id="functionList"
+          [dataSource]="this.files5"
+          rootValue="" [autoExpandAll]="true"
+          keyExpr="functionId"
+          [showRowLines]="true"
+          [showBorders]="true"
+          parentIdExpr="parentId" 
+          [columnAutoWidth]="true"> 
+          <dxo-scrolling
+            mode="standard">  
+        </dxo-scrolling>
+          <ng-container  *ngFor="let col of cols; let i = index"  >
+            <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i === 0"></dxi-column>
+            <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i !== 0"
+            cellTemplate="toggleCellTemplate">
+            
+            </dxi-column>
+          </ng-container>
+        
+          
+          <div *dxTemplate="let d of 'toggleCellTemplate'">
+            <label> {{d.data[d.column.dataField]}}</label>
+           
+          </div>
+         
+      </dx-tree-list>
+      
+      </div> -->
+    </div>
+</div>

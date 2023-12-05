@@ -1,0 +1,31 @@
+<!-- (ngSubmit)="update()" -->
+<!-- <form  id="editForm" > -->
+  <div class="col-md-12">
+    
+      <div class="row">
+       <div class="col-6">
+        <h3>Uom Code</h3>
+        <input #cbbcode  [value]="this.model.uomCode" style="width:100%" />
+       </div>
+       <div class="col-6">
+        <h3>Uom Name</h3>
+        <input #cbbname [value]="this.model.uomName" style="width:100%"/>
+       </div>
+
+      </div>
+
+      <div class="mt-3">
+        <h3>Status</h3>
+
+      <dx-select-box [value]="this.model.status" class="mt-2" #cbbstatus [items]="statusList" displayExpr="name" valueExpr="value" 
+      placeholder="Active"></dx-select-box>
+      </div>
+      
+  </div>
+
+  <div class="col-md-12 text-right">
+    <!-- form="editForm"  *ngIf="checkPermission('btnSave' ,'V')"  [disabled]="!editForm.valid || !editForm.dirty" -->
+      <button  (click)="save(cbbcode.value,cbbname.value,cbbstatus.value)" class="btn-agree width-200 height-60">{{'Save Changes' | translate}}</button>
+  </div>
+
+<!-- </form> -->

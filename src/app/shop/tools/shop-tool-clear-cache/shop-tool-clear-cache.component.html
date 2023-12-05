@@ -1,0 +1,55 @@
+<div id='discount-modal'>
+  <div class="modal-header">
+      <div class="row" style="width: 100%">
+          <div class="col-md-7">
+              <h4 class="modal-title pull-left" id="my-modal-title"> {{'Clear Cache' | translate}}</h4>
+          </div>
+
+      </div>
+
+
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+  <img src="../../../assets/images/System/times.svg">
+</button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+          
+      <div class="col-md-12">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+              {{'Key' | translate}}:
+          </div>
+          <div class="col-md-10">
+              <!-- <i class="fas fa-list-ol"></i> -->
+              <!-- <input    class="form-control" #txtKey type="text"  placeholder="{{'Key' | translate}}" aria-label="Key"> -->
+              <dx-text-box  #txtKey placeholder="{{'Key' | translate}}" ></dx-text-box>
+          </div>
+         </div>
+      </div>
+      
+    </div> 
+      <div class="row ">
+          
+        <div class="col-md-2 mt-2">
+          {{'Prefix' | translate}}:
+          
+        </div>
+        <div class="col-md-4 mt-2">
+          <dx-select-box  #ddlPrefix (onValueChanged)="onValueChanged($event)"
+            [items]="prefixes"
+            [value]="prefixes[0]" 
+          ></dx-select-box>
+        </div>
+        <div class="col-md-6 mt-2">
+          <!-- <input  [readOnly]="" class="form-control"  type="text"  aria-label="Prefix"> -->
+           <dx-text-box [readOnly]="ddlPrefix.value !== 'Custom'" #txtPrefix placeholder="{{'Prefix' | translate}}" ></dx-text-box>
+        </div>
+      </div> 
+  </div>
+  <div class="modal-footer">
+    <div class="col-md-12 text-right">
+        <button (click)="clearData()" class="btn-agree width-200 height-60">{{'Clear cache' | translate}}</button>
+    </div>
+ </div>
+</div>

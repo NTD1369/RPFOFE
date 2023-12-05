@@ -1,0 +1,60 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Rounding Off Payment Setting' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #dataGrid id="controlList" 
+            [dataSource]="this.list" keyExpr="id" [showRowLines]="true" (onEditingStart)="mode='E'" (onInitNewRow)="mode='N'" (onSaved)="save($event)" (onRowRemoved)="remove($event)"
+                [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true">
+                <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+                </dxo-editing>
+                <!-- <dxo-editing  mode="row" [allowUpdating]="true" [allowDeleting]="true" ></dxo-editing> -->
+                <dxi-column dataField="currencyCode" caption="{{'Currency' | translate}}">
+                    <dxo-lookup [dataSource]="this.currencyList" displayExpr="currencyName" valueExpr="currency"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+
+                <dxi-column dataField="storeId" caption="{{'Store ID' | translate}}"></dxi-column>
+                <dxi-column dataField="roundingOff" caption="{{'Rounding Off' | translate}}" [customizeText]="customizeText"></dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}">
+                    <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+            </dx-data-grid>
+            <!-- <dx-data-grid     [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}"  keyExpr="id" 
+          id="gridCurency"  [dataSource]="this.list" [allowColumnResizing]="true"   [showRowLines]="true"
+          [showBorders]="true" [columnAutoWidth]="true" (onEditingStart)="mode='E'"  (onInitNewRow)="mode='N'" (onSaved)="save($event)" 
+          (onRowRemoved)="remove($event)">
+          <dxo-editing mode="row" [allowAdding]="true" [useIcons]="true" [allowUpdating]="true" [allowDeleting]="true">
+          </dxo-editing>
+        
+          <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+          <dxo-search-panel [visible]="true"  [width]="540"  placeholder="Search..." location="before"></dxo-search-panel>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+         
+          <dxi-column dataField="storeId" caption="Store Id" dataType="string">  
+            
+          </dxi-column>
+        
+          <dxi-column dataField="currencyCode" caption="Currency"   > 
+            <dxo-lookup [dataSource]="this.currencyList" displayExpr="currencyName" valueExpr="currencyCode"> </dxo-lookup>
+           </dxi-column> 
+          <dxi-column dataField="roundingOff" caption="RoundingOff"   >  </dxi-column> 
+          <dxi-column alignment="center" dataField="status"   cellTemplate="statusTemplate" caption="Status" >
+            <dxo-lookup [dataSource]="this.status" displayExpr="name" valueExpr="value"> </dxo-lookup>
+          </dxi-column>
+     
+          <div *dxTemplate="let cell of 'statusTemplate'">
+            <div  [innerHtml]="cell.data.status | statusFormat"></div>
+          </div>
+      
+      </dx-data-grid> -->
+        </div>
+    </div>
+</div>

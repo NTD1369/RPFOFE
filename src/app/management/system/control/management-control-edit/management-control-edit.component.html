@@ -1,0 +1,56 @@
+<form [formGroup]="editForm" id="editForm" (ngSubmit)="update()">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="controlId">{{'ID' | translate}} </label>
+            <input class="form-control" id="controlId" disabled formControlName="controlId" name="controlId" [(ngModel)]="model.controlId">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="controlName">{{'Name' | translate}} </label>
+            <input class="form-control" id="controlName" formControlName="controlName" name="controlName" [(ngModel)]="model.controlName">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="action">{{'Action' | translate}} </label>
+            <input class="form-control" id="action" formControlName="action" name="action" [(ngModel)]="model.action">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="orderNum">{{'Order Num' | translate}}</label>
+            <input class="form-control" id="orderNum" formControlName="orderNum" name="orderNum" [(ngModel)]="model.orderNum">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="require">{{'Require' | translate}} </label>
+            <br />
+            <!-- <p-checkbox [(ngModel)]="model.require"  id="require"   
+      formControlName="require"  name="require"  [binary]="true"></p-checkbox> -->
+            <dx-switch width="20%" [(ngModel)]="model.require" id="require" formControlName="require" name="require" [(value)]="model.require"></dx-switch>
+
+        </div>
+        <div class="form-group col-md-6">
+            <label for="optionName">{{'Option Name' | translate}} </label>
+            <input class="form-control" id="optionName" formControlName="optionName" name="optionName" [(ngModel)]="model.optionName">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="optionKey">{{'Option Key' | translate}} </label>
+            <input class="form-control" id="optionKey" formControlName="optionKey" name="optionKey" [(ngModel)]="model.optionKey">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="optionValue">{{'Option Value' | translate}} </label>
+            <input class="form-control" id="optionValue" formControlName="optionValue" name="optionValue" [(ngModel)]="model.optionValue">
+        </div>
+        <div class="row clearfix"></div>
+        <!-- [attr.disabled]="!checkPermission('controlName' ,'E') ?'disabled':null"  -->
+        <div class="form-group col-md-6">
+            <label for="controlType" class="mr-2">{{'Type' | translate}}</label>
+            <!-- <p-dropdown [options]="typeOptions"  formControlName="controlType"  name="controlType"   
+      [(ngModel)]="model.controlType" optionLabel="name" optionValue="value"></p-dropdown> -->
+            <dx-select-box formControlName="controlType" name="controlType" [dataSource]="typeOptions" displayExpr="name" valueExpr="value" [(ngModel)]="model.controlType" [value]="model.controlType!==null ? typeOptions[0].value : model.controlType"></dx-select-box>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="status" class="mr-2">{{'Status' | translate}}</label>
+            <dx-select-box formControlName="status" name="status" [attr.disabled]="!checkPermission('status' ,'E') ?'disabled':null" [dataSource]="statusOptions" displayExpr="name" valueExpr="value" [(ngModel)]="model.status" [value]="model.status!==null ? statusOptions[0].value : model.status"></dx-select-box>
+
+        </div>
+    </div>
+
+    <button [disabled]="!editForm.valid || !editForm.dirty" form="editForm" class="btn btn-success btn-block">{{'Save Changes' | translate}}</button>
+</form>

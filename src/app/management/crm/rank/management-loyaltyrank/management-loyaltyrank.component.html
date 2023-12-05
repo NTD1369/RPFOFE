@@ -1,0 +1,56 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Rank' | translate}}</label>
+
+        </div>
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 30vh)','overflow':'auto'}" #buytt id="controlList" [dataSource]="this.list" (onToolbarPreparing)="onToolbarPreparing($event)" keyExpr="rankId" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true"
+                [columnAutoWidth]="true">
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxi-column dataField="lineNum" [visible]="false" [allowEditing]="false" caption="{{'Line Num' | translate}}"></dxi-column>
+                <!-- <dxi-column dataField="lineType"   caption="Line Type"  ></dxi-column> -->
+
+                <dxi-column dataField="rankId" caption="{{'Rank' | translate}}"></dxi-column>
+                <dxi-column dataField="rankName" caption="{{'Name' | translate}}"></dxi-column>
+                <dxi-column dataField="targetAmount" caption="{{'Target' | translate}}" [customizeText]="customizeText"></dxi-column>
+                <!-- <dxi-column dataField="validDateFrom" caption="From"   dataType="date" [format]="this.dateFormat">  </dxi-column>
+               <dxi-column dataField="validDateTo" caption="To"   dataType="date" [format]="this.dateFormat ">  </dxi-column> -->
+                <!-- <dxi-column dataField="isUsed"  caption="In Use" cellTemplate="usedTemplate" ></dxi-column> -->
+                <!-- <dxi-column dataField="status"  caption="Status"  ></dxi-column>  -->
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+                <div *dxTemplate="let cell of 'usedTemplate'">
+                    <div [innerHtml]="cell.data.isUsed | statusFormat"></div>
+                </div>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button icon="fa fa-times" text="{{'Delete' | translate}}" (onClick)="delPromotion(data)"></dx-button>
+                </div>
+
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Loyalty Rank' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+           <img src="../../../assets/images/System/times.svg">
+         </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-manangement-loyaltyrank-edit [model]="this.model" style="width: 100%" [isNew]="this.isNew" (outModel)="updateModel($event)"></app-manangement-loyaltyrank-edit>
+            <!-- <app-management-holiday-edit [model]="this.holiday" [isnew]="this.isNew"  style="width: 100%" (outModel)="updateModel($event)"></app-management-holiday-edit> -->
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>

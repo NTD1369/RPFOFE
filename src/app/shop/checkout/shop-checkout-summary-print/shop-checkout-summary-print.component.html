@@ -1,0 +1,355 @@
+<style>
+    .textTitlePrint {
+        font-weight: 600;
+    }
+    
+    .textRightPrint {}
+</style>
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto; width:100%">
+        <!-- <h2 class="maintenance-heading" >Printing </h2> -->
+        <!-- <dx-button
+   class="send"
+   icon="print"
+   text="Send"
+   (onClick)="sendClick()">
+</dx-button> -->
+
+        <div class="row">
+            <!-- <div class="col-md-12 text-right"><button class="btn button-filter mb-2" printSectionId="print-section" ngxPrint
+      [useExistingCss]="true">Print</button> </div> -->
+            <div class="col-md-12 text-right">
+                <!-- <dx-button class="btn-search" icon="fa fa-print" text="Print" id="printPageShopCheck" (onClick)="PrintPage()"></dx-button> -->
+                <button class="btn-search" (click)="PrintPage()" id="printPageShopCheck" style="padding: 10px 30px"><i
+        class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+            </div>
+        </div>
+
+        <br />
+        <!-- <button class="primary-btn mr-2 " printSectionId="print-section" ngxPrint  [useExistingCss]="true">Print</button>  -->
+        <div class="maintenance-row" #pdfContainer_1>
+            <div class="col-md-12">
+
+                <div  id="print-section">
+
+                    <ng-container>
+                        <table class="tblHeader">
+                            <tr>
+                                <td style="text-align:center ;">
+                                    <img src="/assets/images/jump.png" style=" max-height: 80px; ">
+                                </td>
+                                <td class="text-center" colspan="4">
+                                    <h2 class="title-con" style="font-size: 22px; text-align: center; font-weight: 700;"> {{ this.companyInfor.foreignName }}</h2>
+                                    <br />
+                                    <h2 class="title-con" style="    font-size: 25px; text-align: center; font-weight: 700;">BIÊN BẢN XÁC NHẬN SỐ LƯỢNG SỬ DỤNG TRONG SỰ KIỆN</h2>
+                                </td>
+                               
+                            </tr>
+                          
+                        </table>
+                        <br />
+                        <table style="display: none ;" class="tblHeader2">
+                           
+                            <tr style="    background-color: white;">
+                                <td>
+                                    <p style=" font-size: 15px !important;"  class="fs-25">Phòng / Ban yêu cầu:</p>
+                                    <p style="color: white ;" class="fs-25"> xxxx </p>
+                                </td>
+                                <td colspan="3">
+                                    <span style=" font-size: 15px !important;" class="fs-25">Kế hoạch yêu cầu:</span>
+                                    <br/>
+                                    <span class="fs-25" style="margin-right: 20px;"> <dx-check-box [value]="false" text="Có"></dx-check-box></span>  
+                                    <span class="fs-25"> <dx-check-box [value]="false" text="Không"></dx-check-box></span>  
+                                </td>
+                             
+                                <td >
+                                    <p style=" font-size: 15px !important;"  class="fs-25">Ngày đề xuất: {{this.invoice?.createdOn | date : "dd-MM-yyyy"}}</p>
+                                    <p style=" font-size: 15px !important;"  class="fs-25">Ngày sử dụng: {{this.now | date : "dd-MM-yyyy"}}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p style=" font-size: 15px !important;"  class="fs-25"> <dx-check-box [value]="false" text="HH-DV cho trung tâm"></dx-check-box></p>  
+                                    <p style=" font-size: 15px !important;"  class="fs-25"> <dx-check-box [value]="false" text="HH-DV cho hoạt động HO"></dx-check-box></p>  
+      
+                                </td>
+                                <td class="text-center" colspan="3">
+                                    <p style=" font-size: 15px !important;"  class="fs-25">  {{this.invoice?.storeName}}</p>
+                                </td>
+                                <!-- <td class="text-right">
+                                   
+                                </td> -->
+                                <td >
+                                    <p style=" font-size: 15px !important;"  class="fs-25">Ngày nhận PYC: .....................</p>
+                                    <p style=" font-size: 15px !important;"  class="fs-25">Số PYC: ..................................</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <br />
+                        <!-- <table class="tblLine">
+                           
+                          
+                        </table>
+                        <table class="tblLine">
+                            
+                           
+                        </table> -->
+                        <!-- <div class="row">
+                            <div class="col-md-2">
+                                <img src="/assets/images/jump.png" style=" float:right; max-height: 120px; ">
+                            </div>
+                                
+                             <div class="col-md-10">
+                                <h2 class="title-con" style="text-align: center; font-weight: 500;"> {{ this.companyInfor.foreignName }}</h2>
+                                <br />
+                                <h2 class="title-con" style="    font-size: 25px; text-align: center; font-weight: 500;">BIÊN BẢN XÁC NHẬN SỐ LƯỢNG SỬ DỤNG TRONG SỰ KIỆN</h2>
+                            </div>
+                        </div> -->
+                        <!-- <div class="row" style="padding-top: 30px;">
+                            <div class="col-md-3">
+                                <p class="fs-25">Phòng / Ban yêu cầu:</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="fs-25">Kế hoạch yêu cầu:</p>
+                              
+                            </div>
+                            <div class="col-md-1">
+                                 
+                                <p class="fs-25"> <dx-check-box [value]="false" text="Có"></dx-check-box></p>  
+                                <p class="fs-25"> <dx-check-box [value]="false" text="Không"></dx-check-box></p>  
+  
+                            </div>
+                            <div class="col-md-3">
+                                <p class="fs-25">Ngày đề xuất: {{this.invoice?.createdOn | date : "dd-MM-yyyy"}}</p>
+                               
+                            </div>
+                            <div class="col-md-3">
+                                
+                                <p class="fs-25">Ngày Sử dụng: {{this.invoice?.createdOn | date : "dd-MM-yyyy"}}</p>
+                               
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom: 30px;">
+                            <div class="col-md-3">
+                              <p class="fs-25"> <dx-check-box [value]="false" text="HH-DV cho trung tâm"></dx-check-box></p>  
+                              <p class="fs-25"> <dx-check-box [value]="false" text="HH-DV cho hoạt động HO"></dx-check-box></p>  
+
+                            </div>
+                            <div class="col-md-6">
+                              
+                                <p class="fs-25">  {{this.invoice?.storeName}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                
+                                <p class="fs-25">Ngày nhận PYC: ....................</p>
+                                <p class="fs-25">Số PYC: ..................</p>
+                            </div>
+                        </div> -->
+                        <!-- <div>
+                           
+                            <h2 class="title-con" style="text-align: center; font-weight: 500;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h2>
+                            <h3 class="title-con-h3" style="text-align: center; font-weight: 500;">Độc lập - Tự do - Hạnh phúc</h3>
+                            <br>
+                            <h3 class="title-con" style="text-align: center; font-weight: 500;">BIÊN BẢN XÁC NHẬN SỐ LƯỢNG</h3>
+                            <br>
+                            <h3 class="title-con" style="text-align: center; font-weight: 500;">Mã hợp đồng: {{this.invoice?.contractNo}}</h3>
+                         
+                            <br>
+                        </div> -->
+                    
+                        <p class="fs-25">Hôm nay ngày: {{this.invoice?.createdOn | date : "dd-MM-yyyy"}}. Chúng tôi gồm:</p>
+                        <p class="fs-25">Đại diện Jump Arena: <span style="width: 300px; display:inline-block">  ...........................................................................................</span> <span style="padding-left: 18px;"> Chức vụ:...............</span> </p>
+                        <!-- <p class="fs-25">Đại diện <span style="width: 395px; display:inline-block"> .....................................................................................................................</span> <span style="padding-left: 15px;"> Chức vụ:...............</span></p> -->
+                        <ng-container *ngIf="this.invoice?.cusName === null || this.invoice?.cusName === undefined || this.invoice?.cusName === ''">
+                            <p class="fs-25">Đại diện <span style="width: 395px; display:inline-block"> .....................................................................................................................</span> <span style="padding-left: 15px;"> Chức vụ:...............</span></p>
+                        </ng-container>
+                        <ng-container *ngIf="this.invoice?.cusName">
+                            <!-- border-bottom: 2px dotted gray; -->
+                            <p class="fs-25"> Đại diện <span   style="width: 395px; display:inline-flex;    white-space: nowrap; overflow: hidden; text-overflow: clip; "> {{this.invoice?.cusName }}................................................................................................................. </span> <span style="padding-left: 15px;"> Chức vụ:...............</span></p>
+                        </ng-container>
+                        
+                        
+
+                        <p class="fs-25">Nội dung:  
+                            <ng-container *ngIf="this.invoice?.storeName?.length > 0">
+                                <span > {{this.invoice?.storeName}}</span> 
+                            </ng-container>
+                            <ng-container *ngIf="this.invoice?.storeName===undefined || this.invoice?.storeName===null || this.invoice?.storeName=== '' ||  this.invoice?.storeName?.length <= 0">
+                                <span >...............................</span> 
+                            </ng-container>
+                           
+                              có bàn giao cho 
+                              
+                              <ng-container *ngIf="this.invoice?.customer?.customerName?.length > 0">
+                                <span > {{this.invoice?.customer?.customerName}}</span> 
+                            </ng-container>
+                            <ng-container *ngIf="this.invoice?.customer?.customerName==undefined || this.invoice?.customer?.customerName===null || this.invoice?.customer?.customerName=== '' ||  this.invoice?.customer?.customerName?.length <= 0">
+                                <span >...............................</span> 
+                            </ng-container>
+                          
+                              <!-- {{this.invoice?.customer?.cusName }} -->
+                            
+                            tổng cộng là: </p>
+
+                        <br>
+                        <!-- <hr class="style5"> -->
+                        <table class="tblLine">
+                            <tr>
+                                <th>
+                                    <p class="fs-25"> {{'Mô tả' | translate}} </p>
+                                </th>
+                                <th class="text-center">
+                                    <p class="fs-25"> {{'Số lượng' | translate}} </p>
+                                </th>
+                                <th class="text-right">
+                                    <p class="fs-25"> {{'Giá tiền' | translate}} </p>
+                                </th>
+                                <th class="text-right">
+                                    <p class="fs-25"> {{'Giá sau K/M' | translate}} </p>
+                                </th>
+                            </tr>
+
+                            <tr *ngFor="let item of this.invoice?.lines">
+                                <td *ngIf="item.itemName !== ''">
+                                    
+                                      <p class="fs-25" style="font-size: 15px!important ; font-weight: lighter !important;"> {{item.itemName}}   </p>
+                                   
+                                </td>
+                                <td style="text-align: center;" *ngIf="item.itemName !== ''">
+                                    
+                                      <p class="fs-25" style="font-size: 15px!important ; font-weight: lighter !important;">   {{item.checkedQty | number}}   </p>
+                                     
+                                </td>
+                                <td style="text-align: right;" *ngIf="item.itemName !== ''">
+                                    
+                                    <p class="fs-25" style="font-size: 15px!important ; font-weight: lighter !important;">   {{item.lineTotal | number}}   </p>
+                                  
+                                </td>
+                                <td style="text-align: right;" *ngIf="item.itemName !== ''">
+                                   
+                                    <p class="fs-25" style="font-size: 15px!important ; font-weight: lighter !important;">   {{item.promoLineTotal | number}}   </p>
+                                  
+                                </td>
+                            </tr>
+                            <tr style="font-size: 20px; background: #fff">
+                                <td class="fs-25" style=" font-weight: 600;">Tổng cộng</td>
+                                <td class="fs-25" style="text-align: center;">{{this.invoice?.totalQuanlity | number}}</td>
+                                <td class="fs-25" style="text-align: right;">{{this.invoice?.totalLineTotal | number}}</td>
+                                <td class="fs-25" style="text-align: right;">{{this.invoice?.totalPromoLineTotal | number}}</td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <p class="fs-25"> Biên bản được lập thành 2 bản. Mỗi bên giữ một bản và có giá trị như nhau.</p>
+
+                        <br>
+                        <br>
+                        <table class="tbl">
+                            <tr>
+                                <th style="text-align: center;">
+                                    <p class="fs-25">{{' Đại diện trung tâm ' | translate}}</p>
+                                </th>
+
+                                <th style="text-align: center;">
+                                    <p class="fs-25"> {{'Đại diện khách hàng' | translate}}</p>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                     
+                    </label>
+                                </td>
+
+                                <td>
+                                    <label>
+                      
+                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                     
+                    </label>
+                                </td>
+
+                                <td>
+                                    <label>
+                      
+                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                     
+                    </label>
+                                </td>
+
+                                <td>
+                                    <label>
+                      
+                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>
+                     
+                    </label>
+                                </td>
+
+                                <td>
+                                    <label>
+                      
+                    </label>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+
+
+
+                        <!-- <hr class="style5"> -->
+                        <!-- <h3>Category Sales</h3>
+             <hr class="style5">
+             <table class="tblLine">
+              <tr>
+                <th>  {{'Description' | translate}} </th> 
+                <th>  {{'Quantity' | translate}} </th>
+                <th>  {{'LineTotal' | translate}} </th>
+              </tr>
+              <tr *ngFor="let item of this.invoice?.itemSumary">
+                <td>   
+                  <label>
+                    {{item.itemCode}}  
+                  </label>
+                </td>
+                <td style="text-align: center;"> 
+                  <label>
+                  {{item.totalQty| number}}  
+                  </label>
+                </td>
+                <td style="text-align: center;"> 
+                  <label>
+                    {{item.lineTotal | number}}
+                  </label>
+                </td>  
+              </tr>
+              
+            </table>
+             
+              <hr class="style5"> -->
+                    </ng-container>
+
+                </div>
+                <!-- </dx-funnel> -->
+                <!-- <button class="submit-btn" style="min-width:150px; width: 100%;"   >Print</button>  -->
+
+            </div>
+
+        </div>
+    </div>
+</div>

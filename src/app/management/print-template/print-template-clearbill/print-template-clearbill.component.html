@@ -1,0 +1,162 @@
+<!-- <style>
+  .textTitlePrint {
+      font-weight: 600;
+  }
+ 
+</style>
+<div class="col-md-6 col-sm-6  offset-md-6 text-right" id="dropdownWidth">
+  <dx-toolbar style="width: 100px">
+      <dxi-item location="before" widget="dxDropDownButton" [options]="{
+          stylingMode: 'text',
+          displayExpr: 'name',
+          keyExpr: 'value',
+          useSelectMode: true,
+          items: widths,
+          selectedItemKey: width,
+          onSelectionChanged: onWidthChanged,
+          itemTemplate: 'widthsItem'
+          }">
+      </dxi-item>
+   
+      <div *dxTemplate="let data of 'widthsItem'">
+          {{data.name}}
+      </div>
+
+  </dx-toolbar>
+</div> -->
+<!-- [style.width]="width + 'cm'" -->
+<div class="center-wrap cl-print-eod" style="font-family: Roboto; color: #000; font-size: 13px;" #pdfShift_1>
+  <div class="maintenance-card print-main cl-print-cm" style="overflow: hidden;  width: 100%;" >
+      <div class="maintenance-row">
+          <div class="col-md-12">
+            <!-- *ngIf="name === 'A4'" -->
+            <div class="cl-pad-eod-A4" >
+               <h2 class="mb-2"> {{this.rptModel?.storeId}}</h2>
+               <h2 class="mb-2"> {{this.rptModel?.title}}</h2>
+               
+             <div class="row mb-2 col-print-12">
+                  <div class="col-md-6 col-print-6">
+                    
+                      <p  class="mb-1"><b>{{'Date' | translate}}: {{this.rptModel?.dateFr | date : this.authService.loadFormat().dateFormat }} ~ {{this.rptModel?.dateTo | date : this.authService.loadFormat().dateFormat }}</b></p>
+                  </div>
+                  <div class="col-md-6 col-print-6 text right">
+                    <p class="mb-1" *ngIf="this.rptModel?.printBy?.length > 0" ><b>{{'Print By' | translate}}: {{this.rptModel?.printBy}}</b></p>
+                    <p class="mb-1"><b>{{'Print Date' | translate}}: {{this.rptModel?.printDate | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</b></p>
+                      <p class="mb-1" *ngIf="this.rptModel?.terminalId?.length > 0" ><b>{{'Location' | translate}}: {{this.rptModel?.terminalId}}</b></p>
+                  </div>
+              </div>
+
+              <div *ngIf="this?.terminalGrp?.length > 0">
+                <hr class="style5">
+                <div class="row table-row">
+                    <table style="width: 100%; border-collapse: collapse;" class="shift-cls">
+                        <tr>
+                            <th> {{'Counter' | translate}} </th>
+                            <th> {{'Cashier' | translate}} </th>
+                            <th> {{'Time' | translate}} </th>
+                            <th> {{'TransId' | translate}} </th>
+                            <th> {{'Item' | translate}} </th>
+                            <th> {{'UOM' | translate}} </th>
+                            <!-- <th> {{'Description' | translate}} </th> -->
+                            <th> {{'Qty' | translate}} </th>
+                            <th> {{'Barcode' | translate}} </th>
+                            <th> {{'Price' | translate}} </th>
+                            <th> {{'Line Total' | translate}} </th>
+                            <th> {{'Approve Id' | translate}} </th>
+                            <th> {{'Remark' | translate}} </th>
+                            <!-- <th style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"> {{'Fc' | translate}} </th>
+                            <th style="text-align: right;"> {{'Total' | translate}} </th>
+                            <th style="text-align: right;"> {{'Collected' | translate}} </th> -->
+                        </tr>
+                      
+                        <ng-container *ngFor="let group of this?.terminalGrp">
+                            <tr >
+                                <td style="font-size: 16px; font-weight: 700;">
+                                    {{group.Grp}}
+                                </td>
+                               
+                            </tr>
+                            <tr *ngFor="let item of group">
+                                <td>
+                                    {{item?.TerminalId}}
+                                </td>
+                                <td>
+                                  {{item?.CreatedBy}}
+                                </td>
+                                <td>
+                                  {{item?.Time}}
+                                </td>
+                                <td>
+                                  {{item?.TransId}}
+                                </td>
+                                <td>
+                                  {{item?.CustomF1}}  
+                                  <!-- <th> {{'Item' | translate}} </th> --> 
+                                </td>
+                                <td>
+                                  {{item?.CustomF2}}
+                                  <!-- <th> {{'SKU' | translate}} </th> -->
+                                </td>
+                                <!-- <td>
+                                  <th> {{'Description' | translate}} </th>  
+                                  {{item?.CustomF3}} 
+                                </td> -->
+                                <td>
+                                  {{item?.CustomF6}}
+                                  <!-- <th> {{'Qty' | translate}} </th> -->
+                                </td>
+                                <td>
+                                  {{item?.CustomF3}}
+                                  <!-- <th> {{'Price' | translate}} </th> -->
+                                </td>
+                                <td>
+                                  {{item?.CustomF4}}
+                                  <!-- <th> {{'Line Total' | translate}} </th> -->
+                                </td>
+                                <td>
+                                  {{item?.CustomF5}}
+                                  <!-- <th> {{'Approve' | translate}} </th> -->
+                                </td>
+                                <td>
+                                  {{item?.CustomF7}}
+                                  <!-- <th> {{'Remark' | translate}} </th> -->
+                                </td>
+                                <td>
+                                  {{item?.CustomF8}}
+                                  <!-- <th> {{'Remark' | translate}} </th> -->
+                                </td>
+                                <!-- <td style="text-align: right;" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0">{{item.fcAmount | number}}</td>
+                                <td style="text-align: right;"><label>{{ item.totalAmt | currencyFormat}}</label></td>
+                                <td style="text-align: right;"><label>{{ item.collectedAmount | currencyFormat}}</label></td> -->
+                            </tr>
+                        </ng-container>
+                        
+                       
+                        <!-- <tr style="border-top: 1px solid;">
+                            <td> <b>{{'Total' | translate}}</b></td>
+                            <td class="text-right" *ngIf="this.authService.getStoreCurrency() ===null || this.authService.getStoreCurrency()===undefined || this.authService.getStoreCurrency().length > 0"><b>{{this.header?.totalFCAmount | currencyFormat}}</b></td>
+                            <td class="text-right"><b>{{this.header?.totalPrice | currencyFormat}}</b></td>
+                            <td class="text-right"><b>{{this.header?.totalCollected | currencyFormat}}</b></td>
+                        </tr> -->
+                    </table>
+                </div>
+            </div>
+          </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- <div class="center-wrap cl-print-eod">
+  <div class="maintenance-card print-main" id="printPageShopCheck" [style.width]="width + 'cm'" style="position: relative; top: -35px;">
+      <div class="maintenance-row">
+          <div class="col-md-12">
+              <div class="row mt-4 ">
+                  <div class="col-md-12 w-100">
+                      <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                                  class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> -->

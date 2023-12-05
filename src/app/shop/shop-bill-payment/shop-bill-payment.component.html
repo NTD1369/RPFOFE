@@ -1,0 +1,696 @@
+<div class="modal-header">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-5">
+                <h4 class="modal-title pull-left" id="my-modal-title"> {{'Payment' | translate}} </h4>
+            </div>
+
+            <div class="col-md-5">
+                <div class="ml-3" style="width: 100%" *ngIf="this.showCouponInput">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 p-0">{{'Coupon' | translate}}</div>
+                        <div class="col-md-7 p-0">
+                            <dx-text-box #txtVoucher style="height: 50px; padding: 10px;"></dx-text-box>
+                        </div>
+                        <div class="col-md-3">
+                            <dx-button class="submit-btn mr-2" style="height: 50px; width: 100%;" (onClick)="findVoucherDetail(txtVoucher.value , null)" text="{{'Search' | translate}}"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 pr-0" style="text-align: right;">
+                <button *ngIf="this.waitingAPi !== true" type="reset" class="reset-btn mr-1 closeCustom" (click)="closeModal()" style="width: 60px; height: 55px">
+                    <i class="fas fa-window-close"></i>
+            
+                  </button>
+                <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()"> <img src="../../../assets/images/System/times.svg"> </button> -->
+                <!-- <div class="ml-3" style="width: 100%" *ngIf="this.showCouponInput">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 p-0">{{'Coupon' | translate}}</div>
+                        <div class="col-md-7 p-0">
+                            <dx-text-box #txtVoucher style="height: 50px; padding: 10px;"></dx-text-box>
+                        </div>
+                        <div class="col-md-3">
+                            <dx-button class="submit-btn mr-2" style="height: 50px; width: 100%;" (onClick)="findVoucherDetail(txtVoucher.value)" text="{{'Search' | translate}}"></dx-button>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<div class="modal-body" *ngIf="basket$ | async as basket" [appIsLoading]="this.loadingService.isLoading(this, this.LoadingIndicator.MANUAL)">
+    <!-- <ng-container *ngIf="this.waitingAPi === false"> -->
+        <div class="row"  *ngIf="filterPayment(true)?.length > 0">
+            <div class="col-md-12 mb-2">
+                <div class="grey-wrapper left-modal-section">
+                    <div class="table-wrap">
+                        <div class="payment-modal-table custom-table horizontal-scroll">
+                            <div class="t-head">
+                                <div class="t-row">
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Trans Id' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-payment">
+                                        <p>{{'Payment Method' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-charged">
+                                        <p>{{'Chargable' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{'Collected' | translate}}</p>
+                                    </div>
+                                    <div class="t-cell cell-ref">
+                                        <p>{{'Ref. Number' | translate}}</p>
+                                    </div>
+    
+                                </div>
+                            </div>
+    
+                            <div class="t-body vertical-scroll mb-2" style="    min-height: unset!important;">
+    
+                                <div class="t-row" *ngFor="let payment of filterPayment(true) ; let i = index">
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment?.transId}}</p>
+                                    </div>
+    
+                                    <div class="t-cell cell-payment">
+                                        <p>{{payment.id}}</p>
+                                    </div>
+    
+                                    <div class="t-cell cell-charged">
+    
+                                        <p>{{payment.paymentCharged | currencyFormat}}</p>
+                                    </div>
+                                    <div class="t-cell cell-amount">
+                                        <p>{{payment.paymentTotal | currencyFormat }}</p>
+    
+                                    </div>
+    
+                                    <div class="t-cell cell-ref">
+                                        <p>{{payment.refNumber}}</p>
+                                    </div>
+    
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                </div>
+    
+            </div>
+        </div>
+       
+
+        <ng-container *ngIf="this.message?.length > 0 || !(this.isResponseBasket$ | async)">
+            <div class="row mb-3">
+                <h2 style="    width: 100%; text-align: center; color: red;">
+                    <!-- {{this.message}} -->
+                    <div innerHTML="{{this.message}}"></div>
+                    <ng-container *ngIf="!(this.isResponseBasket$ | async)">
+                        <h2>{{ 'Order in processing' | translate }}...</h2>
+                    </ng-container>
+
+                </h2>
+
+            </div>
+        </ng-container> 
+        <div class="spinner-grow text-danger btnLoading" role="status" *ngIf="this.message?.length > 0 || !(this.isResponseBasket$ | async)">
+            <span class="sr-only">{{ 'Loading' | translate }}...</span>
+         
+        </div> 
+        <!-- *ngIf=" this.message?.length <= 0" -->
+        <div  [ngClass]="this.message?.length > 0 || !(this.isResponseBasket$ | async) ? ' hideContent':' showContent'" >
+            <div  *ngIf="this.message?.length > 0 || !(this.isResponseBasket$ | async)" style="width: 100%; height: 100%;   z-index: 1;     position: absolute;
+            background-color: white;">
+
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-7">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <!-- <span class="username" style="cursor: pointer;"  [routerLink]="['/shop/customer']">  {{basket.customer.customerName}}</span> -->
+                            <span class="username" style="cursor: pointer;"> <i class="fas fa-user-tie"></i>
+                              {{basket.customer.customerName}}</span>
+                        </div>
+                        <div *ngIf="basket.customer.phone !== null  || basket.customer.mobile !== null">
+                            <a href="tel:{{basket.customer.phone || basket.customer.mobile}}">
+                                <img src="../../../../assets/images/System/phone.svg" alt="phone"> {{basket.customer.phone || basket.customer.mobile}}
+                            </a>
+                        </div>
+                        <div *ngIf="basket.customer.email !== null">
+                            <a href="mailto:{{basket.customer?.email}}">
+                                <img src="../../../../assets/images/System/mail.svg" alt="mail">{{basket.customer?.email}}
+                            </a>
+                        </div>
+                        <div style="cursor: pointer;" *ngIf="basket.customer?.rewardPoints!==null && basket.customer?.rewardPoints!==undefined" (click)="usePoint(basket.customer)">
+                            <span class="nav-mail greeting ml-1" style="    font-size: 18px;">
+                                <img src="../../../../assets/images/System/top-rated.svg" style="height: 25px;" alt="mail">{{basket.customer?.rewardPoints | number}}
+                                <span *ngIf="basket.customer?.customerRankName?.length > 0">  ({{basket.customer?.customerRankName}})</span>
+                              
+                            </span>
+                            <i class="fas fa-angle-double-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5" style="text-align: right" >
+                    <ng-container *ngIf="this.enablePaymentPromotion==='true'" >
+                        <ng-container *ngIf="this.runSimulate">
+                            <button type="reset" class="reset-btn mr-1 closeCustom" (click)="clearSimualation()" style=" height: 55px; width: 50%">
+                                {{'Clear Simulate' | translate}}
+                                <i class="fas fa-list-alt"></i>
+                              </button>
+                        </ng-container>
+                        <ng-container *ngIf="!this.runSimulate">
+                            <button type="reset" class="reset-btn mr-1 closeCustom" (click)="runPaymentSimualation()" style=" height: 55px; width: 50%">
+                                {{'Run Simulate' | translate}}
+                                <i class="fas fa-list-alt"></i>
+                              </button>
+                        </ng-container>
+                    </ng-container>
+                  
+                </div>
+                <!-- <div class="col-md-3" style="text-align: right" *ngIf="!this.production">
+
+                    <button type="reset" class="reset-btn mr-1 closeCustom" (click)="showPaymentHistory()" style=" height: 55px; width: 100%">
+                        {{'Payment Histories' | translate}}
+                        <i class="fas fa-list-alt"></i>
+                      </button>
+                </div> -->
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-7 ">
+                    <!-- {{basket?.negativeOrder}} -->
+
+                    <div class="grey-wrapper left-modal-section">
+
+                        <div class="table-wrap">
+                            <div class="payment-modal-table custom-table horizontal-scroll">
+                                <div class="t-head">
+                                    <div class="t-row">
+                                        <div class="t-cell cell-action"></div>
+                                        <div class="t-cell cell-action">
+                                            <p>{{'No.' | translate}}</p>
+                                        </div>
+                                        <!-- <div class="t-cell cell-discount" *ngIf="this.storecurrency!==null && this.storecurrency!==undefined && this.storecurrency.length > 0">
+                                            <p>{{'Currency' | translate}}</p>
+                                        </div> -->
+                                        <div class="t-cell cell-payment">
+                                            <p>{{'PaymentMethod' | translate}}</p>
+                                        </div>
+
+                                        <div class="t-cell cell-charged">
+                                            <!-- <p>Chargable</p> -->
+                                            <p>{{'Amount' | translate}}
+                                                <span *ngIf="this.storecurrency!==null && this.storecurrency!==undefined && this.storecurrency.length > 0">
+                                                    ({{this.authService.storeSelected()?.currencyCode}})
+                                                </span>
+                                            </p>
+                                        </div>
+                                      
+                                        <div class="t-cell cell-amount">
+                                            <ng-container *ngIf="(basket$ | async)?.negativeOrder">
+                                                <p>{{'Return Amount' | translate}}</p>
+                                            </ng-container>
+                                            <ng-container *ngIf="!(basket$ | async)?.negativeOrder">
+                                                <p>{{'Collected Amount' | translate}}</p>
+                                            </ng-container>
+
+                                        </div>
+                                        <div class="t-cell cell-amount" *ngIf="this.runSimulate">
+                                            <p>{{'Actual Amount' | translate}}</p> 
+                                        </div>
+
+                                        <div class="t-cell cell-ref">
+                                            <p>{{'Remarks' | translate}}</p>
+                                        </div>
+                                        <div class="t-cell cell-ref">
+                                            <p>{{'Ref' | translate}}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="t-body vertical-scroll " *ngIf="basket$ | async as basket">
+                                    <!-- 11/3/2022 Sửa lại filter payment để gom form bill payment bill detail  -->
+                                    <!-- basket.payments -->
+                                    <div (click)="changeValuePayment(input?.value, payment.lineNum, payment)" class="t-row" *ngFor="let payment of filterPayment(false);" [class.selectRow]="payment.lineNum === this.selectedRow">
+                                        <!-- {{this.selectedRow}} {{payment?.lineNum}} -->
+                                        <ng-container *ngIf="this.runSimulate">
+                                            <div class="t-cell cell-action"  >
+                                                
+                                            
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="!this.runSimulate">
+                                            <div class="t-cell cell-action" (click)="removePayment(payment)">
+                                                <a class="delete-btn">
+                                                    <img src="../../../../assets/images/System/close.svg" alt="close">
+                                                </a>
+                                            
+                                            </div>
+                                        </ng-container>
+                                       
+
+                                        <div class="t-cell cell-action">
+                                            <p>{{payment.lineNum}}</p>
+
+                                        </div>
+                                        <!-- ?? this.authService.storeSelected()?.currencyCode  -->
+                                        <!-- <div class="t-cell cell-discount" *ngIf="this.storecurrency!==null && this.storecurrency!==undefined && this.storecurrency.length > 0">
+                                         
+                                        </div> -->
+                                        <div class="t-cell cell-payment">
+                                            <!-- <span *ngIf="payment?.currency!=='' && payment?.currency!==null && payment?.currency!==undefined"> {{payment.currency }}</span>
+                                            <span *ngIf="payment?.currency==='' || payment?.currency===null || payment?.currency===undefined"> {{ this.authService.storeSelected()?.currencyCode }}</span> -->
+
+                                            <p>
+                                                <span style="color: #c44040;" *ngIf="payment?.currency!=='' && payment?.currency!==null && payment?.currency!==undefined"> {{payment.currency }} - </span>
+                                                <span style="color: #c44040;" *ngIf="payment?.currency==='' || payment?.currency===null || payment?.currency===undefined"> {{ this.authService.storeSelected()?.currencyCode }} - </span> {{payment.id }} </p>
+                                            <p>{{payment.shortName}} </p>
+                                        </div>
+
+                                        <div class="t-cell cell-charged">
+
+                                            <p *ngIf="i==0">{{(basketTotal$ | async).total | currencyFormat }}</p>
+                                            <p *ngIf="i!=0">{{payment.paymentCharged | currencyFormat}}</p>
+                                            <p style="color:darkorange ;" *ngIf="i!=0 && payment.paymentDiscount!=0 && payment.paymentDiscount !==null && payment.paymentDiscount !==undefined " 
+                                            (click)="toggleTotalDiscountOptions(payment.promoId)">  {{-payment.paymentDiscount | currencyFormat}} <i class="fas fa-info-circle" id="PaymentDiscount"></i></p>
+                                            <dx-popover target="#PaymentDiscount" position="top" [width]="500" [shading]="true" [showTitle]="true" shadingColor="rgba(0, 0, 0, 0.5)" title="{{'Promotion Details' | translate}}" [(visible)]="withPaymentDiscountVisible">
+                                                <div *dxTemplate="let data = model of 'content'">
+                                                    <!-- *ngFor="let promotion of (basket$ | async)?.promotionApply" -->
+                                                    <ng-container *ngIf="paymentDetailPromotion!==null && paymentDetailPromotion!==undefined">
+                                                        <div class="row" >
+                                                            <label>
+                                                                <i class="fas fa-check-circle" style="color: olivedrab;"></i> 
+                                                                <span style="font-weight: bolder;">
+                                                                {{paymentDetailPromotion?.promoTypeName}}
+                                                                <br>
+                                                                <a (click)="openPromotion(paymentDetailPromotion.promoId)" style="cursor: pointer;">
+                                                                    {{paymentDetailPromotion?.promoId}}:
+                                                                </a> 
+                                                                </span> 
+                                                                {{paymentDetailPromotion?.promoName}}
+                                                            </label>
+        
+                                                        </div>
+                                                    </ng-container>
+                                                    
+                                                    
+                                                </div>
+                                            </dx-popover>
+                                        
+                                        </div>
+                                        
+                                        <div class="t-cell cell-amount">
+                                            <ng-container *ngIf="!this.runSimulate">
+                                                <div class="search-wrap typing-section-input-wrap inputAmount">
+
+                                                    <input class="typing-section-input txtAmount" pattern="[0-9]{1,5}" #input [disabled]="payment.id==='Point' || payment.canEdit===false" [ngModel]="payment.paymentTotal | numberPipe" (ngModelChange)="payment.paymentTotal=$event" style="  border: 1px solid #c6c5cb;"
+                                                        type="text"  (focus)="setClickedRow(payment.lineNum, payment, 'amountInput')" placeholder="Amount" aria-label="text" (keyup)="inputNum(input.value, false)" (blur)="blurNum(input.value )" (change)="inputNum(input.value, false)">
+                                                    <!--  -->
+    
+                                                    <a *ngIf="payment.lineNum==this.selectedRow && payment.id!=='Point' && payment.canEdit!==false" (click)="clearAmountPayment(payment)"><i
+                                                        class="fas fa-eraser"></i></a>
+                                                    <!-- <img class="clear-input" style="right: 5%;" *ngIf="i==this.selectedRow" #txtInput src="../../../../assets/images/System/close.svg" (click)="addPayment(payment.id)" alt="clear"> -->
+                                                </div>
+                                            </ng-container>
+                                          
+
+                                            <ng-container *ngIf="this.runSimulate">
+                                                <p style="text-align: right ;">{{ (payment.paymentTotal) | currencyFormat }}</p>
+                                            </ng-container>
+                                        </div>    
+                                        <div class="t-cell cell-amount" *ngIf="this.runSimulate">
+                                            <!-- payment.paymentTotal - (payment.undefinedAmount)  -->
+                                            <!-- payment.paymentTotal  - payment.paymentDiscount -->
+                                            <p >{{ (payment.undefinedAmount ) | currencyFormat }}</p>
+                                        </div>
+                                        <!-- (change)="changeValuePayment(focus{{i}}.value, i, payment)" (keyup)="changeValuePayment(focus.value, i, payment)" -->
+
+                                        <div class="t-cell cell-ref">
+                                            <ng-container *ngIf="this.runSimulate">
+                                                <p >{{ payment.refNum }}</p>
+                                            </ng-container>
+                                            <ng-container *ngIf="!this.runSimulate">
+                                                <div class="search-wrap typing-section-input-wrap inputAmount">
+
+                                                    <label *ngIf="payment.isRequireRefNum">
+                                                        {{payment.refNum }}
+                                                    
+                                                    <p *ngIf="payment.id==='PrepaidCard'">{{payment.mainBalance | currencyFormat}}/{{payment.subBalance | currencyFormat}}</p>
+                                                    </label>
+                                                    <ng-container *ngIf="!payment.isRequireRefNum">
+    
+                                                        <ng-container *ngIf="VirtualKey$ | async">
+                                                            <!-- [matKeyboard]  -->
+                                                            <input type="text" #input2 appOskInput [formControl]="this.customValueControl[payment.lineNum]" type="text" id="link4" value="{{payment.refNum }}" [disabled]="(payment.id==='Point' || payment.canEdit===false) && payment.customF2!= 'B'" (input)="changeValuePayment(input2.value, payment.lineNum, payment, 'refNum')"
+                                                            (blur)="changeValuePayment(input2.value, payment.lineNum, payment, 'refNum')"   (keyup)="changeValuePayment(input2.value, payment.lineNum, payment, 'refNum')" placeholder="Ref Number" (focus)="setClickedRow(payment.lineNum, payment, 'refNum')" class="typing-section-input txtAmount">
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!(VirtualKey$ | async)">
+                                                            <input type="text" #input2 type="text" id="link4" value="{{payment.refNum }}" [disabled]="(payment.id==='Point' || payment.canEdit===false) && payment.customF2!= 'B'" (keyup)="changeValuePayment(input2.value, payment.lineNum, payment, 'refNum')" placeholder="Ref Number"
+                                                                (focus)="setClickedRow(payment.lineNum, payment, 'refNum')" class="typing-section-input txtAmount">
+                                                        </ng-container>
+                                                        <!-- (change)="changeValuePayment(input.value, i, payment, 'refNum')" -->
+    
+                                                        <a *ngIf="payment.lineNum==this.selectedRow && payment.id!=='Point' && payment.canEdit!==false" (click)="clearRefNumPayment(payment)">
+                                                            <i class="fas fa-eraser"></i>
+                                                        </a>
+                                                    </ng-container>
+    
+                                                </div>
+                                            </ng-container>
+                                            
+                                        </div>
+                                        <div class="t-cell cell-ref">
+                                            <ng-container *ngIf="this.runSimulate">
+                                                <p >{{ payment.customF1}}</p>
+                                            </ng-container>
+                                            <ng-container *ngIf="!this.runSimulate">
+                                                <div class="search-wrap typing-section-input-wrap inputAmount">
+
+                                                    <label *ngIf="payment.isRequireRefNum">
+                                                        {{payment.customF1 }} 
+                                                    </label>
+                                                    <ng-container *ngIf="!payment.isRequireRefNum">
+                                                        <ng-container *ngIf="VirtualKey$ | async">
+                                                            <!-- [matKeyboard] -->
+                                                            <input type="text" #customF1 [formControl]="this.refValueControl[payment.lineNum]" appOskInput type="text" id="customF1" value="{{payment.customF1 }}" [disabled]="(payment.id==='Point' || payment.canEdit===false) && payment.customF2!= 'B'" (input)="changeValuePayment(customF1.value, payment.lineNum, payment, 'customF1')"
+                                                            (blur)="changeValuePayment(customF1.value, payment.lineNum, payment, 'customF1')"  (keyup)="changeValuePayment(customF1.value, payment.lineNum, payment, 'customF1')" placeholder="Ref 1" (focus)="setClickedRow(payment.lineNum, payment,'customF1')" class="typing-section-input txtAmount">
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!(VirtualKey$ | async)">
+                                                            <input type="text" #customF1 type="text" id="customF1" value="{{payment.customF1 }}" [disabled]="(payment.id==='Point' || payment.canEdit===false ) && payment.customF2!= 'B'" (keyup)="changeValuePayment(customF1.value, payment.lineNum, payment, 'customF1')"
+                                                                placeholder="Ref 1" (focus)="setClickedRow(payment.lineNum, payment,'customF1')" class="typing-section-input txtAmount">
+                                                        </ng-container>
+    
+                                                        <a *ngIf="payment.lineNum==this.selectedRow && payment.id!=='Point' && payment.canEdit!==false" (click)="clearCustom1Payment(payment)"><i
+                                                             class="fas fa-eraser"></i></a>
+                                                    </ng-container>
+    
+                                                </div>
+                                            </ng-container>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- <ng-container *ngIf="basket.paymentType === null || basket.paymentType === undefined || basket.paymentType.toLowerCase()!=='change'">
+                   
+                  </ng-container> -->
+                            <!-- <ng-container *ngIf="basket?.paymentType?.toLowerCase()==='change'">
+                    <div *ngFor="let item of storecurrency" class="col-md-4 number-div"> 
+                      <button [ngClass]="item.currency == this.payment.currency ? 'pay-option-btn' : 'number-btn'"> {{item.currency }}
+                        <br />
+                        {{item.currencyName }}
+                        <br />
+                        Rate :  {{item.rate | currencyFormat }}
+                      </button> 
+                    </div>  
+                  </ng-container> -->
+
+                        </div>
+                        <div class="modal-payment-info">
+                            <!-- <div>
+                                <label #lblBillAmount id="lblBillAmount">{{'Bill Amount' | translate}}</label>
+                                <p>{{(basketTotal$ | async).billTotal | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label>{{'Total Discount' | translate}}</label>
+                              
+                                <p>{{(basketTotal$ | async).discountBillValue | currencyFormat}}</p>
+                            </div> -->
+                            <div>
+                                <!-- <label>{{'Total Amount Due' | translate}}</label> -->
+
+                                <!-- <ng-container  *ngIf="(basket$ | async)?.negativeOrder">
+                                    <label class="lblTitle">{{'Return Total' | translate}}</label>
+                                </ng-container>
+                                <ng-container *ngIf="!(basket$ | async)?.negativeOrder"> -->
+                                <label class="lblTitle">{{'Total' | translate}}</label>
+                                <!-- </ng-container> -->
+                                <p class="lblNumber">
+                                    <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketTotal$ | async)?.charged != 0">
+                                        -
+                                    </ng-container>
+                                    {{(basketTotal$ | async)?.charged | currencyFormat}}
+
+                                </p>
+                            </div>
+                            <div>
+                                <!-- <label>{{'Total Collected' | translate}}</label> -->
+                              
+                                <ng-container  *ngIf="(basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return' ">
+                                  
+                                    <label class="lblTitle">{{'Returned Amount' | translate}}</label>
+                                </ng-container>
+                                <ng-container *ngIf="!(basket$ | async)?.negativeOrder && (basket$ | async)?.salesType?.toLowerCase() !== 'return'">
+                                    <label class="lblTitle">{{'Collected' | translate}}</label>
+                                </ng-container>
+                                <p class="lblNumber" style="color: darkorange;">
+                                    <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketTotal$ | async)?.totalAmount != 0 ">
+                                        -
+                                    </ng-container>
+                                    {{(basketTotal$ | async)?.totalAmount | currencyFormat}}
+                                </p>
+                            </div>
+                            <ng-container *ngIf="this.runSimulate">
+                                <div>
+                                    <label class="lblTitle">{{'Actual Amount' | translate}}</label>
+                                   
+                                    <p class="lblNumber" style="color: green;">
+                                        <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketTotal$ | async)?.totalAmount != 0 ">
+                                            -
+                                        </ng-container>
+                                        {{((basketTotal$ | async)?.actualAmount  ) | currencyFormat}}
+                                    </p>
+                                </div>
+                            </ng-container>
+                            
+                            <div>
+                                <!-- <label>{{'Balance Due' | translate}}</label> -->
+                                <label class="lblTitle">{{'Due' | translate}}</label>
+                                <p class="lblNumber">   <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketTotal$ | async)?.amountLeft != 0">
+                                    -
+                                </ng-container>
+                                {{(basketTotal$ | async)?.amountLeft | currencyFormat}}</p>
+                            </div>
+                            <div>
+                                <label class="lblTitle">{{'Change' | translate}}</label>
+                                <p class="lblNumber" style="color: darkred;">{{(basketTotal$ | async).changeAmount | currencyFormat}}</p>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="(basketCurrencyTotal$ | async)?.currency!==null && (basketCurrencyTotal$ | async)?.currency!==undefined  && (basketCurrencyTotal$ | async)?.currency!=='' && (basketCurrencyTotal$ | async)?.currency !== this.authService.storeSelected()?.currencyCode">
+
+                            <ng-container *ngIf="isShowChangeAmtInPayment==='true'">
+                                <div style="border-top: 1px solid;" class="mt-2 pt-2">
+                                    <p> <i class="fas fa-money-check-alt"></i> {{(basketCurrencyTotal$ | async)?.currency}}</p>
+                                </div>
+                            </ng-container>
+                            <div class="modal-payment-info mt-0">
+
+                                <!-- <div>
+                                    <label>{{'Bill Amount' | translate}}</label>
+                                    <p>{{(basketCurrencyTotal$ | async)?.billTotal | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <label>{{'Total Discount' | translate}}</label>
+                                   
+                                    <p>{{(basketCurrencyTotal$ | async)?.discountBillValue | currencyFormat}}</p>
+                                </div> -->
+                                <div>
+                                    <!-- <label>{{'Total Amount Due' | translate}}</label> -->
+                                    <label class="lblTitle">{{'Total' | translate}}</label>
+                                    <p class="lblNumber">    
+                                       <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return')  && (basketCurrencyTotal$ | async)?.charged != 0">
+                                        -
+                                       </ng-container>
+                                    {{(basketCurrencyTotal$ | async)?.charged | currencyFormat}}</p>
+                                </div>
+                                <div>
+                                    <!-- <label>{{'Total Collected' | translate}}</label> -->
+                                    <label class="lblTitle">{{'Collected' | translate}}</label>
+                                    <p class="lblNumber" style="color: OragneDark;">
+                                        <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketCurrencyTotal$ | async)?.totalAmount != 0">
+                                            -
+                                        </ng-container>
+                                        {{(basketCurrencyTotal$ | async)?.totalAmount | currencyFormat}}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <!-- <label>{{'Balance Due' | translate}}</label> -->
+                                    <label class="lblTitle">{{'Due' | translate}}</label>
+                                    <p class="lblNumber">
+                                        <ng-container  *ngIf="((basket$ | async)?.negativeOrder || (basket$ | async)?.salesType?.toLowerCase() === 'return') && (basketCurrencyTotal$ | async)?.amountLeft != 0">
+                                            -
+                                        </ng-container>
+                                        {{(basketCurrencyTotal$ | async)?.amountLeft | currencyFormat}}
+                                    </p>
+                                </div>
+                                <div>
+
+                                    <ng-container *ngIf="isShowChangeAmtInPayment==='true'">
+                                        <label class="lblTitle">{{'Change' | translate}}</label>
+                                        <p style="color: cornflowerblue;">{{(basketCurrencyTotal$ | async)?.changeAmount}}</p>
+                                    </ng-container>
+                                    <ng-container *ngIf="isShowChangeAmtInPayment==='false'">
+                                        <label style="color:#E8E8ED" class="lblTitle">{{'Change' | translate}}</label>
+                                        <p style="color: cornflowerblue;" class="lblNumber">{{(basketCurrencyTotal$ | async)?.currency}}</p>
+                                    </ng-container>
+                                    <!-- <p> <i class="fas fa-money-check-alt"></i> {{(basketCurrencyTotal$ | async)?.currency}}</p> -->
+                                    <!-- <label>{{'Currency' | translate}}</label> -->
+                                    <!-- <label style="color:#E8E8ED">{{'Change' | translate}}</label>
+                                    <p style="color: cornflowerblue;">{{(basketCurrencyTotal$ | async)?.currency}}</p> -->
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                    </div>
+                    <div class="modal-discount-btn-wrap-amount">
+                        <ng-container *ngFor="let item of this.denolist">
+                            <button class="btn-discount-amount mb-3" (click)="inputNum(item.value, true)">{{item.value | currencyFormat}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="grey-wrapper right-modal-section">
+                        <div class="typing-section">
+                            <ng-container *ngIf="isShowPaymentHistory">
+                                <app-shop-payment-history (outPayment)="this.addBasketPaymentToPayment($event)" [payments]="this.paymentHitories"></app-shop-payment-history>
+                            </ng-container>
+                            <ng-container *ngIf="!isShowPaymentHistory">
+                                <div class="number-pad" *ngIf="isShowOtherPayment">
+                             
+                                    <app-shop-other-payment (outPayment)="this.addOtherPayment($event)" [title]="this.titleOtherPayment" [payments]="this.paymentMethodOtherList"></app-shop-other-payment>
+                                </div>
+                                <div *ngIf="isShowCurrency">
+                                    <app-shop-payment-currency (outPayment)="this.addMultiCurrencyPayment($event)" [storeCurrency]="this.storecurrency" [amount]="this.basketService.getAmountChange()" [payment]="this.paymentSelectTemp"></app-shop-payment-currency>
+                                </div>
+                                <div *ngIf="this.isQRScan===true">
+                                    <app-shop-payment-qrscan [payment]="this.paymentTmp" (outEvent)="this.applyQrPayment($event)"></app-shop-payment-qrscan>
+                                </div>
+                              
+                                
+                                    <div class="number-pad" *ngIf="isShowPayment">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="row">
+                                                    <div class="col-md-4 number-div">
+        
+                                                        <button class="number-btn" (click)="pressKey('1')">1</button>
+        
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+        
+                                                        <button class="number-btn" (click)="pressKey('2')">2</button>
+        
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+        
+                                                        <button class="number-btn" (click)="pressKey('3')">3</button>
+        
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('4')">4</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('5')">5</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('6')">6</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('7')">7</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('8')">8</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('9')">9</button>
+                                                    </div>
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('0')">0</button>
+                                                    </div>
+        
+                                                    <div class="col-md-4 number-div" *ngIf="this.storeSelected.currencyCode !== 'VND'">
+                                                        <button class="number-btn" (click)="pressKey('.')">.</button>
+                                                    </div>
+        
+                                                    <div class="col-md-4 number-div" *ngIf="this.storeSelected.currencyCode === 'VND'">
+                                                        <button class="number-btn" (click)="pressKey('000')">000</button>
+                                                    </div>
+        
+                                                    <div class="col-md-4 number-div">
+                                                        <button class="number-btn" (click)="pressKey('000000')"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 ">
+                                                <div class="row">
+                                                    <ng-container *ngIf="this.typeOfPaymentMode === 'BankTerminal'">
+                                                        <div class="col-md-12 number-div" *ngFor="let group of this.fatherPayment">
+                                                            
+                                                            <button class="pay-option-btn" *ngIf="group.fatherName?.length > 0 " (click)="showPaymentList(group.fatherId, group.fatherName, group.bankSelectedMode)" >{{ group.fatherName}}</button>
+                                                            <button class="pay-option-btn"  *ngIf="group.fatherName?.length <= 0 " >{{ group.fatherName}}</button>
+
+                                                            <!-- (click)="addPaymentClick(payment , null , payment.isRequireRefnum)" -->
+                                                        </div>
+                                                            <!-- <div class="number-pad" *ngIf="isShowPayment">
+                                                                <div class="row" *ngIf="fatherPayment!==null && fatherPayment!==undefined && fatherPayment.length > 0">
+                                                                    <div *ngFor="let group of this?.fatherPayment" class="col-md-6 mb-3 number-div pt-2 pb-2">
+                                                                       
+                                                                        <button [ngClass]=" 'number-btn'" (click)="showPaymentList(group.fatherId)" > {{group.fatherId }}
+                                                                      
+                                                                        </button>
+                                                                    </div>
+                                                    
+                                                                </div>
+                                                            </div>
+                                                            -->
+                                                    </ng-container>
+                                                    <!-- <ng-container *ngIf="this.typeOfPaymentMode !== 'BankTerminal'"> -->
+                                                        <div class="col-md-12 number-div" *ngFor="let payment of this.paymentMethodShowList">
+                                                            <button class="pay-option-btn" (click)="addPaymentClick(payment , null , payment.isRequireRefnum)">{{ payment.shortName}}</button>
+                                                        </div>
+            
+                                                        <div class="col-md-12 number-div">
+                                                            <button class="pay-option-btn"  (click)="showOtherPayment()"> {{'Other' | translate}}</button>
+                                                        </div>
+                                                    <!-- </ng-container> -->
+                                                </div>
+        
+        
+        
+                                            </div>
+        
+                                            <div class="number-div submit-div" style="height: 80px!important;">
+                                                <button class="btn-agree" *ngIf="this.isShowSubmitQRScan" (click)="addOrder()"> {{'QR Scan' | translate}}</button>
+                                                <button class="btn-agree" *ngIf="!this.isShowSubmitQRScan" (click)="addOrder()"> {{'Submit' | translate}}</button>
+                                                 
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                          
+                            </ng-container>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <!-- </ng-container> -->
+
+
+</div>

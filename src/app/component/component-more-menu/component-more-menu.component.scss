@@ -1,0 +1,29 @@
+.maintenance-cardCustom {
+    background-color: var(--white, white);
+    /* display: list-item; */
+    border-radius: 5px;
+    // padding: 1rem;
+    overflow-y: overlay;
+    // height: 100vh;
+    margin-bottom: 150px;
+    /* margin-right: 20px; */
+    height: 100%!important;
+    margin: unset!important;
+    // padding-right: 30px;
+}
+
+.maintenance-cardCustom .maintenance-row {
+    display: flex;
+    display: contents!important;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+.titleRow
+{ 
+    position: relative!important;
+}
+
+.moreMenuRow{
+    margin-top: 5px!important;
+}

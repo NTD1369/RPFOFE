@@ -1,0 +1,132 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
+// FILTER NAV SCROLL
+$("#scrollLeft").click(function () {
+  var navwidth = $(".main-side-option");
+  navwidth.animate({ scrollLeft: "-=188" }, 500);
+});
+
+$("#scrollRight").click(function () {
+  var navwidth = $(".main-side-option");
+  navwidth.animate({ scrollLeft: "+=188" }, 500);
+});
+
+// SLICK CAROUSEL
+$("#food-carousel").slick({
+  rows: 3,
+  dots: true,
+  arrows: false,
+  infinite: false,
+  speed: 300,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  responsive: [
+    {
+      breakpoint: 1430,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+      },
+    },
+    {
+      breakpoint: 1200,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 4,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+      },
+    },
+    {
+      breakpoint: 576,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+      },
+    },
+  ],
+});
+
+// SHUBHAM JOSHI - MANAGER PAGE - 11/11/2020
+// $(document).ready(function () {
+//   function bannerheight() {
+//     var head_height = $("header").outerHeight(true);
+//     var extra_top_space = 20;
+//     $(".after-header").css("margin-top", head_height + "px");
+//     $(".toggle-services-display").css(
+//       "top",
+//       head_height + extra_top_space + "px"
+//     );
+//   }
+//   bannerheight();
+//   $(window).resize(bannerheight);
+// });
+
+// function sidebarwidth() {
+//   var side_width = $(".sidebar-manager").outerWidth(true);
+//   var extra_left_space = 16;
+//   $(".data-display-area").css("margin-left", side_width + "px");
+//   $(".toggle-services-display").css(
+//     "left",
+//     side_width + extra_left_space + "px"
+//   );
+// }
+// sidebarwidth();
+// $(window).resize(sidebarwidth);
+
+// if ($(window).width() < 767) {
+//   function sidebarwidth() {
+//     var side_height = $(".sidebar-manager").outerHeight(true);
+//     var extra_margin = 20;
+//     $(".data-display-area").css("margin-left", 0 + "px");
+//     $(".data-display-area").css(
+//       "margin-top",
+//       side_height + extra_margin + "px"
+//     );
+//     $(".toggle-services-display").css("left", 0 + "px");
+//     $(".toggle-services-display").css("top", side_height + "px");
+//   }
+//   sidebarwidth();
+//   $(window).resize(sidebarwidth);
+
+//   $(document).ready(function () {
+//     $("#payment-modal").modal();
+//   });
+
+//   function bannerheight() {
+//     var head_height = $("header").outerHeight(true);
+//     var sideTwo_height = $(".sidebar-manager").outerHeight(true);
+//     var extra_top_space = 20;
+
+//     // console.log(sidebar_manager + head_height + sideTwo_height);
+//     // var total_height = sidebar_manager + head_height + sideTwo_height;
+
+//     // console.log($(".toggle-services-display"));
+
+//     $(".toggle-services-display").css(
+//       "top",
+//       head_height + sideTwo_height + extra_top_space + "px"
+//     );
+//   }
+//   bannerheight();
+//   $(window).resize(bannerheight);
+// }
+
+$(".clear-input").click(function (e) {
+  e.preventDefault();
+  $(".typing-section-input").val("");
+});
+
+$("#manger-services-setting").on("click", function () {
+  $(".toggle-services-display").toggleClass("show-services");
+  bannerheight();
+});
+
+

@@ -1,0 +1,143 @@
+<main class="wrap item-search-page">
+    <div class="container-fluid">
+        <div class="main-section">
+            <a href="javascript:void" class="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+          <defs>
+            <clippath id="clip-path">
+              <rect id="Rectangle_224" data-name="Rectangle 224" width="32" height="32" transform="translate(0.486 0.486)" stroke="#707070" stroke-width="1"></rect>
+            </clippath>
+          </defs>
+          <g id="Mask_Group_5" data-name="Mask Group 5" transform="translate(-0.486 -0.486)" clip-path="url(#clip-path)">
+            <g id="arrow-right-line_4_" data-name="arrow-right-line (4)">
+              <path id="Path_136" data-name="Path 136" d="M32.972,0H0V32.972H32.972Z" fill="none"></path>
+              <path id="Path_137" class="back-arrow" data-name="Path 137" d="M9.259,13.534l7.369-7.369L14.686,4.222,4,14.908,14.686,25.593l1.943-1.943L9.259,16.281H25.981V13.534Z" transform="translate(1.495 1.578)"></path>
+            </g>
+          </g>
+        </svg>
+            </a>
+
+            <div class="item-search-nav">
+                <div class="row align-items-end">
+                    <div class="col-lg-4 col-12">
+                        <div class="search-wrap">
+                            <label for="item-searchbar" class="section-title">{{'Item Search' | translate}}</label>
+                            <input type="search" id="item-searchbar" placeholder="{{'Type Keywords' | translate}}">
+                        </div>
+                    </div>
+                    <!-- <div class="col-lg-8 col-12 mt-2 mb-2 mb-lg-0 mt-lg-0">
+            <div class="row">
+              <div class="col-12 mt-2 col-sm-6 col-md-3 mt-sm-0">
+                <div class="search-wrap">
+                  <label for="category">Category</label>
+                  <select name="category-select" id="category" class="custom-select">
+                    <option value="">Select category</option>
+                    <option value="one">one</option>
+                    <option value="one">two</option>
+                    <option value="three">three</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 mt-2 col-sm-6 col-md-3 mt-sm-0">
+                <div class="search-wrap">
+                  <label for="style">Style</label>
+                  <select name="style-select" id="style" class="custom-select">
+                    <option value="">Select style</option>
+                    <option value="one">one</option>
+                    <option value="one">two</option>
+                    <option value="three">three</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 mt-2 col-sm-6 col-md-3 mt-sm-2 mt-md-0">
+                <div class="search-wrap">
+                  <label for="status">Status</label>
+                  <select name="status-select" id="status" class="custom-select">
+                    <option value="">Select status</option>
+                    <option value="one">one</option>
+                    <option value="one">two</option>
+                    <option value="three">three</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 mt-2 col-sm-6 col-md-3 mt-sm-2 mt-md-0">
+                <div class="search-wrap">
+                  <label for="color">Color</label>
+                  <select name="color-select" id="color" class="custom-select">
+                    <option value="">Select color</option>
+                    <option value="one">one</option>
+                    <option value="one">two</option>
+                    <option value="three">three</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div> -->
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <div class="item-search-table custom-table">
+                    <div class="t-head">
+                        <div class="t-row">
+                            <div class="t-cell cell-item">
+                                <p>{{'Item Code' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-name">
+                                <p>{{'Item Name' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-price">
+                                <p>{{'Item Price' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-color">
+                                <p>{{'Foreign Name' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-size">
+                                <p>{{'Image' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-uom">
+                                <p>{{'UoM' | translate}}</p>
+                            </div>
+                            <div class="t-cell cell-action">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="t-body vertical-scroll">
+                        <div class="t-row" *ngFor="let item of this.items">
+                            <div class="t-cell cell-item">
+                                <p>{{item.itemCode}}</p>
+                            </div>
+                            <div class="t-cell cell-name">
+                                <p>{{item.itemName}}</p>
+                            </div>
+                            <div class="t-cell cell-price">
+                                <p>{{item.defaultPrice}}</p>
+                            </div>
+                            <div class="t-cell cell-color">
+                                <p>{{item.foreignName}}</p>
+                            </div>
+                            <div class="t-cell cell-size">
+                                <p>{{item.imageUrl}}</p>
+                            </div>
+                            <div class="t-cell cell-uom">
+                                <p>{{item.inventoryUom}}</p>
+                            </div>
+                            <div class="t-cell cell-action">
+                                <a class="secondary-btn">{{'Select' | translate}}</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="dvPaging" class="col-md-12">
+                        <!-- <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+            [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" 
+            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+      
+            </pagination> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

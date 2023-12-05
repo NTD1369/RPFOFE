@@ -1,0 +1,68 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Prepaid Card' | translate}}</label>
+
+        </div>
+
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 20vh)','overflow':'auto'}" id="gridContainer" 
+            (onToolbarPreparing)="onToolbarPreparing($event)" [dataSource]="this.cards" [showBorders]="true"  [showRowLines]="true">
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" autocomplete="off" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <dxi-column dataField="prepaidCardNo" caption="{{'Card No' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="mainBalance" caption="{{'Main Balance' | translate}}" [customizeText]="customizeText"> </dxi-column>
+                <dxi-column dataField="subBalance" caption="{{'Sub Balance' | translate}}" [customizeText]="customizeText"> </dxi-column>
+                <dxi-column dataField="startDate" caption="{{'Start Date' | translate}}" dataType="date" [format]="this.authService.loadFormat().dateFormat"> </dxi-column>
+                <dxi-column dataField="duration" caption="{{'Duration' | translate}}"> </dxi-column>
+                <dxi-column alignment="center" dataField="status" cellTemplate="statusTemplate" caption="{{'' | translate}}Status"></dxi-column>
+
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" (onClick)="openModal(false, cell.data, template)"></dx-button>
+                    <dx-button icon="fa fa-history" class="ml-2" text="History" (onClick)="openHistoryModal( cell.data, historyTemplate)"></dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Prepaid Card' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-prepaid-edit [model]="this.card" style="width: 100%" (outModel)="updateModel($event)"></app-management-prepaid-edit>
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #historyTemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'History Prepaid Card' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-manament-prepaid-history [model]="this.card" style="width: 100%"></app-manament-prepaid-history>
+            <!-- <app-management-store-edit [model]="this.store"  style="width: 100%" (outModel)="updateModel($event)"></app-management-store-edit>  -->
+        </div>
+    </div>
+</ng-template>

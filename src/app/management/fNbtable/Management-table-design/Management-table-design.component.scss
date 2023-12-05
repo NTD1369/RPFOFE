@@ -1,0 +1,75 @@
+::ng-deep #diagram {
+  height: 900px;
+}
+
+::ng-deep .dxdi-canvas .shape text,
+.dxdi-canvas .toolbox-item text {
+  fill: transparent;
+}
+
+::ng-deep #diagram {
+  height: 725px;
+}
+
+::ng-deep #diagram .template .template-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+::ng-deep #diagram .template .template-title {
+  // font-style: italic;
+  font-weight: 600;
+  font-size: 20px;
+  color: red;
+}
+
+::ng-deep .dxdi-canvas .shape text,
+.dxdi-canvas .toolbox-item text {
+  fill: transparent;
+}
+
+::ng-deep #diagram .template .template-button {
+  cursor: pointer;
+  font-size: 8pt;
+  fill: navy;
+}
+
+::ng-deep #diagram .template .template-button:hover {
+  text-decoration: underline;
+}
+
+// ::ng-deep .dx-popup-content {
+//   padding: 0;
+// }
+
+// ::ng-deep .dx-popup-content .dx-fieldset.buttons {
+//   display: flex;
+//   justify-content: flex-end;
+// }
+
+// ::ng-deep .dx-popup-content .dx-fieldset.buttons > * {
+//   margin-left: 8px;
+// }
+
+.geeks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+
+}
+
+.table__NoOrder {
+  position: relative;
+  margin: auto 0px;
+  font-weight: 900;
+  width: 100%;
+}
+
+.table__Order {
+  position: relative;
+  margin: auto 0px;
+  font-weight: 900;
+  width: 100%;
+}

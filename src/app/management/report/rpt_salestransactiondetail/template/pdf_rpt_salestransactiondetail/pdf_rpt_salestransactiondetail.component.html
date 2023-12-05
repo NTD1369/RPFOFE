@@ -1,0 +1,29 @@
+ 
+<div class="center-wrap cl-print-eod" style="font-family: Roboto; color: #000; font-size: 13px;" #pdfShift_1>
+  <div class="maintenance-card print-main cl-print-cm" style="overflow: hidden;  width: 100%;" >
+      <div class="maintenance-row">
+          <div class="col-md-12">
+            <!-- *ngIf="name === 'A4'" -->
+            <div class="cl-pad-eod-A4" >
+               <h2 class="mb-2"> {{this.rptModel?.storeId}}</h2>
+               <h2 class="mb-2"> {{this.rptModel?.title}}</h2>
+               
+             <div class="row mb-2 col-print-12">
+                  <div class="col-md-6 col-print-6">
+                    
+                      <p  class="mb-1"><b>{{'Date' | translate}}: {{this.rptModel?.dateFr | date : this.authService.loadFormat().dateFormat }} ~ {{this.rptModel?.dateTo | date : this.authService.loadFormat().dateFormat }}</b></p>
+                  </div>
+                  <div class="col-md-6 col-print-6 text right">
+                    <p class="mb-1" *ngIf="this.rptModel?.printBy?.length > 0" ><b>{{'Print By' | translate}}: {{this.rptModel?.printBy}}</b></p>
+                    <p class="mb-1"><b>{{'Print Date' | translate}}: {{this.rptModel?.printDate | date : this.authService.loadFormat().dateFormat + " HH:mm:ss"}}</b></p>
+                      <p class="mb-1" *ngIf="this.rptModel?.terminalId?.length > 0" ><b>{{'Location' | translate}}: {{this.rptModel?.terminalId}}</b></p>
+                  </div>
+              </div>
+
+             
+          </div>
+          </div>
+      </div>
+  </div>
+</div>
+ 

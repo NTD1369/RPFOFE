@@ -1,0 +1,44 @@
+.item-info {
+    text-align: center;
+    font-weight: 600;
+    width: 9.7cm;
+    margin-bottom: 1.5cm;
+    padding-top: 1.6cm;
+    margin-left: 0.8cm;
+    position: relative;
+    .title {
+        font-size: 20px;
+        height: 40px;
+        margin-bottom: 0 !important;
+    }
+    .price {
+        font-size: 44px;
+        margin-bottom: 0 !important;
+    }
+    .unit {
+        text-align: right;
+        font-weight: 500;
+        font-size: 17px;
+    }
+}
+
+.cl-itemcode {
+    font-size: 12px;
+    position: absolute;
+    left: 15px;
+    bottom: 6px;
+}
+
+.cl-bc {
+    text-align: right;
+}
+
+.cl-contain {
+    display: none;
+}
+
+@media print {
+    .cl-contain {
+        display: block;
+    }
+}

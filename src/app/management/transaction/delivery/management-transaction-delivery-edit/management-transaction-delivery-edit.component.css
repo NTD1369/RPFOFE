@@ -1,0 +1,16 @@
+.deliveryEdit__background{
+    background-color: white;
+    margin-top: 25px;
+    padding:20px;
+    height:800px;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.deliveryEdit__fws{
+    font-size: 32px;
+    font-weight: 700;
+}
+
+

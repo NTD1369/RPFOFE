@@ -1,0 +1,136 @@
+<style>
+  .textTitlePrint {
+      font-weight: 600;
+  }
+ 
+</style>
+<div class="col-md-6 col-sm-6  offset-md-6 text-right" id="dropdownWidth">
+    <dx-toolbar style="width: 100px">
+        <dxi-item location="before" widget="dxDropDownButton" [options]="{
+            stylingMode: 'text',
+            displayExpr: 'name',
+            keyExpr: 'value',
+            useSelectMode: true,
+            items: widths,
+            selectedItemKey: width,
+            onSelectionChanged: onWidthChanged,
+            itemTemplate: 'widthsItem'
+            }">
+        </dxi-item>
+       
+        <div *dxTemplate="let data of 'widthsItem'">
+            {{data.name}}
+        </div>
+  
+    </dx-toolbar>
+  </div>
+ 
+<div class="center-wrap cl-print-eod" style="font-family: Roboto; color: #000; font-size: 13px;" #pdfShift_1>
+  <div class="maintenance-card print-main cl-print-cm" style="overflow: hidden" [style.width]="width + 'cm'">
+      <div class="maintenance-row">
+          <div class="col-md-12">
+            <div *ngIf="name === '80mm' || name === '50mm'">
+
+               
+                <!-- <h3><b>{{'Counter'}}: {{this.counterId}}</b></h3>
+                <h3><b>{{'Shift'}}: {{this.shiftId}}</b></h3> -->
+
+                <div class="text-center mb-2" style="font-size:15px">{{'Pickup Amount' | translate}}</div>
+             
+                <!-- <div>
+                    <p> <label class="textTitlePrint">{{'Store' | translate}}: </label> {{this.header?.storeId}} - {{this.header?.storeName}} </p>
+                    <p> <label class="textTitlePrint">{{'Date' | translate}}: </label> {{this.header?.date | date : this.authService.loadFormat().dateFormat}}</p>
+                </div> -->
+              <div>
+                  <p> <label class="textTitlePrint">{{'Counter' | translate}}: </label> {{this.counterId}} </p>
+                  <p> <label class="textTitlePrint">{{'Shift' | translate}}: </label> {{this.shiftId}} </p>
+                  <p *ngIf="docBusiness!==undefined && docBusiness!==null"> <label class="textTitlePrint">{{'Business Date' | translate}}: </label>
+                       {{this.docBusiness | date: this.authService.loadFormat().dateFormat }} </p>
+              </div>
+                <div *ngIf="this.pickupAmtList?.length > 0"> 
+                    <!-- <h5 class="mb-1 mt-3"> {{'Pick up' | translate}}</h5>  -->
+                    <div class="row table-row">
+                        <table style="width: 100%; border-collapse: collapse;" class="shift-cls" >
+                            <tr>
+                                <th width="10%"> {{'#' | translate}} </th> 
+                                <th width="30%" style="padding-right: 3px;"> {{'By' | translate}} </th> 
+                                <th width="60%" class="text-right" style="padding-right: 3px;"> {{'Amount' | translate}} </th>
+                                <!-- <th width="50%" style="min-width: 50px;"> {{'Remark' | translate}} </th> -->
+                            </tr>
+                            <ng-container *ngFor="let item of this.pickupAmtList">
+                                <tr >
+                                    <td>
+                                        <label style="margin-bottom: 0px;">
+                                            {{item.collection}} 
+                                        </label>
+                                    </td> 
+                                    <td>
+                                      <label *ngIf="item?.createdBy !== null && item?.createdBy !== undefined && item.createdBy?.length > 0" style="margin-bottom: 0px;">
+                                          {{item.createdBy}} 
+                                         
+                                      </label>
+                                      <ng-container *ngIf="item?.createdBy !== null && item?.createdBy !== undefined && item.createdBy?.length > 0 && item?.createdOn !== null && item?.createdOn !== undefined">
+                                         <br />
+                                      </ng-container>
+                                      <label *ngIf="item?.createdOn !== null && item?.createdOn !== undefined"  style="margin-bottom: 0px;">
+                                          {{item.createdOn | date: 'HH:mm:ss'}} 
+                                      </label>
+                                    </td> 
+                                
+                                    <td class="text-right" style="padding-right: 3px;">
+                                        <label style="margin-bottom: 0px;">
+                                            {{item.amount | currencyFormat}}
+                                        </label>
+                                    </td>
+                                   
+                                </tr>
+                               <ng-container *ngIf="item.remarks !== null && item.remarks!==undefined && item.remarks?.length > 0">
+                                    <tr>
+                                        <td style="    padding: 0px 5px;">
+                                            
+                                        </td> 
+                                        <td colspan="3"  style="    padding: 0px 5px;">
+                                            <span style="font-size: 13; font-weight: bolder;">
+                                                {{'Note' | translate}}:
+                                            </span>
+                                            <label style="margin-bottom: 0px;">
+                                                {{item.remarks}}
+                                            </label>
+                                        </td>
+                                    
+                                    </tr>
+                               </ng-container>
+                             
+                            </ng-container>
+                            
+                     
+                            <tr style="border-top: 1px solid;">
+                                <td><b>{{'Total' | translate}}</b></td> 
+                                <td></td>  
+                                <td class="text-right"><b>{{this.pickTotal | currencyFormat}}</b></td>
+                                <!-- <td class="text-right"></td> -->
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+              
+            </div>
+
+          </div>
+      </div>
+  </div>
+</div>
+<div class="center-wrap cl-print-eod">
+  <div class="maintenance-card print-main" id="printPageShopCheck" [style.width]="width + 'cm'" style="position: relative; top: -35px;">
+      <div class="maintenance-row">
+          <div class="col-md-12">
+              <div class="row mt-4 ">
+                  <div class="col-md-12 w-100">
+                      <button class="btn-search w-100" (click)="PrintPage()" style="padding: 10px 30px"><i
+                                  class="fa fa-print" aria-hidden="true"></i> {{'Print' | translate}}</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

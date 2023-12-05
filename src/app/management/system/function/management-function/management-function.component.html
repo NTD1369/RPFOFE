@@ -1,0 +1,187 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Function' | translate}}</label>
+
+        </div>
+        <!-- <div class="item-search-nav">
+        <div class="row align-items-end">
+          <div class="col-lg-4 col-12">
+            <div class="search-wrap">
+              
+              <input type="search" id="item-searchbar"  placeholder="Type Keywords">
+             
+            </div>
+          </div>
+          <div class="col-lg-4">
+            
+          </div>
+        
+          <div class="col-lg-4 col-12 right">
+            <button class="btn btn-success btn-block col-md-4 "  (click)="openModal(true,null, template)"><i class="fas fa-plus-square"></i> Add New</button> 
+          </div>
+        
+        </div>
+      </div> -->
+
+        <div class="table-wrap">
+            <dx-tree-list id="functionList" [dataSource]="this.files5" rootValue="" keyExpr="functionId" [showRowLines]="true" [showBorders]="true" parentIdExpr="parentId" [columnAutoWidth]="true">
+                <ng-container *ngFor="let col of cols; let i = index">
+                    <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i === 0"></dxi-column>
+                    <dxi-column [dataField]="col.field" [caption]="col.header" *ngIf="i !== 0" cellTemplate="toggleCellTemplate">
+
+                    </dxi-column>
+                </ng-container>
+
+                <dxi-column caption="" cellTemplate="diffCellTemplate"></dxi-column>
+                <div *dxTemplate="let d of 'toggleCellTemplate'">
+                    <label> {{d.data[d.column.dataField] | translate}}</label>
+                    <!-- <dx-switch  alignment="center" (onValueChanged)="onchange(d.data, d.column.dataField, d.data[d.column.dataField])" [(value)]="d.data[d.column.dataField]"></dx-switch> -->
+                </div>
+                <div *dxTemplate="let d of 'diffCellTemplate'">
+
+                    <dx-button icon="edit" (onClick)="openModal(false, d.data, template)"></dx-button>
+                </div>
+
+                <!-- <dxi-column dataField="A" caption="Add"></dxi-column> 
+        <dxi-column dataField="E" caption="Edit"></dxi-column>
+        <dxi-column dataField="I" caption="Insert"></dxi-column>
+        <dxi-column dataField="D" caption="Delete"></dxi-column> -->
+            </dx-tree-list>
+            <!-- <ng-template pTemplate="caption">
+          <div style="text-align: right">        
+              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Global Filter" (input)="tt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+      </ng-template> -->
+            <!-- <p-treeTable  #tt [value]="files5" [columns]="cols" selectionMode="checkbox">
+    
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                    <th style="width: 8rem">
+                     
+                  </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-col let-rowNode let-rowData="rowData" let-columns="columns">
+                <tr>
+                
+                  
+                    <td  *ngFor="let col of columns; let i = index"  >
+                      <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                 
+                      <label> {{rowData[col.field]}}</label>
+                      
+                    
+                    </td>
+                    <td>
+                  
+                      <p-button icon="pi pi-pencil" styleClass="p-button-warning"  (click)="openModal(false, rowData, template)"></p-button>
+                  </td>
+                </tr>
+            </ng-template>
+          </p-treeTable> -->
+        </div>
+    </div>
+</div>
+<!-- <div class="item-search-nav">
+        <div class="row align-items-end">
+          <div class="col-lg-4 col-12">
+            <div class="search-wrap">
+          
+              <input type="search" id="item-searchbar" placeholder="Type Keywords">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            
+          </div>
+        
+          <div class="col-lg-4 col-12 right">
+            <button class="btn btn-success btn-block col-md-4 "  (click)="openModal(true,null, template)"><i class="fas fa-plus-square"></i> Add New</button> 
+          </div>
+        
+        </div>
+      </div> 
+      <div class="table-wrap">
+        <div class="item-search-table custom-table">
+          <div class="t-head">
+            <div class="t-row">
+              <div class="t-cell cell-item">
+                <p>FunctionId</p>
+              </div>
+              <div class="t-cell cell-name">
+                <p>Name</p>
+              </div>
+              <div class="t-cell cell-price">
+                <p>Url</p>
+              </div>
+              <div class="t-cell cell-price">
+                <p>ParentId</p>
+              </div>
+              <div class="t-cell cell-price">
+                <p>Icon</p>
+              </div>
+              <div class="t-cell cell-price">
+                <p>Status</p>
+              </div>
+              <div class="t-cell cell-action">
+                <p></p>
+              </div>
+            </div>
+          </div>
+          <div class="t-body vertical-scroll">
+            <div class="t-row" *ngFor="let item of this.functions">
+              <div class="t-cell cell-item">
+                <p>{{item.functionId}}</p>
+              </div>
+              <div class="t-cell cell-name">
+                <p>{{item.name}}</p>
+              </div>
+              <div class="t-cell cell-name">
+                <p>{{item.url}}</p>
+              </div>
+              <div class="t-cell cell-name">
+                <p>{{item.parentId}}</p>
+              </div>
+              <div class="t-cell cell-name">
+                <p>{{item.icon}}</p>
+              </div>
+
+              <div class="t-cell cell-price">
+                <p>{{item.status}}</p>
+              </div>
+              
+              <div class="t-cell cell-action">
+                <a class="secondary-btn" (click)="openModal(false,item, template)" >Select</a>
+              </div>
+            </div>
+           
+          </div>
+          <div id="dvPaging" class="col-md-12">
+            <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+            [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" 
+            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+      
+            </pagination>
+          </div>
+        </div>
+      </div> -->
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left" id="my-modal-title">{{'Function' | translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"> 
+      <img src="../../../assets/images/System/times.svg">
+    </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <app-management-function-edit [model]="this.function" (functionModel)="updateFunction($event)" style="width: 100%; padding: 5px 20px;"></app-management-function-edit>
+        </div>
+    </div>
+</ng-template>

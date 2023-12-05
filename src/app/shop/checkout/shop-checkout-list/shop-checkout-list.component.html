@@ -1,0 +1,76 @@
+<!--  
+<div class="center-wrap"> 
+ 
+  <div class="row">
+    <div class="col-md-12">
+      
+      <div class="main-content " > -->
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+        <div class="search-wrap">
+            <label for="item-searchbar" class="section-title">{{'Check Out List' | translate}}</label>
+
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-2">
+                {{'From Date' | translate}}
+                <dx-date-box #fromCalendar id="fromCalendar" [value]="this.fromdate" [displayFormat]="this.dateFormat"> </dx-date-box>
+            </div>
+            <div class="col-md-2">
+                {{'To Date' | translate}}
+                <dx-date-box #toCalendar id="toCalendar" [value]="this.todate" [displayFormat]="this.dateFormat"> </dx-date-box>
+
+            </div>
+            <div class="col-md-2">
+                <!-- {{'Status' | translate}}
+                <dx-select-box #cbbStatus [value]="statusOptions[0].value" [items]="statusOptions" displayExpr="name" valueExpr="value" placeholder="Status"></dx-select-box> -->
+            </div>
+            <div class="col-md-3">
+                <!-- {{'Bill No' | translate}}
+                <dx-text-box #transId></dx-text-box> -->
+            </div>
+            <!-- cbbStatus.value,'', transId.value ,'' -->
+            <div class="col-md-3" style="text-align: right;">
+                <dx-button class="mr-2 mt-3" style="width:60%" icon="fas fa-eye" type="success" (onClick)="loadInvoice(fromCalendar.value, toCalendar.value)" text="{{'View' | translate}}"></dx-button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <dx-data-grid [style]="{'max-height':'calc(100vh - 22vh)','overflow':'auto'}" id="gridContainer" 
+            [columnAutoWidth]="true" [wordWrapEnabled]="true" [showBorders]="true" [allowColumnResizing]="true" [columnResizingMode]="true" 
+            [dataSource]="this.invoices"                 >
+
+                <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="540" placeholder="{{'Search' | translate}}..." location="before"></dxo-search-panel>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- <dxo-search-panel  [visible]="true"></dxo-search-panel> -->
+                <!-- <dxi-column dataField="invoiceType" caption="{{'Invoice Type' | translate}}" dataType="string"> </dxi-column> -->
+                <dxi-column dataField="cusId" caption="{{'Customer ID' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="contractNo" caption="{{'Contract No' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="transId" caption="{{'Transaction ID' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="refTransId" caption="{{'Bill No. Ref' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="createdBy" caption="{{'Created By' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column dataField="createdOn" caption="{{'Created On' | translate}}" dataType="date" [format]="this.dateFormat + ' HH:mm:ss'"></dxi-column>
+                <!-- <dxi-column dataField="totalReceipt" caption="Total Receipt" [customizeText]="customizeText" dataType="number">
+        </dxi-column> -->
+                <dxi-column alignment="center" cellTemplate="statusTemplate" caption="{{'Status' | translate}}"></dxi-column>
+                <!-- <dxi-column dataField="salesPerson" caption="Sales Person" dataType="string"></dxi-column> -->
+                <dxi-column dataField="storeId" caption="{{'Store Code' | translate}}" dataType="string"> </dxi-column>
+                <dxi-column cellTemplate="cellTemplate"></dxi-column>
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="fas fa-eye" text="{{'View' | translate}}" class="mr-2" (onClick)="OpenInvoice(cell.data)"></dx-button>
+                    <dx-button icon="fas fa-eye" text="{{'Print' | translate}}" (onClick)="PrintPage(cell.data)"></dx-button>
+                </div>
+                <div *dxTemplate="let cell of 'statusTemplate'">
+                    <div [innerHtml]="cell.data.status | statusFormat"></div>
+                </div>
+
+            </dx-data-grid>
+
+        </div>
+    </div>
+
+</div>
+<!-- </div> -->
+<!-- <div class="left-grid"> 
+  </div> -->

@@ -1,0 +1,88 @@
+<div class="center-wrap">
+  <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+      <div class="maintenance-row">
+          <div class="col-md-12">
+              <div class="row mb-4">
+                  <div class="col-md-6">
+                      <a routerLink="/admin/masterdata/licensePlate" class="back-btn">
+                          <i class="fa fa-arrow-left fa-2x mr-2" aria-hidden="true"></i>
+                      </a>
+                      <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">{{'Edit License Plate' | translate}}</label>
+                      <label for="item-searchbar" *ngIf="this.mode!=='e'" class="section-title">{{'Create License Plate' | translate}}</label>
+                  </div>
+                  <!-- {{this.goodissue.status}}
+          {{this.goodissue.refId}} -->
+                  <!-- a.back-btn svg -->
+
+              </div>
+              <div id="tree-list-demo">
+                  <div class="row align-items-center">
+                      <div class="col-md-1">
+                          {{'ID' | translate}}
+                      </div>
+                      <div class="col-md-3">
+                          <dx-text-box [readOnly]="true" id="transId" [value]="this.LicensePlate.transId" [(ngModel)]="this.LicensePlate.transId">
+                          </dx-text-box>
+                      </div>
+                      <div class="col-md-1">
+                          {{'Start Date' | translate}}
+                      </div>
+                      <div class="col-md-3">
+                        <label class="mt-2">{{this.LicensePlate?.startDate | date: this.dateFormat}}</label>
+                      </div>
+                      <ng-container *ngIf="this.mode==='e'">
+                          <div class="col-md-1">
+                              {{'End Date' | translate}}
+                          </div>
+                          <!-- *ngIf="this.mode!=='e'" -->
+                          <div class="col-md-3">
+                              <label class="mt-2">{{this.LicensePlate?.endDate | date: this.dateFormat }}</label>
+                          </div>
+                      </ng-container>
+
+                  </div>
+                  <div class="row mt-2 align-items-center">
+                    <div class="col-md-1">
+                      {{'Contract No' | translate}}
+                  </div>
+                  <div class="col-md-3">
+                      <dx-text-box [readOnly]="true" id="ContractNo" [value]="this.LicensePlate.contract" [(ngModel)]="this.LicensePlate.contract">
+                      </dx-text-box>
+                  </div>
+                      <div class="col-md-1">
+                          {{'Remark' | translate}}
+                      </div>
+                      <div class="col-md-3">
+                          <!-- [disabled]="this.goodissue.status==='C' || this.goodissue.status==='N'" -->
+                          <dx-text-box [readOnly]="true"  [value]="this.LicensePlate?.remark" [(ngModel)]="this.LicensePlate.remark"></dx-text-box>
+                      </div>
+                      <!-- *ngIf="this.mode!=='e'" -->
+                      <div class="col-md-1">
+                        {{'Payment Code' | translate}}
+                    </div>
+                    <div class="col-md-3">
+                        <dx-text-box [readOnly]="true" id="PaymentCode" [value]="this.LicensePlate.itemCode" [(ngModel)]="this.LicensePlate.itemCode">
+                        </dx-text-box>
+                    </div>
+                  </div>
+                  <div class="row mt-2 align-items-center">
+                    <div class="col-md-1">
+                      {{'Times' | translate}}
+                  </div>
+                  <div class="col-md-3">
+                      <dx-text-box [readOnly]="true" id="times" [value]="this.LicensePlate.times" [(ngModel)]="this.LicensePlate.times">
+                      </dx-text-box>
+                  </div>
+                  </div>
+                  <dx-data-grid class="mt-4" #dataGrid id="goodsreceipt"  [(dataSource)]="this.lines"   
+                      keyExpr="lineId" [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [showBorders]="true">
+                      <dxo-editing mode="cell"  [useIcons]="true" [allowUpdating]="false" [allowDeleting]="false" [confirmDelete]="false"></dxo-editing>
+                      <dxi-column dataField="licensePlate"  [width]="250" caption="{{'License Plate' | translate}}" dataType="string"> </dxi-column>
+                      <dxi-column dataField="remark" caption="{{'Remark' | translate}}" dataType="string"> </dxi-column>        
+                  </dx-data-grid>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

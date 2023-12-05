@@ -1,0 +1,46 @@
+<div class="center-wrap">
+    <div class="maintenance-card" style="margin: auto;    width: 100%;">
+
+        <div class="row">
+            <!-- <label for="item-searchbar" *ngIf="this.mode==='e'" class="section-title">Edit Goods Issue</label>  -->
+            <label for="item-searchbar" class="section-title">{{'Return List' | translate}}</label>
+        </div>
+
+        <div class="center-wrap">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="main-content ">
+                        <dx-data-grid [style]="{'max-height':'calc(100vh - 15vh)','overflow':'auto'}" id="gridContainer" [allowColumnResizing]="true" [dataSource]="this.bills" [showBorders]="true">
+
+                            <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+                            <dxo-search-panel [visible]="true" [width]="540" placeholder="Search..." location="before"></dxo-search-panel>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                            <dxi-column dataField="transId" caption="Trans Id" dataType="string"> </dxi-column>
+                            <dxi-column dataField="cusId" caption="Cus Id" dataType="string"> </dxi-column>
+                            <dxi-column dataField="totalReceipt" caption="Total Receipt" [customizeText]="customizeText" dataType="number"></dxi-column>
+                            <dxi-column alignment="center" cellTemplate="statusTemplate" caption="Status"></dxi-column>
+                            <dxi-column dataField="salesPerson" caption="Sales Person" dataType="string"></dxi-column>
+                            <dxi-column dataField="storeId" caption="Store Id" dataType="string"> </dxi-column>
+                            <dxi-column cellTemplate="cellTemplate" [minWidth]="480"></dxi-column>
+                            <div *dxTemplate="let cell of 'cellTemplate'">
+                                <dx-button icon="fas fa-eye" class="mr-2" text="View" (onClick)="OpenOrder(cell.data)"></dx-button>
+                                <dx-button icon="fas fa-eye" class="mr-2" text="Return" (onClick)="ReturnOrder(cell.data)"></dx-button>
+                                <dx-button icon="fa fa-check-square-o" class="mr-2" text="Check out" (onClick)="CheckOutOrder(cell.data)"></dx-button>
+                                <dx-button icon="fa fa-print" text="Print" (onClick)="PrintOrder(cell.data)"></dx-button>
+                            </div>
+                            <div *dxTemplate="let cell of 'statusTemplate'">
+                                <div [innerHtml]="cell.data.status | statusFormat"></div>
+                            </div>
+
+                        </dx-data-grid>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
